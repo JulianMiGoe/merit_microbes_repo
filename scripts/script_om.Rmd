@@ -1,0 +1,194 @@
+---
+title: "script_om"
+author: "Julian Mittmann-Goetsch"
+date: "2025-04-24"
+output: html_document
+---
+#Version log 
+## Version 1.0: basic outline of the script - 24.04.2025 | JM
+
+
+#Step 1: Prepare R Session
+##Step 1a: Install packages
+You only need to install the packages with the install.packages() command, when running the script for the first time (of the R Session)
+```{r}
+#install.packages("ggplot2", repos = "http://cran.us.r-project.org") 
+#install.packages("dplyr")    
+#install.packages("lubridate")
+#install.packages("here")
+```
+
+##Step 1b: Load packages
+```{r}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(here)
+```
+
+##Step 1c: Define global plot theme
+```{r}
+# Creates a theme for all plots in this study 
+theme_JM <- theme(
+  axis.title.x      = element_text(colour = "black", size = 12),
+  axis.text.x       = element_text(colour = "black", size = 12), 
+  axis.title.y      = element_text(colour = "black", size = 12),
+  axis.text.y       = element_text(colour = "black", size = 12), 
+  legend.title      = element_text(colour = "black", size = 12),
+  legend.text       = element_text(colour = "black", size = 12), 
+  legend.position   = "top",
+  panel.background  = element_blank(), 
+  panel.border      = element_rect(colour = "black", fill = NA, size = 1.2),
+  legend.key        = element_blank(),
+  strip.text.x      = element_text(colour = "black", size = 12),
+  strip.text.y      = element_text(colour = "black", size = 12)
+)
+```
+
+##Step 1d: Load data
+```{r}
+df_OM_19 <- read.delim(here("data", "om", "df_OM_MERIT_2019.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2019 @Hao Tang
+df_OM_21 <- read.delim(here("data", "om", "df_OM_MERIT_2021.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2021 @JulianMiGoe, @Lea Rebentisch
+df_OM_22 <- read.delim(here("data", "om", "df_OM_MERIT_2022.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2021 @JulianMiGoe
+df_OM_24 <- read.delim(here("data", "om", "df_OM_MERIT_2024.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2024 @JulianMiGoe, @annaschrdr
+```
+
+##Step 1e: Transform data
+```{r}
+# correctly format coloumns to either numeric or factor
+df_OM_19 <- df_OM_19 %>% 
+  select(Zone, Treatment, Depth, OM) %>%
+  mutate_at(c(1:3), as.factor)
+
+df_OM_21 <- df_OM_21 %>% 
+  select(Year, Zone, Treatment, Depth, OM) %>%
+  mutate_at(c(2:4), as.factor)%>%
+  mutate_at(c(5), as.numeric)
+
+df_OM_22 <- df_OM_22 %>% 
+  select(Year, Zone, Treatment, Depth, OM) %>%
+  mutate_at(c(2:4), as.factor)%>%
+  mutate_at(c(5), as.numeric)
+
+df_OM_24 <- df_OM_24 %>% 
+  select(Year, Zone, Treatment, Depth, OM, Conductivity, pH) %>%
+  mutate_at(c(2:4), as.factor)
+
+df_OM_merged <- bind_rows(
+  df_OM_19 %>% mutate(Year = 2019),
+  df_OM_21 %>% mutate(Year = 2021),
+  df_OM_22 %>% mutate(Year = 2022),
+  df_OM_24 %>% mutate(Year = 2024)
+)
+
+df_OM_merged$Treatment <- recode_factor(df_OM_merged$Treatment, "ambient" = "ambient", "+1.5C" = "+1.5°C", "+3.0C" = "+3.0°C")
+df_OM_merged$Zone <- recode_factor(df_OM_merged$Zone, "PZ" = "PZ", "LM" = "LM", "HM" = "HM")
+```
+
+
+# Step 2: Plots
+## Step 2a: Point plots
+```{r}
+Plot_OM_yearly_top <- df_OM_merged %>%
+  filter(Depth %in% c("5", "10", "15", "20", "25")) %>%
+  filter(!Year == "2024") %>%
+  ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
+  stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
+  stat_summary(fun = mean, geom = "line", size = 1, position = position_dodge(width = 0.2)) +
+  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+  theme_JM +
+  theme(legend.position = "bottom") +
+  facet_wrap(~Zone) 
+
+Plot_OM_yearly_bottom <- df_OM_merged %>%
+  filter(Depth %in% c("30", "40", "50", "55", "60", "80")) %>%
+  filter(!Year == "2024") %>%
+  ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
+  stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
+  stat_summary(fun = mean, geom = "line", size = 1, position = position_dodge(width = 0.2)) +
+  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027")) +
+  theme_JM +
+  theme(legend.position = "bottom") +
+  facet_wrap(~Zone) 
+
+Plot_OM_yearly_top
+Plot_OM_yearly_bottom
+```
+
+# Step 3: Statistics
+## Step 3a: Model with random effects
+```{r}
+# Add Depth_ID as random factor or use Plot for accounting for the Plots not just the cores being non-independent
+
+# Fit the linear mixed-effects model
+stat_model_OM <- lmer(OM ~ Zone * Treatment * Year + (1|Depth), data = df_OM_merged %>% filter(Depth %in% c("5", "10", "15", "20", "25")) %>% filter(!Year == "2024"))
+ 
+# Main effects
+anova(stat_model_OM)
+
+# Model diagnostics
+#  Residual plots
+plot(stat_model_OM)
+
+# QQ plot of residuals
+qqnorm(resid(stat_model_OM))
+qqline(resid(stat_model_OM))
+
+# Residuals vs. Fitted values
+plot(fitted(stat_model_OM), resid(stat_model_OM))
+abline(h = 0, col = "red")
+
+# Additional diagnostic plots using performance package
+check_model(stat_model_OM)
+
+# ANOVA
+anova(stat_model_OM)
+
+# Model summary
+summary(stat_model_OM)
+
+# Pairwise comparisons
+## For Zone
+stat_OM_zone_emm <- emmeans(stat_model_OM, ~ Zone)
+pairs(stat_OM_zone_emm)
+
+## For Treatment
+stat_OM_treatment_emm <- emmeans(stat_model_OM, ~ Treatment)
+pairs(stat_OM_treatment_emm)
+
+## For Layer
+stat_OM_year_emm <- emmeans(stat_model_OM, ~ Year)
+pairs(stat_OM_year_emm)
+
+## For Zone:Treatment interaction
+stat_OM_zone_treatment_emm <- emmeans(stat_model_OM, ~ Zone | Treatment)
+pairs(stat_OM_zone_treatment_emm)
+
+## For Zone:Layer interaction
+#stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone | Layer)
+#pairs(stat_C_zone_layer_emm)
+
+## For Treatment:Layer interaction
+stat_OM_treatment_year_emm <- emmeans(stat_model_OM, ~ Treatment | Year)
+pairs(stat_OM_treatment_year_emm)
+# Visualizations
+## Interaction plot for Zone and Treatment
+ggplot(df_OM_merged, aes(x = Zone, y = OM, color = Treatment)) +
+  stat_summary(fun = mean, geom = "point") +
+  stat_summary(fun = mean, geom = "line", aes(group = Treatment)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
+#  facet_wrap(~ Layer) +
+  theme_JM +
+  labs(title = "Interaction between Zone and Treatment by Layer across all Enzymes",
+       y = "Response Variable")
+
+performance::check_model(stat_model_OM)
+```
+
+
+# References
+```{r}
+
+```

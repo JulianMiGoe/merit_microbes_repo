@@ -1,0 +1,649 @@
+ID_num	ID	Plot	Subplot	Depth	Zone	Sampling_date	Dominant_plant_species_1	Subdominant_plant_species_1	Sampling_notes	Plate	Date	EEA_g	EEA_buffer	Inc_start	Inc_end	Assay_notes
+1	110(A2)0-5	110	(A2)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_029-1	13.07.2023	2.21	22.11	11:20	10:30	
+2	110(A2)5-10	110	(A2)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_029-2	13.07.2023	2.06	22.03	11:20	10:30	
+3	110(A2)20-30	110	(A2)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_029-3	13.07.2023	2.02	22.03	11:20	10:30	
+4	110(A2)40-50	110	(A2)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_029-4	13.07.2023	2.22	22.01	11:20	10:30	
+5	110(A2)60-80	110	(A2)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_029-5	13.07.2023	2.01	22.23	11:20	10:30	
+6	110(A2)80-100	110	(A2)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_029-6	13.07.2023	2.01	22.02	11:20	10:30	
+7	110(A6)0-5	110	(A6)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima	Used second plate reader	Plate_050-1	02.08.2023	2.01	22.07	13:50	10:30	
+8	110(A6)5-10	110	(A6)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima	Used second plate reader	Plate_050-2	02.08.2023	2.04	22.19	13:50	10:30	
+9	110(A6)20-30	110	(A6)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima	Used second plate reader	Plate_050-3	02.08.2023	2	22	13:50	10:30	
+10	110(A6)40-50	110	(A6)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima	Used second plate reader	Plate_050-4	02.08.2023	2.04	22.09	13:50	10:30	
+11	110(A6)60-80	110	(A6)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima	Used second plate reader	Plate_050-5	02.08.2023	2.02	22.08	13:50	10:30	
+12	110(A6)80-100	110	(A6)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima	Used second plate reader	Plate_050-6	02.08.2023	2.04	22.08	13:50	10:30	
+13	110(C2)0-5	110	(C2)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_025-1	11.07.2023	2.05	22.09	13:40	10:25	
+14	110(C2)5-10	110	(C2)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_025-2	11.07.2023	2.01	22.01	13:40	10:25	
+15	110(C2)20-30	110	(C2)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_025-3	11.07.2023	2.01	22.06	13:40	10:25	
+16	110(C2)40-50	110	(C2)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_025-4	11.07.2023	1.99	22.01	13:40	10:25	
+17	110(C2)60-80	110	(C2)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_025-5	11.07.2023	2	22	13:40	10:25	
+18	110(C2)80-100	110	(C2)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_025-6	11.07.2023	2.03	22.12	13:40	10:25	
+19	110(G5)0-5	110	(G5)	0-5	PZ	13.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_054-1	03.08.2023	2.02	22.06	11:30	10:40	
+20	110(G5)5-10	110	(G5)	05. Okt	PZ	13.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_054-2	03.08.2023	2.05	22	11:30	10:40	
+21	110(G5)20-30	110	(G5)	20-30	PZ	13.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_054-3	03.08.2023	2.01	22.06	11:30	10:40	
+22	110(G5)40-50	110	(G5)	40-50	PZ	13.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_054-4	03.08.2023	2.05	22.02	11:30	10:40	
+23	110(G5)60-80	110	(G5)	60-80	PZ	13.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_054-5	03.08.2023	2.06	22.1	11:30	10:40	
+24	110(G5)80-100	110	(G5)	80-100	PZ	13.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_054-6	03.08.2023	2.04	22.1	11:30	10:40	
+25	111(A2)0-5	111	(A2)	0-5 (nicht da)	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_108-6	24.10.2023	2.14	22.02	16:05	13:25	
+26	111(A2)5-10	111	(A2)	05. Okt	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_063-2	24.10.2023	2.02	22.06	16:05	13:25	
+27	111(A2)20-30	111	(A2)	20-30	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_063-3	24.10.2023	2	22.02	16:05	13:25	
+28	111(A2)40-50	111	(A2)	40-50 (nicht da)	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_109-1	24.10.2023	2	22.06	16:05	13:25	
+29	111(A2)60-80	111	(A2)	60-80	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_063-5	24.10.2023	2.01	22.01	16:05	13:25	
+30	111(A2)80-100	111	(A2)	80-100	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_063-6	24.10.2023	2	22.06	16:05	13:25	
+31	111(A6)0-5	111	(A6)	0-5	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_064-1	24.10.2023	2.02	22.04	16:30	13:30	
+32	111(A6)5-10	111	(A6)	05. Okt	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_064-2	24.10.2023	2.01	22.02	16:30	13:30	
+33	111(A6)20-30	111	(A6)	20-30	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_064-3	24.10.2023	2.03	22.01	16:30	13:30	
+34	111(A6)40-50	111	(A6)	40-50	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_064-4	24.10.2023	2	22.03	16:30	13:30	
+35	111(A6)60-80	111	(A6)	60-80 (nicht da)	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_108-5	24.10.2023	2.17	22.06	16:30	13:30	
+36	111(A6)80-100	111	(A6)	80-100	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima		Plate_064-6	24.10.2023	2.01	22.03	16:30	13:30	
+37	111(C2)0-5	111	(C2)	0-5	PZ	13.09.2022		Spartina anglica, Puccinellia maritima	Used second plate reader	Plate_047-1	02.08.2023	2.03	22.59	13:30	10:30	
+38	111(C2)5-10	111	(C2)	05. Okt	PZ	13.09.2022		Spartina anglica, Puccinellia maritima	Used second plate reader	Plate_047-2	02.08.2023	2.05	22.01	13:30	10:30	
+39	111(C2)20-30	111	(C2)	20-30	PZ	13.09.2022		Spartina anglica, Puccinellia maritima	Used second plate reader	Plate_047-3	02.08.2023	2.04	22.03	13:30	10:30	
+40	111(C2)40-50	111	(C2)	40-50	PZ	13.09.2022		Spartina anglica, Puccinellia maritima	Used second plate reader	Plate_047-4	02.08.2023	2.02	22.02	13:30	10:30	
+41	111(C2)60-80	111	(C2)	60-80	PZ	13.09.2022		Spartina anglica, Puccinellia maritima	Used second plate reader	Plate_047-5	02.08.2023	2	22.07	13:30	10:30	
+42	111(C2)80-100	111	(C2)	80-100	PZ	13.09.2022		Spartina anglica, Puccinellia maritima	Used second plate reader	Plate_047-6	02.08.2023	2.04	22	13:30	10:30	
+43	111(G5)0-5	111	(G5)	0-5	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Limonium vulgare		Plate_070-1	26.1	2.03	22.84	12:00	12:15	
+44	111(G5)5-10	111	(G5)	05. Okt	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Limonium vulgare	short	Plate_070-2	26.10.2023	2.01	22.18	12:00	12:15	
+45	111(G5)20-30	111	(G5)	20-30	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Limonium vulgare		Plate_070-3	26.1	2.05	22.08	12:00	12:15	
+46	111(G5)40-50	111	(G5)	40-50	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Limonium vulgare		Plate_070-4	26.10.2023	2	22.01	12:00	12:15	
+47	111(G5)60-80	111	(G5)	60-80	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Limonium vulgare		Plate_070-5	26.1	2.03	22.03	12:00	12:15	
+48	111(G5)80-100	111	(G5)	80-100	PZ	13.09.2022		Spartina anglica, Salicornia europaea, Limonium vulgare		Plate_070-6	26.10.2023	2.03	22.03	12:00	12:15	Standard und substrat vertauscht!!!
+49	112(A2)0-5	112	(A2)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_059-1	23.10.2023	2	22.01	15:00	14:20	
+50	112(A2)5-10	112	(A2)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_059-2	23.10.2023	2.02	22.03	15:00	14:20	
+51	112(A2)20-30	112	(A2)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_059-3	23.10.2023	2	22.04	15:00	14:20	
+52	112(A2)40-50	112	(A2)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_059-4	23.10.2023	2.04	22.02	15:00	14:20	
+53	112(A2)60-80	112	(A2)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_059-5	23.10.2023	2	22.01	15:00	14:20	
+54	112(A2)80-100	112	(A2)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea	95cm total	Plate_059-6	23.10.2023	2	22.02	15:00	14:20	
+55	112(A6)0-5	112	(A6)	0-5	PZ	13.09.2022	Spartina anglica			Plate_076-1	27.11.2023	2.03	22.04	16:10	12:50	
+56	112(A6)5-10	112	(A6)	05. Okt	PZ	13.09.2022	Spartina anglica			Plate_076-2	27.11.2023	2.01	22.02	16:10	12:50	
+57	112(A6)20-30	112	(A6)	20-30	PZ	13.09.2022	Spartina anglica			Plate_076-3	27.11.2023	2.02	22.02	16:10	12:50	
+58	112(A6)40-50	112	(A6)	40-50	PZ	13.09.2022	Spartina anglica			Plate_108-3						nicht da
+59	112(A6)60-80	112	(A6)	60-80	PZ	13.09.2022	Spartina anglica			Plate_108-4		2.04	22.29			nicht da
+60	112(A6)80-100	112	(A6)	80-100	PZ	13.09.2022	Spartina anglica			Plate_109-2						nicht da
+61	112(C2)0-5	112	(C2)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_048-1	02.08.2023	2.03	20.17	12:45	13:15	
+62	112(C2)5-10	112	(C2)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_048-2	02.08.2023	2.04	20.03	12:45	13:15	
+63	112(C2)20-30	112	(C2)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_048-3	02.08.2023	2.03	20.02	12:45	13:15	
+64	112(C2)40-50	112	(C2)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_048-4	02.08.2023	2.02	20.07	12:45	13:15	
+65	112(C2)60-80	112	(C2)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_048-5	02.08.2023	1.99	20.08	12:45	13:15	
+66	112(C2)80-100	112	(C2)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_048-6	02.08.2023	2.04	22.2	12:45	13:15	
+67	112(G5)0-5	112	(G5)	0-5	PZ	13.09.2022	Salicornia europaea	Spartina anglica, Limonium vulgare	close to top pin	Plate_043-1	02.08.2023	2.1	22.35	10:45	13:15	
+68	112(G5)5-10	112	(G5)	05. Okt	PZ	13.09.2022	Salicornia europaea	Spartina anglica, Limonium vulgare	close to top pin	Plate_108-2		2.02	22.02			
+69	112(G5)20-30	112	(G5)	20-30	PZ	13.09.2022	Salicornia europaea	Spartina anglica, Limonium vulgare	close to top pin	Plate_043-3	02.08.2023	1.98	22.02	10:45	13:15	
+70	112(G5)40-50	112	(G5)	40-50	PZ	13.09.2022	Salicornia europaea	Spartina anglica, Limonium vulgare	close to top pin	Plate_043-4	02.08.2023	2.05	22.01	10:45	13:15	
+71	112(G5)60-80	112	(G5)	60-80	PZ	13.09.2022	Salicornia europaea	Spartina anglica, Limonium vulgare	close to top pin	Plate_043-5	02.08.2023	2.03	22.01	10:45	13:15	
+72	112(G5)80-100	112	(G5)	80-100	PZ	13.09.2022	Salicornia europaea	Spartina anglica, Limonium vulgare	close to top pin	NA		1.96	22.26			
+73	120(A2)0-5	120	(A2)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_014-1	04.07.2023	2.02	22.13	14:30	10:35	
+74	120(A2)5-10	120	(A2)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_014-2	04.07.2023	2.04	22.26	14:30	10:35	
+75	120(A2)20-30	120	(A2)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_014-3	04.07.2023	2.03	22.07	14:30	10:35	
+76	120(A2)40-50	120	(A2)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_014-4	04.07.2023	2.02	22.02	14:30	10:35	
+77	120(A2)60-80	120	(A2)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_014-5	04.07.2023	2.04	22	14:30	10:35	
+78	120(A2)80-100	120	(A2)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_014-6	04.07.2023	2	22.15	14:30	10:35	
+79	120(A6)0-5	120	(A6)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_080-1	28.11.2023	2.02	22.32	17:00	14:30	
+80	120(A6)5-10	120	(A6)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_080-2	28.11.2023	2.01	22.02	17:00	14:30	
+81	120(A6)20-30	120	(A6)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_080-3	28.11.2023	2.02	22.02	17:00	14:30	
+82	120(A6)40-50	120	(A6)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_080-4	28.11.2023	2.02	22.41	17:00	14:30	
+83	120(A6)60-80	120	(A6)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_080-5	28.11.2023	2.04	22.07	17:00	14:30	
+84	120(A6)80-100	120	(A6)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_080-6	28.11.2023	2.03	22.02	17:00	14:30	
+85	120(C2)0-5	120	(C2)	0-5	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_006-1	29.06.2023	2	22	10:40	10:30	
+86	120(C2)5-10	120	(C2)	05. Okt	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_006-2	29.06.2023	2.02	22.04	10:40	10:30	
+87	120(C2)20-30	120	(C2)	20-30	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_006-3	29.06.2023	2.03	22.05	10:40	10:30	
+88	120(C2)40-50	120	(C2)	40-50	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_006-4	29.06.2023	2.04	22.08	10:40	10:30	
+89	120(C2)60-80	120	(C2)	60-80	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_006-5	29.06.2023	2.04	22.02	10:40	10:30	
+90	120(C2)80-100	120	(C2)	80-100	PZ	13.09.2022	Spartina anglica	Salicornia europaea		Plate_006-6	29.06.2023	2.04	22.03	10:40	10:30	
+91	120(G5)0-5	120	(G5)	0-5	PZ	13.09.2022	Spartina anglica			Plate_078-1	28.11.2023	2.02	22.26	13:50	14:20	
+92	120(G5)5-10	120	(G5)	05. Okt	PZ	13.09.2022	Spartina anglica			Plate_078-2	28.11.2023	2	22.09	13:50	14:20	
+93	120(G5)20-30	120	(G5)	20-30	PZ	13.09.2022	Spartina anglica			Plate_078-3	28.11.2023	2.03	22.07	13:50	14:20	
+94	120(G5)40-50	120	(G5)	40-50	PZ	13.09.2022	Spartina anglica			Plate_078-4	28.11.2023	2.05	22.02	13:50	14:20	
+95	120(G5)60-80	120	(G5)	60-80	PZ	13.09.2022	Spartina anglica			Plate_078-5	28.11.2023	2.05	22.02	13:50	14:20	
+96	120(G5)80-100	120	(G5)	80-100	PZ	13.09.2022	Spartina anglica			Plate_078-6	28.11.2023	2.01	22.02	13:50	14:20	
+97	121(A2)0-5	121	(A2)	0-5	PZ	13.09.2022	Spartina anglica			Plate_007-1	29.06.2023	2.02	22	11:00	10:40	
+98	121(A2)5-10	121	(A2)	05. Okt	PZ	13.09.2022	Spartina anglica			Plate_007-2	29.06.2023	2.01	22.02	11:00	10:40	
+99	121(A2)20-30	121	(A2)	20-30	PZ	13.09.2022	Spartina anglica			Plate_007-3	29.06.2023	2.02	22	11:00	10:40	
+100	121(A2)40-50	121	(A2)	40-50	PZ	13.09.2022	Spartina anglica			Plate_007-4	29.06.2023	2.01	22.02	11:00	10:40	
+101	121(A2)60-80	121	(A2)	60-80	PZ	13.09.2022	Spartina anglica			Plate_007-5	29.06.2023	2.01	22.01	11:00	10:40	
+102	121(A2)80-100	121	(A2)	80-100	PZ	13.09.2022	Spartina anglica			Plate_007-6	29.06.2023	2	22	11:00	10:40	
+103	121(A6)0-5	121	(A6)	0-5	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_081-1	28.11.2023	2	22.03	17:30	14:30	
+104	121(A6)5-10	121	(A6)	05. Okt	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_081-2	28.11.2023	2.01	22.02	17:30	14:30	
+105	121(A6)20-30	121	(A6)	20-30	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_081-3	28.11.2023	2.02	22.02	17:30	14:30	
+106	121(A6)40-50	121	(A6)	40-50	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_081-4	28.11.2023	2.03	22.03	17:30	14:30	
+107	121(A6)60-80	121	(A6)	60-80	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_081-5	28.11.2023	2	22.01	17:30	14:30	
+108	121(A6)80-100	121	(A6)	80-100	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_081-6	28.11.2023	2.01	22.04	17:30	14:30	
+109	121(C2)0-5	121	(C2)	0-5	PZ	13.09.2022	Spartina anglica			Plate_001-1	26.06.2023	2	22.07	11:25	10:20	Was originally at 112 C2, but no note on the bag that C2 has been done. On the 121 C2 bag there was a note that it has been done though!.
+110	121(C2)5-10	121	(C2)	05. Okt	PZ	13.09.2022	Spartina anglica			Plate_001-2	26.06.2023	1.98	21.99	11:25	10:20	Was originally at 112 C2, but no note on the bag that C2 has been done. On the 121 C2 bag there was a note that it has been done though!.
+111	121(C2)20-30	121	(C2)	20-30	PZ	13.09.2022	Spartina anglica			Plate_001-3	26.06.2023	2.03	22.07	11:25	10:20	Was originally at 112 C2, but no note on the bag that C2 has been done. On the 121 C2 bag there was a note that it has been done though!.
+112	121(C2)40-50	121	(C2)	40-50	PZ	13.09.2022	Spartina anglica			Plate_001-4	26.06.2023	1.99	22.08	11:25	10:20	Was originally at 112 C2, but no note on the bag that C2 has been done. On the 121 C2 bag there was a note that it has been done though!.
+113	121(C2)60-80	121	(C2)	60-80	PZ	13.09.2022	Spartina anglica			Plate_001-5	26.06.2023	1.99	22.09	11:25	10:20	Was originally at 112 C2, but no note on the bag that C2 has been done. On the 121 C2 bag there was a note that it has been done though!.
+114	121(C2)80-100	121	(C2)	80-100	PZ	13.09.2022	Spartina anglica			Plate_001-6	26.06.2023	2.05	22.07	11:25	10:20	Was originally at 112 C2, but no note on the bag that C2 has been done. On the 121 C2 bag there was a note that it has been done though!.
+115	121(G5)0-5	121	(G5)	0-5	PZ	13.09.2022	Salicornia europaea	Spartina anglica		Plate_079-1	28.11.2023	2	22.02	15:05	14:25	
+116	121(G5)5-10	121	(G5)	05. Okt	PZ	13.09.2022	Salicornia europaea	Spartina anglica		Plate_079-2	28.11.2023	2.03	22.02	15:05	14:25	
+117	121(G5)20-30	121	(G5)	20-30	PZ	13.09.2022	Salicornia europaea	Spartina anglica		Plate_079-3	28.11.2023	2	22.01	15:05	14:25	
+118	121(G5)40-50	121	(G5)	40-50	PZ	13.09.2022	Salicornia europaea	Spartina anglica		Plate_079-4	28.11.2023	2	22	15:05	14:25	
+119	121(G5)60-80	121	(G5)	60-80	PZ	13.09.2022	Salicornia europaea	Spartina anglica		Plate_079-5	28.11.2023	2	22	15:05	14:25	
+120	121(G5)80-100	121	(G5)	80-100	PZ	13.09.2022	Salicornia europaea	Spartina anglica		Plate_079-6	28.11.2023	2	22.05	15:05	14:25	
+121	122(A2)0-5	122	(A2)	0-5	PZ	13.09.2022	Spartina anglica			Plate_077-1	28.11.2023	2.01	22.11	13:30	14:15	
+122	122(A2)5-10	122	(A2)	05. Okt	PZ	13.09.2022	Spartina anglica			Plate_077-2	28.11.2023	2.05	22.01	13:30	14:15	
+123	122(A2)20-30	122	(A2)	20-30	PZ	13.09.2022	Spartina anglica			Plate_077-3	28.11.2023	2.04	22.03	13:30	14:15	
+124	122(A2)40-50	122	(A2)	40-50	PZ	13.09.2022	Spartina anglica			Plate_077-4	28.11.2023	2.01	22.12	13:30	14:15	
+125	122(A2)60-80	122	(A2)	60-80	PZ	13.09.2022	Spartina anglica			Plate_077-5	28.11.2023	2.05	22.15	13:30	14:15	
+126	122(A2)80-100	122	(A2)	80-100	PZ	13.09.2022	Spartina anglica			Plate_077-6	28.11.2023	2.05	22.17	13:30	14:15	
+127	122(A6)0-5	122	(A6)	0-5	PZ	13.09.2022	Salicornia europaea			Plate_058-1	03.08.2023	2.03	22.3	14:10	10:40	
+128	122(A6)5-10	122	(A6)	05. Okt	PZ	13.09.2022	Salicornia europaea		Switch w/ 4	Plate_058-2	03.08.2023	2.03	22.13	14:10	10:40	
+129	122(A6)20-30	122	(A6)	20-30	PZ	13.09.2022	Salicornia europaea			Plate_058-3	03.08.2023	2.02	22.17	14:10	10:40	
+130	122(A6)40-50	122	(A6)	40-50	PZ	13.09.2022	Salicornia europaea		Switch w/ 2	Plate_058-4	03.08.2023	2.02	22.12	14:10	10:40	
+131	122(A6)60-80	122	(A6)	60-80	PZ	13.09.2022	Salicornia europaea			Plate_058-5	03.08.2023	2.03	22.25	14:10	10:40	
+132	122(A6)80-100	122	(A6)	80-100	PZ	13.09.2022	Salicornia europaea			Plate_058-6	03.08.2023	2.01	22.26	14:10	10:40	
+133	122(C2)0-5	122	(C2)	0-5	PZ	13.09.2022	Spartina anglica			Plate_060-1	24.10.2023	2.08	22.27	14:10	13:15	
+134	122(C2)5-10	122	(C2)	05. Okt	PZ	13.09.2022	Spartina anglica			Plate_060-2	24.10.2023	2.07	22.06	14:10	13:15	
+135	122(C2)20-30	122	(C2)	20-30	PZ	13.09.2022	Spartina anglica			Plate_060-3	24.10.2023	2.02	22.07	14:10	13:15	
+136	122(C2)40-50	122	(C2)	40-50	PZ	13.09.2022	Spartina anglica			Plate_060-4	24.10.2023	2.03	22.13	14:10	13:15	
+137	122(C2)60-80	122	(C2)	60-80	PZ	13.09.2022	Spartina anglica			Plate_060-5	24.10.2023	2.06	22.15	14:10	13:15	
+138	122(C2)80-100	122	(C2)	80-100	PZ	13.09.2022	Spartina anglica			Plate_060-6	24.10.2023	2.04	22.12	14:10	13:15	
+139	122(G5)0-5	122	(G5)	0-5	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_062-1	24.10.2023	2.02	22.04	15:40	13:25	
+140	122(G5)5-10	122	(G5)	05. Okt	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_062-2	24.10.2023	2.01	22.08	15:40	13:25	
+141	122(G5)20-30	122	(G5)	20-30	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_062-3	24.10.2023	2	22.06	15:40	13:25	
+142	122(G5)40-50	122	(G5)	40-50	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_062-4	24.10.2023	2.06	22.01	15:40	13:25	
+143	122(G5)60-80	122	(G5)	60-80	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_062-5	24.10.2023	2.04	22.18	15:40	13:25	
+144	122(G5)80-100	122	(G5)	80-100	PZ	13.09.2022		Spartina anglica, Salicornia europaea		Plate_062-6	24.10.2023	2.06	22.12	15:40	13:25	
+145	130(A2)0-5	130	(A2)	0-5	PZ	14.09.2022	Puccinellia maritima	Salicornia europaea		Plate_015-1	04.07.2023	2.05	22.08	14:50	10:40	
+146	130(A2)5-10	130	(A2)	05. Okt	PZ	14.09.2022	Puccinellia maritima	Salicornia europaea		Plate_015-2	04.07.2023	2.04	22.15	14:50	10:40	
+147	130(A2)20-30	130	(A2)	20-30	PZ	14.09.2022	Puccinellia maritima	Salicornia europaea		Plate_015-3	04.07.2023	2.04	22.11	14:50	10:40	
+148	130(A2)40-50	130	(A2)	40-50	PZ	14.09.2022	Puccinellia maritima	Salicornia europaea		Plate_015-4	04.07.2023	2.03	22.07	14:50	10:40	
+149	130(A2)60-80	130	(A2)	60-80	PZ	14.09.2022	Puccinellia maritima	Salicornia europaea		Plate_015-5	04.07.2023	2	22.15	14:50	10:40	
+150	130(A2)80-100	130	(A2)	80-100	PZ	14.09.2022	Puccinellia maritima	Salicornia europaea		Plate_015-6	04.07.2023	2.06	22.3	14:50	10:40	
+151	130(A6)0-5	130	(A6)	0-5	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_023-1	05.07.2023	2.03	22.06	14:30	10:25	
+152	130(A6)5-10	130	(A6)	05. Okt	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_023-2	05.07.2023	2.02	22.03	14:30	10:25	
+153	130(A6)20-30	130	(A6)	20-30	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_023-3	05.07.2023	2	22.03	14:30	10:25	
+154	130(A6)40-50	130	(A6)	40-50	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_023-4	05.07.2023	2	22.08	14:30	10:25	
+155	130(A6)60-80	130	(A6)	60-80	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_023-5	05.07.2023	2.02	22.04	14:30	10:25	
+156	130(A6)80-100	130	(A6)	80-100	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_023-6	05.07.2023	2	22.03	14:30	10:25	
+157	130(C2)0-5	130	(C2)	0-5	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_057-1	03.08.2023	2.01	22.4	13:50	10:40	
+158	130(C2)5-10	130	(C2)	05. Okt	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_057-2	03.08.2023	2.04	22.19	13:50	10:40	
+159	130(C2)20-30	130	(C2)	20-30	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_057-3	03.08.2023	2.03	22.26	13:50	10:40	
+160	130(C2)40-50	130	(C2)	40-50	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_057-4	03.08.2023	2	22.02	13:50	10:40	
+161	130(C2)60-80	130	(C2)	60-80	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_057-5	03.08.2023	2.02	22.08	13:50	10:40	
+162	130(C2)80-100	130	(C2)	80-100	PZ	14.09.2022		Suaeda maritima, Limonium vulgare, Salicornia europaea		Plate_057-6	03.08.2023	2.02	22.03	13:50	10:40	
+163	130(G5)0-5	130	(G5)	0-5	PZ	14.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_032-1	27.07.2023	2	22.01	12:50	15:55	
+164	130(G5)5-10	130	(G5)	05. Okt	PZ	14.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_032-2	27.07.2023	2.01	22.05	12:50	15:55	
+165	130(G5)20-30	130	(G5)	20-30	PZ	14.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_032-3	27.07.2023	2.01	22.01	12:50	15:55	
+166	130(G5)40-50	130	(G5)	40-50	PZ	14.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_032-4	27.07.2023	2	22.02	12:50	15:55	
+167	130(G5)60-80	130	(G5)	60-80	PZ	14.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_032-5	27.07.2023	2	22.07	12:50	15:55	
+168	130(G5)80-100	130	(G5)	80-100	PZ	14.09.2022	Puccinellia maritima	Spartina anglica, Salicornia europaea		Plate_032-6	27.07.2023	2	22.01	12:50	15:55	
+169	131(A2)0-5	131	(A2)	0-5	PZ	14.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima	close to the top pin	Plate_056-1	03.08.2023	2.05	22.04	13:50	10:45	
+170	131(A2)5-10	131	(A2)	05. Okt	PZ	14.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima	close to the top pin	Plate_056-2	03.08.2023	2	22.07	13:50	10:45	
+171	131(A2)20-30	131	(A2)	20-30	PZ	14.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima	close to the top pin	Plate_056-3	03.08.2023	2.03	22.18	13:50	10:45	
+172	131(A2)40-50	131	(A2)	40-50	PZ	14.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima	close to the top pin	Plate_056-4	03.08.2023	2.04	22.07	13:50	10:45	
+173	131(A2)60-80	131	(A2)	60-80	PZ	14.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima	close to the top pin	Plate_056-5	03.08.2023	2.03	22.04	13:50	10:45	
+174	131(A2)80-100	131	(A2)	80-100	PZ	14.09.2022		Spartina anglica, Salicornia europaea, Puccinellia maritima	close to the top pin	Plate_056-6	03.08.2023	2.03	22.02	13:50	10:45	
+175	131(A6)0-5	131	(A6)	0-5	PZ	14.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima		Plate_028-1	13.07.2023	2.03	22.05	11:05	10:25	
+176	131(A6)5-10	131	(A6)	05. Okt	PZ	14.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima		Plate_028-2	13.07.2023	2.03	22	11:05	10:25	
+177	131(A6)20-30	131	(A6)	20-30	PZ	14.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima		Plate_028-3	13.07.2023	2.04	22.21	11:05	10:25	
+178	131(A6)40-50	131	(A6)	40-50	PZ	14.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima		Plate_028-4	13.07.2023	2	22.01	11:05	10:25	
+179	131(A6)60-80	131	(A6)	60-80	PZ	14.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima		Plate_028-5	13.07.2023	2.02	22.06	11:05	10:25	
+180	131(A6)80-100	131	(A6)	80-100	PZ	14.09.2022	Spartina anglica	Salicornia europaea, Puccinellia maritima		Plate_028-6	13.07.2023	2.02	22.06	11:05	10:25	
+181	131(C2)0-5	131	(C2)	0-5	PZ	14.09.2022		Spartina anglica, Salicornia europaea		Plate_055-1	03.08.2023	2.03	22.05	11:45	10:35	
+182	131(C2)5-10	131	(C2)	05. Okt	PZ	14.09.2022		Spartina anglica, Salicornia europaea		Plate_055-2	03.08.2023	2.02	22.11	11:45	10:35	
+183	131(C2)20-30	131	(C2)	20-30	PZ	14.09.2022		Spartina anglica, Salicornia europaea		Plate_055-3	03.08.2023	2.04	22	11:45	10:35	
+184	131(C2)40-50	131	(C2)	40-50	PZ	14.09.2022		Spartina anglica, Salicornia europaea		Plate_055-4	03.08.2023	2.05	22.1	11:45	10:35	
+185	131(C2)60-80	131	(C2)	60-80	PZ	14.09.2022		Spartina anglica, Salicornia europaea		Plate_055-5	03.08.2023	2.05	22.12	11:45	10:35	
+186	131(C2)80-100	131	(C2)	80-100	PZ	14.09.2022		Spartina anglica, Salicornia europaea		Plate_055-6	03.08.2023	2.02	22.07	11:45	10:35	
+187	131(G5)0-5	131	(G5)	0-5	PZ	14.09.2022	Puccinellia maritima	Spartina anglica		Plate_053-1	03.08.2023	2.02	22.03	11:15	10:40	
+188	131(G5)5-10	131	(G5)	05. Okt	PZ	14.09.2022	Puccinellia maritima	Spartina anglica		Plate_053-2	03.08.2023	2	22.03	11:15	10:40	
+189	131(G5)20-30	131	(G5)	20-30	PZ	14.09.2022	Puccinellia maritima	Spartina anglica		Plate_053-3	03.08.2023	2	22.06	11:15	10:40	
+190	131(G5)40-50	131	(G5)	40-50	PZ	14.09.2022	Puccinellia maritima	Spartina anglica		Plate_053-4	03.08.2023	2.01	22.02	11:15	10:40	
+191	131(G5)60-80	131	(G5)	60-80	PZ	14.09.2022	Puccinellia maritima	Spartina anglica		Plate_053-5	03.08.2023	2	22.01	11:15	10:40	
+192	131(G5)80-100	131	(G5)	80-100	PZ	14.09.2022	Puccinellia maritima	Spartina anglica		Plate_053-6	03.08.2023	2	22.06	11:15	10:40	
+193	132(A2)0-5	132	(A2)	0-5	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_082-1	28.11.2023	2.05	22.01	18:00	14:35	
+194	132(A2)5-10	132	(A2)	05. Okt	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_082-2	28.11.2023	2.04	22.03	18:00	14:35	
+195	132(A2)20-30	132	(A2)	20-30	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_082-3	28.11.2023	2.05	22.03	18:00	14:35	
+196	132(A2)40-50	132	(A2)	40-50	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_082-4	28.11.2023	2.04	22.02	18:00	14:35	
+197	132(A2)60-80	132	(A2)	60-80	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_082-5	28.11.2023	2.01	22	18:00	14:35	
+198	132(A2)80-100	132	(A2)	80-100	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_082-6	28.11.2023	2.01	22.07	18:00	14:35	
+199	132(A6)0-5	132	(A6)	0-5	PZ	14.09.2022	Spartina anglica	Salicornia europaea	close to left pin	Plate_021-1	05.07.2023	2	22.02	13:45	10:20	
+200	132(A6)5-10	132	(A6)	05. Okt	PZ	14.09.2022	Spartina anglica	Salicornia europaea	close to left pin	Plate_021-2	05.07.2023	2.02	22.02	13:45	10:20	
+201	132(A6)20-30	132	(A6)	20-30	PZ	14.09.2022	Spartina anglica	Salicornia europaea	close to left pin	Plate_021-3	05.07.2023	2.02	22.02	13:45	10:20	
+202	132(A6)40-50	132	(A6)	40-50	PZ	14.09.2022	Spartina anglica	Salicornia europaea	close to left pin	Plate_021-4	05.07.2023	2.02	22.02	13:45	10:20	
+203	132(A6)60-80	132	(A6)	60-80	PZ	14.09.2022	Spartina anglica	Salicornia europaea	close to left pin	Plate_021-5	05.07.2023	2.02	22.03	13:45	10:20	
+204	132(A6)80-100	132	(A6)	80-100	PZ	14.09.2022	Spartina anglica	Salicornia europaea	close to left pin	Plate_021-6	05.07.2023	2	22.03	13:45	10:20	
+205	132(C2)0-5	132	(C2)	0-5	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_018-1	05.07.2023	2.03	22.01	11:30	10:10	
+206	132(C2)5-10	132	(C2)	05. Okt	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_018-2	05.07.2023	2.01	22.06	11:30	10:10	
+207	132(C2)20-30	132	(C2)	20-30	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_018-3	05.07.2023	2.03	22.02	11:30	10:10	
+208	132(C2)40-50	132	(C2)	40-50	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_018-4	05.07.2023	2.01	22.04	11:30	10:10	
+209	132(C2)60-80	132	(C2)	60-80	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_018-5	05.07.2023	2	22	11:30	10:10	
+210	132(C2)80-100	132	(C2)	80-100	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_018-6	05.07.2023	2	22.02	11:30	10:10	
+211	132(G5)0-5	132	(G5)	0-5	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_011-1	29.06.2023	2.01	22.01	14:00	10:50	
+212	132(G5)5-10	132	(G5)	05. Okt	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_011-2	29.06.2023	2.02	22.02	14:00	10:50	
+213	132(G5)20-30	132	(G5)	20-30	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_011-3	29.06.2023	2.01	22	14:00	10:50	
+214	132(G5)40-50	132	(G5)	40-50	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_011-4	29.06.2023	2.02	22.01	14:00	10:50	
+215	132(G5)60-80	132	(G5)	60-80	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_011-5	29.06.2023	2.02	22.02	14:00	10:50	
+216	132(G5)80-100	132	(G5)	80-100	PZ	14.09.2022	Spartina anglica	Salicornia europaea		Plate_011-6	29.06.2023	2.02	22	14:00	10:50	
+217	240(A2)0-5	240	(A2)	0-5	LM	15.09.2022	Atriplex portulacoides			Plate_095-1	17.01.2024	2.04	21.98	11:30		
+218	240(A2)5-10	240	(A2)	05. Okt	LM	15.09.2022	Atriplex portulacoides			Plate_095-2	17.01.2024	2.01	22.07	11:30		
+219	240(A2)20-30	240	(A2)	20-30	LM	15.09.2022	Atriplex portulacoides			Plate_095-3	17.01.2024	2.03	22.03	11:30		
+220	240(A2)40-50	240	(A2)	40-50	LM	15.09.2022	Atriplex portulacoides			Plate_095-4	17.01.2024	2.01	22.01	11:30		
+221	240(A2)60-80	240	(A2)	60-80	LM	15.09.2022	Atriplex portulacoides			Plate_095-5	17.01.2024	2.02	22	11:30		
+222	240(A2)80-100	240	(A2)	80-100	LM	15.09.2022	Atriplex portulacoides			Plate_095-6	17.01.2024	2	22.06	11:30		
+223	240(A6)0-5	240	(A6)	0-5	LM	15.09.2022	Atriplex portulacoides			Plate_098-1	17.01.2024	2.02	22	13:40		
+224	240(A6)5-10	240	(A6)	05. Okt	LM	15.09.2022	Atriplex portulacoides			Plate_098-2	17.01.2024	2	22.03	13:40		
+225	240(A6)20-30	240	(A6)	20-30	LM	15.09.2022	Atriplex portulacoides			Plate_098-3	17.01.2024	2.03	22.04	13:40		
+226	240(A6)40-50	240	(A6)	40-50	LM	15.09.2022	Atriplex portulacoides			Plate_098-4	17.01.2024	2.02	22.09	13:40		
+227	240(A6)60-80	240	(A6)	60-80	LM	15.09.2022	Atriplex portulacoides			Plate_098-5	17.01.2024	2.02	22.22	13:40		
+228	240(A6)80-100	240	(A6)	80-100	LM	15.09.2022	Atriplex portulacoides			Plate_098-6	17.01.2024	2.05	22.56	13:40		
+229	240(C2)0-5	240	(C2)	0-5	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_061-1	24.10.2023	2.01	22.06	15:15	13:20	
+230	240(C2)5-10	240	(C2)	05. Okt	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_061-2	24.10.2023	2.01	22.06	15:15	13:20	
+231	240(C2)20-30	240	(C2)	20-30	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_061-3	24.10.2023	2.02	22.04	15:15	13:20	
+232	240(C2)40-50	240	(C2)	40-50	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_061-4	24.10.2023	2	22.02	15:15	13:20	
+233	240(C2)60-80	240	(C2)	60-80	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_061-5	24.10.2023	2.03	22.05	15:15	13:20	
+234	240(C2)80-100	240	(C2)	80-100	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_061-6	24.10.2023	2.01	22.04	15:15	13:20	
+235	240(G5)0-5	240	(G5)	0-5	LM	15.09.2022		Spartina anglica, Festuca rubra, Artemisia maritima		Plate_041-1	01.08.2023	2.04	22	16:00	16:10	
+236	240(G5)5-10	240	(G5)	05. Okt	LM	15.09.2022		Spartina anglica, Festuca rubra, Artemisia maritima		Plate_041-2	01.08.2023	2.02	22.07	16:00	16:10	
+237	240(G5)20-30	240	(G5)	20-30	LM	15.09.2022		Spartina anglica, Festuca rubra, Artemisia maritima		Plate_041-3	01.08.2023	2.04	22.02	16:00	16:10	
+238	240(G5)40-50	240	(G5)	40-50	LM	15.09.2022		Spartina anglica, Festuca rubra, Artemisia maritima		Plate_041-4	01.08.2023	2.05	22.11	16:00	16:10	
+239	240(G5)60-80	240	(G5)	60-80	LM	15.09.2022		Spartina anglica, Festuca rubra, Artemisia maritima		Plate_041-5	01.08.2023	2.03	22.04	16:00	16:10	
+240	240(G5)80-100	240	(G5)	80-100	LM	15.09.2022		Spartina anglica, Festuca rubra, Artemisia maritima		Plate_041-6	01.08.2023	2.06	22.04	16:00	16:10	
+241	241(A2)0-5	241	(A2)	0-5	LM	15.09.2022		Atriplex portulacoides, Spartina anglica		Plate_074-1	27.11.2023	2.03	22.04	14:50	12:45	
+242	241(A2)5-10	241	(A2)	05. Okt	LM	15.09.2022		Atriplex portulacoides, Spartina anglica		Plate_074-2	27.11.2023	2.03	22.04	14:50	12:45	
+243	241(A2)20-30	241	(A2)	20-30	LM	15.09.2022		Atriplex portulacoides, Spartina anglica		Plate_074-3	27.11.2023	2.05	22.04	14:50	12:45	
+244	241(A2)40-50	241	(A2)	40-50	LM	15.09.2022		Atriplex portulacoides, Spartina anglica		Plate_074-4	27.11.2023	2.05	22.04	14:50	12:45	
+245	241(A2)60-80	241	(A2)	60-80	LM	15.09.2022		Atriplex portulacoides, Spartina anglica		Plate_074-5	27.11.2023	2.03	22.03	14:50	12:45	
+246	241(A2)80-100	241	(A2)	80-100	LM	15.09.2022		Atriplex portulacoides, Spartina anglica		Plate_074-6	27.11.2023	2.03	22.06	14:50	12:45	
+247	241(A6)0-5	241	(A6)	0-5	LM	15.09.2022		Atriplex portulacoides, Spartina anglica	bare ground	Plate_092-1	05.12.2023	2.03	22.08	19:20	16:50	
+248	241(A6)5-10	241	(A6)	05. Okt	LM	15.09.2022		Atriplex portulacoides, Spartina anglica	bare ground	Plate_092-2	05.12.2023	2.01	22.02	19:20	16:50	
+249	241(A6)20-30	241	(A6)	20-30	LM	15.09.2022		Atriplex portulacoides, Spartina anglica	bare ground	Plate_092-3	05.12.2023	2.04	22.11	19:20	16:50	
+250	241(A6)40-50	241	(A6)	40-50	LM	15.09.2022		Atriplex portulacoides, Spartina anglica	bare ground	Plate_092-4	05.12.2023	2.01	22.22	19:20	16:50	
+251	241(A6)60-80	241	(A6)	60-80	LM	15.09.2022		Atriplex portulacoides, Spartina anglica	bare ground	Plate_092-5	05.12.2023	2.03	22.02	19:20	16:50	
+252	241(A6)80-100	241	(A6)	80-100	LM	15.09.2022		Atriplex portulacoides, Spartina anglica	bare ground	Plate_092-6	05.12.2023	2.01	22	19:20	16:50	
+253	241(C2)0-5	241	(C2)	0-5	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_065-1	25.10.2023	2.04	22.28	14:15	14:05	
+254	241(C2)5-10	241	(C2)	05. Okt	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_065-2	25.10.2023	2.01	22.1	14:15	14:05	
+255	241(C2)20-30	241	(C2)	20-30	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_065-3	25.10.2023	2.03	22.03	14:15	14:05	
+256	241(C2)40-50	241	(C2)	40-50	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_065-4	25.10.2023	2.05	22.04	14:15	14:05	
+257	241(C2)60-80	241	(C2)	60-80	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_065-5	25.10.2023	2.05	22.17	14:15	14:05	
+258	241(C2)80-100	241	(C2)	80-100	LM	15.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_065-6	25.10.2023	2.02	22.25	14:15	14:05	
+259	241(G5)0-5	241	(G5)	0-5	LM	15.09.2022	Atriplex portulacoides			Plate_068-1	26.10.2023	2	22.04	11:10	12:10	
+260	241(G5)5-10	241	(G5)	05. Okt	LM	15.09.2022	Atriplex portulacoides			Plate_068-2	26.10.2023	2.02	22.05	11:10	12:10	
+261	241(G5)20-30	241	(G5)	20-30	LM	15.09.2022	Atriplex portulacoides			Plate_068-3	26.10.2023	2.01	22.16	11:10	12:10	
+262	241(G5)40-50	241	(G5)	40-50	LM	15.09.2022	Atriplex portulacoides			Plate_068-4	26.10.2023	2.01	22.04	11:10	12:10	
+263	241(G5)60-80	241	(G5)	60-80	LM	15.09.2022	Atriplex portulacoides			Plate_068-5	26.10.2023	2.05	22.03	11:10	12:10	
+264	241(G5)80-100	241	(G5)	80-100	LM	15.09.2022	Atriplex portulacoides			Plate_068-6	26.10.2023	2.02	22.05	11:10	12:10	
+265	242(A2)0-5	242	(A2)	0-5	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_094-1	05.12.2023	2.03	22	20:00	16:55	
+266	242(A2)5-10	242	(A2)	05. Okt	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_094-2	05.12.2023	2.03	22.04	20:00	16:55	
+267	242(A2)20-30	242	(A2)	20-30	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_094-3	05.12.2023	2.02	22.02	20:00	16:55	
+268	242(A2)40-50	242	(A2)	40-50	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_094-4	05.12.2023	2	22	20:00	16:55	
+269	242(A2)60-80	242	(A2)	60-80	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_094-5	05.12.2023	2.02	22.04	20:00	16:55	
+270	242(A2)80-100	242	(A2)	80-100	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_094-6	05.12.2023	2.04	22.45	20:00	16:55	
+271	242(A6)0-5	242	(A6)	0-5	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima		Plate_089-1	30.10.2023	2.02	22.02	18:55	14:40	
+272	242(A6)5-10	242	(A6)	05. Okt	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima		Plate_089-2	30.10.2023	2.02	22.02	18:55	14:40	
+273	242(A6)20-30	242	(A6)	20-30	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima		Plate_089-3	30.10.2023	2.02	22.04	18:55	14:40	
+274	242(A6)40-50	242	(A6)	40-50	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima		Plate_089-4	30.10.2023	2.03	22.07	18:55	14:40	
+275	242(A6)60-80	242	(A6)	60-80	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima		Plate_089-5	30.10.2023	2.05	22.4	18:55	14:40	
+276	242(A6)80-100	242	(A6)	80-100	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima		Plate_089-6	30.10.2023	2.03	22.06	18:55	14:40	
+277	242(C2)0-5	242	(C2)	0-5	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_097-1	17.01.2024	2.01	22.02	13:15		
+278	242(C2)5-10	242	(C2)	05. Okt	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_097-2	17.01.2024	2.04	21.98	13:15		
+279	242(C2)20-30	242	(C2)	20-30	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_097-3	17.01.2024	2.03	21.29	13:15		
+280	242(C2)40-50	242	(C2)	40-50	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_097-4	17.01.2024	1.99	22	13:15		
+281	242(C2)60-80	242	(C2)	60-80	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_097-5	17.01.2024	2	22.04	13:15		
+282	242(C2)80-100	242	(C2)	80-100	LM	14.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_097-6	17.01.2024	2	22.02	13:15		
+283	242(G5)0-5	242	(G5)	0-5	LM	14.09.2022	Atriplex portulacoides	Spartina anglica	alt-position G5 -> G3	Plate_091-1	05.12.2023	1.99	22.02	19:00	16:45	
+284	242(G5)5-10	242	(G5)	05. Okt	LM	14.09.2022	Atriplex portulacoides	Spartina anglica	alt-position G5 -> G3	Plate_091-2	05.12.2023	2.01	22.03	19:00	16:45	
+285	242(G5)20-30	242	(G5)	20-30	LM	14.09.2022	Atriplex portulacoides	Spartina anglica	alt-position G5 -> G3	Plate_091-3	05.12.2023	2.01	22.05	19:00	16:45	
+286	242(G5)40-50	242	(G5)	40-50	LM	14.09.2022	Atriplex portulacoides	Spartina anglica	alt-position G5 -> G3			1.99	22.01	Probe fehlt		
+287	242(G5)60-80	242	(G5)	60-80	LM	14.09.2022	Atriplex portulacoides	Spartina anglica	alt-position G5 -> G3	Plate_091-5	05.12.2023	2.06	22.06	19:00	16:45	
+288	242(G5)80-100	242	(G5)	80-100	LM	14.09.2022	Atriplex portulacoides	Spartina anglica	alt-position G5 -> G3	Plate_091-6	05.12.2023	1.99	22.09	19:00	16:45	
+289	250(A2)0-5	250	(A2)	0-5	LM	13.09.2022	Festuca rubra			Plate_030-1	13.07.2023	2	22.01	11:45	10:30	
+290	250(A2)5-10	250	(A2)	05. Okt	LM	13.09.2022	Festuca rubra			Plate_030-2	13.07.2023	2.01	22.03	11:45	10:30	
+291	250(A2)20-30	250	(A2)	20-30	LM	13.09.2022	Festuca rubra			Plate_030-3	13.07.2023	2	22.01	11:45	10:30	
+292	250(A2)40-50	250	(A2)	40-50	LM	13.09.2022	Festuca rubra			Plate_030-4	13.07.2023	2.03	22.01	11:45	10:30	
+293	250(A2)60-80	250	(A2)	60-80	LM	13.09.2022	Festuca rubra			Plate_030-5	13.07.2023	2.02	22.04	11:45	10:30	
+294	250(A2)80-100	250	(A2)	80-100	LM	13.09.2022	Festuca rubra			Plate_030-6	13.07.2023	2.01	22.01	11:45	10:30	
+295	250(A6)0-5	250	(A6)	0-5	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_086-1	29.11.2023	2.04	22.07	19:00	14:50	
+296	250(A6)5-10	250	(A6)	05. Okt	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_086-2	29.11.2023	2.04	22.03	19:00	14:50	
+297	250(A6)20-30	250	(A6)	20-30	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_086-3	29.11.2023	2.01	22.02	19:00	14:50	
+298	250(A6)40-50	250	(A6)	40-50	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_086-4	29.11.2023	2.04	22.04	19:00	14:50	
+299	250(A6)60-80	250	(A6)	60-80	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_086-5	29.11.2023	2.03	22.02	19:00	14:50	
+300	250(A6)80-100	250	(A6)	80-100	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_086-6	29.11.2023	2.01	22.09	19:00	14:50	
+301	250(C2)0-5	250	(C2)	0-5	LM	13.09.2022	Atriplex portulacoides			Plate_026-1	11.07.2023	2.01	22.01	13:50	10:30	
+302	250(C2)5-10	250	(C2)	05. Okt	LM	13.09.2022	Atriplex portulacoides			Plate_026-2	11.07.2023	2.03	22.01	13:50	10:30	
+303	250(C2)20-30	250	(C2)	20-30	LM	13.09.2022	Atriplex portulacoides			Plate_026-3	11.07.2023	2.01	22.01	13:50	10:30	
+304	250(C2)40-50	250	(C2)	40-50	LM	13.09.2022	Atriplex portulacoides			Plate_026-4	11.07.2023	2.02	22.03	13:50	10:30	
+305	250(C2)60-80	250	(C2)	60-80	LM	13.09.2022	Atriplex portulacoides			Plate_026-5	11.07.2023	2	22.06	13:50	10:30	
+306	250(C2)80-100	250	(C2)	80-100	LM	13.09.2022	Atriplex portulacoides			Plate_026-6	11.07.2023	2	22	13:50	10:30	
+307	250(G5)0-5	250	(G5)	0-5	LM	13.09.2022	Limonium vulgare			Plate_083-1	29.11.2023	2.04	22.05	17:50	14:40	
+308	250(G5)5-10	250	(G5)	05. Okt	LM	13.09.2022	Limonium vulgare			Plate_083-2	29.11.2023	2.02	22	17:50	14:40	
+309	250(G5)20-30	250	(G5)	20-30	LM	13.09.2022	Limonium vulgare			Plate_083-3	29.11.2023	2.01	22.04	17:50	14:40	
+310	250(G5)40-50	250	(G5)	40-50	LM	13.09.2022	Limonium vulgare			Plate_083-4	29.11.2023	2.03	22.02	17:50	14:40	
+311	250(G5)60-80	250	(G5)	60-80	LM	13.09.2022	Limonium vulgare			Plate_083-5	29.11.2023	2.02	22.06	17:50	14:40	
+312	250(G5)80-100	250	(G5)	80-100	LM	13.09.2022	Limonium vulgare			Plate_083-6	29.11.2023	2.01	22	17:50	14:40	
+313	251(A2)0-5	251	(A2)	0-5	LM	13.09.2022	Limonium vulgare	Atriplex portulacoides		Plate_088-1	30.11.2023	2.04	22.15	18:35	14:35	
+314	251(A2)5-10	251	(A2)	05. Okt	LM	13.09.2022	Limonium vulgare	Atriplex portulacoides		Plate_088-2	30.11.2023	2.04	22.07	18:35	14:35	
+315	251(A2)20-30	251	(A2)	20-30	LM	13.09.2022	Limonium vulgare	Atriplex portulacoides		Plate_088-3	30.11.2023	2.05	22.03	18:35	14:35	
+316	251(A2)40-50	251	(A2)	40-50	LM	13.09.2022	Limonium vulgare	Atriplex portulacoides		Plate_088-4	30.11.2023	2.05	22.15	18:35	14:35	
+317	251(A2)60-80	251	(A2)	60-80	LM	13.09.2022	Limonium vulgare	Atriplex portulacoides		Plate_088-5	30.11.2023	2.03	22.24	18:35	14:35	
+318	251(A2)80-100	251	(A2)	80-100	LM	13.09.2022	Limonium vulgare	Atriplex portulacoides		Plate_088-6	30.11.2023	2.04	22.04	18:35	14:35	
+319	251(A6)0-5	251	(A6)	0-5	LM	13.09.2022	Atriplex portulacoides		waterlogged	Plate_085-1	29.11.2023	2.05	22.34	18:30	14:50	
+320	251(A6)5-10	251	(A6)	05. Okt	LM	13.09.2022	Atriplex portulacoides		waterlogged	Plate_085-2	29.11.2023	2.02	22.05	18:30	14:50	
+321	251(A6)20-30	251	(A6)	20-30	LM	13.09.2022	Atriplex portulacoides		waterlogged	Plate_085-3	29.11.2023	2.03	22.02	18:30	14:50	
+322	251(A6)40-50	251	(A6)	40-50	LM	13.09.2022	Atriplex portulacoides		waterlogged	Plate_085-4	29.11.2023	2	21.98	18:30	14:50	
+323	251(A6)60-80	251	(A6)	60-80	LM	13.09.2022	Atriplex portulacoides		waterlogged	Plate_085-5	29.11.2023	2.03	22.09	18:30	14:50	
+324	251(A6)80-100	251	(A6)	80-100	LM	13.09.2022	Atriplex portulacoides		waterlogged	Plate_085-6	29.11.2023	2.02	22.03	18:30	14:50	
+325	251(C2)0-5	251	(C2)	0-5	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_104-1		2.05	22.04			
+326	251(C2)5-10	251	(C2)	05. Okt	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_104-2		2.02	22.11			
+327	251(C2)20-30	251	(C2)	20-30	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_104-3		2.04	22.08			
+328	251(C2)40-50	251	(C2)	40-50	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_104-4		2.04	22.07			
+329	251(C2)60-80	251	(C2)	60-80	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_104-5		2.01	22.02			
+330	251(C2)80-100	251	(C2)	80-100	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_104-6		2.04	22.18			
+331	251(G5)0-5	251	(G5)	0-5	LM	13.09.2022	Atriplex portulacoides	Puccinellia maritima, Limonium vulgare		Plate_093-1	05.12.2023	2.05	22.02	19:40	16:50	
+332	251(G5)5-10	251	(G5)	05. Okt	LM	13.09.2022	Atriplex portulacoides	Puccinellia maritima, Limonium vulgare		Plate_093-2	05.12.2023	2.01	22.07	19:40	16:50	
+333	251(G5)20-30	251	(G5)	20-30	LM	13.09.2022	Atriplex portulacoides	Puccinellia maritima, Limonium vulgare		Plate_093-3	05.12.2023	2.04	22.05	19:40	16:50	
+334	251(G5)40-50	251	(G5)	40-50	LM	13.09.2022	Atriplex portulacoides	Puccinellia maritima, Limonium vulgare		Plate_093-4	05.12.2023	2	22.16	19:40	16:50	
+335	251(G5)60-80	251	(G5)	60-80	LM	13.09.2022	Atriplex portulacoides	Puccinellia maritima, Limonium vulgare		Plate_093-5	05.12.2023	2	22.03	19:40	16:50	
+336	251(G5)80-100	251	(G5)	80-100	LM	13.09.2022	Atriplex portulacoides	Puccinellia maritima, Limonium vulgare		Plate_093-6	05.12.2023	2	22.04	19:40	16:50	
+337	252(A2)0-5	252	(A2)	0-5	LM	13.09.2022	Atriplex portulacoides	Spartina anglica		Plate_084-1	29.11.2023	2.01	22.07	18:05	14:45	
+338	252(A2)5-10	252	(A2)	05. Okt	LM	13.09.2022	Atriplex portulacoides	Spartina anglica		Plate_084-2	29.11.2023	2	22.04	18:05	14:45	
+339	252(A2)20-30	252	(A2)	20-30	LM	13.09.2022	Atriplex portulacoides	Spartina anglica		Plate_084-3	29.11.2023	2.01	22.08	18:05	14:45	
+340	252(A2)40-50	252	(A2)	40-50	LM	13.09.2022	Atriplex portulacoides	Spartina anglica		Plate_084-4	29.11.2023	2	22.02	18:05	14:45	
+341	252(A2)60-80	252	(A2)	60-80	LM	13.09.2022	Atriplex portulacoides	Spartina anglica		Plate_084-5	29.11.2023	2.04	22	18:05	14:45	
+342	252(A2)80-100	252	(A2)	80-100	LM	13.09.2022	Atriplex portulacoides	Spartina anglica		Plate_084-6	29.11.2023	1.99	22.03	18:05	14:45	
+343	252(A6)0-5	252	(A6)	0-5	LM	13.09.2022	Atriplex portulacoides	Aster tripolium, Spartina anglica	close to left pin	Plate_066-1	25.10.2023	2.02	22.02	14:40	14:10	
+344	252(A6)5-10	252	(A6)	05. Okt	LM	13.09.2022	Atriplex portulacoides	Aster tripolium, Spartina anglica	close to left pin	Plate_066-2	25.10.2023	2	22.02	14:40	14:10	
+345	252(A6)20-30	252	(A6)	20-30	LM	13.09.2022	Atriplex portulacoides	Aster tripolium, Spartina anglica	close to left pin	Plate_066-3	25.10.2023	2.04	22.08	14:40	14:10	
+346	252(A6)40-50	252	(A6)	40-50	LM	13.09.2022	Atriplex portulacoides	Aster tripolium, Spartina anglica	close to left pin	Plate_066-4	25.10.2023	2.02	22.06	14:40	14:10	
+347	252(A6)60-80	252	(A6)	60-80	LM	13.09.2022	Atriplex portulacoides	Aster tripolium, Spartina anglica	close to left pin	Plate_066-5	25.10.2023	2.02	22.08	14:40	14:10	
+348	252(A6)80-100	252	(A6)	80-100	LM	13.09.2022	Atriplex portulacoides	Aster tripolium, Spartina anglica	close to left pin	Plate_066-6	25.10.2023	2	22	14:40	14:10	
+349	252(C2)0-5	252	(C2)	0-5	LM	13.09.2022	Atriplex portulacoides			Plate_087-1	30.11.2023	1.99	22	18:20	14:35	
+350	252(C2)5-10	252	(C2)	05. Okt	LM	13.09.2022	Atriplex portulacoides			Plate_087-2	30.11.2023	2	22.18	18:20	14:35	
+351	252(C2)20-30	252	(C2)	20-30	LM	13.09.2022	Atriplex portulacoides			Plate_087-3	30.11.2023	2.04	22.08	18:20	14:35	
+352	252(C2)40-50	252	(C2)	40-50	LM	13.09.2022	Atriplex portulacoides			Plate_087-4	30.11.2023	2.05	22.1	18:20	14:35	
+353	252(C2)60-80	252	(C2)	60-80	LM	13.09.2022	Atriplex portulacoides			Plate_087-5	30.11.2023	1.98	22.1	18:20	14:35	
+354	252(C2)80-100	252	(C2)	80-100	LM	13.09.2022	Atriplex portulacoides			Plate_087-6	30.11.2023	2.04	22.16	18:20	14:35	
+355	252(G5)0-5	252	(G5)	0-5	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_096-1	17.01.2024	2.02	22.35	11:50		
+356	252(G5)5-10	252	(G5)	05. Okt	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_096-2	17.01.2024	2.05	22.01	11:50		
+357	252(G5)20-30	252	(G5)	20-30	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_096-3	17.01.2024	2.01	22.08	11:50		
+358	252(G5)40-50	252	(G5)	40-50	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_096-4	17.01.2024	2.04	22.04	11:50		
+359	252(G5)60-80	252	(G5)	60-80	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_096-5	17.01.2024	2.03	22.03	11:50		
+360	252(G5)80-100	252	(G5)	80-100	LM	13.09.2022		Atriplex portulacoides, Limonium vulgare		Plate_096-6	17.01.2024	2.05	22.17	11:50		
+361	260(A2)0-5	260	(A2)	0-5	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_034-1	01.08.2023	2.05	22.02	11:10	11:30	
+362	260(A2)5-10	260	(A2)	05. Okt	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_034-2	01.08.2023	2.01	22.08	11:10	11:30	
+363	260(A2)20-30	260	(A2)	20-30	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_034-3	01.08.2023	2.06	21.96	11:10	11:30	
+364	260(A2)40-50	260	(A2)	40-50	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_034-4	01.08.2023	1.97	21.96	11:10	11:30	
+365	260(A2)60-80	260	(A2)	60-80	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_034-5	01.08.2023	1.98	22.23	11:10	11:30	
+366	260(A2)80-100	260	(A2)	80-100	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_034-6	01.08.2023	2.01	22.11	11:10	11:30	
+367	260(A6)0-5	260	(A6)	0-5	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima, Festuca rubra		NA	30.11.2023	2.01	21.99	19:30	14:45	
+368	260(A6)5-10	260	(A6)	05. Okt	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima, Festuca rubra		NA	30.11.2023	2.02	22.02	19:30	14:45	
+369	260(A6)20-30	260	(A6)	20-30	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima, Festuca rubra		NA	30.11.2023	2.02	21.98	19:30	14:45	
+370	260(A6)40-50	260	(A6)	40-50	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima, Festuca rubra		NA	30.11.2023	2.03	21.99	19:30	14:45	
+371	260(A6)60-80	260	(A6)	60-80	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima, Festuca rubra		NA	30.11.2023	2.01	21.98	19:30	14:45	
+372	260(A6)80-100	260	(A6)	80-100	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima, Festuca rubra		NA	30.11.2023	2.01	22	19:30	14:45	
+373	260(C2)0-5	260	(C2)	0-5	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare	Used second plate reader	Plate_045-1	02.08.2023	2.02	22.02	13:00	10:45	
+374	260(C2)5-10	260	(C2)	05. Okt	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare	Used second plate reader	Plate_045-2	02.08.2023	2.03	22.01	13:00	10:45	
+375	260(C2)20-30	260	(C2)	20-30	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare	Used second plate reader	Plate_045-3	02.08.2023	2.01	22.03	13:00	10:45	
+376	260(C2)40-50	260	(C2)	40-50	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare	Used second plate reader	Plate_045-4	02.08.2023	2.01	22.06	13:00	10:45	
+377	260(C2)60-80	260	(C2)	60-80	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare	Used second plate reader	Plate_045-5	02.08.2023	2	22	13:00	10:45	
+378	260(C2)80-100	260	(C2)	80-100	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare	Used second plate reader	Plate_045-6	02.08.2023	2.02	22.01	13:00	10:45	
+379	260(G5)0-5	260	(G5)	0-5	LM	12.09.2022		Festuca rubra, Artemisia maritima		Plate_075-1	27.11.2023	2.02	22.04	15:50	12:45	
+380	260(G5)5-10	260	(G5)	05. Okt	LM	12.09.2022		Festuca rubra, Artemisia maritima		Plate_075-2	27.11.2023	2	22	15:50	12:45	
+381	260(G5)20-30	260	(G5)	20-30	LM	12.09.2022		Festuca rubra, Artemisia maritima		Plate_075-3	27.11.2023	2.01	22.01	15:50	12:45	
+382	260(G5)40-50	260	(G5)	40-50	LM	12.09.2022		Festuca rubra, Artemisia maritima		Plate_075-4	27.11.2023	2.01	22	15:50	12:45	
+383	260(G5)60-80	260	(G5)	60-80	LM	12.09.2022		Festuca rubra, Artemisia maritima		Plate_075-5	27.11.2023	2.03	22.02	15:50	12:45	
+384	260(G5)80-100	260	(G5)	80-100	LM	12.09.2022		Festuca rubra, Artemisia maritima		Plate_075-6	27.11.2023	2	22.01	15:50	12:45	
+385	261(A2)0-5	261	(A2)	0-5	LM	12.09.2022	Atriplex portulacoides			Plate_105-1	19.02.2024	1.98	22.02			
+386	261(A2)5-10	261	(A2)	05. Okt	LM	12.09.2022	Atriplex portulacoides			Plate_105-2	19.02.2024	2.04	22.04			
+387	261(A2)20-30	261	(A2)	20-30	LM	12.09.2022	Atriplex portulacoides			Plate_105-3	19.02.2024	2.04	22.05			
+388	261(A2)40-50	261	(A2)	40-50	LM	12.09.2022	Atriplex portulacoides			Plate_105-4	19.02.2024	2	19.99			
+389	261(A2)60-80	261	(A2)	60-80	LM	12.09.2022	Atriplex portulacoides			Plate_105-5	19.02.2024	1.99	19.99			
+390	261(A2)80-100	261	(A2)	80-100	LM	12.09.2022	Atriplex portulacoides			Plate_105-6	19.02.2024	2.05	20.02			
+391	261(A6)0-5	261	(A6)	0-5	LM	12.09.2022	Festuca rubra	Aster tripolium, Artemisia maritima		Plate_069-1	26.10.2023	2.02	22.04	11:30	12:15	
+392	261(A6)5-10	261	(A6)	05. Okt	LM	12.09.2022	Festuca rubra	Aster tripolium, Artemisia maritima		Plate_069-2	26.10.2023	2.01	22.03	11:30	12:15	
+393	261(A6)20-30	261	(A6)	20-30	LM	12.09.2022	Festuca rubra	Aster tripolium, Artemisia maritima		Plate_069-3	26.10.2023	2.02	22.03	11:30	12:15	
+394	261(A6)40-50	261	(A6)	40-50	LM	12.09.2022	Festuca rubra	Aster tripolium, Artemisia maritima		Plate_069-4	26.10.2023	2.01	22.01	11:30	12:15	
+395	261(A6)60-80	261	(A6)	60-80	LM	12.09.2022	Festuca rubra	Aster tripolium, Artemisia maritima		Plate_069-5	26.10.2023	2.02	22.01	11:30	12:15	
+396	261(A6)80-100	261	(A6)	80-100	LM	12.09.2022	Festuca rubra	Aster tripolium, Artemisia maritima		Plate_069-6	26.10.2023	2.01	22.02	11:30	12:15	
+397	261(C2)0-5	261	(C2)	0-5	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima	alt -position C2 ->C3	Plate_072-1	26.10.2023	2.01	22.02	13:35	12:20	
+398	261(C2)5-10	261	(C2)	05. Okt	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima	alt -position C2 ->C3	Plate_072-2	26.10.2023	1.99	22.01	13:35	12:20	
+399	261(C2)20-30	261	(C2)	20-30	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima	alt -position C2 ->C3	Plate_072-3	26.10.2023	2.05	22.03	13:35	12:20	112 C2
+400	261(C2)40-50	261	(C2)	40-50	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima	alt -position C2 ->C3	Plate_072-4	26.10.2023	2.04	20.03	13:35	12:20	112 C2
+401	261(C2)60-80	261	(C2)	60-80	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima	alt -position C2 ->C3	Plate_072-5	26.10.2023	2	20.07	13:35	12:20	112 C2
+402	261(C2)80-100	261	(C2)	80-100	LM	12.09.2022		Atriplex portulacoides, Limonium vulgare, Artemisia maritima	alt -position C2 ->C3	Plate_072-6	26.10.2023	2	20.15	13:35	12:20	
+403	261(G5)0-5	261	(G5)	0-5	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_036-1	01.08.2023	1.98	21.92	11:50	11:35	
+404	261(G5)5-10	261	(G5)	05. Okt	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_036-2	01.08.2023	1.98	21.95	11:50	11:35	
+405	261(G5)20-30	261	(G5)	20-30	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_036-3	01.08.2023	1.98	21.96	11:50	11:35	
+406	261(G5)40-50	261	(G5)	40-50	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_036-4	01.08.2023	2	22.07	11:50	11:35	
+407	261(G5)60-80	261	(G5)	60-80	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_036-5	01.08.2023	2.05	22.22	11:50	11:35	
+408	261(G5)80-100	261	(G5)	80-100	LM	12.09.2022		Festuca rubra, Artemisia maritima	Used second plate reader	Plate_036-6	01.08.2023	1.97	22	11:50	11:35	
+409	262(A2)0-5	262	(A2)	0-5	LM	12.09.2022	Limonium vulgare		close to right pin	Plate_040-1	01.08.2023	1.99	20.11	15:20	16:05	
+410	262(A2)5-10	262	(A2)	05. Okt	LM	12.09.2022	Limonium vulgare		close to right pin	Plate_040-2	01.08.2023	2	20.14	15:20	16:05	
+411	262(A2)20-30	262	(A2)	20-30	LM	12.09.2022	Limonium vulgare		close to right pin	Plate_040-3	01.08.2023	2.03	20.05	15:20	16:05	
+412	262(A2)40-50	262	(A2)	40-50	LM	12.09.2022	Limonium vulgare		close to right pin	Plate_040-4	01.08.2023	2	20.01	15:20	16:05	
+413	262(A2)60-80	262	(A2)	60-80	LM	12.09.2022	Limonium vulgare		close to right pin	Plate_040-5	01.08.2023	2.07	20	15:20	16:05	
+414	262(A2)80-100	262	(A2)	80-100	LM	12.09.2022	Limonium vulgare		close to right pin	Plate_040-6	01.08.2023	1.99	20.01	15:20	16:05	
+415	262(A6)0-5	262	(A6)	0-5	LM	12.09.2022		Atriplex portulacoides, Artemisia maritima		Plate_044-1	02.08.2023	2.02	22.01	11:55	13:15	
+416	262(A6)5-10	262	(A6)	05. Okt	LM	12.09.2022		Atriplex portulacoides, Artemisia maritima		Plate_044-2	02.08.2023	2.01	22.04	11:55	13:15	
+417	262(A6)20-30	262	(A6)	20-30	LM	12.09.2022		Atriplex portulacoides, Artemisia maritima		Plate_044-3	02.08.2023	2.01	22.03	11:55	13:15	
+418	262(A6)40-50	262	(A6)	40-50	LM	12.09.2022		Atriplex portulacoides, Artemisia maritima		Plate_044-4	02.08.2023	2	22.02	11:55	13:15	
+419	262(A6)60-80	262	(A6)	60-80	LM	12.09.2022		Atriplex portulacoides, Artemisia maritima		Plate_044-5	02.08.2023	2.02	22	11:55	13:15	
+420	262(A6)80-100	262	(A6)	80-100	LM	12.09.2022		Atriplex portulacoides, Artemisia maritima		Plate_044-6	02.08.2023	2.01	22.02	11:55	13:15	
+421	262(C2)0-5	262	(C2)	0-5	LM	12.09.2022	Atriplex portulacoides		alt -position C2 ->C3	Plate_073-1	27.11.2023	2.02	22.01	13:55	12:40	neue Pipette
+422	262(C2)5-10	262	(C2)	05. Okt	LM	12.09.2022	Atriplex portulacoides		alt -position C2 ->C3	Plate_073-2	27.11.2023	2.02	22	13:55	12:40	neue Pipette
+423	262(C2)20-30	262	(C2)	20-30	LM	12.09.2022	Atriplex portulacoides		alt -position C2 ->C3	Plate_073-3	27.11.2023	2	22.04	13:55	12:40	neue Pipette
+424	262(C2)40-50	262	(C2)	40-50	LM	12.09.2022	Atriplex portulacoides		alt -position C2 ->C3	Plate_073-4	27.11.2023	2.02	22.03	13:55	12:40	neue Pipette
+425	262(C2)60-80	262	(C2)	60-80	LM	12.09.2022	Atriplex portulacoides		alt -position C2 ->C3	Plate_073-5	27.11.2023	2.02	21.99	13:55	12:40	neue Pipette
+426	262(C2)80-100	262	(C2)	80-100	LM	12.09.2022	Atriplex portulacoides		alt -position C2 ->C3	Plate_073-6	27.11.2023	2	22	13:55	12:40	neue Pipette
+427	262(G5)0-5	262	(G5)	0-5	LM	12.09.2022	Limonium vulgare, Artemisia maritima, Festuca rubra		Used second plate reader	Plate_038-1	01.08.2023	2.01	22	13:30	11:40	
+428	262(G5)5-10	262	(G5)	05. Okt	LM	12.09.2022	Limonium vulgare, Artemisia maritima, Festuca rubra		Used second plate reader	Plate_038-2	01.08.2023	2.01	22.01	13:30	11:40	
+429	262(G5)20-30	262	(G5)	20-30	LM	12.09.2022	Limonium vulgare, Artemisia maritima, Festuca rubra		Used second plate reader	Plate_038-3	01.08.2023	2.01	22.02	13:30	11:40	
+430	262(G5)40-50	262	(G5)	40-50	LM	12.09.2022	Limonium vulgare, Artemisia maritima, Festuca rubra		Used second plate reader	Plate_038-4	01.08.2023	2.01	22.01	13:30	11:40	
+431	262(G5)60-80	262	(G5)	60-80	LM	12.09.2022	Limonium vulgare, Artemisia maritima, Festuca rubra		Used second plate reader	Plate_038-5	01.08.2023	1.99	21.98	13:30	11:40	
+432	262(G5)80-100	262	(G5)	80-100	LM	12.09.2022	Limonium vulgare, Artemisia maritima, Festuca rubra		Used second plate reader	Plate_038-6	01.08.2023	2.01	22.01	13:30	11:40	
+433	370(A2)0-5	370	(A2)	0-5	HM	14.09.2022	Elymus athericus			Plate_027-1	13.07.2023	2.02	22.02	10:50	10:20	
+434	370(A2)5-10	370	(A2)	05. Okt	HM	14.09.2022	Elymus athericus			Plate_027-2	13.07.2023	2.02	22.03	10:50	10:20	
+435	370(A2)20-30	370	(A2)	20-30	HM	14.09.2022	Elymus athericus			Plate_027-3	13.07.2023	2.03	22.07	10:50	10:20	
+436	370(A2)40-50	370	(A2)	40-50	HM	14.09.2022	Elymus athericus			Plate_027-4	13.07.2023	2.02	22.01	10:50	10:20	
+437	370(A2)60-80	370	(A2)	60-80	HM	14.09.2022	Elymus athericus			Plate_027-5	13.07.2023	2.01	22.01	10:50	10:20	
+438	370(A2)80-100	370	(A2)	80-100	HM	14.09.2022	Elymus athericus			Plate_027-6	13.07.2023	2.02	22.03	10:50	10:20	
+439	370(A6)0-5	370	(A6)	0-5	HM	14.09.2022	Elymus athericus			Plate_005-1	27.06.2023			14:30	11:00	
+440	370(A6)5-10	370	(A6)	05. Okt	HM	14.09.2022	Elymus athericus			Plate_005-2	27.06.2023			14:30	11:00	
+441	370(A6)20-30	370	(A6)	20-30	HM	14.09.2022	Elymus athericus			Plate_005-3	27.06.2023			14:30	11:00	
+442	370(A6)40-50	370	(A6)	40-50	HM	14.09.2022	Elymus athericus			Plate_005-4	27.06.2023			14:30	11:00	
+443	370(A6)60-80	370	(A6)	60-80	HM	14.09.2022	Elymus athericus			Plate_005-5	27.06.2023			14:30	11:00	
+444	370(A6)80-100	370	(A6)	80-100	HM	14.09.2022	Elymus athericus			Plate_005-6	27.06.2023			14:30	11:00	
+445	370(C2)0-5	370	(C2)	0-5	HM	14.09.2022	Elymus athericus			Plate_100-1	22.01.2024	2.01	22	14:00		
+446	370(C2)5-10	370	(C2)	05. Okt	HM	14.09.2022	Elymus athericus			Plate_100-2	22.01.2024	2.01	22.05	14:00		
+447	370(C2)20-30	370	(C2)	20-30	HM	14.09.2022	Elymus athericus			Plate_100-3	22.01.2024	2.01	22.05	14:00		
+448	370(C2)40-50	370	(C2)	40-50	HM	14.09.2022	Elymus athericus			Plate_100-4	22.01.2024	2	22.02	14:00		
+449	370(C2)60-80	370	(C2)	60-80	HM	14.09.2022	Elymus athericus			Plate_100-5	22.01.2024	2.01	22.01	14:00		
+450	370(C2)80-100	370	(C2)	80-100	HM	14.09.2022	Elymus athericus			Plate_100-6	22.01.2024	2.03	22.04	14:00		
+451	370(G5)0-5	370	(G5)	0-5	HM	14.09.2022	Elymus athericus			Plate_004-1	27.06.2023	2.08	22.09	14:00	11:00	
+452	370(G5)5-10	370	(G5)	05. Okt	HM	14.09.2022	Elymus athericus			Plate_004-2	27.06.2023	2.01	22.21	14:00	11:00	
+453	370(G5)20-30	370	(G5)	20-30	HM	14.09.2022	Elymus athericus			Plate_004-3	27.06.2023	2.01	22.12	14:00	11:00	
+454	370(G5)40-50	370	(G5)	40-50	HM	14.09.2022	Elymus athericus			Plate_004-4	27.06.2023	2.02	22.12	14:00	11:00	
+455	370(G5)60-80	370	(G5)	60-80	HM	14.09.2022	Elymus athericus			Plate_004-5	27.06.2023	2.06	22.14	14:00	11:00	
+456	370(G5)80-100	370	(G5)	80-100	HM	14.09.2022	Elymus athericus			Plate_004-6	27.06.2023			14:00	11:00	
+457	371(A2)0-5	371	(A2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_103-1	22.01.2024	2.05	22.03	15:55		
+458	371(A2)5-10	371	(A2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_103-2	22.01.2024	2	22.06	15:55		
+459	371(A2)20-30	371	(A2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_103-3	22.01.2024	2	22.04	15:55		
+460	371(A2)40-50	371	(A2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_103-4	22.01.2024	2.02	22.03	15:55		
+461	371(A2)60-80	371	(A2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_103-5	22.01.2024	2.02	22.11	15:55		
+462	371(A2)80-100	371	(A2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	93cm total	Plate_103-6	22.01.2024	2.04	22.04	15:55		
+463	371(A6)0-5	371	(A6)	0-5	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		NA		2.03	21.98			
+464	371(A6)5-10	371	(A6)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		NA		2.05	22.03			
+465	371(A6)20-30	371	(A6)	20-30	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		NA		2.01	22.08			
+466	371(A6)40-50	371	(A6)	40-50	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		NA		2.07	22.09			
+467	371(A6)60-80	371	(A6)	60-80	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		NA		2.01	22.03			
+468	371(A6)80-100	371	(A6)	80-100	HM	15.09.2022	Elymus athericus	Atriplex portulacoides	90cm total	NA		1.99	21.99			
+469	371(C2)0-5	371	(C2)	0-5	HM	15.09.2022	Elymus athericus			Plate_019-1	05.07.2023	2.02	22.05	11:50	10:15	
+470	371(C2)5-10	371	(C2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_019-2	05.07.2023	2.04	22.19	11:50	10:15	
+471	371(C2)20-30	371	(C2)	20-30	HM	15.09.2022	Elymus athericus			Plate_019-3	05.07.2023	2	22.05	11:50	10:15	
+472	371(C2)40-50	371	(C2)	40-50	HM	15.09.2022	Elymus athericus			Plate_019-4	05.07.2023	2.04	22.03	11:50	10:15	
+473	371(C2)60-80	371	(C2)	60-80	HM	15.09.2022	Elymus athericus			Plate_019-5	05.07.2023	2.05	22.03	11:50	10:15	
+474	371(C2)80-100	371	(C2)	80-100	HM	15.09.2022	Elymus athericus			Plate_019-6	05.07.2023	2	22.03	11:50	10:15	
+475	371(G5)0-5	371	(G5)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_010-1	29.06.2023	2.06	22.02	13:40	10:50	
+476	371(G5)5-10	371	(G5)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_010-2	29.06.2023	1.98	22.08	13:40	10:50	
+477	371(G5)20-30	371	(G5)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_010-3	29.06.2023	2.02	22	13:40	10:50	
+478	371(G5)40-50	371	(G5)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_010-4	29.06.2023	2.01	22.03	13:40	10:50	
+479	371(G5)60-80	371	(G5)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_010-5	29.06.2023	1.99	22.05	13:40	10:50	
+480	371(G5)80-100	371	(G5)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	96cm total	Plate_010-6	29.06.2023	2.04	22.02	13:40	10:50	
+481	372(A2)0-5	372	(A2)	0-5	HM	15.09.2022	Elymus athericus			Plate_067-1	25.10.2023	2.05	22.09	15:00	14:15	
+482	372(A2)5-10	372	(A2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_067-2	25.10.2023	1.98	22.02	15:00	14:15	
+483	372(A2)20-30	372	(A2)	20-30	HM	15.09.2022	Elymus athericus			Plate_067-3	25.10.2023	2.04	21.99	15:00	14:15	
+484	372(A2)40-50	372	(A2)	40-50	HM	15.09.2022	Elymus athericus			Plate_067-4	25.10.2023	2	22	15:00	14:15	
+485	372(A2)60-80	372	(A2)	60-80	HM	15.09.2022	Elymus athericus			Plate_067-5	25.10.2023	2.04	22.07	15:00	14:15	
+486	372(A2)80-100	372	(A2)	80-100	HM	15.09.2022	Elymus athericus			Plate_067-6	25.10.2023	2.04	22	15:00	14:15	
+487	372(A6)0-5	372	(A6)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_051-1	02.08.2023	2.01	22	13:50	13:20	
+488	372(A6)5-10	372	(A6)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_051-2	02.08.2023	2.02	22.02	13:50	13:20	
+489	372(A6)20-30	372	(A6)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_051-3	02.08.2023	2	22.02	13:50	13:20	
+490	372(A6)40-50	372	(A6)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_051-4	02.08.2023	2.02	22.05	13:50	13:20	
+491	372(A6)60-80	372	(A6)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_051-5	02.08.2023	2.03	22.01	13:50	13:20	
+492	372(A6)80-100	372	(A6)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_051-6	02.08.2023	2.01	22.03	13:50	13:20	
+493	372(C2)0-5	372	(C2)	0-5	HM	15.09.2022	Elymus athericus			Plate_016-1	04.07.2023	2.04	22.03	15:15	10:40	
+494	372(C2)5-10	372	(C2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_016-2	04.07.2023	2.03	22	15:15	10:40	
+495	372(C2)20-30	372	(C2)	20-30	HM	15.09.2022	Elymus athericus			Plate_016-3	04.07.2023	2.04	22.03	15:15	10:40	
+496	372(C2)40-50	372	(C2)	40-50	HM	15.09.2022	Elymus athericus			Plate_016-4	04.07.2023	2	22.06	15:15	10:40	
+497	372(C2)60-80	372	(C2)	60-80	HM	15.09.2022	Elymus athericus			Plate_016-5	04.07.2023	2.05	22.09	15:15	10:40	
+498	372(C2)80-100	372	(C2)	80-100	HM	15.09.2022	Elymus athericus			Plate_016-6	04.07.2023	2.05	22.01	15:15	10:40	
+499	372(G5)0-5	372	(G5)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_002-1	26.06.2023	2.04	22.06	13:37	11:25	
+500	372(G5)5-10	372	(G5)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_002-2	26.06.2023	2.01	22.1	13:37	11:25	
+501	372(G5)20-30	372	(G5)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_002-3	26.06.2023	2	22	13:37	11:25	
+502	372(G5)40-50	372	(G5)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_002-4	26.06.2023	2.03	22.01	13:37	11:25	
+503	372(G5)60-80	372	(G5)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_002-5	26.06.2023	2.04	22.01	13:37	11:25	
+504	372(G5)80-100	372	(G5)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_002-6	26.06.2023	1.98	22.13	13:37	11:25	
+505	380(A2)0-5	380	(A2)	0-5	HM	15.09.2022	Elymus athericus			Plate_101-1	22.01.2024	2.02	22.02	14:20		
+506	380(A2)5-10	380	(A2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_101-2	22.01.2024	2.03	22.02	14:20		
+507	380(A2)20-30	380	(A2)	20-30	HM	15.09.2022	Elymus athericus			Plate_101-3	22.01.2024	2	22.01	14:20		
+508	380(A2)40-50	380	(A2)	40-50	HM	15.09.2022	Elymus athericus			Plate_101-4	22.01.2024	2.02	22.01	14:20		
+509	380(A2)60-80	380	(A2)	60-80	HM	15.09.2022	Elymus athericus			Plate_101-5	22.01.2024	2	22.03	14:20		
+510	380(A2)80-100	380	(A2)	80-100	HM	15.09.2022	Elymus athericus		87cm total	Plate_101-6	22.01.2024	2.03	22.01	14:20		
+511	380(A6)0-5	380	(A6)	0-5	HM	15.09.2022	Elymus athericus			Plate_022-1	05.07.2023	2.03	22.03	14:00	10:20	
+512	380(A6)5-10	380	(A6)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_022-2	05.07.2023	1.98	22.05	14:00	10:20	
+513	380(A6)20-30	380	(A6)	20-30	HM	15.09.2022	Elymus athericus			Plate_022-3	05.07.2023	2.03	22	14:00	10:20	
+514	380(A6)40-50	380	(A6)	40-50	HM	15.09.2022	Elymus athericus			Plate_022-4	05.07.2023	1.99	22.05	14:00	10:20	
+515	380(A6)60-80	380	(A6)	60-80	HM	15.09.2022	Elymus athericus			Plate_022-5	05.07.2023	2	22.04	14:00	10:20	
+516	380(A6)80-100	380	(A6)	80-100	HM	15.09.2022	Elymus athericus			Plate_022-6	05.07.2023	2.05	22.03	14:00	10:20	
+517	380(C2)0-5	380	(C2)	0-5	HM	15.09.2022	Elymus athericus		swapped labels with A2, should be correct on bags	Plate_102-1		2.05	22.03	14:35		
+518	380(C2)5-10	380	(C2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_102-2	22.01.2024	2.01	22.02	14:35		
+519	380(C2)20-30	380	(C2)	20-30	HM	15.09.2022	Elymus athericus			Plate_102-3	22.01.2024	2.04	22.03	14:35		
+520	380(C2)40-50	380	(C2)	40-50	HM	15.09.2022	Elymus athericus			Plate_102-4	22.01.2024	2.03	22.14	14:35		
+521	380(C2)60-80	380	(C2)	60-80	HM	15.09.2022	Elymus athericus			Plate_102-5	22.01.2024	2	22.16	14:35		
+522	380(C2)80-100	380	(C2)	80-100	HM	15.09.2022	Elymus athericus			Plate_102-6	22.01.2024	2.04	22.19	14:35		
+523	380(G5)0-5	380	(G5)	0-5	HM	15.09.2022	Elymus athericus			Plate_024-1	11.07.2023	2.03	22.02	13:20	10:20	
+524	380(G5)5-10	380	(G5)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_024-2	11.07.2023	2.02	22.09	13:20	10:20	
+525	380(G5)20-30	380	(G5)	20-30	HM	15.09.2022	Elymus athericus			Plate_024-3	11.07.2023	2.04	22.03	13:20	10:20	
+526	380(G5)40-50	380	(G5)	40-50	HM	15.09.2022	Elymus athericus			Plate_024-4	11.07.2023	2.05	22.03	13:20	10:20	
+527	380(G5)60-80	380	(G5)	60-80	HM	15.09.2022	Elymus athericus			Plate_024-5	11.07.2023	2.04	22.11	13:20	10:20	
+528	380(G5)80-100	380	(G5)	80-100	HM	15.09.2022	Elymus athericus			Plate_024-6	11.07.2023	2.02	22.01	13:20	10:20	
+529	381(A2)0-5	381	(A2)	0-5	HM	15.09.2022	Elymus athericus			Plate_052-1	02.08.2023	2	22.02	14:10	13:20	
+530	381(A2)5-10	381	(A2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_052-2	02.08.2023	2	22.01	14:10	13:20	
+531	381(A2)20-30	381	(A2)	20-30	HM	15.09.2022	Elymus athericus			Plate_052-3	02.08.2023	2.01	22.02	14:10	13:20	
+532	381(A2)40-50	381	(A2)	40-50	HM	15.09.2022	Elymus athericus			Plate_052-4	02.08.2023	2	22.01	14:10	13:20	
+533	381(A2)60-80	381	(A2)	60-80	HM	15.09.2022	Elymus athericus			NA						
+534	381(A2)80-100	381	(A2)	80-100	HM	15.09.2022	Elymus athericus			NA						
+535	381(A6)0-5	381	(A6)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_046-1	02.08.2023	2.02	22.17	13:15	10:40	
+536	381(A6)5-10	381	(A6)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_046-2	02.08.2023	2.01	22.05	13:15	10:40	
+537	381(A6)20-30	381	(A6)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_046-3	02.08.2023	1.99	22.05	13:15	10:40	
+538	381(A6)40-50	381	(A6)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_046-4	02.08.2023	2.03	22.06	13:15	10:40	
+539	381(A6)60-80	381	(A6)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_046-5	02.08.2023	2.03	22.04	13:15	10:40	
+540	381(A6)80-100	381	(A6)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_046-6	02.08.2023	2.03	22.06	13:15	10:40	
+541	381(C2)0-5	381	(C2)	0-5	HM	15.09.2022	Elymus athericus			Plate_013-1	04.07.2023	2	22.01	14:00	10:30	
+542	381(C2)5-10	381	(C2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_013-2	04.07.2023	2.02	22.02	14:00	10:30	
+543	381(C2)20-30	381	(C2)	20-30	HM	15.09.2022	Elymus athericus			Plate_013-3	04.07.2023	2.05	22.24	14:00	10:30	
+544	381(C2)40-50	381	(C2)	40-50	HM	15.09.2022	Elymus athericus			Plate_013-4	04.07.2023	2.04	22.01	14:00	10:30	
+545	381(C2)60-80	381	(C2)	60-80	HM	15.09.2022	Elymus athericus			Plate_013-5	04.07.2023	2.02	22.01	14:00	10:30	
+546	381(C2)80-100	381	(C2)	80-100	HM	15.09.2022	Elymus athericus			Plate_013-6	04.07.2023	2.02	22.18	14:00	10:30	
+547	381(G5)0-5	381	(G5)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_106-1		2.03	22.02			
+548	381(G5)5-10	381	(G5)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_106-2		2.02	22.06			
+549	381(G5)20-30	381	(G5)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_106-3		2.04	22.4			
+550	381(G5)40-50	381	(G5)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_106-4		2.01	22.19			
+551	381(G5)60-80	381	(G5)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_106-5		2.03	22.02			
+552	381(G5)80-100	381	(G5)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_106-6		2	22			
+553	382(A2)0-5	382	(A2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_033-1	27.07.2023	2.01	22.03	13:15	16:00	
+554	382(A2)5-10	382	(A2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_033-2	27.07.2023	2.02	22.07	13:15	16:00	
+555	382(A2)20-30	382	(A2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_033-3	27.07.2023	2.02	22.07	13:15	16:00	
+556	382(A2)40-50	382	(A2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_033-4	27.07.2023	2	22.04	13:15	16:00	
+557	382(A2)60-80	382	(A2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_033-5	27.07.2023	2.02	22.01	13:15	16:00	
+558	382(A2)80-100	382	(A2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	95cm total	Plate_033-6	27.07.2023	2.01	22.07	13:15	16:00	
+559	382(A6)0-5	382	(A6)	0-5	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_099-1	22.01.2024	2.01	22.04	13:40		
+560	382(A6)5-10	382	(A6)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_099-2	22.01.2024	2.03	22.13	13:40		
+561	382(A6)20-30	382	(A6)	20-30	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_099-3	22.01.2024	2.05	22.02	13:40		
+562	382(A6)40-50	382	(A6)	40-50	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_099-4	22.01.2024	2.03	22.02	13:40		
+563	382(A6)60-80	382	(A6)	60-80	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_099-5	22.01.2024	2.05	22.21	13:40		
+564	382(A6)80-100	382	(A6)	80-100	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_099-6	22.01.2024	2.05	22.01	13:40		
+565	382(C2)0-5	382	(C2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_071-1	26.10.2023	2.02	22.07	13:10	12:20	
+566	382(C2)5-10	382	(C2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_071-2	26.10.2023	2	22.11	13:10	12:20	
+567	382(C2)20-30	382	(C2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_071-3	26.10.2023	2.03	22.01	13:10	12:20	
+568	382(C2)40-50	382	(C2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_071-4	26.10.2023	2.04	22.08	13:10	12:20	
+569	382(C2)60-80	382	(C2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_071-5	26.10.2023	2.03	22.01	13:10	12:20	
+570	382(C2)80-100	382	(C2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	94cm total	Plate_071-6	26.10.2023	2.01	22.04	13:10	12:20	
+571	382(G5)0-5	382	(G5)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_049-1	02.08.2023	2.02	22.1	13:10	13:20	
+572	382(G5)5-10	382	(G5)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_049-2	02.08.2023	2.04	22.03	13:10	13:20	
+573	382(G5)20-30	382	(G5)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_049-3	02.08.2023	2.02	22.01	13:10	13:20	
+574	382(G5)40-50	382	(G5)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_049-4	02.08.2023	2.04	22.03	13:10	13:20	
+575	382(G5)60-80	382	(G5)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata	close to top pin	Plate_049-5	02.08.2023	2.01	22.18	13:10	13:20	
+576	382(G5)80-100	382	(G5)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	90cm total	Plate_049-6	02.08.2023	2.05	22.08	13:10	13:20	
+577	390(A2)0-5	390	(A2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex portulacoides	little material	Plate_008-1	29.06.2023	2.06	22.06	11:15	10:45	
+578	390(A2)5-10	390	(A2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		Plate_008-2	29.06.2023	2.07	22.06	11:15	10:45	
+579	390(A2)20-30	390	(A2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		Plate_008-3	29.06.2023	2.04	22.01	11:15	10:45	
+580	390(A2)40-50	390	(A2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		Plate_008-4	29.06.2023	2.02	22.04	11:15	10:45	
+581	390(A2)60-80	390	(A2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex portulacoides		Plate_008-5	29.06.2023	2	22.02	11:15	10:45	
+582	390(A2)80-100	390	(A2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex portulacoides	90cm total	Plate_008-6	29.06.2023	2.04	22.09	11:15	10:45	
+583	390(A6)0-5	390	(A6)	0-5	HM	15.09.2022	Elymus athericus	Atriplex portulacoides, Atriplex prostrata		Plate_017-1	05.07.2023	2	22.06	11:15	14:00	
+584	390(A6)5-10	390	(A6)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex portulacoides, Atriplex prostrata		Plate_017-2	05.07.2023	2	21.99	11:15	14:00	
+585	390(A6)20-30	390	(A6)	20-30	HM	15.09.2022	Elymus athericus	Atriplex portulacoides, Atriplex prostrata		Plate_017-3	05.07.2023	2.03	22.03	11:15	14:00	
+586	390(A6)40-50	390	(A6)	40-50	HM	15.09.2022	Elymus athericus	Atriplex portulacoides, Atriplex prostrata		Plate_017-4	05.07.2023	2.04	22.06	11:15	14:00	
+587	390(A6)60-80	390	(A6)	60-80	HM	15.09.2022	Elymus athericus	Atriplex portulacoides, Atriplex prostrata		Plate_017-5	05.07.2023	2.05	22.01	11:15	14:00	
+588	390(A6)80-100	390	(A6)	80-100	HM	15.09.2022	Elymus athericus	Atriplex portulacoides, Atriplex prostrata	98cm total	Plate_017-6	05.07.2023	2.04	22.01	11:15	14:00	
+589	390(C2)0-5	390	(C2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_107-1		2.04	21.99			
+590	390(C2)5-10	390	(C2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_107-2		1.98	22.07			
+591	390(C2)20-30	390	(C2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_107-3		1.98	22			
+592	390(C2)40-50	390	(C2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_107-4		2.01	22.04			
+593	390(C2)60-80	390	(C2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_107-5		2.01	22.08			
+594	390(C2)80-100	390	(C2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata		Plate_107-6		2	22.01			
+595	390(G5)0-5	390	(G5)	0-5	HM	15.09.2022	Elymus athericus			Plate_009-1	29.06.2023	2	22.03	13:30	10:50	
+596	390(G5)5-10	390	(G5)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_009-2	29.06.2023	2.04	22.01	13:30	10:50	
+597	390(G5)20-30	390	(G5)	20-30	HM	15.09.2022	Elymus athericus			Plate_009-3	29.06.2023	2	22.01	13:30	10:50	
+598	390(G5)40-50	390	(G5)	40-50	HM	15.09.2022	Elymus athericus			Plate_009-4	29.06.2023	2.03	22.04	13:30	10:50	
+599	390(G5)60-80	390	(G5)	60-80	HM	15.09.2022	Elymus athericus			Plate_009-5	29.06.2023	2.02	22.1	13:30	10:50	
+600	390(G5)80-100	390	(G5)	80-100	HM	15.09.2022	Elymus athericus			Plate_009-6	29.06.2023	2.06	22.04	13:30	10:50	
+601	391(A2)0-5	391	(A2)	0-5	HM	15.09.2022		Elymus athericus, Atriplex prostrata		Plate_020-1	05.07.2023	2.04	22.01	13:30	10:15	
+602	391(A2)5-10	391	(A2)	05. Okt	HM	15.09.2022		Elymus athericus, Atriplex prostrata		Plate_020-2	05.07.2023	2.01	22.53	13:30	10:15	
+603	391(A2)20-30	391	(A2)	20-30	HM	15.09.2022		Elymus athericus, Atriplex prostrata		Plate_020-3	05.07.2023	2.03	22.41	13:30	10:15	
+604	391(A2)40-50	391	(A2)	40-50	HM	15.09.2022		Elymus athericus, Atriplex prostrata		Plate_020-4	05.07.2023	2	22.09	13:30	10:15	
+605	391(A2)60-80	391	(A2)	60-80	HM	15.09.2022		Elymus athericus, Atriplex prostrata		Plate_020-5	05.07.2023	2	22.3	13:30	10:15	
+606	391(A2)80-100	391	(A2)	80-100	HM	15.09.2022		Elymus athericus, Atriplex prostrata		Plate_020-6	05.07.2023	2.01	22.32	13:30	10:15	
+607	391(A6)0-5	391	(A6)	0-5	HM	15.09.2022		Elymus athericus, Atriplex prostrata	Used second plate reader	Plate_035-1	01.08.2023	2.04	22.12	11:30	11:30	
+608	391(A6)5-10	391	(A6)	05. Okt	HM	15.09.2022		Elymus athericus, Atriplex prostrata	Used second plate reader	Plate_035-2	01.08.2023	2.02	22.03	11:30	11:30	
+609	391(A6)20-30	391	(A6)	20-30	HM	15.09.2022		Elymus athericus, Atriplex prostrata	Used second plate reader	Plate_035-3	01.08.2023	2.01	22.06	11:30	11:30	
+610	391(A6)40-50	391	(A6)	40-50	HM	15.09.2022		Elymus athericus, Atriplex prostrata	Used second plate reader	Plate_035-4	01.08.2023	2.01	22.06	11:30	11:30	
+611	391(A6)60-80	391	(A6)	60-80	HM	15.09.2022		Elymus athericus, Atriplex prostrata	Used second plate reader	Plate_035-5	01.08.2023	2.02	22.05	11:30	11:30	
+612	391(A6)80-100	391	(A6)	80-100	HM	15.09.2022		Elymus athericus, Atriplex prostrata	Used second plate reader	Plate_035-6	01.08.2023	2	22.05	11:30	11:30	
+613	391(C2)0-5	391	(C2)	0-5	HM	15.09.2022	Elymus athericus			Plate_003-1	27.06.2023	2.03	22.01	13:30	11:00	
+614	391(C2)5-10	391	(C2)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_003-2	27.06.2023	2	22.03	13:30	11:00	
+615	391(C2)20-30	391	(C2)	20-30	HM	15.09.2022	Elymus athericus			Plate_003-3	27.06.2023	2.01	22.01	13:30	11:00	
+616	391(C2)40-50	391	(C2)	40-50	HM	15.09.2022	Elymus athericus			Plate_003-4	27.06.2023	2	22.04	13:30	11:00	
+617	391(C2)60-80	391	(C2)	60-80	HM	15.09.2022	Elymus athericus			Plate_003-5	27.06.2023	2	22	13:30	11:00	
+618	391(C2)80-100	391	(C2)	80-100	HM	15.09.2022	Elymus athericus			Plate_003-6	27.06.2023	2.03	22.04	13:30	11:00	
+619	391(G5)0-5	391	(G5)	0-5	HM	15.09.2022	Elymus athericus			Plate_012-1	29.06.2023	2.03	22.03	14:20	11:00	
+620	391(G5)5-10	391	(G5)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_012-2	29.06.2023	2.04	22.03	14:20	11:00	
+621	391(G5)20-30	391	(G5)	20-30	HM	15.09.2022	Elymus athericus			Plate_012-3	29.06.2023	2.03	22	14:20	11:00	
+622	391(G5)40-50	391	(G5)	40-50	HM	15.09.2022	Elymus athericus			Plate_012-4	29.06.2023	2.03	22	14:20	11:00	
+623	391(G5)60-80	391	(G5)	60-80	HM	15.09.2022	Elymus athericus			Plate_012-5	29.06.2023	2.02	22.02	14:20	11:00	
+624	391(G5)80-100	391	(G5)	80-100	HM	15.09.2022	Elymus athericus			Plate_012-6	29.06.2023	2.04	22.02	14:20	11:00	
+625	392(A2)0-5	392	(A2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_039-1	01.08.2023	2.01	22.03	13:45	11:40	
+626	392(A2)5-10	392	(A2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_039-2	01.08.2023	2.01	22.01	13:45	11:40	
+627	392(A2)20-30	392	(A2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_039-3	01.08.2023	2.02	22.02	13:45	11:40	
+628	392(A2)40-50	392	(A2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_039-4	01.08.2023	2.01	22.02	13:45	11:40	
+629	392(A2)60-80	392	(A2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_039-5	01.08.2023	2.01	22.01	13:45	11:40	
+630	392(A2)80-100	392	(A2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_039-6	01.08.2023	2.01	22.01	13:45	11:40	
+631	392(A6)0-5	392	(A6)	0-5	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_037-1	01.08.2023	2	22.01	13:10	11:35	
+632	392(A6)5-10	392	(A6)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_037-2	01.08.2023	2.01	22.02	13:10	11:35	
+633	392(A6)20-30	392	(A6)	20-30	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_037-3	01.08.2023	2.01	22.01	13:10	11:35	
+634	392(A6)40-50	392	(A6)	40-50	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_037-4	01.08.2023	2.01	22.03	13:10	11:35	
+635	392(A6)60-80	392	(A6)	60-80	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_037-5	01.08.2023	2.01	22.03	13:10	11:35	
+636	392(A6)80-100	392	(A6)	80-100	HM	15.09.2022	Elymus athericus	Atriplex prostrata	Used second plate reader	Plate_037-6	01.08.2023	2.01	22.02	13:10	11:35	
+637	392(C2)0-5	392	(C2)	0-5	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_031-1	27.07.2023	2	22.02	12:35	15:50	
+638	392(C2)5-10	392	(C2)	05. Okt	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_031-2	27.07.2023	2	22.02	12:35	15:50	
+639	392(C2)20-30	392	(C2)	20-30	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_031-3	27.07.2023	2	22.02	12:35	15:50	
+640	392(C2)40-50	392	(C2)	40-50	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_031-4	27.07.2023	2.01	22.02	12:35	15:50	
+641	392(C2)60-80	392	(C2)	60-80	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_031-5	27.07.2023	2.01	22.07	12:35	15:50	
+642	392(C2)80-100	392	(C2)	80-100	HM	15.09.2022	Elymus athericus	Atriplex litoralis, Atriplex prostrata		Plate_031-6	27.07.2023	2	22.01	12:35	15:50	
+643	392(G5)0-5	392	(G5)	0-5	HM	15.09.2022	Elymus athericus			Plate_042-1	01.08.2023	1.98	21.98	16:25	16:15	
+644	392(G5)5-10	392	(G5)	05. Okt	HM	15.09.2022	Elymus athericus			Plate_042-2	01.08.2023	2.01	22.12	16:25	16:15	
+645	392(G5)20-30	392	(G5)	20-30	HM	15.09.2022	Elymus athericus			Plate_042-3	01.08.2023	2.04	22.07	16:25	16:15	
+646	392(G5)40-50	392	(G5)	40-50	HM	15.09.2022	Elymus athericus			Plate_042-4	01.08.2023	2.02	21.99	16:25	16:15	
+647	392(G5)60-80	392	(G5)	60-80	HM	15.09.2022	Elymus athericus			Plate_042-5	01.08.2023	2.01	22	16:25	16:15	
+648	392(G5)80-100	392	(G5)	80-100	HM	15.09.2022	Elymus athericus		90cm total	Plate_042-6	01.08.2023	2.05	22.04	16:25	16:15	

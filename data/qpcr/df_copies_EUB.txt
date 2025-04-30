@@ -1,0 +1,163 @@
+ID	Zone	Plot	Subplot	Depth	Treatment	Name	Vegetation Status 	Species	Comment	Replicate_ID	Treshhold_Cylce	log10_copies			
+01	PZ	110	veg	0-10	ambient	110veg0-10	2	Salicornia		1	19.49	9.092455826			
+03	PZ	110	veg	20-30	ambient	110veg20-30	2	Salicornia		2					
+04	PZ	110	ctr	0-10	ambient	110ctr0-10		Spartina anglica		3	21.95	9.779213891			
+06	PZ	110	ctr	20-30	ambient	110ctr20-30		Spartina anglica		4	18.08	9.175805217			
+07	PZ	110	non-veg	0-10	ambient	110non-veg0-10				5	15.19	9.529775305			
+09	PZ	110	non-veg	20-30	ambient	110non-veg20-30				6	19.10	9.247617298			
+10	PZ	111	veg	0-10	1.5C	111veg0-10	1	Salicornia	No Vegetation difference (v&nv)	1	16.04	9.03356989			
+12	PZ	111	veg	20-30	1.5C	111veg20-30	1	Salicornia	No Vegetation difference (v&nv)	2	17.20	8.957184325			
+13	PZ	111	ctr	0-10	1.5C	111ctr0-10		Salicornia, Spartina anglica		3	17.07	9.323989173			
+15	PZ	111	ctr	20-30	1.5C	111ctr20-30		Salicornia, Spartina anglica		4	18.52	9.325900204			
+16	PZ	111	non-veg	0-10	1.5C	111non-veg0-10			No Vegetation difference (v&nv)	5	13.58	9.689375136			
+18	PZ	111	non-veg	20-30	1.5C	111non-veg20-30			No Vegetation difference (v&nv)	6	16.43	9.514701573			
+19	PZ	112	veg	0-10	3.0C	112veg0-10	2	Salicornia, Spartina anglica		1	20.48	8.815274412			
+21	PZ	112	veg	20-30	3.0C	112veg20-30	2	Salicornia, Spartina anglica		2	20.02	9.255898099			
+22	PZ	112	ctr	0-10	3.0C	112ctr0-10		Spartina anglica		3	19.25	8.999658639			
+24	PZ	112	ctr	20-30	3.0C	112ctr20-30		Spartina anglica		4	17.49	10.0005035			
+25	PZ	112	non-veg	0-10	3.0C	112non-veg0-10			Watterlogging	5	13.34	9.682943706			
+27	PZ	112	non-veg	20-30	3.0C	112non-veg20-30			Watterlogging	6	17.45	9.570077951			
+28	PZ	120	veg	0-10	ambient	120veg0-10	2	Salicornia		1	15.54	9.509443532			
+30	PZ	120	veg	20-30	ambient	120veg20-30	2	Salicornia		2	17.20	9.450034002			
+31	PZ	120	ctr	0-10	ambient	120ctr0-10		Salicornia, Spartina anglica		3	16.26	9.380503754			
+33	PZ	120	ctr	20-30	ambient	120ctr20-30		Salicornia, Spartina anglica		4	18.06	9.449020407			
+34	PZ	120	non-veg	0-10	ambient	120non-veg0-10				5					
+36	PZ	120	non-veg	20-30	ambient	120non-veg20-30				6	16.39	9.509052116			
+37	PZ	121	veg	0-10	1.5C	121veg0-10	2	Salicornia		1	15.04	9.5014952			
+39	PZ	121	veg	20-30	1.5C	121veg20-30	2	Salicornia		2	18.27	9.336895617			
+40	PZ	121	ctr	0-10	1.5C	121ctr0-10		Salicornia, Limonium vulgare		3	15.72	9.491994635			
+42	PZ	121	ctr	20-30	1.5C	121ctr20-30		Salicornia, Limonium vulgare		4	17.46	9.406145913			
+43	PZ	121	non-veg	0-10	1.5C	121non-veg0-10				5	14.34	9.736963942			
+45	PZ	121	non-veg	20-30	1.5C	121non-veg20-30				6	16.57	9.500447267			
+46	PZ	122	veg	0-10	3.0C	122veg0-10	2	Salicornia		1	14.40	9.457331434			
+48	PZ	122	veg	20-30	3.0C	122veg20-30	2	Salicornia		2	18.20	9.42825343			
+49	PZ	122	ctr	0-10	3.0C	122ctr0-10		Puccinellia		3	14.63	9.159492322			
+51	PZ	122	ctr	20-30	3.0C	122ctr20-30		Puccinellia		4	18.77	9.350735594			
+52	PZ	122	non-veg	0-10	3.0C	122non-veg0-10				5	12.96	9.781800217			
+54	PZ	122	non-veg	20-30	3.0C	122non-veg20-30				6	18.75	9.237587104			
+55	PZ	130	veg	0-10	ambient	130veg0-10	2	Salicornia		1	13.93	9.568618717			
+57	PZ	130	veg	20-30	ambient	130veg20-30	2	Salicornia		2	15.83	9.60959594			
+58	PZ	130	ctr	0-10	ambient	130ctr0-10		Puccinellia		3	14.51	9.66696367			
+60	PZ	130	ctr	20-30	ambient	130ctr20-30		Puccinellia		4	17.38	9.374278136			
+61	PZ	130	non-veg	0-10	ambient	130non-veg0-10				5	14.09	9.618105383			
+63	PZ	130	non-veg	20-30	ambient	130non-veg20-30				6	16.29	9.546894745			
+64	PZ	131	veg	0-10	1.5C	131veg0-10	2	Salicornia		1	15.24	9.498908743			
+66	PZ	131	veg	20-30	1.5C	131veg20-30	2	Salicornia		2	16.60	9.418515641			
+67	PZ	131	ctr	0-10	1.5C	131ctr0-10		Salicornia, Spartina anglica		3	13.97	9.61959971			
+69	PZ	131	ctr	20-30	1.5C	131ctr20-30		Salicornia, Spartina anglica		4	15.71	9.340987843			
+70	PZ	131	non-veg	0-10	1.5C	131non-veg0-10				5	15.13	9.606865129			
+72	PZ	131	non-veg	20-30	1.5C	131non-veg20-30				6	16.18	9.482531547			
+73	PZ	132	veg	0-10	3.0C	132veg0-10	3	Salicornia, Spartina anglica		1	12.14	9.855153744			
+75	PZ	132	veg	20-30	3.0C	132veg20-30	3	Salicornia, Spartina anglica		2	16.49	9.49494721			
+76	PZ	132	ctr	0-10	3.0C	132ctr0-10		Salicornia, Spartina anglica		3	14.03	9.535724795			
+78	PZ	132	ctr	20-30	3.0C	132ctr20-30		Salicornia, Spartina anglica		4	16.25	9.532529114			
+79	PZ	132	non-veg	0-10	3.0C	132non-veg0-10				5	13.53	9.619439148			
+81	PZ	132	non-veg	20-30	3.0C	132non-veg20-30				6	15.70	9.524983803			
+82	LM	240	veg	0-10	ambient	240veg0-10	2	Aster tripolium 		1	13.26	9.563318489			
+84	LM	240	veg	20-30	ambient	240veg20-30	2	Aster tripolium 		2	14.22	9.696516894			
+85	LM	240	ctr	0-10	ambient	240ctr0-10		Atriplex portulacoides		3	13.44	9.722390765			
+87	LM	240	ctr	20-30	ambient	240ctr20-30		Atriplex portulacoides		4	15.25	9.593031593			
+88	LM	240	non-veg	0-10	ambient	240non-veg0-10				5	14.87	9.405510849			
+90	LM	240	non-veg	20-30	ambient	240non-veg20-30				6	13.39	9.83591679			
+91	LM	241	veg	0-10	1.5C	241veg0-10	3	Triglochin maritima		1	12.02	9.71275986			
+93	LM	241	veg	20-30	1.5C	241veg20-30	3	Triglochin maritima		2	12.25	9.896016144			
+94	LM	241	ctr	0-10	1.5C	241ctr0-10		Triglochin maritima		3	12.06	9.813430797			
+96	LM	241	ctr	20-30	1.5C	241ctr20-30		Triglochin maritima		4	15.50	9.572776917			
+97	LM	241	non-veg	0-10	1.5C	241non-veg0-10				5	12.11	9.836755456			
+99	LM	241	non-veg	20-30	1.5C	241non-veg20-30				6	13.40	9.905486469			
+100	LM	242	veg	0-10	3.0C	242veg0-10	1	Limonium vulgare		1	14.17	9.525723335			
+102	LM	242	veg	20-30	3.0C	242veg20-30	1	Limonium vulgare		2	15.40	9.628871275			
+103	LM	242	ctr	0-10	3.0C	242ctr0-10		Limonium vulgare		3	14.59	9.397805611			
+105	LM	242	ctr	20-30	3.0C	242ctr20-30		Limonium vulgare		4	15.50	9.549386706			
+106	LM	242	non-veg	0-10	3.0C	242non-veg0-10				5	13.04	9.631891069			
+108	LM	242	non-veg	20-30	3.0C	242non-veg20-30				6	15.55	9.417504455			
+109	LM	250	veg	0-10	ambient	250veg0-10	2	Atriplex portulacoides		1	11.62	9.713383046			
+111	LM	250	veg	20-30	ambient	250veg20-30	2	Atriplex portulacoides		2	15.36	9.538115813			
+112	LM	250	ctr	0-10	ambient	250ctr0-10		Limonium vulgare		3	11.52	9.669453465			
+114	LM	250	ctr	20-30	ambient	250ctr20-30		Limonium vulgare		4	15.33	9.655810717			
+115	LM	250	non-veg	0-10	ambient	250non-veg0-10				5	12.00	9.71438143			
+117	LM	250	non-veg	20-30	ambient	250non-veg20-30				6	14.36	9.658308021			
+118	LM	251	veg	0-10	1.5C	251veg0-10	2	Atriplex portulacoides, Salicornia, Limonium vulgare		1	13.04	9.614929635			
+120	LM	251	veg	20-30	1.5C	251veg20-30	2	Atriplex portulacoides, Salicornia, Limonium vulgare		2	14.05	10.06643573			
+121	LM	251	ctr	0-10	1.5C	251ctr0-10		Atriplex portulacoides		3	14.41	10.43430724			
+123	LM	251	ctr	20-30	1.5C	251ctr20-30		Atriplex portulacoides		4	16.22	9.078766691			
+124	LM	251	non-veg	0-10	1.5C	251non-veg0-10				5	13.37	9.608147264			
+126	LM	251	non-veg	20-30	1.5C	251non-veg20-30				6	15.54	9.349354583			
+127	LM	252	veg	0-10	3.0C	252veg0-10	2	Atriplex portulacoides, Spartina anglica		1					
+129	LM	252	veg	20-30	3.0C	252veg20-30	2	Atriplex portulacoides, Spartina anglica		2	12.10	9.059228489			
+130	LM	252	ctr	0-10	3.0C	252ctr0-10		Atriplex portulacoides, Spartina anglica		3	11.12	9.5580038			
+132	LM	252	ctr	20-30	3.0C	252ctr20-30		Atriplex portulacoides, Spartina anglica		4	11.18	9.710359706			
+133	LM	252	non-veg	0-10	3.0C	252non-veg0-10				5					
+135	LM	252	non-veg	20-30	3.0C	252non-veg20-30				6	12.28	9.463861434			
+136	LM	260	veg	0-10	ambient	260veg0-10	2	Puccinellia		1	10.70	9.53191688			
+138	LM	260	veg	20-30	ambient	260veg20-30	2	Puccinellia		2	12.09	9.64965889			
+139	LM	260	ctr	0-10	ambient	260ctr0-10		Puccinellia		3	10.40	9.621322139			
+141	LM	260	ctr	20-30	ambient	260ctr20-30		Puccinellia		4	12.15	10.05818614			
+142	LM	260	non-veg	0-10	ambient	260non-veg0-10				5	10.92	9.520310226			
+144	LM	260	non-veg	20-30	ambient	260non-veg20-30				6	12.46	9.597399052			
+145	LM	261	veg	0-10	1.5C	261veg0-10	2	Puccinellia, Salicornia		1	10.08	9.745490881			
+147	LM	261	veg	20-30	1.5C	261veg20-30	2	Puccinellia, Salicornia		2	11.97	9.542637689			
+148	LM	261	ctr	0-10	1.5C	261ctr0-10		Atriplex portulacoides		3	10.51	9.63052054			
+150	LM	261	ctr	20-30	1.5C	261ctr20-30		Atriplex portulacoides		4	11.87	9.654790609			
+151	LM	261	non-veg	0-10	1.5C	261non-veg0-10				5	9.66	9.754180747			
+153	LM	261	non-veg	20-30	1.5C	261non-veg20-30				6	10.76	9.7200816			
+154	LM	262	veg	0-10	3.0C	262veg0-10	2	Atriplex portulacoides		1	10.08	9.682904577			
+156	LM	262	veg	20-30	3.0C	262veg20-30	2	Atriplex portulacoides		2	12.39	9.480080328			
+157	LM	262	ctr	0-10	3.0C	262ctr0-10		Atriplex portulacoides		3	10.90	9.606164988			
+159	LM	262	ctr	20-30	3.0C	262ctr20-30		Atriplex portulacoides		4	12.95	9.358303081			
+160	LM	262	non-veg	0-10	3.0C	262non-veg0-10				5	10.60	9.736533385			
+162	LM	262	non-veg	20-30	3.0C	262non-veg20-30				6	12.58	9.412265267			
+163	HM	370	veg	0-10	ambient	370veg0-10	3	Elymus		1	9.91	9.601460319			
+165	HM	370	veg	20-30	ambient	370veg20-30	3	Elymus		2	11.04	9.794395393			
+166	HM	370	ctr	0-10	ambient	370ctr0-10		Elymus		3	10.06	9.321164397			
+168	HM	370	ctr	20-30	ambient	370ctr20-30		Elymus		4	11.37	9.72770376			
+169	HM	370	non-veg	0-10	ambient	370non-veg0-10				5	10.26	9.685544236			
+171	HM	370	non-veg	20-30	ambient	370non-veg20-30				6	11.74	9.555614023			
+172	HM	371	veg	0-10	1.5C	371veg0-10	2	Elymus		1	10.31	9.584509959			
+174	HM	371	veg	20-30	1.5C	371veg20-30	2	Elymus		2	11.88	9.556345085			
+175	HM	371	ctr	0-10	1.5C	371ctr0-10		Atriplex portulacoides, Elymus		3	10.46	9.713130484			
+177	HM	371	ctr	20-30	1.5C	371ctr20-30		Atriplex portulacoides, Elymus		4	13.16	9.28176999			
+178	HM	371	non-veg	0-10	1.5C	371non-veg0-10				5	11.03	9.521707409			
+180	HM	371	non-veg	20-30	1.5C	371non-veg20-30				6	11.17	9.673224421			
+181	HM	372	veg	0-10	3.0C	372veg0-10	2	Elymus		1	9.33	9.834368755			
+183	HM	372	veg	20-30	3.0C	372veg20-30	2	Elymus		2	11.69	9.496163769			
+184	HM	372	ctr	0-10	3.0C	372ctr0-10		Elymus		3	10.38	9.622830829			
+186	HM	372	ctr	20-30	3.0C	372ctr20-30		Elymus		4	11.69	9.324982473			
+187	HM	372	non-veg	0-10	3.0C	372non-veg0-10				5	10.20	9.771124695			
+189	HM	372	non-veg	20-30	3.0C	372non-veg20-30				6	13.02	9.276268305			
+190	HM	380	veg	0-10	ambient	380veg0-10	2	Elymus, Seedling spec.		1	10.64	9.597225866			
+192	HM	380	veg	20-30	ambient	380veg20-30	2	Elymus, Seedling spec.		2	12.44	9.424001395			
+193	HM	380	ctr	0-10	ambient	380ctr0-10		Elymus		3	10.42	9.544852103			
+195	HM	380	ctr	20-30	ambient	380ctr20-30		Elymus		4	11.16	9.657315009			
+196	HM	380	non-veg	0-10	ambient	380non-veg0-10				5	10.08	9.628617953			
+198	HM	380	non-veg	20-30	ambient	380non-veg20-30				6	12.27	9.395248017			
+199	HM	381	veg	0-10	1.5C	381veg0-10	2	Elymus, Seedling spec.		1	10.36	9.497909337			
+201	HM	381	veg	20-30	1.5C	381veg20-30	2	Elymus, Seedling spec.		2	11.02	9.611604872			
+202	HM	381	ctr	0-10	1.5C	381ctr0-10		Elymus		3	10.69	9.607937091			
+204	HM	381	ctr	20-30	1.5C	381ctr20-30		Elymus		4	11.99	9.458410656			
+205	HM	381	non-veg	0-10	1.5C	381non-veg0-10				5	10.41	9.517100018			
+207	HM	381	non-veg	20-30	1.5C	381non-veg20-30				6	11.07	9.642143006			
+208	HM	382	veg	0-10	3.0C	382veg0-10	2	Atriplex portulacoides, Elymus		1	10.77	9.427231694			
+210	HM	382	veg	20-30	3.0C	382veg20-30	2	Atriplex portulacoides, Elymus		2	11.44	9.507022859			
+211	HM	382	ctr	0-10	3.0C	382ctr0-10		Elymus		3	12.95	9.1450882			
+213	HM	382	ctr	20-30	3.0C	382ctr20-30		Elymus		4	11.77	9.504893055			
+214	HM	382	non-veg	0-10	3.0C	382non-veg0-10				5	10.56	9.590311063			
+216	HM	382	non-veg	20-30	3.0C	382non-veg20-30				6	12.78	9.407489066			
+217	HM	390	veg	0-10	ambient	390veg0-10	2	Atriplex prostrata, Elymus		1	10.24	9.582166827			
+219	HM	390	veg	20-30	ambient	390veg20-30	2	Atriplex prostrata, Elymus		2	12.42	9.432601829			
+220	HM	390	ctr	0-10	ambient	390ctr0-10		Atriplex portulacoides, Elymus		3	10.16	9.523661014			
+222	HM	390	ctr	20-30	ambient	390ctr20-30		Atriplex portulacoides, Elymus		4	11.21	9.579985074			
+223	HM	390	non-veg	0-10	ambient	390non-veg0-10				5	10.66	9.484241315			
+225	HM	390	non-veg	20-30	ambient	390non-veg20-30				6	12.60	9.220873417			
+226	HM	391	veg	0-10	1.5C	391veg0-10	3	Atriplex prostrata, Elymus		1	12.63	9.058343815			
+228	HM	391	veg	20-30	1.5C	391veg20-30	3	Atriplex prostrata, Elymus		2	12.98	9.246114191			
+229	HM	391	ctr	0-10	1.5C	391ctr0-10		Atriplex prostrata, Elymus		3	10.28	9.418100078			
+231	HM	391	ctr	20-30	1.5C	391ctr20-30		Atriplex prostrata, Elymus		4	13.11	9.328592753			
+232	HM	391	non-veg	0-10	1.5C	391non-veg0-10				5	12.21	9.174917769			
+234	HM	391	non-veg	20-30	1.5C	391non-veg20-30				6	11.04	9.586701221			
+235	HM	392	veg	0-10	3.0C	392veg0-10	1	Elymus		1	10.30	9.556397753			
+237	HM	392	veg	20-30	3.0C	392veg20-30	1	Elymus		2	12.48	9.512235188			
+238	HM	392	ctr	0-10	3.0C	392ctr0-10		Atriplex prostrata, Elymus		3	10.03	9.700800591			
+240	HM	392	ctr	20-30	3.0C	392ctr20-30		Atriplex prostrata, Elymus		4	12.26	9.638548048			
+241	HM	392	non-veg	0-10	3.0C	392non-veg0-10				5	9.81	9.641031903			
+243	HM	392	non-veg	20-30	3.0C	392non-veg20-30				6	11.04	9.774154122	

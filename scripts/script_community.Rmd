@@ -1,0 +1,2019 @@
+---
+title: "MERIT samples 2022 - GFZ"
+author: "Julian Mittmann-Goetsch"
+date: "2023-11-24"
+output: pdf_document
+---
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{title.jpg}
+\end{figure}
+\pagebreak
+
+
+# Versionlog
+## Version 1.0: Display DNA and RNA concentrations (24.11.2023)
+## Version 1.1: Include jpg. images of Gels and TapeStation (27.11.2023)
+## Version 1.2: Included cDNA concentrations and decision plot for re-extraction (14.12.2023)
+## Version 1.3: RNA data analysis (01.02.2024)
+## Version 1.4: NMDS plots, stacked bar charts (14.02.2024)
+## Version 1.5: Tax4Fun2 included, changes to script style (25.07.2024)
+## Version 1.6: Compositional analysis via clr transformation (19.11.2024)
+## Version 1.7: DESeq2 Analysis of RNA data (18.01.2025)
+
+\
+# Step 1: Prepare session and load data
+## Step 1a: Install necessary packages
+```{r,  message=FALSE, warning=FALSE}
+# bugfixes
+#.libPaths("C:/Users/Bat1638/R_packages")
+#options("install.lock"=FALSE)
+#install.packages("xfun", type = "binary")
+#install.packages("stringi")
+#install.packages("ade4")
+#install.packages("data.table")
+#install.packages("e1071")
+#install.packages("tzdb")
+#install.packages("DescTools")
+#install.packages("Hmisc")
+#install.packages("zoo")
+#install.packages("devtools")
+#utils::install.packages("xfun", repos = "https://cran.rstudio.com/")
+#library(xfun)
+#library(stringi)
+#library(ade4)
+#library(data.table)
+#library(Hmisc)
+#library(e1071)
+#library(tzdb)
+#library(DescTools)
+#library(zoo)
+#update.packages()
+
+#### Load the packages ####
+#install.packages("tidyverse")       # edit data frames (long format)
+#install.packages("ggplot2")         # Plot data (NDMS,)
+#install.packages("tidyr")           # edit data frames (wide format)
+#install.packages("ggpubr")
+#install.packages("ggside")  
+#install.packages("knitr")           # include jpg in knit output
+#install.packages("ggpmisc")
+#install.packages("dplyr")           # Summarize function
+
+#install.packages("RStoolbox")       # NDMS 
+#install.packages("vegan")           # NDMS
+#install.packages("viridis")
+#install.packages("RVAideMemoire")   # PERMANOVA post-hoc test
+#install.packages("xfun")            # include pdf in knit output
+#install.packages("devtools")
+
+# BiocManager
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+#BiocManager::install("phyloseq")    # Create phyloseq object from raw-data
+#BiocManager::install("microbiome", force = TRUE)
+#BiocManager::install("ANCOMBC")
+#BiocManager::install(c("phyloseq", "microbiome", "ComplexHeatmap"), update = FALSE)
+#install.packages("biom")
+#install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
+#install.packages("pheatmap")
+#install.packages("shiny")
+#install.packages("microViz", repos = c(davidbarnett = "https://david-barnett.r-universe.dev", getOption("repos")))
+#install.packages("vegdist")
+#install.packages("remotes")
+#remotes::install_github("Russel88/MicEco")
+#install.packages("gt")
+#install.packages("DT")
+```
+
+## Step 1b: Load necessary packages
+```{r,  message=FALSE, warning=FALSE}
+# Microbial data analysis
+#install.packages("installr")
+#library(installr)
+#options("install.lock"=FALSE) # fixes an error with LOCK when installing ggside package
+#updateR()
+
+library(microViz)
+library(vegan)
+library(phyloseq)
+library(MicEco) # Venn diagramms
+library(ANCOMBC)
+library(DT)
+options(DT.options = list(
+  initComplete = JS("function(settings, json) {",
+  "$(this.api().table().header()).css({'background-color': 
+  '#000', 'color': '#fff'});","}")))
+
+# Data wrangling
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(knitr)   
+library(purrr)
+library(ggpubr)
+
+# Plots
+library(ggplot2)
+
+# DESeq analyis
+library(DESeq2) 
+library(pheatmap)
+
+# General setting & aesthetics
+library(RColorBrewer)
+#library(ggpubr)
+library(ggside)
+
+# Creating Tables
+library(gt)
+library(lme4)
+library(performance)
+
+# Statistics
+library(ggpmisc)
+
+# Other currently unsorted
+library(RVAideMemoire)
+library(viridis)
+library(Matrix)
+library(reshape2)
+library(xfun)   
+library(pairwiseAdonis)
+library(microbiome)
+library(shiny)
+```
+
+## Step 1c: Load sequencing data
+This dataset is based on soil samples from the MERIT whole-ecosystem warming experiment located in a Wadden Sea salt marsh (Hamburger Hallig, Schleswig Holstein).
+```{r,  message=FALSE, warning=FALSE}
+# Set working directory
+setwd("C:/Users/Bat1638/Documents/repositories/merit_microbes_repo")
+
+# Load dataframes 
+metadata <- read.csv("./data/metadata.csv", dec = ",", sep= ";")
+#metadata <- read.delim("./data/metadata.txt", dec=",", sep=";")
+
+# Raw filtered sequencing data 
+asv <- read.csv("./data/rna/table_ASV_filtered.csv", dec = ",", sep = ";")
+tab <- read.delim("./data/rna/table_ASV_filtered_taxMerge.txt", dec = ".", sep= "\t")
+seq <- read.csv("./data/rna/table_sequences_asvNames_filtered.csv", dec=",", sep=";")
+
+# Rarefied sequencing data
+tab_rare <- read.csv("./data/rna/table_ASV_filtered_rarefied_5000.csv", dec = ",", sep = ";")
+asv_rare <- read.csv("./data/rna/table_ASV_filtered_rarefied_5000.csv", dec = ",", sep = ";")
+
+# Family level counts
+tab_fam <- read.csv("./data/rna/taxa_sum_Family.csv", dec = ".", sep = ";")
+
+# Warming data created with script_warming_data_2022
+#df_warming_all_2022_august
+
+# Elevation data
+df_elevation <- read.delim("./data/elevation/df_iris_elevation.txt", dec = ".", sep= "\t")
+```
+\pagebreak
+
+## Step 1d: Define plot theme
+```{r message=FALSE, warning=FALSE}
+theme_JM <- theme(
+  axis.title.x      = element_text(colour = "black", size = 12),
+  axis.text.x       = element_text(colour = "black", size = 12), 
+  axis.title.y      = element_text(colour = "black", size = 12),
+  axis.text.y       = element_text(colour = "black", size = 12), 
+  legend.title      = element_text(colour = "black", size = 12),
+  legend.text       = element_text(colour = "black", size = 12), 
+  legend.position   = "top",
+  panel.background  = element_blank(), 
+  panel.border      = element_rect(colour = "black", fill = NA, size = 1.2),
+  legend.key        = element_blank(),
+  strip.text.x      = element_text(colour = "black", size = 12),
+  strip.text.y      = element_text(colour = "black", size = 12)
+)
+```
+
+
+
+# Step 2: Compositional analysis using microviz package
+## Step 2a: Create phyloseq objects
+```{r}
+# create phyloseq objetc with raw (not rarefied data)
+metadata <- metadata %>%
+  mutate_at(c(3:12), as.factor)
+
+df_samp = sample_data(metadata) 
+sample_ids <- metadata[, 1]
+rownames(df_samp) <- sample_ids
+
+# Phyloseq object with raw data (used for clr transformation)
+ps = phyloseq(
+    otu_table(as.matrix(tab[,1:(ncol(tab)-6)]), taxa_are_rows=T),
+    tax_table(as.matrix(tab[,(ncol(tab)-5):ncol(tab)])),
+    sample_data(df_samp)
+   )
+
+# Remove MOCK samples and negative controls
+samples_to_remove <- c("X136", "X137", "X138", "X139")
+ps <- subset_samples(ps, !(sample_names(ps) %in% samples_to_remove))
+
+# Create layer coloumn 
+# Add a new column 'layer' based on the 'Depth' column
+sample_data_df <- as(sample_data(ps), "data.frame")
+
+# Add a new column 'layer' based on the 'Depth' column
+sample_data_df <- sample_data_df %>%
+  mutate(Layer = case_when(
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
+    TRUE ~ NA_character_  # For unexpected values
+  ))
+
+# Reintegrate the modified sample data back into the phyloseq object
+sample_data(ps) <- sample_data(sample_data_df)
+
+# Reorder Factors
+ps@sam_data[["Zone"]] <- factor(ps@sam_data[["Zone"]], levels = c("PZ","LM","HM"))
+ps@sam_data[["Treatment"]] <- recode_factor(ps@sam_data[["Treatment"]],  "0" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
+ps@sam_data[["Depth"]]  <- factor(ps@sam_data[["Depth"]],levels=c("0-5 cm", "5-10 cm", "20-30 cm",  "40-50 cm", "80-100 cm" ))
+ps@sam_data[["Layer"]]  <- factor(ps@sam_data[["Layer"]],levels=c("Top-soil (0-30 cm)","Bottom-soil (40-100 cm)"))
+
+#plot_bar(ps, fill = "Family")
+
+# Phyloseq objet with rarefied and filtere data (used for NMDS plots)
+ps_rare = phyloseq(
+    otu_table(as.matrix(tab_rare[,2:(ncol(tab_rare)-6)]), taxa_are_rows=T),
+    tax_table(as.matrix(tab_rare[,(ncol(tab_rare)-5):ncol(tab_rare)])),
+    sample_data(df_samp)
+   )
+
+# Remove MOCK samples and negative controls
+samples_to_remove <- c("X136", "X137", "X138", "X139")
+ps_rare <- subset_samples(ps_rare, !(sample_names(ps) %in% samples_to_remove))
+
+# Create layer coloumn 
+# Add a new column 'layer' based on the 'Depth' column
+sample_data_rare <- as(sample_data(ps_rare), "data.frame")
+
+# Add a new column 'layer' based on the 'Depth' column
+sample_data_rare <- sample_data_rare %>%
+  mutate(Layer = case_when(
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
+    TRUE ~ NA_character_  # For unexpected values
+  ))
+
+# Reintegrate the modified sample data back into the phyloseq object
+sample_data(ps_rare) <- sample_data(sample_data_rare)
+
+# Reorder Factors
+ps_rare@sam_data[["Zone"]] <- factor(ps_rare@sam_data[["Zone"]], levels = c("PZ","LM","HM"))
+ps_rare@sam_data[["Treatment"]] <- recode_factor(ps_rare@sam_data[["Treatment"]],  "0" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
+ps_rare@sam_data[["Depth"]]  <- factor(ps_rare@sam_data[["Depth"]],levels=c("0-5 cm", "5-10 cm", "20-30 cm",  "40-50 cm", "80-100 cm" ))
+ps_rare@sam_data[["Layer"]]  <- factor(ps_rare@sam_data[["Layer"]],levels=c("Top-soil (0-30 cm)","Bottom-soil (40-100 cm)"))
+
+# Save RDS
+#saveRDS(ps_rare, "./ps_rarefied.rds")
+#saveRDS(ps, "./ps_raw.rds")
+```
+
+## Step 2b: Create subsets of phyloseq objects
+```{r}
+#ps <- ps %>%
+ # tax_fix() %>%
+  #phyloseq_validate()
+# Create subsets of phyloseq object 
+
+ps_PZ <- ps%>%
+  subset_samples(Zone =="PZ")
+
+ps_PZ_5 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "0-5 cm")
+
+ps_PZ_10 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "5-10 cm")
+
+ps_PZ_20 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "20-30 cm")
+
+ps_PZ_40 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "40-50 cm")
+
+ps_PZ_80 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "80-100 cm")
+
+ps_LM <- ps%>%
+  subset_samples(Zone  == "LM")
+
+ps_LM_5 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "0-5 cm")
+
+ps_LM_10 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "5-10 cm")
+
+ps_LM_20 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "20-30 cm")
+
+ps_LM_40 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "40-50 cm")
+
+ps_LM_80 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "80-100 cm")
+
+ps_HM <- ps%>%
+  subset_samples(Zone =="HM")
+
+ps_HM_5 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "0-5 cm")
+
+ps_HM_10 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "5-10 cm")
+
+ps_HM_20 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "20-30 cm")
+
+ps_HM_40 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "40-50 cm")
+
+ps_HM_80 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "80-100 cm")
+ 
+#ord_explore(ps_rare)
+
+#  ord_explore(ps_PZ)
+#  ord_explore(ps_PZ_5)
+#  ord_explore(ps_PZ_10)
+#  ord_explore(ps_PZ_20)
+#  ord_explore(ps_PZ_40)
+#  ord_explore(ps_PZ_80)
+  
+#  ord_explore(ps_LM)
+#  ord_explore(ps_LM_5)
+#  ord_explore(ps_LM_10)
+#  ord_explore(ps_LM_20)
+#  ord_explore(ps_LM_40)
+#  ord_explore(ps_LM_80)
+    
+#  ord_explore(ps_HM)
+#  ord_explore(ps_HM_5)
+#  ord_explore(ps_HM_10)
+#  ord_explore(ps_HM_20)
+#  ord_explore(ps_HM_40)
+#  ord_explore(ps_HM_80)
+```
+
+
+## Step 2d: NMDS plots
+```{r}
+# All analysis performed here are done on the filtered and rarefied data
+#ord_explore(ps_rare)
+
+#ps_rare$Treatment <- as.factor(ps_rare$Treatment)
+
+plot_all_treatment_layer_nmds <- ps_rare %>%
+ tax_transform(rank = "unique", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(axes = c(1, 2),
+  colour = "Treatment", fill = "Treatment",
+  shape = "Zone", alpha = 0.5, size = 2) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(group = Treatment, fill = Treatment, colour = Treatment), geom = "polygon", alpha = 0.7) +
+ scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+ scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+ facet_wrap(~Layer * Zone, ncol = 3) +
+ theme_JM
+
+plot_all_treatment_layer_nmds
+```
+
+## Step 2e: PcoA Plot
+```{r}
+head(metadata)
+metadata_1 <- metadata
+row.names(metadata_1) <- metadata_1$sample_name
+sam <- sample_data(metadata_1)
+plaply <- phyloseq(otu_table(ps_rare, taxa_are_rows = T), sam)
+pla = ordinate(ps_rare, "PCoA", "bray") 
+pplant = plot_ordination(plaply, pla, type = "Zone",color = "Treatment", shape = "Treatment", axes = 1:2)+
+ # scale_color_manual(values = c("#4393c3", "#F6B394", "#cd4e44"))+
+  #scale_shape_manual(values = c(15, 19))+
+  geom_point(size=5)+
+  theme_JM +
+  facet_wrap(~Layer * Zone, ncol = 3) +
+  theme(legend.position = "none",
+        axis.text = element_text(size = 10, face = "bold"),
+        axis.title = element_text(size = 12,face = "bold"))+
+  stat_ellipse(aes(color = Treatment),level=0.65,linetype=2); pplant
+
+pplant
+```
+
+
+# Step 3: Statistics
+## Step 3a: PERMANOVA bray curtis
+```{r}
+# Convert phyloseq object to distance matrix
+dist_matrix <- phyloseq::distance(ps_rare, method = "bray")
+
+# Extract sample data
+sample_data <- data.frame(sample_data(ps_rare))
+
+# Perform PERMANOVA
+stat_permanova_bray <- adonis2(dist_matrix ~ Zone * Layer * Treatment, data = sample_data, by = "terms")
+print(stat_permanova_bray)
+
+# Perform pairwise comparisons for each factor and their interactions
+stat_pairwise_bray_zone <- pairwise.adonis2(dist_matrix ~ Zone, data = sample_data, p.adjust.m = "holm")
+stat_pairwise_bray_layer <- pairwise.adonis2(dist_matrix ~ Layer, data = sample_data, p.adjust.m = "holm")
+stat_pairwise_bray_treatment <- pairwise.adonis2(dist_matrix ~ Treatment, data = sample_data, p.adjust.m = "holm")
+
+print(stat_pairwise_bray_zone)
+print(stat_pairwise_bray_layer)
+print(stat_pairwise_bray_treatment)
+```
+
+## Step 3b: PERMANOVA aitchinson (Supplement figure)
+```{r}
+# Check permutations with permustats
+permustat(adonis2(dist_matrix ~ Zone, data = metadata))
+
+stat_PERM_bray_int <- stat_PERM_bray %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    interactions = c("Zone*Treatment", "Layer*Treatment", "Zone*Layer"),
+    n_processes = 1, n_perms = 9999
+  )
+
+stat_dist_ait <- ps %>%
+  tax_agg("unique") %>%
+  tax_transform("identity") %>%
+  dist_calc("aitchison")
+
+stat_PERM_ait <- stat_dist_ait %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    n_processes = 1,
+    n_perms = 9999 
+  )
+
+stat_PERM_ait_int <- stat_dist_ait %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    interactions = c("Zone*Treatment", "Layer*Treatment", "Zone*Depth"),
+    n_processes = 1, n_perms = 9999
+  )
+
+stat_PERM_bray
+stat_PERM_bray_int
+stat_PERM_ait
+stat_PERM_ait_int
+
+print(stat_PERM_bray)
+print(stat_PERM_ait_int)
+print(stat_PERM_bray_int)
+```
+
+
+# Step 4: Plots
+## Step 4a: Plot Barplot
+```{r}
+# New ps object based on rarefied data
+ps_phylum_rel <- ps_rare %>%
+  tax_glom(taxrank = "Phylum") %>%
+  transform_sample_counts(function(x) x / sum(x))
+
+# Get top 9 phyla names
+top_phyla <- tax_table(ps_phylum_rel)[names(sort(taxa_sums(ps_phylum_rel), decreasing = TRUE)[1:9]), "Phylum"]
+
+# Summarise on Zone / Treatment
+df_abundance_data <- ps_phylum_rel %>%
+  psmelt() %>%
+  mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
+  mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
+  group_by(Sample, Zone, Treatment, Phylum) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# Summarise on Plot level
+df_abundance_data_plot <- ps_phylum_rel %>%
+  psmelt() %>%
+  mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
+  mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
+  group_by(Zone, Treatment, Phylum, Plot) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# See share of groups
+df_temporal <- df_abundance_data %>%
+  group_by(Phylum) %>%
+  summarise(Mean = sum(Abundance))
+
+# Set order of Phyla to be descending and inlcuding others at the bottom
+df_abundance_data$Phylum <- factor(df_abundance_data$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
+
+# Set order of Phyla to be descending and inlcuding others at the bottom
+df_abundance_data_plot$Phylum <- factor(df_abundance_data_plot$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
+
+# Plot
+plot_stacked_bar <- ggplot(df_abundance_data, aes(x = Treatment, y = Abundance, fill = Phylum)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = c("#D73027", "#FDAE61", "#ffff99", "#b2df8a", "#33a02c", "#cab2d6", "#1f78b4", "#a6cee3", "black", "grey"))+
+  theme_JM +
+  labs(y = "Relative Abundance [%]") +
+  scale_y_continuous(breaks = seq(0, 15, by = 7.5), 
+                     labels = seq(0, 100, by = 50)) +
+  facet_wrap(~ Zone) +
+  theme(legend.position = "right")
+
+plot_stacked_bar_plot <- ggplot(df_abundance_data_plot, aes(x = Plot, y = Abundance, fill = Phylum)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = c("#D73027", "#FDAE61", "#ffff99", "#b2df8a", "#33a02c", "#cab2d6", "#1f78b4", "#a6cee3", "black", "grey"))+
+  theme_JM +
+  labs(y = "Relative Abundance [%]") +
+  scale_y_continuous(breaks = seq(0, 5, by = 2.5), 
+                     labels = seq(0, 100, by = 50)) +
+  facet_wrap(~ Zone, scales = "free_x", nrow = 3) +
+  theme(legend.position = "top")
+
+# All Plots
+plot_stacked_bar
+plot_stacked_bar_plot
+```
+
+## Step 4b: Statistics for Top 10 Phyla
+```{r}
+df_top10_abundance <- df_abundance_data %>%
+  group_by(Phylum) %>%
+  summarise(percent = mean(Abundance))
+
+df_top10_abundance_factors <- df_abundance_data %>%
+  group_by(Phylum, Treatment, Zone) %>%
+  summarise(percent = mean(Abundance))
+
+sum(df_top10_abundance$percent)
+
+df_abundance_diff <- df_top10_abundance_factors %>%
+  group_by(Phylum, Zone) %>%
+  pivot_wider(names_from = Treatment, values_from = percent) %>%
+  mutate(
+    diff_ambient_1_5 = ambient - `+1.5°C`,
+    diff_ambient_3_0 = ambient - `+3.0°C`,
+    diff_1_5_3_0 = `+1.5°C` - `+3.0°C`
+  ) %>%
+  select(Phylum, Zone, starts_with("diff")) %>%
+  arrange(Phylum, Zone)
+
+
+
+# Perform two-way ANOVA for each phylum
+anova_results <- df_abundance_data %>%
+  group_by(Phylum) %>%
+  nest() %>%
+  mutate(
+    anova = map(data, ~aov(Abundance ~ Zone * Treatment, data = .x)),
+    tidy_anova = map(anova, tidy)
+  ) %>%
+  unnest(tidy_anova) %>%
+  select(Phylum, term, statistic, p.value)
+
+# Print the results
+print(anova_results)
+
+# Optionally, you can adjust p-values for multiple comparisons
+anova_results_adjusted <- anova_results %>%
+  group_by(term) %>%
+  mutate(p.adjusted = p.adjust(p.value, method = "holm")) %>%
+  ungroup()
+
+# Print the adjusted results
+print(anova_results_adjusted)
+```
+
+
+# Step 5: Alpha diversity
+## Step 5a: Alpha diversity (compositional)
+```{r}
+# Calculate alpha diversity metrics
+df_alpha_div <- estimate_richness(ps_rare, measures = c("Shannon"))
+
+# Add metadata
+df_alpha_div <- df_alpha_div %>% 
+  rownames_to_column(var = "sample_name")
+
+df_alpha_div <- df_alpha_div %>%
+  left_join(metadata, by = "sample_name")
+
+# Transform df into long-format
+df_alpha_div_long <- df_alpha_div %>%
+  pivot_longer(cols = c("Shannon"), names_to = "Metric", values_to = "Value") %>%
+    mutate(Layer = case_when(
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil\n(0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil\n(40-100 cm)",
+    TRUE ~ NA_character_  # For unexpected values
+  ))
+
+df_alpha_div_long$Treatment <- recode_factor(df_alpha_div_long$Treatment ,  "0" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
+
+# Reorder factors for streamlined plotting
+df_alpha_div_long$Zone <- factor(df_alpha_div_long$Zone, levels = c("PZ", "LM", "HM"))
+df_alpha_div_long$Treatment <- recode_factor(df_alpha_div_long$Treatment, "ambient" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
+df_alpha_div_long$Layer <- factor(df_alpha_div_long$Layer, levels = c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)"))
+
+# Plot alpha diversity
+plot_alpha_div_zone <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Zone)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA) +  # Boxplots for diversity
+  geom_jitter(width = 0.2, alpha = 0.7, aes(colour = Zone), size = 2) +  # Points overlay
+  facet_wrap(~ Metric, scales = "free_y") +  # Separate facets for each metric
+  scale_colour_manual(values = c("#08306b", "#6baed6", "#c6dbef"), name = "Zone:") +
+  scale_fill_manual(values = c("#08306b", "#6baed6", "#c6dbef"), name = "Zone:") +
+  theme_JM +
+  labs(x = "Zone", y = "Alpha Diversity") +
+  theme(strip.background = element_rect(fill = "#5ab4ac"))
+
+plot_alpha_div_zone_treatment <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Treatment)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA, position = position_dodge(width = 0.8), width = 0.6) +  
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.8), 
+              alpha = 0.7, aes(colour = Treatment), size = 2) +  
+  scale_colour_manual(values = c("#4575B4", "#FDAE61", "#D73027"), name = "Warming treatment:") +
+  scale_fill_manual(values = c("#4575B4", "#FDAE61", "#D73027"), name = "Warming treatment:") +
+  theme_JM +
+  theme(legend.position = "bottom") +
+  labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") 
+  #facet_wrap(~Layer, ncol = 1) 
+
+# Plot with depth layers
+plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Treatment)) +
+  geom_boxplot(alpha = 0.7, outlier.shape = NA, position = position_dodge(width = 0.8), width = 0.6) +  
+  geom_jitter(position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.8), 
+              alpha = 0.7, aes(colour = Treatment), size = 2) +  
+  scale_colour_manual(values = c("#4575B4", "#FDAE61", "#D73027"), name = "Warming treatment:") +
+  scale_fill_manual(values = c("#4575B4", "#FDAE61", "#D73027"), name = "Warming treatment:") +
+  theme_JM +
+  theme(legend.position = "bottom") +
+  labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") +
+  facet_wrap(~Layer, ncol = 1) 
+
+# All Plots
+plot_alpha_div_zone
+plot_alpha_div_zone_treatment
+plot_alpha_div_zone_treatment_layer
+
+# Arranged Plots
+ggarrange(plot_alpha_div_zone_treatment_layer,plot_all_treatment_layer_nmds, ncol = 2)
+
+plot_alpha_nmds_qpcr_bar <- ggarrange(
+  ggarrange(
+    plot_alpha_div_zone_treatment_layer + theme(legend.position = "none"),
+    plot_all_treatment_layer_nmds + theme(legend.position = "none"), 
+    ncol = 2,
+    labels = c("A", "B")
+  ),
+  ggarrange(
+    plot_qpcr_bar_eub +
+      theme(legend.position = "right",
+            legend.box = "vertical",
+            legend.key.size = unit(0.5, "cm"),
+            legend.text = element_text(size = 8),
+            legend.title = element_text(size = 9)) +
+      guides(color = guide_legend(ncol = 1)),
+    labels = "C"
+  ),
+  nrow = 2,
+  heights = c(1, 0.8)  # Slightly increase height of bottom row
+)
+
+# Three panel Plot 
+plot_alpha_nmds_qpcr_bar
+```
+
+## Step 5b: Alpha diversity statistics without random effect
+```{r}
+stat_aov_alpha <- aov(Value ~ Zone * Treatment * Layer, data = df_alpha_div_long)
+summary(stat_aov_alpha)
+TukeyHSD(stat_aov_alpha)
+
+# Perform TukeyHSD
+tukey_results <- TukeyHSD(stat_aov_alpha)
+
+# Convert TukeyHSD results to a data frame
+tukey_df <- do.call(rbind, lapply(names(tukey_results), function(x) {
+  data.frame(comparison = x, 
+             pair = rownames(tukey_results[[x]]), 
+             tukey_results[[x]], 
+             stringsAsFactors = FALSE)
+}))
+
+# Filter significant comparisons
+significant_comparisons <- tukey_df[tukey_df$`p.adj` < 0.05, ]
+
+# View significant comparisons
+print(significant_comparisons)
+```
+
+## Step 5c: Alpha diversity statistics with random effect Plot
+```{r}
+# Fit the linear mixed-effects model
+stat_model_alpha <- lmer(Value ~ Treatment * Zone * Layer + (1|Plot), data = df_alpha_div_long)
+
+# Model diagnostics
+## 1. Residual plots
+plot(stat_model_alpha)
+
+## 2. QQ plot of residuals
+qqnorm(resid(stat_model_alpha))
+qqline(resid(stat_model_alpha))
+
+## 3. Residuals vs. Fitted values
+plot(fitted(stat_model_alpha), resid(stat_model_alpha))
+abline(h = 0, col = "red")
+
+## 4. Additional diagnostic plots using performance package
+check_model(stat_model_alpha)
+
+# ANOVA
+anova(stat_model_alpha)
+
+# Model summary
+summary(stat_model_alpha)
+
+# Pairwise comparisons
+## For Zone
+stat_alpha_zone_emm <- emmeans(stat_model_alpha, ~ Zone)
+pairs(stat_alpha_zone_emm)
+
+## For Treatment
+stat_alpha_treatment_emm <- emmeans(stat_model_alpha, ~ Treatment)
+pairs(stat_alpha_treatment_emm)
+
+## For Layer
+stat_alpha_layer_emm <- emmeans(stat_model_alpha, ~ Layer)
+pairs(stat_alpha_layer_emm)
+
+## For Zone:Treatment interaction
+stat_alpha_zone_treatment_emm <- emmeans(stat_model_alpha, ~ Zone | Treatment)
+pairs(stat_alpha_zone_treatment_emm)
+
+## For Zone:Layer interaction
+stat_alpha_zone_layer_emm <- emmeans(stat_model_alpha, ~ Zone | Layer)
+pairs(stat_alpha_zone_layer_emm)
+
+## For Treatment:Layer interaction
+stat_alpha_treatment_layer_emm <- emmeans(stat_model_alpha, ~ Treatment | Layer)
+pairs(stat_alpha_treatment_layer_emm)
+
+## For Treatment:Layer:Zone interaction
+stat_alpha_treatment_layer_zone_emm <- emmeans(stat_model_alpha, ~ Treatment | Layer | Zone)
+pairs(stat_alpha_treatment_layer_zone_emm)
+
+# Visualizations
+## Interaction plot for Zone and Treatment
+ggplot(df_alpha_div_long, aes(x = Zone, y = Value, color = Treatment)) +
+  stat_summary(fun = mean, geom = "point") +
+  stat_summary(fun = mean, geom = "line", aes(group = Treatment)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
+  facet_wrap(~ Layer) +
+  theme_JM +
+  labs(title = "Interaction between Zone and Treatment by Layer across all Enzymes",
+       y = "Response Variable")
+```
+
+## Step 5d: Alpha diversity statistics with elevational and warming data
+```{r}
+#df_EEA_final <- df_alpha_div %>%
+#  ungroup() %>%
+# mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
+
+#summary(lm(Value~ meanTemp, data = df_alpha_div_long))
+
+# Prepare warming and elevation data
+df_elevation_mean <- df_elevation %>%
+  group_by(Plot) %>%
+  summarise(elevation_mean = mean(Elevation))
+df_elevation_mean$Plot <- as.factor(df_elevation_mean$Plot)
+
+df_warming_mean <- df_warming_all_2022_yearly %>%
+  group_by(plotid) %>%
+  summarise(pin_mean = mean(pinTemp_mean),
+            deep_mean = mean (deepTemp_mean))
+
+df_warming_mean$Plot <- as.factor(df_warming_mean$plotid)
+
+df_alpha_div_stat <- df_alpha_div_long %>%
+  left_join(df_elevation_mean, by = "Plot") %>%
+  left_join(df_warming_mean, by = "Plot")
+
+# Split the data
+df_top_soil <- df_alpha_div_stat %>% filter(Layer == "Top-soil (0-30 cm)")
+df_bottom_soil <- df_alpha_div_stat %>% filter(Layer == "Bottom-soil (40-100 cm)")
+
+# Run models
+stat_model_elevation <- lm(Value ~ elevation_mean, data = df_alpha_div_stat)
+stat_model_top_elevation <- lm(Value ~ elevation_mean, data = df_top_soil)
+stat_model_bottom_elevation <- lm(Value ~ elevation_mean, data = df_bottom_soil)
+
+# Function to extract R2 and p-value
+get_stats <- function(model) {
+  r_squared <- summary(model)$r.squared
+  f_statistic <- summary(model)$fstatistic
+  p_value <- pf(f_statistic[1], f_statistic[2], f_statistic[3], lower.tail = FALSE)
+  return(c(R_squared = r_squared, P_value = p_value))
+}
+
+# Get statistics
+stats_alpha_all <- get_stats(stat_model_elevation)
+stats_alpha_top <- get_stats(stat_model_top_elevation)
+stats_alpha_bottom <- get_stats(stat_model_bottom_elevation)
+
+# Print results
+print("All:")
+print(stats_alpha_all)
+print(summary(stat_model_elevation))
+
+print("Top Soil:")
+print(stats_alpha_top)
+print(summary(stat_model_top_elevation))
+
+print("Bottom Soil:")
+print(stats_alpha_bottom)
+print(summary(stat_model_bottom_elevation))
+
+# ANCOVA to test for interaction
+model_interaction <- lm(Value ~ Layer * elevation_mean, data = df_alpha_div_stat)
+print("Interaction Model:")
+print(summary(model_interaction))
+
+## Warming data
+# Run model
+run_models <- function(data, predictor) {
+  model <- lm(as.formula(paste("Value ~", predictor)), data = data)
+  stats <- get_stats(model)
+  return(list(model = model, stats = stats))
+}
+
+# Run models for each Zone and Layer combination
+zones <- c("PZ", "LM", "HM")
+layers <- c("Top-soil (0-30 cm)", "Bottom-soil (40-100 cm)")
+predictors <- c("pin_mean", "deep_mean")
+
+results <- list()
+
+for (zone in zones) {
+  for (layer in layers) {
+    for (predictor in predictors) {
+      data_subset <- df_alpha_div_stat %>% 
+        filter(Zone == zone, Layer == layer)
+      
+      model_results <- run_models(data_subset, predictor)
+      
+      key <- paste(zone, layer, predictor, sep = "_")
+      results[[key]] <- model_results
+    }
+  }
+}
+
+# Print results
+for (key in names(results)) {
+  cat("\n", key, ":\n")
+  print(results[[key]]$stats)
+  print(summary(results[[key]]$model))
+}
+
+# ANCOVA to test for interactions
+model_pin_interaction <- lm(Value ~ Zone * Layer * pin_mean, data = df_alpha_div_stat)
+model_deep_interaction <- lm(Value ~ Zone * Layer * deep_mean, data = df_alpha_div_stat)
+
+print("Pin Mean Interaction Model:")
+print(summary(model_pin_interaction))
+
+print("Deep Mean Interaction Model:")
+print(summary(model_deep_interaction))
+```
+
+
+## Step 5e: Summarise alpha diversity dataframe
+```{r}
+# summarise alpha diversity dataframe
+df_alpha_sum <- df_alpha_div_long  %>%
+  rename("Plot" = "plotid") %>%
+  group_by(plotid, Layer) %>%
+  summarise("Alpha_diversity" = mean(Value, na.rm=TRUE))
+```
+
+
+# Step 7: Warming data 
+## Step 7a: Calculate dissimalarities
+```{r}
+# Filter the phyloseq object
+ps_top <- ps_filter(ps_rare, Layer == "Top-soil (0-30 cm)")
+ps_bottom <- ps_filter(ps_rare, Layer == "Bottom-soil (40-100 cm)")
+
+#ps_top <- ps_filter(ps, Layer == "Top-soil (0-30 cm)")
+#ps_bottom <- ps_filter(ps, Layer == "Bottom-soil (40-100 cm)")
+
+# Calculate Bray-Curtis distances on the filtered object
+stat_bray_curtis_dist_top <- phyloseq::distance(ps_top, method = "bray")
+stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_bottom, method = "bray")
+
+# Calculate Aitchinson distance on clr transformed data 
+#### NOTE currently bray curtis is overwritten by Aitchinson
+#stat_bray_curtis_dist_top <- phyloseq::distance(ps_top, method = "euclidean", transform = "clr")
+#stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_bottom, method = "euclidean", transform = "clr")
+
+
+# Convert the distance matrix to a dataframe 
+df_bray_curtis_top <- as.data.frame(as.matrix(stat_bray_curtis_dist_top)) %>%
+  rownames_to_column(var = "sample_name") %>%
+  pivot_longer(cols = -sample_name, names_to = "comparison", values_to = "BrayCurtisDissimilarity")
+
+df_bray_curtis_bottom <- as.data.frame(as.matrix(stat_bray_curtis_dist_bottom)) %>%
+  rownames_to_column(var = "sample_name") %>%
+  pivot_longer(cols = -sample_name, names_to = "comparison", values_to = "BrayCurtisDissimilarity")
+
+# Merge with metadata and add plot information on both samples compared
+df_bray_curtis_top_plots <- df_bray_curtis_top %>%
+  left_join(metadata, by = "sample_name") %>%
+  dplyr::rename(plotid1 = Plot, depth1 = Depth, zone1 = Zone)
+df_bray_curtis_top_plots <- df_bray_curtis_top_plots %>%
+  left_join(metadata, by = c("comparison" = "sample_name")) %>%
+  dplyr::rename(plotid2 = Plot, depth2 = Depth, zone2 = Zone)
+
+df_bray_curtis_bottom_plots <- df_bray_curtis_bottom %>%
+  left_join(metadata, by = "sample_name") %>%
+  dplyr::rename(plotid1 = Plot, depth1 = Depth, zone1 = Zone)
+df_bray_curtis_bottom_plots <- df_bray_curtis_bottom_plots %>%
+  left_join(metadata, by = c("comparison" = "sample_name")) %>%
+  dplyr::rename(plotid2 = Plot, depth2 = Depth, zone2 = Zone)
+
+# Clean dataframe
+df_bray_curtis_top_plots <- df_bray_curtis_top_plots %>%
+  filter(depth1 == depth2) %>%
+  select(sample_name, comparison, depth1, depth2, plotid1, plotid2, zone1, zone2, BrayCurtisDissimilarity)
+
+df_bray_curtis_bottom_plots <- df_bray_curtis_bottom_plots %>%
+   filter(depth1 == depth2) %>%
+  select(sample_name, comparison, depth1, depth2, plotid1, plotid2, zone1, zone2, BrayCurtisDissimilarity)
+```
+
+
+## Step 7b: Calculate delta in temperature
+```{r}
+# Generate pairwise combinations of plots and calculate delta values
+df_warming_delta <- combn(unique(df_warming_all_2022_monthly$plotid), 2) %>%
+  t() %>%
+  as.data.frame() %>%
+  setNames(c("plotid1", "plotid2")) %>%
+  left_join(df_warming_all_2022_monthly, by = c("plotid1" = "plotid")) %>%
+  dplyr::rename(surfaceTemp1 = surfaceTemp_mean, pinTemp1 = pinTemp_mean, deepTemp1 = deepTemp_mean) %>%
+  left_join(df_warming_all_2022_monthly, by = c("plotid2" = "plotid")) %>%
+  dplyr::rename(surfaceTemp2 = surfaceTemp_mean, pinTemp2 = pinTemp_mean, deepTemp2 = deepTemp_mean) %>%
+  mutate(delta_surfaceTemp = abs(surfaceTemp1 - surfaceTemp2),
+         delta_pinTemp = abs(pinTemp1 - pinTemp2),
+         delta_deepTemp = abs(deepTemp1 - deepTemp2)) %>%
+  select("plotid1", "plotid2", "delta_surfaceTemp", "delta_pinTemp", "delta_deepTemp")
+
+df_warming_delta$plotid1 <- as.factor(df_warming_delta$plotid1)
+df_warming_delta$plotid2 <- as.factor(df_warming_delta$plotid2)
+
+
+#### NOTE: Currently the weekly version is ranging from 01.09.2022-11.09.2022 (sampling day)
+# Generate pairwise combinations of plots and calculate delta values
+df_warming_delta_1 <- combn(unique(df_warming_all_2022_weekly$plotid), 2) %>%
+  t() %>%
+  as.data.frame() %>%
+  setNames(c("plotid1", "plotid2")) %>%
+  left_join(df_warming_all_2022_weekly, by = c("plotid1" = "plotid")) %>%
+  dplyr::rename(surfaceTemp1 = surfaceTemp_mean, pinTemp1 = pinTemp_mean, deepTemp1 = deepTemp_mean) %>%
+  left_join(df_warming_all_2022_weekly, by = c("plotid2" = "plotid")) %>%
+  dplyr::rename(surfaceTemp2 = surfaceTemp_mean, pinTemp2 = pinTemp_mean, deepTemp2 = deepTemp_mean) %>%
+  mutate(delta_surfaceTemp = abs(surfaceTemp1 - surfaceTemp2),
+         delta_pinTemp = abs(pinTemp1 - pinTemp2),
+         delta_deepTemp = abs(deepTemp1 - deepTemp2)) %>%
+  select("plotid1", "plotid2", "delta_surfaceTemp", "delta_pinTemp", "delta_deepTemp")
+
+df_warming_delta_1$plotid1 <- as.factor(df_warming_delta_1$plotid1)
+df_warming_delta_1$plotid2 <- as.factor(df_warming_delta_1$plotid2)
+
+#### NOTE: Currently the weekly version is ranging from March until 11.09.2022 (sampling day), and the yearly and weekly dataset are stored but not used in the following code. 
+# Generate pairwise combinations of plots and calculate delta values
+df_warming_delta_2 <- combn(unique(df_warming_all_2022_yearly$plotid), 2) %>%
+  t() %>%
+  as.data.frame() %>%
+  setNames(c("plotid1", "plotid2")) %>%
+  left_join(df_warming_all_2022_yearly, by = c("plotid1" = "plotid")) %>%
+  dplyr::rename(surfaceTemp1 = surfaceTemp_mean, pinTemp1 = pinTemp_mean, deepTemp1 = deepTemp_mean) %>%
+  left_join(df_warming_all_2022_yearly, by = c("plotid2" = "plotid")) %>%
+  dplyr::rename(surfaceTemp2 = surfaceTemp_mean, pinTemp2 = pinTemp_mean, deepTemp2 = deepTemp_mean) %>%
+  mutate(delta_surfaceTemp = abs(surfaceTemp1 - surfaceTemp2),
+         delta_pinTemp = abs(pinTemp1 - pinTemp2),
+         delta_deepTemp = abs(deepTemp1 - deepTemp2)) %>%
+  select("plotid1", "plotid2", "delta_surfaceTemp", "delta_pinTemp", "delta_deepTemp")
+
+df_warming_delta_2$plotid1 <- as.factor(df_warming_delta_2$plotid1)
+df_warming_delta_2$plotid2 <- as.factor(df_warming_delta_2$plotid2)
+```
+
+## Step 7c: Calculate delta in elevation
+```{r}
+df_elevation_mean <- df_elevation %>%
+  group_by(Plot) %>%
+  summarise(elevation_mean = mean(Elevation))
+
+df_elevation_delta <- combn(unique(df_elevation_mean$Plot), 2) %>%
+  t() %>%
+  as.data.frame() %>%
+  setNames(c("plotid1", "plotid2")) %>%
+  left_join(df_elevation_mean, by = c("plotid1" = "Plot")) %>%
+  dplyr::rename(elevation1 = elevation_mean) %>%
+  left_join(df_elevation_mean, by = c("plotid2" = "Plot")) %>%
+  dplyr::rename(elevation2 = elevation_mean) %>%
+  mutate(delta_elevation = abs(elevation1 - elevation2)) 
+
+df_elevation_delta$plotid1 <- as.factor(df_elevation_delta$plotid1)
+df_elevation_delta$plotid2 <- as.factor(df_elevation_delta$plotid2)
+```
+
+
+## Step 7d: Merge delta data with bray curtis data
+```{r}
+# Top-soil data 0-30 cm with warming
+df_bray_delta_top <- df_bray_curtis_top_plots %>%
+  left_join(df_warming_delta, by = c("plotid1", "plotid2")) %>%
+  left_join(df_warming_delta, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+  mutate(
+    delta_surfaceTemp = coalesce(delta_surfaceTemp, delta_surfaceTemp_rev),
+    delta_pinTemp = coalesce(delta_pinTemp, delta_pinTemp_rev),
+    delta_deepTemp = coalesce(delta_deepTemp, delta_deepTemp_rev)
+  ) %>%
+  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_deepTemp, delta_pinTemp, delta_surfaceTemp, everything(), -ends_with("_rev"))
+
+# Remove double comparisons (e.g. 370 with 372 and 372 with 370)
+df_bray_delta_top <- df_bray_delta_top %>%
+  rowwise() %>%
+  mutate(
+    sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")
+  ) %>%
+  ungroup() %>%
+  distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+  select(-sorted_plotids)
+
+# Bottom-soil 40-100 cm with warming
+df_bray_delta_bottom <- df_bray_curtis_bottom_plots %>%
+  left_join(df_warming_delta, by = c("plotid1", "plotid2")) %>%
+  left_join(df_warming_delta, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+  mutate(
+    delta_surfaceTemp = coalesce(delta_surfaceTemp, delta_surfaceTemp_rev),
+    delta_pinTemp = coalesce(delta_pinTemp, delta_pinTemp_rev),
+    delta_deepTemp = coalesce(delta_deepTemp, delta_deepTemp_rev)
+  ) %>%
+  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_deepTemp, delta_pinTemp, delta_surfaceTemp, everything(), -ends_with("_rev"))
+
+df_bray_delta_bottom <- df_bray_delta_bottom %>%
+  rowwise() %>%
+  mutate(
+    sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")
+  ) %>%
+  ungroup() %>%
+  distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+  select(-sorted_plotids)
+
+# Top-soil data 0-30 cm with elevation
+df_bray_delta_top_elevation <- df_bray_curtis_top_plots %>%
+  left_join(df_elevation_delta, by = c("plotid1", "plotid2")) %>%
+  left_join(df_elevation_delta, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+  mutate(
+    delta_elevation = coalesce(delta_elevation, delta_elevation_rev)) %>%
+  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_elevation, everything(), -ends_with("_rev"))
+
+df_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
+  rowwise() %>%
+  mutate(
+    sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")
+  ) %>%
+  ungroup() %>%
+  distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+  select(-sorted_plotids)
+
+# Bottom-soil 40-100 cm with elevation
+df_bray_delta_bottom_elevation <- df_bray_curtis_bottom_plots %>%
+  left_join(df_elevation_delta, by = c("plotid1", "plotid2")) %>%
+  left_join(df_elevation_delta, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+  mutate(
+    delta_elevation = coalesce(delta_elevation, delta_elevation_rev)) %>%
+  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_elevation, everything(), -ends_with("_rev"))
+
+df_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
+  rowwise() %>%
+  mutate(
+    sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")
+  ) %>%
+  ungroup() %>%
+  distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+  select(-sorted_plotids)
+```
+
+## Step 7e: Plot dissimilarities & warming + Statistics
+```{r}
+plot_bray_delta_top_surface <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta monthly T at 2 cm depth [°C]") +
+  ylab("Dissimalarity")
+
+plot_bray_delta_top_pin <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+ # geom_smooth(method = "lm") +
+ # stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+#               label.x = "left", label.y = 0.1,
+ #              formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM + 
+  xlab("Delta monthly T at 20 cm depth [°C]") +
+  ylab("Dissimalarity")
+
+plot_bray_delta_top_deep <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM+
+  xlab("Delta monthly T at 75 cm depth [°C]") +
+  ylab("Dissimalarity")
+
+plot_bray_delta_bottom_surface <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta monthly T at 2 cm depth [°C]") +
+  ylab("Dissimalarity")
+
+plot_bray_delta_bottom_pin <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta monthly T at 20 cm depth [°C]") +
+  ylab("Dissimalarity")
+
+plot_bray_delta_bottom_deep <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+ # geom_smooth(method = "lm") +
+ # stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+ #              label.x = "left", label.y = 0.1,
+ #              formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta monthly T at 75 cm depth [°C]") +
+  ylab("Dissimalarity")
+
+# Arrange all plots
+ggarrange(plot_bray_delta_top_surface, plot_bray_delta_top_pin, plot_bray_delta_top_deep,
+          plot_bray_delta_bottom_surface, plot_bray_delta_bottom_pin, plot_bray_delta_bottom_deep,
+          ncol = 3, nrow = 2)
+
+ggarrange(plot_bray_delta_top_pin, plot_bray_delta_bottom_deep,
+          ncol = 1, nrow = 2)
+```
+
+### Step 7ei: PZ Plot dissimilarities & warming + Statistics 
+```{r}
+plot_bray_delta_top_surface_PZ <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "PZ") %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Surface")
+
+plot_bray_delta_top_pin_PZ <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "PZ") %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Pin")
+
+plot_bray_delta_top_deep_PZ <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "PZ") %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Deep")
+
+plot_bray_delta_bottom_surface_PZ <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "PZ") %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Surface")
+
+plot_bray_delta_bottom_pin_PZ <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "PZ") %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Pin")
+
+plot_bray_delta_bottom_deep_PZ <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "PZ") %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Deep")
+
+# Arrange all plots
+ggarrange(plot_bray_delta_top_surface_PZ, plot_bray_delta_top_pin_PZ, plot_bray_delta_top_deep_PZ,
+          plot_bray_delta_bottom_surface_PZ, plot_bray_delta_bottom_pin_PZ, plot_bray_delta_bottom_deep_PZ,
+          ncol = 3, nrow = 2)
+```
+
+
+
+### Step 7eii: LM Plot dissimilarities & warming + Statistics 
+```{r}
+plot_bray_delta_top_surface_LM <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "LM") %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Surface")
+
+plot_bray_delta_top_pin_LM <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "LM") %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Pin")
+
+plot_bray_delta_top_deep_LM <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "LM") %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Deep")
+
+plot_bray_delta_bottom_surface_LM <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "LM") %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Surface")
+
+plot_bray_delta_bottom_pin_LM <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "LM") %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Pin")
+
+plot_bray_delta_bottom_deep_LM <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "LM") %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Deep")
+
+# Arrange all plots
+ggarrange(plot_bray_delta_top_surface_LM, plot_bray_delta_top_pin_LM, plot_bray_delta_top_deep_LM,
+          plot_bray_delta_bottom_surface_LM, plot_bray_delta_bottom_pin_LM, plot_bray_delta_bottom_deep_LM,
+          ncol = 3, nrow = 2)
+```
+
+### Step 7eii: HM Plot dissimilarities & warming + Statistics 
+```{r}
+ plot_bray_delta_top_surface_HM <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "HM") %>%
+  filter(!BrayCurtisDissimilarity == 0) %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  ylim(0,1) +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Surface")
+
+plot_bray_delta_top_pin_HM <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "HM") %>%
+  filter(!BrayCurtisDissimilarity == 0) %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  ylim(0,1) +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Pin")
+
+plot_bray_delta_top_deep_HM <- df_bray_delta_top %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "HM") %>%
+  filter(!BrayCurtisDissimilarity == 0) %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  ylim(0,1) +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Top Deep")
+
+plot_bray_delta_bottom_surface_HM <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "HM") %>%
+  filter(!BrayCurtisDissimilarity == 0) %>%
+  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  ylim(0,1) +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Surface")
+
+plot_bray_delta_bottom_pin_HM <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "HM") %>%
+  filter(!BrayCurtisDissimilarity == 0) %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  ylim(0,1) +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Pin")
+
+plot_bray_delta_bottom_deep_HM <- df_bray_delta_bottom %>%
+  filter(zone1 == zone2) %>%
+  filter(zone1 == "HM") %>%
+  filter(!BrayCurtisDissimilarity == 0) %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  ylim(0,1) +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  labs(title = "Bottom Deep")
+
+# Arrange all plots
+ggarrange(plot_bray_delta_top_surface_HM, plot_bray_delta_top_pin_HM, plot_bray_delta_top_deep_HM,
+          plot_bray_delta_bottom_surface_HM, plot_bray_delta_bottom_pin_HM, plot_bray_delta_bottom_deep_HM,
+          ncol = 3, nrow = 2)     
+
+```
+
+## Step 7f: Plot dissimilarities & elevation + statistics
+```{r}
+plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
+ #filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta elevation [cm]") +
+  ylab("Dissimalarity")
+
+plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
+ #filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta elevation [cm]") +
+  ylab("Dissimalarity")
+
+# Arrange all plots
+ggarrange(plot_bray_delta_top_elevation, plot_bray_delta_bottom_elevation, ncol = 1, nrow = 2)
+
+plot_bray_delta_combined <- ggarrange(
+  plot_bray_delta_top_elevation, 
+  plot_bray_delta_top_pin, 
+  plot_bray_delta_bottom_elevation, 
+  plot_bray_delta_bottom_deep,
+  ncol = 2, 
+  nrow = 2,
+  labels = c("A", "B", "C", "D"), # Add custom labels
+  font.label = list(size = 14, face = "bold"), # Customize label appearance
+  common.legend = TRUE, # Optional: shared legend
+  legend = "top" # Place legend at the top
+)
+
+plot_bray_delta_combined
+```
+
+## Step 7g: Regression analysis
+```{r}
+# Create dataframe with top and bottom soil and Dissimilarities
+df_bray_delta_T <- df_bray_delta_top %>%
+  full_join(df_bray_delta_bottom) %>%
+  mutate(meanTemp = rowMeans(select(., delta_pinTemp, delta_deepTemp), na.rm = TRUE))
+
+df_bray_delta_E <- df_bray_delta_top_elevation %>%
+  full_join(df_bray_delta_bottom_elevation)
+
+# Statstics
+# All with mean T from pin and deep
+summary(lm(BrayCurtisDissimilarity ~ meanTemp, data = df_bray_delta_T %>% filter(zone1 == zone2)))
+
+# All with Elevation
+summary(lm(BrayCurtisDissimilarity ~ delta_elevation, data = df_bray_delta_E))
+
+# Top-soil pin T
+summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2)))
+
+# Bottom-soil deep T
+summary(lm(BrayCurtisDissimilarity ~ delta_deepTemp, data = df_bray_delta_bottom %>% filter(zone1 == zone2)))
+
+# Top-soil elevation Delta
+summary(lm(BrayCurtisDissimilarity ~ delta_elevation, data = df_bray_delta_top_elevation))
+
+# Bottom-soil elevation Delta
+summary(lm(BrayCurtisDissimilarity ~ delta_elevation, data = df_bray_delta_bottom_elevation))
+summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2) %>% filter (zone1 == "PZ")))
+summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2) %>% filter (zone1 == "LM")))
+summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2) %>% filter (zone1 == "HM")))
+
+# Alpha Diversity Statstics
+df_alpha_T <- df_alpha_div_stat %>%
+    mutate(meanTemp = rowMeans(select(., pin_mean, deep_mean), na.rm = TRUE))
+
+summary(lm(Value ~ meanTemp, data = df_alpha_T))
+```
+
+## Step 8g: Mantel test
+```{r}
+library(vegan)
+library(dplyr)
+library(tidyr)
+
+# Prepare warming delta data
+unique_plots <- unique(df_warming_all_2022_monthly$plotid)
+
+# Create ALL pairwise combinations 
+df_all_pairs <- expand.grid(
+  plotid1 = unique_plots,
+  plotid2 = unique_plots,
+  stringsAsFactors = FALSE
+) 
+
+df_warming_delta_full <- df_all_pairs %>%
+  left_join(
+    df_warming_all_2022_monthly %>%
+      select(plotid, pinTemp_1 = pinTemp_mean, deepTemp_1 = deepTemp_mean),
+    by = c("plotid1" = "plotid")
+  ) %>%
+  left_join(
+    df_warming_all_2022_monthly %>%
+      select(plotid, pinTemp_2 = pinTemp_mean, deepTemp_2 = deepTemp_mean),
+    by = c("plotid2" = "plotid")
+  ) %>%
+  mutate(
+    delta_pinTemp = abs(pinTemp_1 - pinTemp_2),
+    delta_deepTemp = abs(deepTemp_1 - deepTemp_2)
+  ) 
+
+# Prepare Bray-Curtis distance data  
+df_bray_curtis_top_plots_mean <- df_bray_curtis_top_plots %>%
+  group_by(plotid1, plotid2) %>%
+  summarise(BrayCurtisDissimilarity = mean(BrayCurtisDissimilarity))
+
+df_bray_top_complete <- df_bray_curtis_top_plots_mean %>%
+  left_join(df_warming_delta_full, by = c("plotid1", "plotid2"))
+
+# Create Bray-Curtis distance matrix (27x27)
+mat_bray_top_dist <- df_bray_top_complete %>%
+  group_by(plotid1, plotid2) %>%
+  summarize(BrayCurtisDissimilarity = mean(BrayCurtisDissimilarity)) %>% 
+  pivot_wider(names_from = plotid2, values_from = BrayCurtisDissimilarity) %>%
+  column_to_rownames("plotid1") %>%
+  as.matrix() %>%
+  as.dist()
+
+# Create delta temperature (pin 20 cm) mateix (27 x 27)
+mat_delta_pin_dist <- df_bray_top_complete %>%
+  group_by(plotid1, plotid2) %>%
+  summarize(delta_pinTemp = mean(delta_pinTemp)) %>% 
+  pivot_wider(names_from = plotid2, values_from = delta_pinTemp) %>%
+  column_to_rownames("plotid1") %>%
+  as.matrix() %>%
+  as.dist()
+
+# Run Mantel test (handles NAs if present)
+mantel_result <- mantel(
+  mat_bray_top_dist, 
+  mat_delta_pin_dist, 
+  method = "pearson", 
+  permutations = 999,
+  na.rm = TRUE  # Exclude NA pairs from calculation
+)
+
+# Print results
+print(mantel_result)
+
+```
+
+
+#### Appendix ####
+
+# Step 6: Venn diagramms
+```{r,message=FALSE, warning=FALSE}
+# Subset ps objects for each Zone
+ps_PZ <- subset_samples(ps, Zone == "PZ")
+ps_LM <- subset_samples(ps, Zone == "LM")
+ps_HM <- subset_samples(ps, Zone == "HM")
+
+# Create Venn Diagramms
+plot_venn_T <- ps_venn(ps,"Treatment", fill = c("#4575B4", "#FDAE61", "red3"))
+plot_venn_T_PZ <- ps_venn(ps_PZ, "Treatment",quantities = list(type=c("percent","counts"), font = 2), fill = c("#4575B4", "#FDAE61", "red3"))
+plot_venn_T_LM <- ps_venn(ps_LM, "Treatment",quantities = list(type=c("percent","counts"), font = 2), fill = c("#4575B4", "#FDAE61", "red3"))
+plot_venn_T_HM <- ps_venn(ps_HM, "Treatment",quantities = list(type=c("percent","counts"), font = 2), fill = c("#4575B4", "#FDAE61", "red3"))
+plot_venn_Z <- ps_venn(ps,"Zone", fill = c("tan", "darkgreen", "lightgreen"))
+plot_venn_D <- ps_venn(ps,"Depth")
+plot_venn_L <- ps_venn(ps,"Layer")
+
+# All Plots
+plot_venn_T
+plot_venn_T_PZ
+plot_venn_T_LM
+plot_venn_T_HM
+plot_venn_Z
+plot_venn_D
+plot_venn_L
+```
+
+
+## Step 2c: PCA Plots 
+```{r}
+ps %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(
+  method = "auto"
+ ) %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Treatment", fill = "Treatment",
+  shape = "Zone", alpha = 0.5,
+  size = 2
+ ) + 
+ scale_shape_girafe_filled() +
+ stat_chull(
+  ggplot2::aes(colour = Treatment)
+ )
+
+# pioneer zone
+plot_PZ_5 <- ps_PZ_5 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_PZ_10 <- ps_PZ_10 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_PZ_20 <- ps_PZ_20 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_PZ_40 <- ps_PZ_40 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_PZ_80 <- ps_PZ_80 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+# low marsh
+plot_LM_5 <- ps_LM_5 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(2, 3), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_LM_10 <- ps_LM_10 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_LM_20 <- ps_LM_20 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_LM_40 <- ps_LM_40 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_LM_80 <- ps_LM_80 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+# high marsh
+plot_HM_5 <- ps_HM_5 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_HM_10 <- ps_HM_10 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_HM_20 <- ps_HM_20 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_HM_40 <- ps_HM_40 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM +
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_HM_80 <- ps_HM_80 %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
+
+plot_zone <- ps %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Zone", fill = "Zone", shape = "Zone", alpha = 0.5, size = 2) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Zone, fill= Zone), alpha = 0.5)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Zone, fill = Zone), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Zone, fill = Zone), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#08306b", "#6baed6", "#c6dbef"), name = "Zone:")+
+  scale_fill_manual(values = c("#08306b", "#6baed6", "#c6dbef"), name = "Zone:")
+
+plot_PZ_depth <- ps_PZ %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Depth", fill = "Depth", shape = "Depth", alpha = 0.5, size = 2) +
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Depth, fill= Depth), alpha = 0.5)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Depth, fill = Depth), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Depth, fill = Depth), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#ffeda0", "#fee391", "#fe9929", "#cc4c02", "#662506"), name = "Depth:")+
+  scale_fill_manual(values = c("#ffeda0", "#fee391", "#fe9929", "#cc4c02", "#662506"), name = "Depth:")
+
+plot_LM_depth <- ps_LM %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Depth", fill = "Depth", shape = "Depth", alpha = 0.5, size = 2) +
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Depth, fill= Depth), alpha = 0.5)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Depth, fill = Depth), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Depth, fill = Depth), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#ffeda0", "#fee391", "#fe9929", "#cc4c02", "#662506"), name = "Depth:")+
+  scale_fill_manual(values = c("#ffeda0", "#fee391", "#fe9929", "#cc4c02", "#662506"), name = "Depth:")
+
+plot_HM_depth <- ps_HM %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Depth", fill = "Depth", shape = "Depth", alpha = 0.5, size = 2) +
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Depth, fill= Depth), alpha = 0.5)+
+ theme_JM+
+  geom_xsidedensity(aes(colour = Depth, fill = Depth), alpha = 0.5, show.legend = FALSE) +
+  geom_ysidedensity(aes(colour = Depth, fill = Depth), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#ffeda0", "#fee391", "#fe9929", "#cc4c02", "#662506"), name = "Depth:")+
+  scale_fill_manual(values = c("#ffeda0", "#fee391", "#fe9929", "#cc4c02", "#662506"), name = "Depth:")
+
+plot_all_treatment_depth <- ps %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(2, 3), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
+ theme_JM+
+ # geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+ #geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+  facet_wrap(~Zone*Depth, ncol = 5)
+
+# plot all layers
+plot_all_treatment_layer <- ps %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+ stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3) +
+ theme_JM +
+geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5,   show.legend = FALSE) +
+ geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
+  theme(legend.position = "bottom") +
+  facet_wrap(~Layer * Zone, ncol = 3)
+
+plot_all_treatment <- ps %>%
+ tax_transform(rank = "unique", trans = "clr") %>%
+ ord_calc(method = "auto") %>% 
+ ord_plot(axes = c(1, 2), colour = "Treatment", alpha = 0.75, size = 3) + 
+ scale_shape_girafe_filled() +
+stat_chull(ggplot2::aes(group = Treatment, fill = Treatment, colour = Treatment), alpha = 0.7) +
+ theme_JM +
+ # geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+ #geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
+  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
+  facet_wrap(~Zone, ncol = 3)
+
+# all plots
+plot_PZ_5
+plot_PZ_10
+plot_PZ_20
+plot_PZ_40
+plot_PZ_80
+
+plot_LM_5
+plot_LM_10
+plot_LM_20
+plot_LM_40
+plot_LM_80
+
+plot_HM_5
+plot_HM_10
+plot_HM_20
+plot_HM_40
+plot_HM_80
+
+plot_PZ_depth
+plot_LM_depth
+plot_HM_depth
+
+plot_all_treatment
+
+plot_all_PCA_PZ <- ggarrange(plot_PZ_5, plot_PZ_10, plot_PZ_20, plot_PZ_40, plot_PZ_80,ncol= 5, common.legend = TRUE,
+  legend.grob = NULL, labels = c("0-5 cm", "5-10 cm", "20-30 cm", "40-50 cm", "80-100 cm"), label.x = 10)
+
+plot_all_PCA_LM <- ggarrange(plot_LM_5, plot_LM_10, plot_LM_20, plot_LM_40, plot_LM_80,ncol= 5, common.legend = TRUE,
+  legend.grob = NULL, labels = c("0-5 cm", "5-10 cm", "20-30 cm", "40-50 cm", "80-100 cm"), label.x = 10)
+
+plot_all_PCA_HM <- ggarrange(plot_HM_5, plot_HM_10, plot_HM_20, plot_HM_40, plot_HM_80,ncol= 5, common.legend = TRUE,
+  legend.grob = NULL, labels = c("0-5 cm", "5-10 cm", "20-30 cm", "40-50 cm", "80-100 cm"), label.x = 10)
+
+```
+
+## Step 1e: Transform and combine asv table with metadata
+```{r,  message=FALSE, warning=FALSE}
+# Transform asv table into long-format. Transformation will catch all headers (sample names) into a new coloumn (Sample_ID) 
+asv_long <- asv %>%  
+   rownames_to_column(var = "asv")%>%
+  gather(key = "Sample_ID", value = "count",X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12, X13, X14, X15, X16, X17, X18, X19, X20, X21, X22, X23, X24, X25, X26, X27, X28, X29, X30, X31, X32, X33, X34, X35, X36, X37, X38, X39, X40, X41, X42, X43, X44, X45, X46, X47, X48, X49, X50, X51, X52, X53, X54, X55, X56, X57, X58, X59, X60, X61, X62, X63, X64, X65, X66, X67, X68, X69, X70, X71, X72, X73, X74, X75, X76, X77, X78, X79, X80, X81, X82, X83, X84, X85, X86, X87, X88, X89, X90, X91, X92, X93, X94, X95, X96, X97, X98, X99, X100, X101, X102, X103, X104, X105, X106, X107, X108, X109, X110, X111, X112, X113, X114, X115, X116, X117, X118, X119, X120, X121, X122, X123, X124, X125, X126, X127, X128, X129, X130, X131, X132, X133, X134, X135, X136, X137, X138, X139)
+
+# Merge asv table with metadata file to create a master dataframe (master_df)
+metadata$Sample_ID <-metadata$sample_name
+master_df <- merge(asv_long, metadata, by = "Sample_ID", all = TRUE)
+```
+
+
+
+# References
+```{r}
+
+#ggpubr
+Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
+
+# pairwise adonis
+Martinez Arbizu, P. (2020). pairwiseAdonis: Pairwise multilevel comparison using adonis. R package version 0.4
+
+```
+

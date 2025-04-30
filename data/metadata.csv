@@ -1,0 +1,136 @@
+sample_name;ID_num;ID;ID_RNA;Plot;Subplot;Depth;Zone;Treatment;Sampling date;dominant_plant_species_1;subdominant_plant_species_1
+X1;1;110(A2)0-5;A0;110;A;0-5 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X2;2;110(A2)5-10;A1;110;A;5-10 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X3;3;110(A2)20-30;A2;110;A;20-30 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X4;4;110(A2)40-50;A3;110;A;40-50 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X5;6;110(A2)80-100;A4;110;A;80-100 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X6;25;111(A2)0-5;A0;111;A;0-5 cm;PZ;1.5;13.09.2022;Spartina anglica;Salicornia europaea
+X7;26;111(A2)5-10;A1;111;A;5-10 cm;PZ;1.5;13.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X8;27;111(A2)20-30;A2;111;A;20-30 cm;PZ;1.5;13.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X9;28;111(A2)40-50;A3;111;A;40-50 cm;PZ;1.5;13.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X10;30;111(A2)80-100;A4;111;A;80-100 cm;PZ;1.5;13.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X11;49;112(A2)0-5;A0;112;A;0-5 cm;PZ;3;13.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X12;49;112(A2)5-10;A1;112;A;5-10 cm;PZ;3;13.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X13;49;112(A2)20-30;A2;112;A;20-30 cm;PZ;3;13.09.2022;Spartina anglica;Salicornia europaea
+X14;49;112(A2)40-50;A3;112;A;40-50 cm;PZ;3;13.09.2022;Spartina anglica;Salicornia europaea
+X15;49;112(A2)80-100;A4;112;A;80-100 cm;PZ;3;13.09.2022;Spartina anglica;Salicornia europaea
+X16;73;120(A2)0-5;A0;120;A;0-5 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X17;74;120(A2)5-10;A1;120;A;5-10 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X18;75;120(A2)20-30;A2;120;A;20-30 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X19;76;120(A2)40-50;A3;120;A;40-50 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X20;78;120(A2)80-100;A4;120;A;80-100 cm;PZ;ambient;13.09.2022;Spartina anglica;Salicornia europaea
+X21;97;121(A2)0-5;A0;121;A;0-5 cm;PZ;1.5;13.09.2022;Spartina anglica;Salicornia europaea
+X22;98;121(A2)5-10;A1;121;A;5-10 cm;PZ;1.5;13.09.2022;Spartina anglica;Salicornia europaea
+X23;99;121(A2)20-30;A2;121;A;20-30 cm;PZ;1.5;13.09.2022;Spartina anglica;Salicornia europaea
+X24;100;121(A2)40-50;A3;121;A;40-50 cm;PZ;1.5;13.09.2022;Spartina anglica;Salicornia europaea
+X25;102;121(A2)80-100;A4;121;A;80-100 cm;PZ;1.5;13.09.2022;Spartina anglica;
+X26;121;122(A2)0-5;A0;122;A;0-5 cm;PZ;3;13.09.2022;Spartina anglica;
+X27;122;122(A2)5-10;A1;122;A;5-10 cm;PZ;3;13.09.2022;Spartina anglica;
+X28;123;122(A2)20-30;A2;122;A;20-30 cm;PZ;3;13.09.2022;Spartina anglica;
+X29;124;122(A2)40-50;A3;122;A;40-50 cm;PZ;3;13.09.2022;Spartina anglica;
+X30;126;122(A2)80-100;A4;122;A;80-100 cm;PZ;3;13.09.2022;Spartina anglica;
+X31;145;130(A2)0-5;A0;130;A;0-5 cm;PZ;ambient;13.09.2022;Spartina anglica;
+X32;146;130(A2)5-10;A1;130;A;5-10 cm;PZ;ambient;13.09.2022;Spartina anglica;
+X33;147;130(A2)20-30;A2;130;A;20-30 cm;PZ;ambient;13.09.2022;Spartina anglica;
+X34;148;130(A2)40-50;A3;130;A;40-50 cm;PZ;ambient;13.09.2022;Spartina anglica;
+X35;150;130(A2)80-100;A4;130;A;80-100 cm;PZ;ambient;13.09.2022;Spartina anglica;
+X36;169;131(A2)0-5;A0;131;A;0-5 cm;PZ;1.5;13.09.2022;Spartina anglica;
+X37;170;131(A2)5-10;A1;131;A;5-10 cm;PZ;1.5;14.09.2022;Puccinellia maritima;Salicornia europaea
+X38;171;131(A2)20-30;A2;131;A;20-30 cm;PZ;1.5;14.09.2022;Puccinellia maritima;Salicornia europaea
+X39;172;131(A2)40-50;A3;131;A;40-50 cm;PZ;1.5;14.09.2022;Puccinellia maritima;Salicornia europaea
+X40;174;131(A2)80-100;A4;131;A;80-100 cm;PZ;1.5;14.09.2022;Puccinellia maritima;Salicornia europaea
+X41;193;132(A2)0-5;A0;132;A;0-5 cm;PZ;3;14.09.2022;Puccinellia maritima;Salicornia europaea
+X42;194;132(A2)5-10;A1;132;A;5-10 cm;PZ;3;14.09.2022;Puccinellia maritima;Salicornia europaea
+X43;195;132(A2)20-30;A2;132;A;20-30 cm;PZ;3;14.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X44;196;132(A2)40-50;A3;132;A;40-50 cm;PZ;3;14.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X45;198;132(A2)80-100;A4;132;A;80-100 cm;PZ;3;14.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X46;217;240(A2)0-5;A0;240;A;0-5 cm;LM;ambient;14.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X47;218;240(A2)5-10;A1;240;A;5-10 cm;LM;ambient;14.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X48;219;240(A2)20-30;A2;240;A;20-30 cm;LM;ambient;14.09.2022;;Spartina anglica, Salicornia europaea, Puccinellia maritima
+X49;220;240(A2)40-50;A3;240;A;40-50 cm;LM;ambient;14.09.2022;Spartina anglica;Salicornia europaea
+X50;222;240(A2)80-100;A4;240;A;80-100 cm;LM;ambient;14.09.2022;Spartina anglica;Salicornia europaea
+X51;241;241(A2)0-5;A0;241;A;0-5 cm;LM;1.5;14.09.2022;Spartina anglica;Salicornia europaea
+X52;242;241(A2)5-10;A1;241;A;5-10 cm;LM;1.5;14.09.2022;Spartina anglica;Salicornia europaea
+X53;243;241(A2)20-30;A2;241;A;20-30 cm;LM;1.5;14.09.2022;Spartina anglica;Salicornia europaea
+X54;244;241(A2)40-50;A3;241;A;40-50 cm;LM;1.5;14.09.2022;Spartina anglica;Salicornia europaea
+X55;246;241(A2)80-100;A4;241;A;80-100 cm;LM;1.5;15.09.2022;Atriplex portulacoides;
+X56;265;242(A2)0-5;A0;242;A;0-5 cm;LM;3;15.09.2022;Atriplex portulacoides;
+X57;266;242(A2)5-10;A1;242;A;5-10 cm;LM;3;15.09.2022;Atriplex portulacoides;
+X58;267;242(A2)20-30;A2;242;A;20-30 cm;LM;3;15.09.2022;Atriplex portulacoides;
+X59;268;242(A2)40-50;A3;242;A;40-50 cm;LM;3;15.09.2022;Atriplex portulacoides;
+X60;270;242(A2)80-100;A4;242;A;80-100 cm;LM;3;15.09.2022;Atriplex portulacoides;
+X61;289;250(A2)0-5;A0;250;A;0-5 cm;LM;ambient;15.09.2022;;Atriplex portulacoides, Spartina anglica
+X62;290;250(A2)5-10;A1;250;A;5-10 cm;LM;ambient;15.09.2022;;Atriplex portulacoides, Spartina anglica
+X63;291;250(A2)20-30;A2;250;A;20-30 cm;LM;ambient;15.09.2022;;Atriplex portulacoides, Spartina anglica
+X64;292;250(A2)40-50;A3;250;A;40-50 cm;LM;ambient;15.09.2022;;Atriplex portulacoides, Spartina anglica
+X65;294;250(A2)80-100;A4;250;A;80-100 cm;LM;ambient;15.09.2022;;Atriplex portulacoides, Spartina anglica
+X66;313;251(A2)0-5;A0;251;A;0-5 cm;LM;1.5;15.09.2022;;Atriplex portulacoides, Spartina anglica
+X67;314;251(A2)5-10;A1;251;A;5-10 cm;LM;1.5;14.09.2022;;Atriplex portulacoides, Limonium vulgare
+X68;315;251(A2)20-30;A2;251;A;20-30 cm;LM;1.5;14.09.2022;;Atriplex portulacoides, Limonium vulgare
+X69;316;251(A2)40-50;A3;251;A;40-50 cm;LM;1.5;14.09.2022;;Atriplex portulacoides, Limonium vulgare
+X70;318;251(A2)80-100;A4;251;A;80-100 cm;LM;1.5;14.09.2022;;Atriplex portulacoides, Limonium vulgare
+X71;337;252(A2)0-5;A0;252;A;0-5 cm;LM;3;14.09.2022;;Atriplex portulacoides, Limonium vulgare
+X72;338;252(A2)5-10;A1;252;A;5-10 cm;LM;3;14.09.2022;;Atriplex portulacoides, Limonium vulgare
+X73;339;252(A2)20-30;A2;252;A;20-30 cm;LM;3;13.09.2022;Festuca rubra;
+X74;340;252(A2)40-50;A3;252;A;40-50 cm;LM;3;13.09.2022;Festuca rubra;
+X75;342;252(A2)80-100;A4;252;A;80-100 cm;LM;3;13.09.2022;Festuca rubra;
+X76;361;260(A2)0-5;A0;260;A;0-5 cm;LM;ambient;13.09.2022;Festuca rubra;
+X77;362;260(A2)5-10;A1;260;A;5-10 cm;LM;ambient;13.09.2022;Festuca rubra;
+X78;363;260(A2)20-30;A2;260;A;20-30 cm;LM;ambient;13.09.2022;Festuca rubra;
+X79;364;260(A2)40-50;A3;260;A;40-50 cm;LM;ambient;13.09.2022;Limonium vulgare;Atriplex portulacoides
+X80;366;260(A2)80-100;A4;260;A;80-100 cm;LM;ambient;13.09.2022;Limonium vulgare;Atriplex portulacoides
+X81;385;261(A2)0-5;A0;261;A;0-5 cm;LM;1.5;13.09.2022;Limonium vulgare;Atriplex portulacoides
+X82;386;261(A2)5-10;A1;261;A;5-10 cm;LM;1.5;13.09.2022;Limonium vulgare;Atriplex portulacoides
+X83;387;261(A2)20-30;A2;261;A;20-30 cm;LM;1.5;13.09.2022;Limonium vulgare;Atriplex portulacoides
+X84;388;261(A2)40-50;A3;261;A;40-50 cm;LM;1.5;13.09.2022;Limonium vulgare;Atriplex portulacoides
+X85;390;261(A2)80-100;A4;261;A;80-100 cm;LM;1.5;13.09.2022;Atriplex portulacoides;Spartina anglica
+X86;409;262(A2)0-5;A0;262;A;0-5 cm;LM;3;13.09.2022;Atriplex portulacoides;Spartina anglica
+X87;410;262(A2)5-10;A1;262;A;5-10 cm;LM;3;13.09.2022;Atriplex portulacoides;Spartina anglica
+X88;411;262(A2)20-30;A2;262;A;20-30 cm;LM;3;13.09.2022;Atriplex portulacoides;Spartina anglica
+X89;412;262(A2)40-50;A3;262;A;40-50 cm;LM;3;13.09.2022;Atriplex portulacoides;Spartina anglica
+X90;414;262(A2)80-100;A4;262;A;80-100 cm;LM;3;13.09.2022;Atriplex portulacoides;Spartina anglica
+X91;433;370(A2)0-5;A0;370;A;0-5 cm;HM;ambient;12.09.2022;;Festuca rubra, Artemisia maritima
+X92;434;370(A2)5-10;A1;370;A;5-10 cm;HM;ambient;12.09.2022;;Festuca rubra, Artemisia maritima
+X93;435;370(A2)20-30;A2;370;A;20-30 cm;HM;ambient;12.09.2022;;Festuca rubra, Artemisia maritima
+X94;436;370(A2)40-50;A3;370;A;40-50 cm;HM;ambient;12.09.2022;;Festuca rubra, Artemisia maritima
+X95;438;370(A2)80-100;A4;370;A;80-100 cm;HM;ambient;12.09.2022;;Festuca rubra, Artemisia maritima
+X96;457;371(A2)0-5;A0;371;A;0-5 cm;HM;1.5;12.09.2022;;Festuca rubra, Artemisia maritima
+X97;458;371(A2)5-10;A1;371;A;5-10 cm;HM;1.5;12.09.2022;Atriplex portulacoides;
+X98;459;371(A2)20-30;A2;371;A;20-30 cm;HM;1.5;12.09.2022;Atriplex portulacoides;
+X99;460;371(A2)40-50;A3;371;A;40-50 cm;HM;1.5;12.09.2022;Atriplex portulacoides;
+X100;462;371(A2)80-100;A4;371;A;80-100 cm;HM;1.5;12.09.2022;Atriplex portulacoides;
+X101;481;372(A2)0-5;A0;372;A;0-5 cm;HM;3;12.09.2022;Atriplex portulacoides;
+X102;482;372(A2)5-10;A1;372;A;5-10 cm;HM;3;12.09.2022;Atriplex portulacoides;
+X103;483;372(A2)20-30;A2;372;A;20-30 cm;HM;3;12.09.2022;Limonium vulgare;
+X104;484;372(A2)40-50;A3;372;A;40-50 cm;HM;3;12.09.2022;Limonium vulgare;
+X105;486;372(A2)80-100;A4;372;A;80-100 cm;HM;3;12.09.2022;Limonium vulgare;
+X106;505;380(A2)0-5;A0;380;A;0-5 cm;HM;ambient;12.09.2022;Limonium vulgare;
+X107;506;380(A2)5-10;A1;380;A;5-10 cm;HM;ambient;12.09.2022;Limonium vulgare;
+X108;507;380(A2)20-30;A2;380;A;20-30 cm;HM;ambient;12.09.2022;Limonium vulgare;
+X109;508;380(A2)40-50;A3;380;A;40-50 cm;HM;ambient;14.09.2022;Elymus athericus;
+X110;510;380(A2)80-100;A4;380;A;80-100 cm;HM;ambient;14.09.2022;Elymus athericus;
+X111;529;381(A2)0-5;A0;381;A;0-5 cm;HM;1.5;14.09.2022;Elymus athericus;
+X112;530;381(A2)5-10;A1;381;A;5-10 cm;HM;1.5;14.09.2022;Elymus athericus;
+X113;531;381(A2)20-30;A2;381;A;20-30 cm;HM;1.5;14.09.2022;Elymus athericus;
+X114;532;381(A2)40-50;A3;381;A;40-50 cm;HM;1.5;14.09.2022;Elymus athericus;
+X115;534;381(A2)80-100;A4;381;A;80-100 cm;HM;1.5;15.09.2022;Elymus athericus;Atriplex prostrata
+X116;553;382(A2)0-5;A0;382;A;0-5 cm;HM;3;15.09.2022;Elymus athericus;Atriplex prostrata
+X117;554;382(A2)5-10;A1;382;A;5-10 cm;HM;3;15.09.2022;Elymus athericus;Atriplex prostrata
+X118;555;382(A2)20-30;A2;382;A;20-30 cm;HM;3;15.09.2022;Elymus athericus;Atriplex prostrata
+X119;556;382(A2)40-50;A3;382;A;40-50 cm;HM;3;15.09.2022;Elymus athericus;Atriplex prostrata
+X120;558;382(A2)80-100;A4;382;A;80-100 cm;HM;3;15.09.2022;Elymus athericus;Atriplex prostrata
+X121;577;390(A2)0-5;A0;390;A;0-5 cm;HM;ambient;15.09.2022;Elymus athericus;
+X122;578;390(A2)5-10;A1;390;A;5-10 cm;HM;ambient;15.09.2022;Elymus athericus;
+X123;579;390(A2)20-30;A2;390;A;20-30 cm;HM;ambient;15.09.2022;Elymus athericus;
+X124;580;390(A2)40-50;A3;390;A;40-50 cm;HM;ambient;15.09.2022;Elymus athericus;
+X125;582;390(A2)80-100;A4;390;A;80-100 cm;HM;ambient;15.09.2022;Elymus athericus;
+X126;601;391(A2)0-5;A0;391;A;0-5 cm;HM;1.5;15.09.2022;Elymus athericus;
+X127;602;391(A2)5-10;A1;391;A;5-10 cm;HM;1.5;15.09.2022;Elymus athericus;
+X128;603;391(A2)20-30;A2;391;A;20-30 cm;HM;1.5;15.09.2022;Elymus athericus;
+X129;604;391(A2)40-50;A3;391;A;40-50 cm;HM;1.5;15.09.2022;Elymus athericus;
+X130;606;391(A2)80-100;A4;391;A;80-100 cm;HM;1.5;15.09.2022;Elymus athericus;
+X131;625;392(A2)0-5;A0;392;A;0-5 cm;HM;3;15.09.2022;Elymus athericus;
+X132;626;392(A2)5-10;A1;392;A;5-10 cm;HM;3;15.09.2022;Elymus athericus;
+X133;627;392(A2)20-30;A2;392;A;20-30 cm;HM;3;15.09.2022;Elymus athericus;
+X134;628;392(A2)40-50;A3;392;A;40-50 cm;HM;3;15.09.2022;Elymus athericus;
+X135;630;392(A2)80-100;A4;392;A;80-100 cm;HM;3;15.09.2022;Elymus athericus;

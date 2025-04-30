@@ -1,0 +1,175 @@
+---
+title: "script_iris"
+author: "Julian Mittmann-Goetsch"
+date: "2025-02-27"
+output: html_document
+---
+
+#Version log 
+## Version 1.0: basic outline of the script - 27.02.2025 | JM
+
+
+#Step 1: Prepare R Session
+##Step 1a: Install packages
+You only need to install the packages with the install.packages() command, when running the script for the first time (of the R Session)
+```{r}
+#install.packages("ggplot2", repos = "http://cran.us.r-project.org") 
+#install.packages("dplyr")    
+#install.packages("lubridate")
+#install.packages("ggpubr")   
+#install.packages("tidyverse")
+#install.packages("lme4")
+#install.packages("car")
+#install.packages("emmeans")
+```
+
+##Step 1b: Load packages
+```{r}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(ggpubr)
+library(tidyverse)
+library(lme4)
+library(car)
+library(emmeans)
+library(here)
+```
+
+
+##Step 1c: Define global plot theme
+```{r}
+# Creates a theme for all plots in this study 
+theme_JM <- theme(
+  axis.title.x      = element_text(colour = "black", size = 12),
+  axis.text.x       = element_text(colour = "black", size = 12), 
+  axis.title.y      = element_text(colour = "black", size = 12),
+  axis.text.y       = element_text(colour = "black", size = 12), 
+  legend.title      = element_text(colour = "black", size = 12),
+  legend.text       = element_text(colour = "black", size = 12), 
+  legend.position   = "top",
+  panel.background  = element_blank(), 
+  panel.border      = element_rect(colour = "black", fill = NA, size = 1.2),
+  legend.key        = element_blank(),
+  strip.text.x      = element_text(colour = "black", size = 12),
+  strip.text.y      = element_text(colour = "black", size = 12)
+)
+```
+
+# Step 2: Prepare data
+## Step 2a: Load raw data
+This needs to be set individually. We do load the txt data which includes two campaigns in 2023 which were in the same months as the microbial sampling in 2022.
+```{r}
+# load iris data
+df_iris <- read.delim(here("data", "iris", "df_iris_2023.txt"), dec = ".", sep = "\t")
+```
+## Step 2b: Re-order factors
+```{r}
+df_iris$Treatment <- factor(df_iris$Treatment, levels = c("ambient", "+1.5°C", "+3.0°C"))
+df_iris$Zone <- factor(df_iris$Zone, levels = c("PZ", "LM", "HM"))
+# Add a new column 'layer' based on the 'Depth' column
+df_iris <- df_iris %>%
+  mutate(Layer = case_when(
+    Depth %in% c("0-10 cm", "10-20 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
+    Depth %in% c("40-50 cm", "50-60 cm", "60-70 cm", "70-80 cm") ~ "Bottom-soil (40-80 cm)",
+    TRUE ~ NA_character_  # For unexpected values
+  ))
+df_iris$Layer <- factor(df_iris$Layer, levels = c("Top-soil (0-30 cm)", "Bottom-soil (40-80 cm)"))
+```
+
+
+# Step 3: Plots
+## Step 3a: Barplot
+```{r}
+plot_iris_bar <- df_iris %>%
+  filter(!is.na(Layer)) %>%
+  ggplot(aes(x = Zone, y = ri,  group = Treatment, fill = Treatment)) +
+  stat_summary(fun = mean, geom = "bar",
+               position = position_dodge(width = 1), show.legend = TRUE) +
+  stat_summary(geom = "errorbar", width = 0.5, size = 1, color = "black", 
+               position = position_dodge(width = 1)) +
+  #scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+   scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+  scale_y_continuous(limits = c(0, 1), expand = c(0,0)) +
+  labs(color = NULL, y = "Reduction index", x = "Zone") +
+  theme_JM +
+  facet_wrap(~ Layer, ncol = 1) +
+  theme(legend.position = "top") 
+
+plot_iris_bar
+```
+
+# Step 4: Statistics
+## Step 4a: Random effect model
+```{r}
+# Fit the linear mixed-effects model
+stat_model_iris <- lmer(ri ~ Treatment * Zone * Layer + (1|ID_plot_subplot), data = df_iris)
+
+# Model diagnostics
+## 1. Residual plots
+plot(stat_model_iris)
+
+## 2. QQ plot of residuals
+qqnorm(resid(stat_model_iris))
+qqline(resid(stat_model_iris))
+
+## 3. Residuals vs. Fitted values
+plot(fitted(stat_model_iris), resid(stat_model_iris))
+abline(h = 0, col = "red")
+
+## 4. Additional diagnostic plots using performance package
+check_model(stat_model_iris)
+
+# ANOVA
+anova(stat_model_iris)
+
+# Model summary
+summary(stat_model_iris)
+
+# Pairwise comparisons
+## For Zone
+stat_iris_zone_emm <- emmeans(stat_model_iris, ~ Zone)
+pairs(stat_iris_zone_emm)
+
+## For Treatment
+stat_iris_treatment_emm <- emmeans(stat_model_iris, ~ Treatment)
+pairs(stat_iris_treatment_emm)
+
+## For Layer
+stat_iris_layer_emm <- emmeans(stat_model_iris, ~ Layer)
+pairs(stat_iris_layer_emm)
+
+## For Zone:Treatment interaction
+stat_iris_zone_treatment_emm <- emmeans(stat_model_iris, ~ Zone | Treatment)
+pairs(stat_iris_zone_treatment_emm)
+
+## For Zone:Layer interaction
+stat_iris_zone_layer_emm <- emmeans(stat_model_iris, ~ Zone | Layer)
+pairs(stat_iris_zone_layer_emm)
+
+## For Treatment:Layer interaction
+stat_iris_treatment_layer_emm <- emmeans(stat_model_iris, ~ Treatment | Layer)
+pairs(stat_iris_treatment_layer_emm)
+
+## For Treatment:Layer:Zone interaction
+stat_iris_treatment_layer_zone_emm <- emmeans(stat_model_iris, ~ Treatment | Layer | Zone)
+pairs(stat_iris_treatment_layer_zone_emm)
+```
+
+# Step 5: Summarise dataframe for further calculations
+```{r}
+df_iris_sum <- df_iris %>%
+    mutate(Layer = recode_factor(Layer, "Bottom-soil (40-80 cm)" = "Bottom-soil\n(40-100 cm)")) %>%
+    mutate(Layer = recode_factor(Layer, "Top-soil (0-30 cm)" = "Top-soil\n(0-30 cm)")) %>%
+  filter(!Layer == "Top-soil (0-30 cm)" | !Layer == "Bottom-soil (40-100 cm)") %>%
+  group_by(plotid, Layer) %>%
+  summarise(ri = mean(ri)) 
+
+df_iris_sum$Plot <- as.character(df_iris_sum$plotid)
+```
+
+# References
+```{r}
+#ggpubr
+#Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
+```

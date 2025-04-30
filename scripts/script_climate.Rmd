@@ -1,0 +1,104 @@
+---
+title: "script_climate"
+author: "Julian Mittmann-Goetsch"
+date: "2025-04-17"
+output: html_document
+---
+
+# Versionlog
+## Version 1.0: Basic script with data loading - 17.04.2025 | JM
+
+# Step 1: Prepare R Session
+## Step 1a: Install all necessary packages
+Here we load all encessary c
+```{r message=FALSE, warning=FALSE}
+# Troubleshooting with LOCK file
+#options("install.lock"=FALSE)  
+# Install all necessary packages
+  #install.packages("ggplot2")   # plot package
+  #install.packages("dplyr")     # quick summarize functions
+  #install.packages("lubridate") # convert time formats
+  #install.packages("ggpubr")    # further plots options (visual)
+  #install.packages("tidyverse") # data preperation tools
+```
+
+## Step 1b: Load all necessary packages
+```{r}
+# Load all necessary packages  
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(ggpubr)
+library(tidyverse)
+library(here)
+```
+
+## Step 1c: Set global plot theme
+```{r}
+# Creates a theme for all plots in this study 
+theme_JM <- theme(
+  axis.title.x      = element_text(colour = "black", size = 12),
+  axis.text.x       = element_text(colour = "black", size = 12), 
+  axis.title.y      = element_text(colour = "black", size = 12),
+  axis.text.y       = element_text(colour = "black", size = 12), 
+  legend.title      = element_text(colour = "black", size = 12),
+  legend.text       = element_text(colour = "black", size = 12), 
+  legend.position   = "top",
+  panel.background  = element_blank(), 
+  panel.border      = element_rect(colour = "black", fill = NA, size = 1.2),
+  legend.key        = element_blank(),
+  strip.text.x      = element_text(colour = "black", size = 12),
+  strip.text.y      = element_text(colour = "black", size = 12)
+)
+```
+
+## Step 1d: Load raw data (source DWD)
+```{r}
+df_precipitation_08 <- read.delim(here("data", "climate", "regional_averages_rr_08.txt"), dec = ".", sep = ";", skip = 1)
+df_temperature_08 <- read.delim(here("data", "climate", "regional_averages_tm_08.txt"), dec = ".", sep = ";", skip = 1)
+```
+
+## Step 1e: Merge raw data
+```{r}
+df_precipitation_08 <- df_precipitation_08 %>%
+  select(Year = Jahr, Month = Monat, Precipitation = Schleswig.Holstein)
+
+df_temperature_08 <- df_temperature_08 %>%
+  select(Year = Jahr, Month = Monat, Temperature = Schleswig.Holstein)
+
+df_climate_08 <- df_precipitation_08 %>%
+  left_join(df_temperature_08, by = c("Year", "Month"))
+```
+
+# Step 2: Plot climate data
+```{r}
+max_temp <- max(df_climate_08$Temperature, na.rm = TRUE)
+max_precip <- max(df_climate_08$Precipitation, na.rm = TRUE)
+scaling_factor <- max_temp / max_precip
+
+plot_climate_08 <- df_climate_08 %>%
+  filter(Year > 2001 & Year < 2023) %>%
+  ggplot(aes(x = Year)) +
+  geom_col(aes(y = Precipitation * scaling_factor), 
+           width = 0.7, 
+           fill = "steelblue",
+           alpha = 0.6) +
+  geom_line(aes(y = Temperature), color = "red", linewidth = 1) +
+  scale_y_continuous(
+    name = "Mean monthly temperature [°C]",
+    sec.axis = sec_axis(~./scaling_factor, 
+                        name = "Mean monthly precipitation [mm]")
+  ) +
+  scale_x_continuous(breaks = seq(2002, 2022, by = 2)) +
+  labs(x = "Year") +
+  theme_JM +
+  theme(axis.title.y.right = element_text(color = "steelblue"),
+        axis.text.y.right = element_text(color = "steelblue"))
+```
+
+
+# References
+```{r}
+#ggpubr
+#Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
+```

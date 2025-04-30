@@ -1,0 +1,393 @@
+---
+title: "script_faprotax"
+author: "Julian Mittmann-Goetsch"
+date: "2025-01-31"
+output: html_document
+---
+
+# Versionlog
+## Version 1.0: Basic script using FAPROTAX output table (31.01.2025)
+
+# Step 1: Prepare session and load data
+## Step 1a: Install necessary packages
+```{r}
+
+```
+
+## Step 1b: Load necessary packages
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(broom)
+library(purrr)
+```
+
+## Step 1c: Load sequencing data
+```{r}
+df_functional <- read.delim("./data/faprotax/df_functional_database.tsv", dec = ".", sep = "\t")
+df_metadata <-  read.delim("./metadata.txt", dec = ".", sep= "\t")
+```
+
+## Step 1d: Modify dataframes
+```{r}
+df_metadata <- df_metadata %>%
+  rename(Sample_ID = sample_name) %>%
+  mutate(Layer = case_when(
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
+    TRUE ~ NA_character_  # For unexpected values
+  ))
+df_metadata <- df_metadata %>%
+  mutate_at(c(5:9), as.factor)
+```
+
+```{r}
+# Assuming df_functional has Sample_IDs as column names
+df_functional_long <- df_functional %>%
+  pivot_longer(cols = -X.group, names_to = "Sample_ID", values_to = "abundance")
+
+df_functional_long$Functional <- df_functional_long$X.group
+
+# Merge with metadata
+df_merged <- df_functional_long %>%
+  inner_join(df_metadata, by = "Sample_ID")
+
+# Reorder Factors
+df_merged <- df_merged %>%
+  mutate(Treatment = case_when(
+    Treatment == "ambient" ~ "Ambient",
+    Treatment == "1.5" ~ "+1.5°C",
+    Treatment == "3" ~ "+3.0°C",
+    TRUE ~ Treatment
+  )) %>%
+  mutate(Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C")))
+
+# Reorder Zone factor
+df_merged <- df_merged %>%
+  mutate(Zone = factor(Zone, levels = c("PZ", "LM", "HM")))
+```
+
+
+# Step 2: Plots
+## Step 2a: Heatmaps
+```{r}
+# Filter out functional groups containing "human"
+df_merged_filtered <- df_merged %>%
+  filter(!str_detect(Functional, regex("human", ignore_case = TRUE)))
+
+desired_functions_redox <- c(
+  "methanogenesis_by_CO2_reduction_with_H2",
+  "methanogenesis_by_reduction_of_methyl_compounds_with_H2",
+  "hydrogenotrophic_methanogenesis",
+  "methanogenesis",
+  "nitrogen_fixation",
+  "nitrification",
+  "denitrification",
+  "sulfate_respiration",
+  "methanotrophy",
+  "dark_hydrogen_oxidation",
+  "fermentation",
+  "aerobic_chemoheterotrophy",
+  "dark_iron_oxidation",
+  "iron_respiration"
+)
+
+desired_functions_degradation <- c(
+  "cellulolysis",
+  "chitinolysis",
+  "ligninolysis",
+  "hydrocarbon_degradation"
+#  "aliphatic_non_methane_hydrocarbon_degradation",
+#  "aromatic_hydrocarbon_degradation",
+#  "aromatic_compound_degradation"
+)
+
+desired_functions_all <- c(
+  "aerobic_chemoheterotrophy",
+  "photoautotrophy",
+  "nitrite_respiration",
+  "nitrate_reduction",
+  "aerobic_nitrite_oxidation",
+  "hydrocarbon_degradation",
+  "fermentation",
+  "sulfate_respiration",
+  "xylanolysis",
+  "chitinolysis",
+  "cellulolysis",
+  "methanotrophy",
+  "aerobic_ammonia_oxidation",
+  "anoxygenic_photoautotrophy",
+  "nitrate_denitrification",
+  "dark_hydrogen_oxidation",
+  "urelolysis",
+  "dark_sulfite_oxidation",
+  "dark_sulfur_oxidation",
+  "dark_oxidation_of_sulfur_compounds",
+  "dark_sulfide_oxidation",
+  "animal_parasites_or_symbionts",
+  "nitrate_respiration",
+  "methanol_oxidation",
+  "methylotrophy",
+  "methanogenesis",
+  "methanogenesis_by_CO2_reduction_with_H2",
+  "methanogenesis_by_reduction_of_methyl_compounds_with_H2",
+  "hydrogenotrophic_methanogenesis",
+  "dark_iron_oxidation",
+  "iron_respiration"
+)
+
+df_merged_filtered_redox <- df_merged_filtered %>%
+  filter(Functional %in% desired_functions_redox)
+
+df_merged_filtered_degradation <- df_merged_filtered %>%
+  filter(Functional %in% desired_functions_degradation)
+
+df_merged_filtered_all <- df_merged_filtered %>%
+  filter(Functional %in% desired_functions_all)
+
+# Calculate mean abundance for each combination
+df_heatmap_redox <- df_merged_filtered_redox %>%
+  group_by(Functional, Zone, Treatment) %>%
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Calculate mean abundance for each combination
+df_heatmap_degradation <- df_merged_filtered_degradation %>%
+  group_by(Functional, Zone, Treatment) %>%
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Calculate mean abundance for each combination
+df_heatmap_all <- df_merged_filtered_all %>%
+  group_by(Functional, Zone, Treatment) %>%
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Create the heatmap with zones side by side and shared y-axis
+# Define the custom color palette
+custom_palette <- c("#e0ecf4", "#8c96c6", "#810f7c")
+
+# Modify plot_heatmap_functional_redox
+plot_heatmap_functional_redox <- ggplot(df_heatmap_redox, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+  geom_tile() +
+  facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
+  scale_fill_gradientn(name = "Mean Abundance", 
+                       colors = custom_palette,
+                       values = scales::rescale(c(min(df_heatmap_redox$mean_abundance),
+                                                  median(df_heatmap_redox$mean_abundance),
+                                                  max(df_heatmap_redox$mean_abundance)))) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 6),
+    strip.background = element_rect(fill = "lightgrey"),
+    strip.text = element_text(face = "bold"),
+    panel.spacing = unit(0.1, "lines"),
+    axis.title.y = element_text(margin = margin(r = 10))
+  ) +
+  labs(x = "Treatment", y = "Functional Group", 
+       title = "Functional Group Abundance Across Zones and Treatments (Redox)")
+
+# Modify plot_heatmap_functional_degradation
+plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+  geom_tile() +
+  facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
+  scale_fill_gradientn(name = "Mean Abundance", 
+                       colors = custom_palette,
+                       values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
+                                                  median(df_heatmap_degradation$mean_abundance),
+                                                  max(df_heatmap_degradation$mean_abundance)))) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 6),
+    strip.background = element_rect(fill = "lightgrey"),
+    strip.text = element_text(face = "bold"),
+    panel.spacing = unit(0.1, "lines"),
+    axis.title.y = element_text(margin = margin(r = 10))
+  ) +
+  labs(x = "Treatment", y = "Functional Group", 
+       title = "Functional Group Abundance Across Zones and Treatments (Degradation)")
+
+# Modify plot_heatmap_functional_all
+plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+  geom_tile() +
+  facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
+  scale_fill_gradientn(name = "Mean Abundance", 
+                       colors = custom_palette,
+                       values = scales::rescale(c(min(df_heatmap_all$mean_abundance),
+                                                  median(df_heatmap_all$mean_abundance),
+                                                  max(df_heatmap_all$mean_abundance)))) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 6),
+    strip.background = element_rect(fill = "lightgrey"),
+    strip.text = element_text(face = "bold"),
+    panel.spacing = unit(0.1, "lines"),
+    axis.title.y = element_text(margin = margin(r = 10))
+  ) +
+  labs(x = "Treatment", y = "Functional Group")
+
+
+# Display the plots
+plot_heatmap_functional_redox
+plot_heatmap_functional_degradation
+plot_heatmap_functional_all
+```
+
+## Step 2b: Barplots
+```{r}
+plot_degradation_bar <- df_merged_filtered %>%
+  filter(Functional %in% desired_functions_degradation) %>%
+  ggplot(aes(x = abundance, y = Functional, fill = Treatment)) +
+      stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9),
+                 alpha = 0.9, width = 0.7) +
+    stat_summary(fun.data = mean_se, geom = "errorbar",
+                 position = position_dodge(width = 0.9), width = 0.25, color = "black") +
+    scale_fill_manual(values = c("Ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+  theme_JM +
+  facet_grid(~ Zone)
+  
+
+# All Plots
+plot_degradation_bar
+```
+
+## Step 2c: Warming data & Functional groups
+```{r}
+# Calculate mean abundance for each combination
+df_functional_all <- df_merged_filtered_all %>%
+  group_by(Functional, Zone, Treatment, Plot, Layer) %>%
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
+  ungroup() %>%
+  rename(plotid = Plot)
+
+df_warming_all_2022_monthly$plotid <- as.factor(df_warming_all_2022_monthly$plotid)
+
+df_functional_all_warming <- df_functional_all %>%
+  left_join(df_warming_all_2022_monthly, by = "plotid")
+
+df_functional_all_warming$Layer <- factor(df_functional_all_warming$Layer, levels = c("Top-soil (0-30 cm)", "Bottom-soil (40-100 cm)"))
+
+plot_degradation_warming_deep <- df_functional_all_warming %>%
+  filter(Functional == "hydrocarbon_degradation") %>%
+  ggplot(aes(x = deepr_mean, y = mean_abundance, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#ccebc5"), name = "Zone:") +
+    theme_JM + 
+    labs(x = "Temperature 80 cm [°C]", y = "Hydrocarbon degradation") +
+    facet_wrap(~ Layer, ncol = 1)
+
+plot_degradation_warming_pin <- df_functional_all_warming %>%
+  filter(Functional == "hydrocarbon_degradation") %>%
+  ggplot(aes(x = pinr_mean, y = mean_abundance, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#ccebc5"), name = "Zone:") +
+    theme_JM + 
+    labs(x = "Temperature 20 cm [°C]", y = "Hydrocarbon degradation") +
+    facet_wrap(~ Layer, ncol = 1)
+
+# All Plots
+plot_degradation_warming_pin 
+plot_degradation_warming_deep
+
+ggarrange(plot_degradation_warming_pin, plot_degradation_warming_deep)
+```
+
+```{r}
+
+df_functional_all_warming$fun <- as.factor(df_functional_all_warming$Functional)
+
+# Function to create a plot for a given functional group
+create_functional_plot <- function(data, functional_group, temp_var, temp_label) {
+  filtered_data <- data %>% filter(Functional == functional_group)
+  
+  # Check if there is any data for this functional group
+  if (nrow(filtered_data) == 0) {
+    return(NULL) # Return NULL if no data exists
+  }
+  
+  # Create the plot if data exists
+  ggplot(filtered_data, aes(x = .data[[temp_var]], y = mean_abundance, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#ccebc5"), name = "Zone:") +
+    theme_JM + 
+    labs(x = temp_label, y = stringr::str_to_title(gsub("_", " ", functional_group))) +
+    facet_wrap(~ Layer, ncol = 1)
+}
+
+# Create plots for deep temperature
+plots_deep <- map(desired_functions_all, ~create_functional_plot(df_functional_all_warming, 
+                                                                 .x, 
+                                                                 "deepr_mean", 
+                                                                 "Temperature 80 cm [°C]"))
+
+# Create plots for pin temperature
+plots_pin <- map(desired_functions_all, ~create_functional_plot(df_functional_all_warming, 
+                                                                .x, 
+                                                                "pinr_mean", 
+                                                                "Temperature 20 cm [°C]"))
+
+# Name the plots
+names(plots_deep) <- paste0(desired_functions_all, "_deep")
+names(plots_pin) <- paste0(desired_functions_all, "_pin")
+
+# Combine all plots into a single list and remove NULL entries
+all_plots <- c(plots_deep, plots_pin) %>% discard(is.null)
+
+# Plot all the generated plots
+for (name in names(all_plots)) {
+  print(all_plots[[name]])
+}
+
+```
+
+
+# Step 3: Statistics
+## Step 3a: Lineare regressions warming & functions
+```{r}
+# Updated function to perform regression for both temperature variables
+perform_regression <- function(data, functional_group) {
+  filtered_data <- data %>% filter(Functional == functional_group)
+  
+  if (nrow(filtered_data) == 0) {
+    return(NULL)
+  }
+  
+  regression_results <- filtered_data %>%
+    group_by(Zone, Layer) %>%
+    summarise(
+      pin_estimate = coef(lm(mean_abundance ~ pinr_mean))[2],
+      pin_p_value = summary(lm(mean_abundance ~ pinr_mean))$coefficients[2,4],
+      deep_estimate = coef(lm(mean_abundance ~ deepr_mean))[2],
+      deep_p_value = summary(lm(mean_abundance ~ deepr_mean))$coefficients[2,4],
+      .groups = "drop"
+    ) %>%
+    mutate(Functional = functional_group)
+  
+  return(regression_results)
+}
+
+# Run regressions for all functional groups
+results <- map_dfr(desired_functions_all, ~perform_regression(df_functional_all_warming, .x))
+
+# Format the table for better readability
+final_results <- results %>%
+  mutate(across(ends_with("estimate"), ~round(., 3))) %>%
+  mutate(across(ends_with("p_value"), ~round(., 3))) %>%
+  arrange(Functional, Zone, Layer)
+
+# View the final table
+print(final_results)
+
+# Optionally save the table as a CSV file
+write.csv(final_results, "functional_group_responses.csv", row.names = FALSE)
+
+
+```
+
