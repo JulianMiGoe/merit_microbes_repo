@@ -26,13 +26,15 @@ The [`data/`](data/) folder contains:
 ## Scripts
 
 The [`scripts/`](scripts/) folder contains RMarkdown scripts for data analysis:
-- **Data preparation and filtering** (e.g., `script_warming_data_2022.Rmd`)
-- **Community analyses** (e.g., `script_community.Rmd`)
-- **Enzyme activity analyses** (e.g., `script_eea.Rmd`)
-- **Functional group analyses** (e.g., `script_faprotax.Rmd`)
-- **qPCR analyses** (e.g., `script_qpcr_2023.Rmd`)
-- **Network analyses** (e.g., `script_network.Rmd`)
-- **Climate data analyses** (e.g., `script_climate.Rmd`)
+- `script_bgb.Rmd`: Belowground biomass analysis
+- `script_climate.Rmd`: Climate data analysis
+- `script_community.Rmd`: Community analyses
+- `script_eea.Rmd`: Enzyme activity analyses
+- `script_faprotax.Rmd`: Functional group analyses
+- `script_iris.Rmd`: IRIS tube and elevation data analysis
+- `script_om.Rmd`: Organic matter data analysis
+- `script_qpcr_2023.Rmd`: qPCR analyses
+- `script_warming_data_2022.Rmd`: Data preparation and filtering for warming experiment
 
 Each script is modular and includes sections for package installation, data preprocessing, analysis, and visualization.
 
