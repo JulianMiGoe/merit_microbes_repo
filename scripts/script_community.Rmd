@@ -1598,12 +1598,12 @@ plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
 ggarrange(plot_bray_delta_top_elevation, plot_bray_delta_bottom_elevation, ncol = 1, nrow = 2)
 
 plot_bray_delta_combined <- ggarrange(
-  plot_bray_delta_top_elevation, 
-  plot_bray_delta_top_ri,
-  plot_bray_delta_top_pin, 
-  plot_bray_delta_bottom_elevation, 
-  plot_bray_delta_bottom_ri,
-  plot_bray_delta_bottom_deep,
+  plot_bray_delta_top_elevation  + xlim(0, 80), 
+  plot_bray_delta_top_ri  + xlim(0, 1),
+  plot_bray_delta_top_pin  + xlim(0, 3.5), 
+  plot_bray_delta_bottom_elevation  + xlim(0, 80), 
+  plot_bray_delta_bottom_ri  + xlim(0, 1),
+  plot_bray_delta_bottom_deep + xlim(0, 3.5),
   ncol = 3, 
   nrow = 3,
   labels = c("A", "C", "E", "B", "D", "F"), 
