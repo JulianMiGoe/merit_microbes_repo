@@ -384,20 +384,31 @@ ps_HM_80 <- ps%>%
 
 #ps_rare$Treatment <- as.factor(ps_rare$Treatment)
 
-# NMDS plot with Layer as horizontal facet (labels above), Zone as vertical facet (panels in columns by Layer, rows by Zone)
 plot_all_treatment_layer_nmds <- ps_rare %>%
- tax_transform(rank = "unique", trans = "identity") %>%
- dist_calc(dist = "bray") %>%
- ord_calc(method = "NMDS") %>% 
- ord_plot(axes = c(1, 2),
-  colour = "Treatment", fill = "Treatment",
-  shape = "Zone", alpha = 0.5, size = 2) + 
- scale_shape_girafe_filled() +
- stat_chull(ggplot2::aes(group = Treatment, fill = Treatment, colour = Treatment), geom = "polygon", alpha = 0.7) +
- scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
- scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
- ggh4x::facet_nested(Layer ~ Zone) +
- theme_JM
+  tax_transform(rank = "unique", trans = "identity") %>%
+  dist_calc(dist = "bray") %>%
+  ord_calc(method = "NMDS") %>% 
+  ord_plot(
+    axes = c(1, 2),
+    colour = "Treatment", fill = "Treatment",
+    shape = "Zone", alpha = 0.5, size = 2
+  ) + 
+  scale_shape_girafe_filled() +
+  stat_chull(
+    ggplot2::aes(group = Treatment, fill = Treatment, colour = Treatment),
+    geom = "polygon", alpha = 0.7
+  ) +
+  scale_colour_manual(
+    values = c("#4575B4", "#FDAE61", "#D73027"), 
+    name = "Warming treatment:"
+  ) +
+  scale_fill_manual(
+    values = c("#4575B4", "#FDAE61", "#D73027"), 
+    name = "Warming treatment:"
+  ) +
+ facet_grid(Layer ~ Zone) +  # Layers as rows (vertical), Zones as columns (horizontal)
+  theme_JM
+
 
 plot_all_treatment_layer_nmds
 ```
@@ -668,7 +679,7 @@ plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y
   theme_JM +
   theme(legend.position = "bottom") +
   labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") +
-  facet_wrap(~Layer, ncol = 1) 
+  facet_grid(rows = vars(Layer)) 
 
 
 # All Plots
@@ -1625,12 +1636,18 @@ df_bray_delta_T <- df_bray_delta_top %>%
 df_bray_delta_E <- df_bray_delta_top_elevation %>%
   full_join(df_bray_delta_bottom_elevation)
 
+df_bray_delta_R <- df_bray_delta_top_ri %>%
+    full_join(df_bray_delta_bottom_ri)
+
 # Statstics
 # All with mean T from pin and deep
 summary(lm(BrayCurtisDissimilarity ~ meanTemp, data = df_bray_delta_T %>% filter(zone1 == zone2)))
 
 # All with Elevation
 summary(lm(BrayCurtisDissimilarity ~ delta_elevation, data = df_bray_delta_E))
+
+# All with Reduction
+summary(lm(BrayCurtisDissimilarity ~ delta_ri, data = df_bray_delta_R))
 
 # Top-soil pin T
 summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2)))
@@ -1654,83 +1671,9 @@ df_alpha_T <- df_alpha_div_stat %>%
 summary(lm(Value ~ meanTemp, data = df_alpha_T))
 ```
 
+#### Supplement ####
 
-## Step 8g: Mantel test
-```{r}
-library(vegan)
-library(dplyr)
-library(tidyr)
-
-# Prepare warming delta data
-unique_plots <- unique(df_warming_all_2022_monthly$plotid)
-
-# Create ALL pairwise combinations 
-df_all_pairs <- expand.grid(
-  plotid1 = unique_plots,
-  plotid2 = unique_plots,
-  stringsAsFactors = FALSE
-) 
-
-df_warming_delta_full <- df_all_pairs %>%
-  left_join(
-    df_warming_all_2022_monthly %>%
-      select(plotid, pinTemp_1 = pinTemp_mean, deepTemp_1 = deepTemp_mean),
-    by = c("plotid1" = "plotid")
-  ) %>%
-  left_join(
-    df_warming_all_2022_monthly %>%
-      select(plotid, pinTemp_2 = pinTemp_mean, deepTemp_2 = deepTemp_mean),
-    by = c("plotid2" = "plotid")
-  ) %>%
-  mutate(
-    delta_pinTemp = abs(pinTemp_1 - pinTemp_2),
-    delta_deepTemp = abs(deepTemp_1 - deepTemp_2)
-  ) 
-
-# Prepare Bray-Curtis distance data  
-df_bray_curtis_top_plots_mean <- df_bray_curtis_top_plots %>%
-  group_by(plotid1, plotid2) %>%
-  summarise(BrayCurtisDissimilarity = mean(BrayCurtisDissimilarity))
-
-df_bray_top_complete <- df_bray_curtis_top_plots_mean %>%
-  left_join(df_warming_delta_full, by = c("plotid1", "plotid2"))
-
-# Create Bray-Curtis distance matrix (27x27)
-mat_bray_top_dist <- df_bray_top_complete %>%
-  group_by(plotid1, plotid2) %>%
-  summarize(BrayCurtisDissimilarity = mean(BrayCurtisDissimilarity)) %>% 
-  pivot_wider(names_from = plotid2, values_from = BrayCurtisDissimilarity) %>%
-  column_to_rownames("plotid1") %>%
-  as.matrix() %>%
-  as.dist()
-
-# Create delta temperature (pin 20 cm) mateix (27 x 27)
-mat_delta_pin_dist <- df_bray_top_complete %>%
-  group_by(plotid1, plotid2) %>%
-  summarize(delta_pinTemp = mean(delta_pinTemp)) %>% 
-  pivot_wider(names_from = plotid2, values_from = delta_pinTemp) %>%
-  column_to_rownames("plotid1") %>%
-  as.matrix() %>%
-  as.dist()
-
-# Run Mantel test (handles NAs if present)
-mantel_result <- mantel(
-  mat_bray_top_dist, 
-  mat_delta_pin_dist, 
-  method = "pearson", 
-  permutations = 999,
-  na.rm = TRUE  # Exclude NA pairs from calculation
-)
-
-# Print results
-print(mantel_result)
-
-```
-
-
-#### Appendix ####
-
-# Step 6: Venn diagramms
+# Step S1: Venn diagramms
 ```{r,message=FALSE, warning=FALSE}
 # Subset ps objects for each Zone
 ps_PZ <- subset_samples(ps, Zone == "PZ")
@@ -1757,7 +1700,7 @@ plot_venn_L
 ```
 
 
-## Step 2c: PCA Plots 
+## Step S2: PCA Plots 
 ```{r}
 ps %>%
  tax_transform(rank = "unique", trans = "clr") %>%
@@ -2122,22 +2065,4 @@ Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package 
 Martinez Arbizu, P. (2020). pairwiseAdonis: Pairwise multilevel comparison using adonis. R package version 0.4
 
 ```
-
-# Plot: Bray-Curtis-Dissimilarität vs. delta_ri für Top- und Bottom-Soil
-# Layer-Namen anpassen: "bottom-soil (40-80 cm)" für Bottom-Soil
-
-df_pairs <- df_pairs %>%
-  mutate(Layer = ifelse(Layer == "Bottom-Soil" | Layer == "bottom-soil", "bottom-soil (40-80 cm)",
-                       ifelse(Layer == "Top-Soil" | Layer == "top-soil", "top-soil (0-40 cm)", Layer)))
-
-p_delta_ri <- ggplot(df_pairs, aes(x = delta_ri, y = mean_bc)) +
-  geom_point(alpha = 0.7) +
-  geom_smooth(method = "lm", se = TRUE, color = "black") +
-  facet_wrap(~ Layer, ncol = 2, labeller = label_both) +
-  labs(x = expression(Delta~Soil~Reduction~(Delta~r[i])),
-       y = "Bray-Curtis Dissimilarity",
-       title = "Bray-Curtis Dissimilarity vs. Delta Soil Reduction (ri)") +
-  theme_bw(base_size = 14)
-
-print(p_delta_ri)
 

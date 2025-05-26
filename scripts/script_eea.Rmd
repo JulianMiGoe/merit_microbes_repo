@@ -492,7 +492,7 @@ plot_EEA_C_warming_pin <- df_EEA_final %>%
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)) +
     theme_JM + 
-    labs(x = "Monthly T at 20 depth [°C]") 
+    labs(x = "Monthly T at 20 cm depth [°C]") 
 
 plot_EEA_N_warming_pin <- df_EEA_final %>%
  # filter(Enzyme %in% c("CHI", "LEU")) %>%
