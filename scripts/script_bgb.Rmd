@@ -146,10 +146,8 @@ pairs_rhiz_fine <- pairs(emm_rhiz_fine)
 print(pairs_bgb)
 print(pairs_rhiz_fine)
 ```
-```
 
-# References
-```{r}
+
 # References 
 ```{r}
 # R Studio

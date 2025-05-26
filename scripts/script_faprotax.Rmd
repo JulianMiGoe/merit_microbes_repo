@@ -21,12 +21,16 @@ library(ggplot2)
 library(dplyr)
 library(broom)
 library(purrr)
+library(here)
+library(emmeans)
+library(multcompView)
+library(ggh4x)
 ```
 
 ## Step 1c: Load sequencing data
 ```{r}
-df_functional <- read.delim("./data/faprotax/df_functional_database.tsv", dec = ".", sep = "\t")
-df_metadata <-  read.delim("./metadata.txt", dec = ".", sep= "\t")
+df_functional <- read.delim(here::here("data", "faprotax", "df_functional_database.tsv"), dec = ".", sep = "\t")
+df_metadata <-  read.delim(here::here("data", "metadata.txt"), dec = ".", sep= "\t")
 ```
 
 ## Step 1d: Modify dataframes
@@ -97,7 +101,8 @@ desired_functions_degradation <- c(
   "cellulolysis",
   "chitinolysis",
   "ligninolysis",
-  "hydrocarbon_degradation"
+  "hydrocarbon_degradation",
+  "fermentation"
 #  "aliphatic_non_methane_hydrocarbon_degradation",
 #  "aromatic_hydrocarbon_degradation",
 #  "aromatic_compound_degradation"
@@ -237,22 +242,65 @@ plot_heatmap_functional_degradation
 plot_heatmap_functional_all
 ```
 
-## Step 2b: Barplots
+## Step 2b: Barplot for all degradation functions with robust statistical annotation
 ```{r}
-plot_degradation_bar <- df_merged_filtered %>%
-  filter(Functional %in% desired_functions_degradation) %>%
-  ggplot(aes(x = abundance, y = Functional, fill = Treatment)) +
-      stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9),
-                 alpha = 0.9, width = 0.7) +
-    stat_summary(fun.data = mean_se, geom = "errorbar",
-                 position = position_dodge(width = 0.9), width = 0.25, color = "black") +
-    scale_fill_manual(values = c("Ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-  theme_JM +
-  facet_grid(~ Zone)
-  
+library(multcompView)
+library(emmeans)
 
-# All Plots
-plot_degradation_bar
+# Analyse aller Degradationsfunktionen
+fun_list <- unique(df_merged_filtered_degradation$Functional)
+cld_degradation <- NULL
+summary_degradation <- NULL
+cld_list <- list()
+for (fun in fun_list) {
+  dat <- df_merged_filtered_degradation[df_merged_filtered_degradation$Functional == fun, ]
+  if (nrow(dat) >= 3) {
+    mod <- try(aov(abundance ~ Treatment * Zone, data = dat), silent = TRUE)
+    if (!inherits(mod, "try-error")) {
+      em <- try(emmeans(mod, ~ Treatment * Zone), silent = TRUE)
+      if (!inherits(em, "try-error")) {
+        cld <- try(multcomp::cld(em, Letters = letters), silent = TRUE)
+        if (!inherits(cld, "try-error")) {
+          cld$Functional <- fun
+          sumdat <- dat %>%
+            group_by(Treatment, Zone) %>%
+            summarise(ypos = max(abundance, na.rm = TRUE) + max(0.1, 0.1 * abs(max(abundance, na.rm = TRUE))), .groups = "drop")
+          sumdat$Functional <- fun
+          cld <- dplyr::left_join(cld, sumdat, by = c("Treatment", "Zone", "Functional"))
+          cld_list[[fun]] <- cld
+        }
+      }
+    }
+  }
+}
+cld_degradation <- bind_rows(cld_list)
+
+# Gemeinsame y-Achse für alle Funktionen und Layer-Beschriftung nur einmal pro Block
+if (nrow(df_merged_filtered_degradation) > 0) {
+  ymax <- max(df_merged_filtered_degradation$abundance, na.rm = TRUE)
+  plot_degradation_bar <- df_merged_filtered_degradation %>%
+    ggplot(aes(x = Treatment, y = abundance, fill = Treatment)) +
+      stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9),
+                   alpha = 0.9, width = 0.7) +
+      stat_summary(fun.data = mean_se, geom = "errorbar",
+                   position = position_dodge(width = 0.9), width = 0.25, color = "black") +
+      geom_text(
+        data = cld_degradation,
+        aes(x = Treatment, y = ypos, label = gsub("_", " ", .group), group = Treatment, fill = NULL),
+        position = position_dodge(width = 0.9),
+        vjust = 0,
+        size = 5,
+        fontface = "bold",
+        color = "black",
+        inherit.aes = FALSE
+      ) +
+      scale_fill_manual(values = c("Ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+      theme_JM +
+      ggh4x::facet_nested(Layer + Functional ~ Zone, scales = "fixed", labeller = labeller(Functional = function(x) gsub("_", " ", x))) +
+      ylim(0, ymax * 1.15) +
+      labs(y = "Abundance", x = "Treatment")
+  plot_degradation_bar
+}
 ```
 
 ## Step 2c: Warming data & Functional groups
@@ -367,7 +415,7 @@ perform_regression <- function(data, functional_group) {
       deep_estimate = coef(lm(mean_abundance ~ deepr_mean))[2],
       deep_p_value = summary(lm(mean_abundance ~ deepr_mean))$coefficients[2,4],
       .groups = "drop"
-    ) %>%
+    ) %>% 
     mutate(Functional = functional_group)
   
   return(regression_results)

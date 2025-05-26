@@ -384,6 +384,7 @@ ps_HM_80 <- ps%>%
 
 #ps_rare$Treatment <- as.factor(ps_rare$Treatment)
 
+# NMDS plot with Layer as horizontal facet (labels above), Zone as vertical facet (panels in columns by Layer, rows by Zone)
 plot_all_treatment_layer_nmds <- ps_rare %>%
  tax_transform(rank = "unique", trans = "identity") %>%
  dist_calc(dist = "bray") %>%
@@ -395,7 +396,7 @@ plot_all_treatment_layer_nmds <- ps_rare %>%
  stat_chull(ggplot2::aes(group = Treatment, fill = Treatment, colour = Treatment), geom = "polygon", alpha = 0.7) +
  scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
  scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
- facet_wrap(~Layer * Zone, ncol = 3) +
+ ggh4x::facet_nested(Layer ~ Zone) +
  theme_JM
 
 plot_all_treatment_layer_nmds
@@ -668,6 +669,7 @@ plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y
   theme(legend.position = "bottom") +
   labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") +
   facet_wrap(~Layer, ncol = 1) 
+
 
 # All Plots
 plot_alpha_div_zone
@@ -1151,7 +1153,8 @@ plot_bray_delta_top_pin <- df_bray_delta_top %>%
  #              formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM + 
   xlab("Delta monthly T at 20 cm depth [°C]") +
-  ylab("Dissimalarity")
+  ylab("Dissimalarity") +
+  ggtitle("Top-soil (0-30 cm)")
 
 plot_bray_delta_top_deep <- df_bray_delta_top %>%
   filter(zone1 == zone2) %>%
@@ -1199,7 +1202,8 @@ plot_bray_delta_bottom_deep <- df_bray_delta_bottom %>%
  #              formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta monthly T at 75 cm depth [°C]") +
-  ylab("Dissimalarity")
+  ylab("Dissimalarity") +
+  ggtitle("Bottom-soil (40-100 cm)")
 
 # Arrange all plots
 ggarrange(plot_bray_delta_top_surface, plot_bray_delta_top_pin, plot_bray_delta_top_deep,
@@ -1465,7 +1469,104 @@ ggarrange(plot_bray_delta_top_surface_HM, plot_bray_delta_top_pin_HM, plot_bray_
 
 ```
 
-## Step 7f: Plot dissimilarities & elevation + statistics
+
+
+## Step 7f: Calculate delta in soil reduction (ri) and plot dissimilarity vs. delta_ri
+```{r}
+# Calculate mean ri per plot and layer
+# (Assumes df_iris is already loaded and contains columns: plotid, Layer, ri)
+df_ri_mean <- df_iris %>%
+  group_by(plotid, Layer) %>%
+  summarise(ri_mean = mean(ri, na.rm = TRUE), .groups = "drop")
+
+# Calculate all pairwise deltas for ri
+ri_pairs <- combn(unique(df_ri_mean$plotid), 2)
+df_ri_delta <- tibble(
+  plotid1 = ri_pairs[1,],
+  plotid2 = ri_pairs[2,]
+) %>%
+  left_join(df_ri_mean, by = c("plotid1" = "plotid")) %>%
+  dplyr::rename(ri1 = ri_mean, Layer1 = Layer) %>%
+  left_join(df_ri_mean, by = c("plotid2" = "plotid", "Layer1" = "Layer")) %>%
+  dplyr::rename(ri2 = ri_mean, Layer = Layer1) %>%
+  mutate(delta_ri = abs(ri1 - ri2)) %>%
+  select(plotid1, plotid2, Layer, delta_ri)
+df_ri_delta$plotid1 <- as.factor(df_ri_delta$plotid1)
+df_ri_delta$plotid2 <- as.factor(df_ri_delta$plotid2)
+
+# Merge delta_ri with Bray-Curtis for top-soil
+if (exists("df_bray_curtis_top_plots")) {
+  df_bray_delta_top_ri <- df_bray_curtis_top_plots %>%
+    left_join(df_ri_delta %>% filter(Layer == "Top-soil (0-30 cm)"), by = c("plotid1", "plotid2")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Top-soil (0-30 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+    mutate(delta_ri = coalesce(delta_ri, delta_ri_rev)) %>%
+    select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_ri, everything(), -ends_with("_rev")) %>%
+    rowwise() %>%
+    mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
+    ungroup() %>%
+    distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+    select(-sorted_plotids)
+} else {
+  df_bray_delta_top_ri <- NULL
+}
+
+# Merge delta_ri with Bray-Curtis for bottom-soil
+if (exists("df_bray_curtis_bottom_plots")) {
+  df_bray_delta_bottom_ri <- df_bray_curtis_bottom_plots %>%
+    left_join(df_ri_delta %>% filter(Layer == "Bottom-soil (40-80 cm)"), by = c("plotid1", "plotid2")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Bottom-soil (40-80 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+    mutate(delta_ri = coalesce(delta_ri, delta_ri_rev)) %>%
+    select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_ri, everything(), -ends_with("_rev")) %>%
+    rowwise() %>%
+    mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
+    ungroup() %>%
+    distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+    select(-sorted_plotids)
+} else {
+  df_bray_delta_bottom_ri <- NULL
+}
+
+# Plot for top-soil
+if (!is.null(df_bray_delta_top_ri)) {
+  plot_bray_delta_top_ri <- df_bray_delta_top_ri %>%
+    ggplot(aes(x = delta_ri, y = BrayCurtisDissimilarity)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+                 label.x = "left", label.y = 0.1,
+                 formula = y ~ x, parse = TRUE, coef.digits = 3) +
+    theme_JM +
+    xlab("Delta reduction index") +
+    ylab("Dissimilarity") +
+    ggtitle("Top-soil (0-30 cm)")
+} else {
+  plot_bray_delta_top_ri <- NULL
+}
+
+# Plot for bottom-soil
+if (!is.null(df_bray_delta_bottom_ri)) {
+  plot_bray_delta_bottom_ri <- df_bray_delta_bottom_ri %>%
+    ggplot(aes(x = delta_ri, y = BrayCurtisDissimilarity)) +
+    geom_point() +
+   #  geom_smooth(method = "lm") +
+   # stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+   #              label.x = "left", label.y = 0.1,
+  #             formula = y ~ x, parse = TRUE, coef.digits = 3) +
+    theme_JM +
+    xlab("Delta reduction index") +
+    ylab("Dissimilarity") +
+    ggtitle("Bottom-soil (40-100 cm)")
+} else {
+  plot_bray_delta_bottom_ri <- NULL
+}
+
+# Arrange both panels
+if (!is.null(plot_bray_delta_top_ri) & !is.null(plot_bray_delta_bottom_ri)) {
+  ggarrange(plot_bray_delta_top_ri, plot_bray_delta_bottom_ri, ncol = 1, nrow = 2)
+}
+```
+
+## Step 7g: Plot dissimilarities & elevation + statistics
 ```{r}
 plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
  #filter(zone1 == zone2) %>%
@@ -1477,7 +1578,8 @@ plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta elevation [cm]") +
-  ylab("Dissimalarity")
+  ylab("Dissimalarity") +
+  ggtitle("Top-soil (0-30 cm)")
 
 plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
  #filter(zone1 == zone2) %>%
@@ -1489,28 +1591,31 @@ plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta elevation [cm]") +
-  ylab("Dissimalarity")
+  ylab("Dissimalarity") +
+  ggtitle("Bottom-soil (40-100 cm)")
 
 # Arrange all plots
 ggarrange(plot_bray_delta_top_elevation, plot_bray_delta_bottom_elevation, ncol = 1, nrow = 2)
 
 plot_bray_delta_combined <- ggarrange(
   plot_bray_delta_top_elevation, 
+  plot_bray_delta_top_ri,
   plot_bray_delta_top_pin, 
   plot_bray_delta_bottom_elevation, 
+  plot_bray_delta_bottom_ri,
   plot_bray_delta_bottom_deep,
-  ncol = 2, 
-  nrow = 2,
-  labels = c("A", "B", "C", "D"), # Add custom labels
-  font.label = list(size = 14, face = "bold"), # Customize label appearance
-  common.legend = TRUE, # Optional: shared legend
-  legend = "top" # Place legend at the top
+  ncol = 3, 
+  nrow = 3,
+  labels = c("A", "C", "E", "B", "D", "F"), 
+  font.label = list(size = 14, face = "bold"), 
+  common.legend = TRUE, 
+  legend = "top" 
 )
 
 plot_bray_delta_combined
 ```
 
-## Step 7g: Regression analysis
+## Step 7h: Regression analysis
 ```{r}
 # Create dataframe with top and bottom soil and Dissimilarities
 df_bray_delta_T <- df_bray_delta_top %>%
@@ -1548,6 +1653,7 @@ df_alpha_T <- df_alpha_div_stat %>%
 
 summary(lm(Value ~ meanTemp, data = df_alpha_T))
 ```
+
 
 ## Step 8g: Mantel test
 ```{r}
@@ -2016,4 +2122,22 @@ Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package 
 Martinez Arbizu, P. (2020). pairwiseAdonis: Pairwise multilevel comparison using adonis. R package version 0.4
 
 ```
+
+# Plot: Bray-Curtis-Dissimilarität vs. delta_ri für Top- und Bottom-Soil
+# Layer-Namen anpassen: "bottom-soil (40-80 cm)" für Bottom-Soil
+
+df_pairs <- df_pairs %>%
+  mutate(Layer = ifelse(Layer == "Bottom-Soil" | Layer == "bottom-soil", "bottom-soil (40-80 cm)",
+                       ifelse(Layer == "Top-Soil" | Layer == "top-soil", "top-soil (0-40 cm)", Layer)))
+
+p_delta_ri <- ggplot(df_pairs, aes(x = delta_ri, y = mean_bc)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "black") +
+  facet_wrap(~ Layer, ncol = 2, labeller = label_both) +
+  labs(x = expression(Delta~Soil~Reduction~(Delta~r[i])),
+       y = "Bray-Curtis Dissimilarity",
+       title = "Bray-Curtis Dissimilarity vs. Delta Soil Reduction (ri)") +
+  theme_bw(base_size = 14)
+
+print(p_delta_ri)
 
