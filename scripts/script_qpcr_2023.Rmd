@@ -209,8 +209,10 @@ for (i in seq_along(genes)) {
 
 # Step 4: Summarise dataframes
 ```{r}
+df_qpcr$plotid <- as.factor(df_qpcr$Plot)
+
 df_qpcr_sum  <- df_qpcr  %>%
-  rename("plotid" = "Plot") %>%
+ # rename("plotid" = "Plot") %>%
   group_by(plotid) %>%
   summarise("Abundance" = mean(log10_copies_eub, na.rm=TRUE)) %>%
   ungroup()
