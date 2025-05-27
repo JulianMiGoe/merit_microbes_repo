@@ -25,7 +25,10 @@ output: pdf_document
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r,  message=FALSE, warning=FALSE}
-# bugfixes
+# Clean up: Remove or translate all remaining German comments and text in the script
+# (Below: Only English comments and labels)
+
+# Bug fixes
 #.libPaths("C:/Users/Bat1638/R_packages")
 #options("install.lock"=FALSE)
 #install.packages("xfun", type = "binary")
@@ -51,12 +54,12 @@ output: pdf_document
 #update.packages()
 
 #### Load the packages ####
-#install.packages("tidyverse")       # edit data frames (long format)
-#install.packages("ggplot2")         # Plot data (NDMS,)
-#install.packages("tidyr")           # edit data frames (wide format)
+#install.packages("tidyverse")       # Edit data frames (long format)
+#install.packages("ggplot2")         # Plot data (NDMS)
+#install.packages("tidyr")           # Edit data frames (wide format)
 #install.packages("ggpubr")
 #install.packages("ggside")  
-#install.packages("knitr")           # include jpg in knit output
+#install.packages("knitr")           # Include jpg in knit output
 #install.packages("ggpmisc")
 #install.packages("dplyr")           # Summarize function
 
@@ -64,7 +67,7 @@ output: pdf_document
 #install.packages("vegan")           # NDMS
 #install.packages("viridis")
 #install.packages("RVAideMemoire")   # PERMANOVA post-hoc test
-#install.packages("xfun")            # include pdf in knit output
+#install.packages("xfun")            # Include pdf in knit output
 #install.packages("devtools")
 
 # BiocManager
@@ -91,13 +94,13 @@ output: pdf_document
 # Microbial data analysis
 #install.packages("installr")
 #library(installr)
-#options("install.lock"=FALSE) # fixes an error with LOCK when installing ggside package
+#options("install.lock"=FALSE) # Fixes an error with LOCK when installing ggside package
 #updateR()
 
 library(microViz)
 library(vegan)
 library(phyloseq)
-library(MicEco) # Venn diagramms
+library(MicEco) # Venn diagrams
 library(ANCOMBC)
 library(DT)
 options(DT.options = list(
@@ -116,7 +119,7 @@ library(ggpubr)
 # Plots
 library(ggplot2)
 
-# DESeq analyis
+# DESeq analysis
 library(DESeq2) 
 library(pheatmap)
 
@@ -195,7 +198,7 @@ theme_JM <- theme(
 # Step 2: Compositional analysis using microviz package
 ## Step 2a: Create phyloseq objects
 ```{r}
-# create phyloseq objetc with raw (not rarefied data)
+# Create phyloseq object with raw (not rarefied data)
 metadata <- metadata %>%
   mutate_at(c(3:12), as.factor)
 
@@ -214,7 +217,7 @@ ps = phyloseq(
 samples_to_remove <- c("X136", "X137", "X138", "X139")
 ps <- subset_samples(ps, !(sample_names(ps) %in% samples_to_remove))
 
-# Create layer coloumn 
+# Create layer column 
 # Add a new column 'layer' based on the 'Depth' column
 sample_data_df <- as(sample_data(ps), "data.frame")
 
@@ -237,7 +240,7 @@ ps@sam_data[["Layer"]]  <- factor(ps@sam_data[["Layer"]],levels=c("Top-soil (0-3
 
 #plot_bar(ps, fill = "Family")
 
-# Phyloseq objet with rarefied and filtere data (used for NMDS plots)
+# Phyloseq object with rarefied and filtered data (used for NMDS plots)
 ps_rare = phyloseq(
     otu_table(as.matrix(tab_rare[,2:(ncol(tab_rare)-6)]), taxa_are_rows=T),
     tax_table(as.matrix(tab_rare[,(ncol(tab_rare)-5):ncol(tab_rare)])),
@@ -248,7 +251,7 @@ ps_rare = phyloseq(
 samples_to_remove <- c("X136", "X137", "X138", "X139")
 ps_rare <- subset_samples(ps_rare, !(sample_names(ps) %in% samples_to_remove))
 
-# Create layer coloumn 
+# Create layer column 
 # Add a new column 'layer' based on the 'Depth' column
 sample_data_rare <- as(sample_data(ps_rare), "data.frame")
 
@@ -279,8 +282,8 @@ ps_rare@sam_data[["Layer"]]  <- factor(ps_rare@sam_data[["Layer"]],levels=c("Top
 # All analysis performed here are done on the filtered and rarefied data
 #ord_explore(ps_rare)
 layer.labs <- c(
-  "Top-soil\n(0-30 cm)" = "Top-soil (0-30 cm)",
-  "Bottom-soil\n(40-100 cm)" = "Bottom-soil (40-100 cm)"
+  "Top-soil (0-30 cm)" = "Top-soil\n(0-30 cm)",
+  "Bottom-soil (40-100 cm)" = "Bottom-soil\n(40-100 cm)"
 )
 
 plot_all_treatment_layer_nmds <- ps_rare %>%
@@ -305,12 +308,14 @@ plot_all_treatment_layer_nmds <- ps_rare %>%
     values = c("#4575B4", "#FDAE61", "#D73027"), 
     name = "Warming treatment:"
   ) +
- facet_grid(Layer ~ Zone,   labeller = labeller(Layer = layer.labs)) +  # Layers as rows (vertical), Zones as columns (horizontal)
-  theme_JM
-
+  facet_grid(rows = vars(Layer), cols = vars(Zone), labeller = labeller(Layer = layer.labs)) +
+  theme_JM +
+  theme(strip.text.y.left = element_text(angle = 0, hjust = 0.5, vjust = 0.5, size = 12),
+        strip.placement = "outside")
 
 plot_all_treatment_layer_nmds
 ```
+
 # Step 3: Statistics
 ## Step 3a: PERMANOVA bray curtis
 ```{r}
@@ -333,8 +338,6 @@ print(stat_pairwise_bray_zone)
 print(stat_pairwise_bray_layer)
 print(stat_pairwise_bray_treatment)
 ```
-
-
 
 # Step 4: Plots
 ## Step 4a: Plot Barplot
@@ -368,10 +371,10 @@ df_temporal <- df_abundance_data %>%
   group_by(Phylum) %>%
   summarise(Mean = sum(Abundance))
 
-# Set order of Phyla to be descending and inlcuding others at the bottom
+# Set order of Phyla to be descending and including others at the bottom
 df_abundance_data$Phylum <- factor(df_abundance_data$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
 
-# Set order of Phyla to be descending and inlcuding others at the bottom
+# Set order of Phyla to be descending and including others at the bottom
 df_abundance_data_plot$Phylum <- factor(df_abundance_data_plot$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
 
 # Plot
@@ -422,8 +425,6 @@ df_abundance_diff <- df_top10_abundance_factors %>%
   ) %>%
   select(Phylum, Zone, starts_with("diff")) %>%
   arrange(Phylum, Zone)
-
-
 
 # Perform two-way ANOVA for each phylum
 anova_results <- df_abundance_data %>%
@@ -479,28 +480,6 @@ df_alpha_div_long$Zone <- factor(df_alpha_div_long$Zone, levels = c("PZ", "LM", 
 df_alpha_div_long$Treatment <- recode_factor(df_alpha_div_long$Treatment, "ambient" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
 df_alpha_div_long$Layer <- factor(df_alpha_div_long$Layer, levels = c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)"))
 
-# Plot alpha diversity
-plot_alpha_div_zone <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Zone)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = NA) +  # Boxplots for diversity
-  geom_jitter(width = 0.2, alpha = 0.7, aes(colour = Zone), size = 2) +  # Points overlay
-  facet_wrap(~ Metric, scales = "free_y") +  # Separate facets for each metric
-  scale_colour_manual(values = c("#08306b", "#6baed6", "#c6dbef"), name = "Zone:") +
-  scale_fill_manual(values = c("#08306b", "#6baed6", "#c6dbef"), name = "Zone:") +
-  theme_JM +
-  labs(x = "Zone", y = "Alpha Diversity") +
-  theme(strip.background = element_rect(fill = "#5ab4ac"))
-
-plot_alpha_div_zone_treatment <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Treatment)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = NA, position = position_dodge(width = 0.8), width = 0.6) +  
-  geom_jitter(position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.8), 
-              alpha = 0.7, aes(colour = Treatment), size = 2) +  
-  scale_colour_manual(values = c("#4575B4", "#FDAE61", "#D73027"), name = "Warming treatment:") +
-  scale_fill_manual(values = c("#4575B4", "#FDAE61", "#D73027"), name = "Warming treatment:") +
-  theme_JM +
-  theme(legend.position = "bottom") +
-  labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") 
-  #facet_wrap(~Layer, ncol = 1) 
-
 # Plot with depth layers
 plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Treatment)) +
   geom_boxplot(alpha = 0.7, outlier.shape = NA, position = position_dodge(width = 0.8), width = 0.6) +  
@@ -513,10 +492,7 @@ plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y
   labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") +
   facet_grid(rows = vars(Layer)) 
 
-
-# All Plots
-plot_alpha_div_zone
-plot_alpha_div_zone_treatment
+# Plot
 plot_alpha_div_zone_treatment_layer
 
 # Arranged Plots
@@ -562,7 +538,7 @@ tukey_df <- do.call(rbind, lapply(names(tukey_results), function(x) {
              pair = rownames(tukey_results[[x]]), 
              tukey_results[[x]], 
              stringsAsFactors = FALSE)
-}))
+})
 
 # Filter significant comparisons
 significant_comparisons <- tukey_df[tukey_df$`p.adj` < 0.05, ]
@@ -753,7 +729,7 @@ print(summary(model_deep_interaction))
 
 ## Step 5e: Summarise alpha diversity dataframe
 ```{r}
-# summarise alpha diversity dataframe
+# Summarise alpha diversity dataframe
 df_alpha_sum <- df_alpha_div_long  %>%
   rename("Plot" = "plotid") %>%
   group_by(plotid, Layer) %>%
@@ -762,7 +738,7 @@ df_alpha_sum <- df_alpha_div_long  %>%
 
 
 # Step 7: Warming data 
-## Step 7a: Calculate dissimalarities
+## Step 7a: Calculate dissimilarities
 ```{r}
 # Filter the phyloseq object
 ps_top <- ps_filter(ps_rare, Layer == "Top-soil (0-30 cm)")
@@ -984,19 +960,15 @@ plot_bray_delta_top_surface <- df_bray_delta_top %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta monthly T at 2 cm depth [°C]") +
-  ylab("Dissimalarity")
+  ylab("Dissimilarity")
 
 plot_bray_delta_top_pin <- df_bray_delta_top %>%
   filter(zone1 == zone2) %>%
   ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
   geom_point() +
- # geom_smooth(method = "lm") +
- # stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-#               label.x = "left", label.y = 0.1,
- #              formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM + 
   xlab("Delta monthly T at 20 cm depth [°C]") +
-  ylab("Dissimalarity") +
+  ylab("Dissimilarity") +
   ggtitle("Top-soil (0-30 cm)")
 
 plot_bray_delta_top_deep <- df_bray_delta_top %>%
@@ -1009,7 +981,7 @@ plot_bray_delta_top_deep <- df_bray_delta_top %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM+
   xlab("Delta monthly T at 75 cm depth [°C]") +
-  ylab("Dissimalarity")
+  ylab("Dissimilarity")
 
 plot_bray_delta_bottom_surface <- df_bray_delta_bottom %>%
   filter(zone1 == zone2) %>%
@@ -1021,7 +993,7 @@ plot_bray_delta_bottom_surface <- df_bray_delta_bottom %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta monthly T at 2 cm depth [°C]") +
-  ylab("Dissimalarity")
+  ylab("Dissimilarity")
 
 plot_bray_delta_bottom_pin <- df_bray_delta_bottom %>%
   filter(zone1 == zone2) %>%
@@ -1033,19 +1005,15 @@ plot_bray_delta_bottom_pin <- df_bray_delta_bottom %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta monthly T at 20 cm depth [°C]") +
-  ylab("Dissimalarity")
+  ylab("Dissimilarity")
 
 plot_bray_delta_bottom_deep <- df_bray_delta_bottom %>%
   filter(zone1 == zone2) %>%
   ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
   geom_point() +
- # geom_smooth(method = "lm") +
- # stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
- #              label.x = "left", label.y = 0.1,
- #              formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta monthly T at 75 cm depth [°C]") +
-  ylab("Dissimalarity") +
+  ylab("Dissimilarity") +
   ggtitle("Bottom-soil (40-100 cm)")
 
 # Arrange all plots
@@ -1391,10 +1359,6 @@ if (!is.null(df_bray_delta_bottom_ri)) {
   plot_bray_delta_bottom_ri <- df_bray_delta_bottom_ri %>%
     ggplot(aes(x = delta_ri, y = BrayCurtisDissimilarity)) +
     geom_point() +
-   #  geom_smooth(method = "lm") +
-   # stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-   #              label.x = "left", label.y = 0.1,
-  #             formula = y ~ x, parse = TRUE, coef.digits = 3) +
     theme_JM +
     xlab("Delta reduction index") +
     ylab("Dissimilarity") +
@@ -1412,7 +1376,6 @@ if (!is.null(plot_bray_delta_top_ri) & !is.null(plot_bray_delta_bottom_ri)) {
 ## Step 7g: Plot dissimilarities & elevation + statistics
 ```{r}
 plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
- #filter(zone1 == zone2) %>%
   ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -1421,11 +1384,10 @@ plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta elevation [cm]") +
-  ylab("Dissimalarity") +
+  ylab("Dissimilarity") +
   ggtitle("Top-soil (0-30 cm)")
 
 plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
- #filter(zone1 == zone2) %>%
   ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -1434,7 +1396,7 @@ plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
                formula = y ~ x, parse = TRUE, coef.digits = 3) +
   theme_JM +
   xlab("Delta elevation [cm]") +
-  ylab("Dissimalarity") +
+  ylab("Dissimilarity") +
   ggtitle("Bottom-soil (40-100 cm)")
 
 # Arrange all plots
@@ -1471,7 +1433,7 @@ df_bray_delta_E <- df_bray_delta_top_elevation %>%
 df_bray_delta_R <- df_bray_delta_top_ri %>%
     full_join(df_bray_delta_bottom_ri)
 
-# Statstics
+# Statistics
 # All with mean T from pin and deep
 summary(lm(BrayCurtisDissimilarity ~ meanTemp, data = df_bray_delta_T %>% filter(zone1 == zone2)))
 
@@ -1496,7 +1458,7 @@ summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>%
 summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2) %>% filter (zone1 == "LM")))
 summary(lm(BrayCurtisDissimilarity ~ delta_pinTemp, data = df_bray_delta_top %>% filter(zone1 == zone2) %>% filter (zone1 == "HM")))
 
-# Alpha Diversity Statstics
+# Alpha Diversity Statistics
 df_alpha_T <- df_alpha_div_stat %>%
     mutate(meanTemp = rowMeans(select(., pin_mean, deep_mean), na.rm = TRUE))
 
@@ -1537,7 +1499,7 @@ print(stat_perm_bray)
 print(stat_perm_bray_int)
 ```
 
-# S1: PERMANOVA Ai  tchinson distance
+# S1: PERMANOVA Aitchinson distance
 ```{r}
 
 
@@ -1572,14 +1534,14 @@ print(stat_PERM_ait_int)
 print(stat_PERM_bray_int)
 ```
 
-# Step S1: Venn diagramms
+# Step S1: Venn diagrams
 ```{r,message=FALSE, warning=FALSE}
 # Subset ps objects for each Zone
 ps_PZ <- subset_samples(ps, Zone == "PZ")
 ps_LM <- subset_samples(ps, Zone == "LM")
 ps_HM <- subset_samples(ps, Zone == "HM")
 
-# Create Venn Diagramms
+# Create Venn Diagrams
 plot_venn_T <- ps_venn(ps,"Treatment", fill = c("#4575B4", "#FDAE61", "red3"))
 plot_venn_T_PZ <- ps_venn(ps_PZ, "Treatment",quantities = list(type=c("percent","counts"), font = 2), fill = c("#4575B4", "#FDAE61", "red3"))
 plot_venn_T_LM <- ps_venn(ps_LM, "Treatment",quantities = list(type=c("percent","counts"), font = 2), fill = c("#4575B4", "#FDAE61", "red3"))
@@ -1716,7 +1678,7 @@ ps %>%
   ggplot2::aes(colour = Treatment)
  )
 
-# pioneer zone
+# Pioneer zone
 plot_PZ_5 <- ps_PZ_5 %>%
  tax_transform(rank = "unique", trans = "clr") %>%
  ord_calc(method = "auto") %>% 
@@ -1782,7 +1744,7 @@ plot_PZ_80 <- ps_PZ_80 %>%
   scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
   scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
 
-# low marsh
+# Low marsh
 plot_LM_5 <- ps_LM_5 %>%
  tax_transform(rank = "unique", trans = "clr") %>%
  ord_calc(method = "auto") %>% 
@@ -1848,7 +1810,7 @@ plot_LM_80 <- ps_LM_80 %>%
   scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
   scale_ysidex_continuous(labels = scales::label_number(accuracy = 1))
 
-# high marsh
+# High marsh
 plot_HM_5 <- ps_HM_5 %>%
  tax_transform(rank = "unique", trans = "clr") %>%
  ord_calc(method = "auto") %>% 
@@ -1969,13 +1931,11 @@ plot_all_treatment_depth <- ps %>%
  scale_shape_girafe_filled() +
  stat_chull(ggplot2::aes(colour = Treatment, fill= Treatment), alpha = 0.3)+
  theme_JM+
- # geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
- #geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
   scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
   scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:") +
   facet_wrap(~Zone*Depth, ncol = 5)
 
-# plot all layers
+# Plot all layers
 plot_all_treatment_layer <- ps %>%
  tax_transform(rank = "unique", trans = "clr") %>%
  ord_calc(method = "auto") %>% 
@@ -1997,13 +1957,11 @@ plot_all_treatment <- ps %>%
  scale_shape_girafe_filled() +
 stat_chull(ggplot2::aes(group = Treatment, fill = Treatment, colour = Treatment), alpha = 0.7) +
  theme_JM +
- # geom_xsidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
- #geom_ysidedensity(aes(colour = Treatment, fill = Treatment), alpha = 0.5, show.legend = FALSE) +
   scale_colour_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
   scale_fill_manual(values = c("#4575B4", "#FDAE61","#D73027"), name = "Warming treatment:")+
   facet_wrap(~Zone, ncol = 3)
 
-# all plots
+# All plots
 plot_PZ_5
 plot_PZ_10
 plot_PZ_20
@@ -2041,7 +1999,7 @@ plot_all_PCA_HM <- ggarrange(plot_HM_5, plot_HM_10, plot_HM_20, plot_HM_40, plot
 
 ## Step 1e: Transform and combine asv table with metadata
 ```{r,  message=FALSE, warning=FALSE}
-# Transform asv table into long-format. Transformation will catch all headers (sample names) into a new coloumn (Sample_ID) 
+# Transform asv table into long-format. Transformation will catch all headers (sample names) into a new column (Sample_ID) 
 asv_long <- asv %>%  
    rownames_to_column(var = "asv")%>%
   gather(key = "Sample_ID", value = "count",X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12, X13, X14, X15, X16, X17, X18, X19, X20, X21, X22, X23, X24, X25, X26, X27, X28, X29, X30, X31, X32, X33, X34, X35, X36, X37, X38, X39, X40, X41, X42, X43, X44, X45, X46, X47, X48, X49, X50, X51, X52, X53, X54, X55, X56, X57, X58, X59, X60, X61, X62, X63, X64, X65, X66, X67, X68, X69, X70, X71, X72, X73, X74, X75, X76, X77, X78, X79, X80, X81, X82, X83, X84, X85, X86, X87, X88, X89, X90, X91, X92, X93, X94, X95, X96, X97, X98, X99, X100, X101, X102, X103, X104, X105, X106, X107, X108, X109, X110, X111, X112, X113, X114, X115, X116, X117, X118, X119, X120, X121, X122, X123, X124, X125, X126, X127, X128, X129, X130, X131, X132, X133, X134, X135, X136, X137, X138, X139)

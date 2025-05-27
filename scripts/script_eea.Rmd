@@ -219,6 +219,32 @@ df_EEA_merged <- df_EEA_merged %>%
 
 ## Step 2c: Calculate activity for Enzymes
 ```{r}
+# Plot: Sample size per plotid (before filtering)
+df_plotid_counts <- df_EEA_merged %>%
+  group_by(plotid = as.factor(Plot)) %>%
+  summarise(n = n())
+
+ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
+  geom_col(color = "black") +
+  geom_text(aes(label = n), vjust = -0.5, size = 4) +
+  scale_fill_brewer(palette = "Set2", name = "Sample size") +
+  labs(x = "Plot ID", y = "Number of samples", title = "Sample size per plotid before filtering") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+# calculate the mean acitivity from the four technical replicates of each plate. The highest and the lowest of the four values are removed.
+df_EEA_merged <- df_EEA_merged %>%
+  group_by(Depth.x, Zone, Treatment, Enzyme, UID, ID.y, Layer) %>%
+#  mutate(rank = rank(Activity_OM, ties.method = "first")) %>%
+ # filter(rank %in% c(2, 3)) %>%
+  summarise(n = n(),
+            Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
+            sd = sd(Activity_OM, na.rm = TRUE),
+            se = sd / sqrt(n),
+            ci = qt(0.975, df = n - 1) * sd / sqrt(n),
+            .groups = "drop")
+
+
 df_EEA_merged <- df_EEA_merged %>%
   mutate(
     Enzyme = case_when(
@@ -315,17 +341,40 @@ ggplot(df_EEA_merged_filtered) +
   ) +
   theme_minimal()
 
+# Plot: Sample size per plotid (after filtering)
+df_plotid_counts <- df_EEA_merged %>%
+  group_by(plotid = substring(ID.y, 1, 3), Enzyme) %>%
+  summarise(n = n())
+
+ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
+  geom_col(color = "black") +
+  geom_text(aes(label = n), vjust = -0.5, size = 4) +
+  scale_fill_brewer(palette = "Set2", name = "Sample size") +
+  labs(x = "Plot ID", y = "Number of samples", title = "Sample size per plotid after filtering") +
+  theme_minimal() +
+  facet_wrap(~Enzyme) +
+  theme(legend.position = "none")
+
 # calculate the mean acitivity from the four technical replicates of each plate. The highest and the lowest of the four values are removed.
 df_EEA_merged <- df_EEA_merged_filtered %>%
   group_by(Depth.x, Zone, Treatment, Enzyme, UID, ID.y, Layer) %>%
-  mutate(rank = rank(Activity_OM, ties.method = "first")) %>%
-  filter(rank %in% c(2, 3)) %>%
+#  mutate(rank = rank(Activity_OM, ties.method = "first")) %>%
+ # filter(rank %in% c(2, 3)) %>%
   summarise(n = n(),
             Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
             sd = sd(Activity_OM, na.rm = TRUE),
             se = sd / sqrt(n),
             ci = qt(0.975, df = n - 1) * sd / sqrt(n),
             .groups = "drop")
+
+
+ggplot(df_EEA_merged) +
+  aes(x = Activity_OM) +
+  geom_histogram(
+    bins = round(sqrt(length(df_EEA_merged_filtered$Activity_OM))),
+    fill = "steelblue", color = "black"
+  ) +
+  theme_minimal()
 
 df_EEA_merged$Activity_OM <- df_EEA_merged$Activity_OM_mean
 
@@ -339,17 +388,14 @@ df_EEA_merged$Plot <- substring(df_EEA_merged$ID.y, 1,3)
 ## Step 2d: Calculate C/N aquisition ratio
 ```{r}
 df_glu_data <- df_EEA_merged %>%
-  #filter(!Activity_FW <= 0 & !Activity_FW >= 1000)%>%  
   filter(Enzyme == "GLU") %>%
   select(ID.y, GLU_value = Activity_OM, Depth.x, Zone, Treatment, Layer)  
 
 df_chi_data <- df_EEA_merged %>%
- # filter(!Activity_FW <= 0 & !Activity_FW >= 1000)%>%  
   filter(Enzyme == "CHI") %>%
   select(ID.y, CHI_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
 
 df_leu_data <- df_EEA_merged %>%
-  #filter(!Activity_FW <= 0 & !Activity_FW >= 1000)%>%  
   filter(Enzyme == "LEU") %>%
   select(ID.y, LEU_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
 
@@ -419,9 +465,8 @@ df_EEA_final <- df_EEA_wide %>%
   left_join(df_warming_all_2022_monthly, by = "Plot")
 ```
 
-
-# Step 4: Plots
-## Step 4a: EEAs (factorial)
+# Step 3: Plots
+## Step 3a: EEAs (factorial)
 ```{r}
 # Plot C-Acquisition
 plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
@@ -466,10 +511,10 @@ plot_CN <- ggarrange(
   font.label = list(size = 16, face = "bold") # optional styling
 )
 
+plot_CN
 ```
 
-
-## Step 4b: EEAs (regressions)
+## Step 3b: EEAs (regressions)
 ```{r}
 plot_EEA_C_warming_pin <- df_EEA_final %>%
   #filter(Enzyme == "GLU") %>%
@@ -579,134 +624,10 @@ plot_CN_warming_pin_deep <- ggarrange(
 plot_CN_warming_pin_deep
 ```
 
-## Step 4c: EEAs (correaltion)
-```{r}
-library(ggplot2)
-library(ggpubr)
-
-# ---- Top-soil, C-acquisition ----
-plot_EEA_C_warming_pin <- df_EEA_final %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "left",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0,0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 20 cm depth [°C]")
-
-# ---- Top-soil, N-acquisition ----
-plot_EEA_N_warming_pin <- df_EEA_final %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = Activity_N, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "right",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0, 0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 20 cm depth [°C]")
-
-# ---- Bottom-soil, C-acquisition ----
-plot_EEA_C_warming_deep <- df_EEA_final %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = Activity_C, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "right",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0,0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 75 cm depth [°C]")
-
-# ---- Bottom-soil, N-acquisition ----
-plot_EEA_N_warming_deep <- df_EEA_final %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = Activity_N, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "right",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0, 0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 75 cm depth [°C]")
-
-# ---- Arrange all plots ----
-plot_CN_warming_pin_deep_cor <- ggarrange(
-  plot_EEA_C_warming_pin,
-  plot_EEA_N_warming_pin,
-  plot_EEA_C_warming_deep,
-  plot_EEA_N_warming_deep,
-  ncol = 2,
-  nrow = 2,
-  common.legend = TRUE,
-  legend = "top",
-  labels = c("A", "C", "B", "D"),
-  font.label = list(size = 16, face = "bold")
-)
-
-plot_CN_warming_pin_deep_cor
-```
 
 
-## Step 4d: Plots EEA-ratio
+
+## Step 3c: EEA-ratio
 ```{r}
 plot_EEA_ratio <- df_C_N_ratio %>%
   filter(!is.na(GLU_CHI_ratio)) %>%
@@ -720,8 +641,7 @@ plot_EEA_ratio <- df_C_N_ratio %>%
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1.1)) +
-    theme(strip.background = element_rect(fill = "grey44"),
-          legend.position = "bottom",
+    theme(legend.position = "bottom",
           axis.text.x = element_blank(),
           panel.spacing = unit(1, "lines"))  
 
@@ -729,136 +649,8 @@ plot_EEA_ratio <- df_C_N_ratio %>%
 plot_EEA_ratio
 ```
 
-## Step 4d: Plots Redox, Elevation, EEA
-```{r}
-# Group Enzymes by C and N Acquistion
-df_EEA_merged <- df_EEA_merged %>%
-  mutate(
-    Enzyme_group = case_when(
-      Enzyme == "GLU" ~ "C-Acquisition", # GLU -> C-Acquisition
-      Enzyme %in% c("CHI", "LEU") ~ "N-Acquisition", # CHI or LEU -> N-Acquisition
-      TRUE ~ NA_character_ # Default: NA for other values
-    )
-  )
-
-plot_reg_ri_eea <- df_EEA_merged %>%
-  filter(!is.na(ri) & !is.na(Activity_OM_mean) & !is.na(Enzyme_group)) %>% # Remove rows with NA
-  ggplot(aes(x = ri, y = Activity_OM_mean, color = Enzyme_group)) +
-  geom_point() +
-  geom_smooth(method = "lm", alpha = 0.2) + 
-  facet_wrap(~ Layer, ncol = 1) + 
-      stat_poly_eq(
-      aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-      formula = y ~ x,
-      parse = TRUE,
-      label.x.npc = "right",  # Horizontal position of the label
-      label.y.npc = 0.9       # Vertical position of the label
-    ) +
-     scale_y_continuous(name = expression(paste("Enzymatic activity", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
-  labs(
-    x = "Reduction index") +
-  scale_color_manual(
-    values = c("C-Acquisition" = "#d8b365", "N-Acquisition" = "#5ab4ac"),
-    name = "Enzymes:"
-  ) +
-  theme_JM
-
-ggarrange(plot_reg_ri_eea, plot_iris_bar)
-
-# add plot ID for merging
-df_EEA_merged$Plot <- substring(df_EEA_merged$ID.y, 1,3)
-
-# summarise EEA dataframe for Glucosidase activity
-df_EEA_sum  <- df_EEA_merged  %>%
-  filter(Enzyme == "GLU")%>%
-  group_by(Zone, Treatment, Enzyme, Plot) %>%
-  summarize(n = n(),
-            mean_activity = mean(Activity_OM_mean, na.rm=TRUE),
-            sd = sd(Activity_OM_mean, na.rm=TRUE),
-            se = sd / sqrt(n),
-            ci = qt(0.975, df = n - 1) * sd / sqrt(n))
-
-# summarise iris (ri) and elevation dataframe 
-df_iris_elevation_sum  <- df_elevation  %>%
-  group_by(Treatment, Plot) %>%
-  summarize(n = n(),
-            mean_ri = mean(mean_ri, na.rm=TRUE),
-            sd = sd(mean_ri,na.rm=TRUE),
-            se = sd / sqrt(n),
-            ci = qt(0.975, df = n - 1) * sd / sqrt(n),
-            mean_elevation= mean(elevation, na.rm=TRUE))
-
-df_iris_elevation_sum$Plot <- as.factor(df_iris_elevation_sum$Plot)
-
-# merge dataframe EEA & iris/elevation
-df_eea_elevation <- df_EEA_sum  %>%
-   left_join(df_iris_elevation_sum, by = c("Plot"))
- 
- 
- my_colors <- c("darkblue","#4575B4", "yellow")
- my_gradient <- c("#fee8c8","#fdbb84","#e34a33","#7f0000")
- 
-plot_iris_elevation_eea <-ggplot(df_EEA_final, aes(x = ri  , y = Elevation_mean, color= Activity_N)) +
-  geom_point(aes(x = ri  , y = Elevation_mean, color = Activity_C), size=3) +
-  geom_smooth(method = "loess", se = TRUE)+
-  ylab(expression("Elevation in relation to MHT [cm]"))+
-  xlab(expression("Reduction Index"))+
-  scale_color_gradientn(colors = my_gradient, na.value = "white")  +
-  theme_JM+
-  coord_flip()
-
-# Plot incl depth (mathced were possible)
-# summarise EEA dataframe for Glucosidase activity
-df_EEA_depth_sum  <- df_EEA_merged  %>%
-  filter(Enzyme == "GLU")%>%
-  group_by(Zone, Treatment, Enzyme, Plot, Depth.x) %>%
-  summarize(n = n(),
-            mean_activity = mean(Activity_FW, na.rm=TRUE),
-            sd = sd(Activity_FW,na.rm=TRUE),
-            se = sd / sqrt(n),
-            ci = qt(0.975, df = n - 1) * sd / sqrt(n))
-
-df_EEA_depth_sum$Depth <- df_EEA_depth_sum$Depth.x
-
-# summarise reduction index from 60-70 cm and 70-80 cm to 60-80 cm, to match the EEA data
-df_iris_elevation <- df_iris_elevation %>%
-mutate(Depth = ifelse(Depth %in% c("60-70 cm", "70-80 cm"), "60-80 cm", Depth))%>%
-mutate(Depth = ifelse(Depth %in% c("0-10 cm"), "5-10 cm", Depth))
-
-# summarise iris (ri) and elevation dataframe 
-df_iris_elevation_depth_sum  <- df_iris_elevation  %>%
-  group_by(Zone, Treatment, Plot, Depth) %>%
-  summarize(n = n(),
-            mean_ri = mean(mean_ri, na.rm=TRUE),
-            sd = sd(mean_ri,na.rm=TRUE),
-            se = sd / sqrt(n),
-            ci = qt(0.975, df = n - 1) * sd / sqrt(n),
-            mean_elevation= mean(elevation, na.rm=TRUE))
-
-df_iris_elevation_depth_sum$Plot  <- as.factor(df_iris_elevation_depth_sum$Plot)
-
-# merge dataframe EEA & iris/elevation
-df_iris_elevation_depth_EEA <- df_EEA_depth_sum  %>%
-   left_join(df_iris_elevation_depth_sum, by = c("Plot","Depth")) %>%
-    filter(!is.na(mean_ri)) 
-
-plot_iris_elevation_depth_eea <-ggplot(df_iris_elevation_depth_EEA, aes(x = mean_ri  , y = mean_elevation, color=mean_activity)) +
-  geom_point(aes(x = mean_ri  , y = mean_elevation, color=mean_activity), size=3) +
-  geom_smooth(method = "loess", se = TRUE, color="#2b8cbe",fill="#a6bddb")+
-  ylab(expression("Elevation in relation to MHT [m]"))+
-  xlab(expression("Reduction Index"))+
-  scale_color_gradientn(colors = my_gradient, na.value = "white",  name = expression(atop("ß-Glucosidase activity", paste("[", "nmol", "*", "g", " ", DW^-1, "*", "h"^-1, "]"))))+
-  #scale_x_reverse()+
-  theme_JM+
-  coord_flip()
-
-plot_iris_elevation_eea
-plot_iris_elevation_depth_eea
-```
-
-
-# Step 5: Statistics
-## Step 5a: EEAs (factorial)
+# Step 4: Statistics
+## Step 4a: EEAs (factorial)
 ```{r}
 # Add core_id as random factor or use Plot for accounting for the Plots not just the cores being non-independent
 df_EEA_merged <- df_EEA_merged %>%
@@ -1055,8 +847,6 @@ df_warming_sum <- df_warming_all_2022_monthly %>%
 # summarise alpha diversity (done in "script_community") Step 5e)
 # summarise Abundance (done in "script_qpcr_2023") Step 4)
 
-
-
 #df_eea_c_sum <- df_eea_c_sum %>% mutate(plotid = as.character(plotid))
 #df_eea_n_sum <- df_eea_n_sum %>% mutate(plotid = as.character(plotid))
 #df_elevation_sum <- df_elevation_sum %>% mutate(plotid = as.character(plotid))
@@ -1196,6 +986,132 @@ plot_corr_mat_bottom<- ggstatsplot::ggcorrmat(
 ggarrange(plot_corr_mat_top, plot_corr_mat_bottom)
 ```
 
+# Suuplement
+## Step S1: EEAs (correaltion)
+```{r}
+library(ggplot2)
+library(ggpubr)
+
+# ---- Top-soil, C-acquisition ----
+plot_EEA_C_warming_pin <- df_EEA_final %>%
+  filter(grepl("Top-soil", Layer)) %>%
+  ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_cor(
+      method = "pearson",
+      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
+      label.x.npc = "left",
+      label.y.npc = 0.9,
+      size = 5
+    ) +
+    scale_color_manual(
+      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
+      name = "Zone:"
+    ) +
+    scale_y_continuous(
+      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      expand = c(0,0),
+      limits = c(0, 3000),
+      breaks = seq(0, 3000, by = 1000)
+    ) +
+    theme_JM +
+    labs(x = "Monthly T at 20 cm depth [°C]")
+
+# ---- Top-soil, N-acquisition ----
+plot_EEA_N_warming_pin <- df_EEA_final %>%
+  filter(grepl("Top-soil", Layer)) %>%
+  ggplot(aes(x = pinTemp_mean, y = Activity_N, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_cor(
+      method = "pearson",
+      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
+      label.x.npc = "right",
+      label.y.npc = 0.9,
+      size = 5
+    ) +
+    scale_color_manual(
+      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
+      name = "Zone:"
+    ) +
+    scale_y_continuous(
+      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      expand = c(0, 0),
+      limits = c(0, 3000),
+      breaks = seq(0, 3000, by = 1000)
+    ) +
+    theme_JM +
+    labs(x = "Monthly T at 20 cm depth [°C]")
+
+# ---- Bottom-soil, C-acquisition ----
+plot_EEA_C_warming_deep <- df_EEA_final %>%
+  filter(grepl("Bottom-soil", Layer)) %>%
+  ggplot(aes(x = deepTemp_mean, y = Activity_C, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_cor(
+      method = "pearson",
+      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
+      label.x.npc = "right",
+      label.y.npc = 0.9,
+      size = 5
+    ) +
+    scale_color_manual(
+      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
+      name = "Zone:"
+    ) +
+    scale_y_continuous(
+      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      expand = c(0,0),
+      limits = c(0, 3000),
+      breaks = seq(0, 3000, by = 1000)
+    ) +
+    theme_JM +
+    labs(x = "Monthly T at 75 cm depth [°C]")
+
+# ---- Bottom-soil, N-acquisition ----
+plot_EEA_N_warming_deep <- df_EEA_final %>%
+  filter(grepl("Bottom-soil", Layer)) %>%
+  ggplot(aes(x = deepTemp_mean, y = Activity_N, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_cor(
+      method = "pearson",
+      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
+      label.x.npc = "right",
+      label.y.npc = 0.9,
+      size = 5
+    ) +
+    scale_color_manual(
+      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
+      name = "Zone:"
+    ) +
+    scale_y_continuous(
+      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      expand = c(0, 0),
+      limits = c(0, 3000),
+      breaks = seq(0, 3000, by = 1000)
+    ) +
+    theme_JM +
+    labs(x = "Monthly T at 75 cm depth [°C]")
+
+# ---- Arrange all plots ----
+plot_CN_warming_pin_deep_cor <- ggarrange(
+  plot_EEA_C_warming_pin,
+  plot_EEA_N_warming_pin,
+  plot_EEA_C_warming_deep,
+  plot_EEA_N_warming_deep,
+  ncol = 2,
+  nrow = 2,
+  common.legend = TRUE,
+  legend = "top",
+  labels = c("A", "C", "B", "D"),
+  font.label = list(size = 16, face = "bold")
+)
+
+plot_CN_warming_pin_deep_cor
+```
 
 # References
 ```{r}
