@@ -84,7 +84,7 @@ df_EEA_metadata$UID <- df_EEA_metadata$Plate
 data_dir <- here("data", "eea", "raw")
 
 #Define the list of file numbers file names
-file_numbers <- sprintf("%03d", c(1:100, 102:325))
+file_numbers <- sprintf("%03d", c(1:100, 102:198, 200:266, 268:293, 295:325))
 file_names <- paste0("Plate_", file_numbers, ".txt")
 
 # Construct full file paths 
@@ -232,21 +232,37 @@ ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
   theme_minimal() +
   theme(legend.position = "none")
 
-# calculate the mean acitivity from the four technical replicates of each plate. The highest and the lowest of the four values are removed.
+# calculate the means from the four technical replicates of each plate. 
 df_EEA_merged <- df_EEA_merged %>%
-  group_by() %>%
-  summarise(n = n(),
-            _mean = mean(, na.rm = TRUE),
-            .groups = "drop")
+ # filter(!Subplot == "(A6)") %>%
+  group_by(UID, Plate.x, Depth.x, ID.y, Subplot, Depth.y, Zone, Sampling_date, Dominant_plant_species_1, Subdominant_plant_species_1, Plate.y, Date, Inc_start, Inc_end, Crucible_ID) %>%
+  summarise(
+    across(where(is.numeric), ~mean(.x, na.rm = TRUE)),
+    across(!where(is.numeric), ~first(.x)),
+    .groups = "drop"
+  )
+
+# Plot: Sample size per plotid (before filtering)
+df_plotid_counts <- df_EEA_merged %>%
+  group_by(plotid = as.factor(Plot)) %>%
+  summarise(n = n())
+
+ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
+  geom_col(color = "black") +
+  geom_text(aes(label = n), vjust = -0.5, size = 4) +
+  scale_fill_brewer(palette = "Set2", name = "Sample size") +
+  labs(x = "Plot ID", y = "Number of samples", title = "Sample size per plotid before filtering") +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 df_EEA_merged <- df_EEA_merged %>%
   mutate(
     Enzyme = case_when(
       Plate.x %in% paste0("Plate_", sprintf("%03d", 1:109)) ~ "GLU",
-      Plate.x %in% c(paste0("Plate_", sprintf("%03d", 110:214)), 
+      Plate.x %in% c(paste0("Plate_", sprintf("%03d", c(110:198, 200:214))), 
                      "Plate_324", 
-                     "Plate_325") ~ "CHI",  # Explicitly add 324/325
-      Plate.x %in% paste0("Plate_", sprintf("%03d", 215:323)) ~ "LEU",
+                     "Plate_325") ~ "CHI",  
+      Plate.x %in% paste0("Plate_", sprintf("%03d", c(215:266, 268:293, 295:323))) ~ "LEU",
       TRUE ~ NA_character_
     )
   )
@@ -255,8 +271,8 @@ df_EEA_merged$Inc_start <- as.POSIXct(df_EEA_merged$Inc_start, format="%H:%M", t
 df_EEA_merged$Inc_end <- as.POSIXct(df_EEA_merged$Inc_end, format="%H:%M", tz="UTC")
 
 df_EEA_merged <- df_EEA_merged %>%
-  mutate(Inc_start        = as.POSIXct(df_EEA_merged[,25], format="%H:%M"))%>%
-  mutate(Inc_end          = as.POSIXct(df_EEA_merged[,26], format="%H:%M"))%>%
+  mutate(Inc_start        = as.POSIXct(df_EEA_merged$Inc_start, format="%H:%M"))%>%
+  mutate(Inc_end          = as.POSIXct(df_EEA_merged$Inc_end, format="%H:%M"))%>%
   # calculate incubation time
   mutate(Inc_time         = 24 + difftime(df_EEA_merged$Inc_end, df_EEA_merged$Inc_start, units="hours"))                             
 df_EEA_merged$Inc_time <- as.numeric(df_EEA_merged$Inc_time)        
@@ -300,11 +316,6 @@ df_EEA_merged <- df_EEA_merged %>%
 Outlier detection following: https://statsandr.com/blog/outliers-detection-in-r/ 
 ```{r}
 # Check data structure of Activity prior to filtering
-
-## Step 2d: Filtering of EEA data
-Outlier detection following: https://statsandr.com/blog/outliers-detection-in-r/ 
-```{r}
-# Check data structure of Activity prior to filtering
 ggplot(df_EEA_merged) +
   aes(x = Activity_OM) +
   geom_histogram(
@@ -313,24 +324,8 @@ ggplot(df_EEA_merged) +
   ) +
   theme_minimal()
 
-# Filter of Assays where Blanks were contaminated
-hist(df_EEA_merged$Blank)
-df_EEA_merged$z_Blank <- scale(df_EEA_merged$Blank)
-hist(df_EEA_merged$z_Blank)
-summary(df_EEA_merged$z_Blank)
-which(df_EEA_merged$z_Blank > 3.29)
-qqPlot(df_EEA_merged$Blank)
-mean(df_EEA_merged$Blank) + 2*sd(df_EEA_merged$Blank) # = 5049.276
-
-# Filter for Assays where substrate control was significantly upregulated, hinting at pipetting errors or contaminated buffer
-hist(df_EEA_merged$Sub_ctrl)
-mean(df_EEA_merged$Sub_ctrl) + 2*sd(df_EEA_merged$Sub_ctrl) # = 773726.2 
-
 df_EEA_merged_filtered <- df_EEA_merged %>%
-  filter(!Blank >= 5049.276) %>% # True in 9 cases 
-  filter(!Sub_ctrl >= 773726.2) %>% # True in  87cases
-  filter(!Quench_coeff <= 0.1) %>% # True in 144 cases
-  filter(!Activity_OM <= 0) 
+  filter(!Activity_OM <= 0 & !Activity_OM >= 10000) 
 
 ggplot(df_EEA_merged_filtered) +
   aes(x = Activity_OM) +
@@ -340,51 +335,8 @@ ggplot(df_EEA_merged_filtered) +
   ) +
   theme_minimal()
 
-# Plot: Sample size per plotid (after filtering)
-df_plotid_counts <- df_EEA_merged %>%
-  group_by(plotid = substring(ID.y, 1, 3), Enzyme) %>%
-  summarise(n = n())
-
-ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
-  geom_col(color = "black") +
-  geom_text(aes(label = n), vjust = -0.5, size = 4) +
-  scale_fill_brewer(palette = "Set2", name = "Sample size") +
-  labs(x = "Plot ID", y = "Number of samples", title = "Sample size per plotid after filtering") +
-  theme_minimal() +
-  facet_wrap(~Enzyme) +
-  theme(legend.position = "none")
-
-# Summarise technical replicates by Blank, Standard, Sub_ctrl, Hom_ctrl, Quench, Assay
-# Alle anderen Spalten, die nicht aggregiert werden, werden mit first() übernommen
-df_EEA_merged <- df_EEA_merged_filtered %>%
-  group_by(Blank, Standard, Sub_ctrl, Hom_ctrl, Quench, Assay) %>%
-  summarise(
-    n = n(),
-    Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
-    sd = sd(Activity_OM, na.rm = TRUE),
-    se = sd / sqrt(n),
-    ci = qt(0.975, df = n - 1) * sd / sqrt(n),
-    # alle anderen Spalten übernehmen
-    UID = first(UID),
-    Depth.x = first(Depth.x),
-    Zone = first(Zone),
-    Treatment = first(Treatment),
-    Enzyme = first(Enzyme),
-    ID.y = first(ID.y),
-    Layer = first(Layer),
-    # ggf. weitere Spalten ergänzen, falls benötigt
-    .groups = "drop"
-  )
-
-ggplot(df_EEA_merged) +
-  aes(x = Activity_OM_mean) +
-  geom_histogram(
-    bins = round(sqrt(length(df_EEA_merged$Activity_OM_mean))),
-    fill = "steelblue", color = "black"
-  ) +
-  theme_minimal()
-
-df_EEA_merged$Activity_OM <- df_EEA_merged$Activity_OM_mean
+# Rewrite filtered data
+df_EEA_merged <- df_EEA_merged_filtered 
 
 df_EEA_merged$Layer <- factor(df_EEA_merged$Layer, levels = c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)"))
 df_EEA_merged$Treatment  <- factor(df_EEA_merged$Treatment, levels = c("ambient", "+1.5°C", "+3.0°C"))
@@ -452,7 +404,7 @@ df_iris_mean$Layer <- as.factor(df_iris_mean$Layer)
 
 df_EEA_sum <- df_EEA_merged %>%
   group_by(Zone, Treatment, Layer, Enzyme, Plot) %>%
-  summarise(Activity_OM_mean = mean(Activity_OM_mean, na.rm = TRUE))
+  summarise(Activity_OM_mean = mean(Activity_OM, na.rm = TRUE))
 
 df_EEA_wide <- df_EEA_sum %>%
   pivot_wider(
@@ -471,6 +423,8 @@ df_EEA_final <- df_EEA_wide %>%
   left_join(df_elevation_mean, by = "Plot") %>%
   left_join(df_iris_mean, by = c("Layer", "Plot")) %>%
   left_join(df_warming_all_2022_monthly, by = "Plot")
+
+df_EEA_final$CN_ratio <- (df_EEA_final$GLU / (df_EEA_final$CHI + df_EEA_final$LEU)) 
 ```
 
 # Step 3: Plots
@@ -632,10 +586,7 @@ plot_CN_warming_pin_deep <- ggarrange(
 plot_CN_warming_pin_deep
 ```
 
-
-
-
-## Step 3c: EEA-ratio
+## Step 3c: EEA-ratio (factorial)
 ```{r}
 plot_EEA_ratio <- df_C_N_ratio %>%
   filter(!is.na(GLU_CHI_ratio)) %>%
@@ -656,6 +607,77 @@ plot_EEA_ratio <- df_C_N_ratio %>%
 # All Plots
 plot_EEA_ratio
 ```
+
+## Step 3d: EEA-ratio (regression)
+```{r}
+plot_EEA_CN_warming_pin <- df_EEA_final %>%
+  filter(grepl("Top-soil", Layer)) %>%
+  ggplot(aes(x = pinTemp_mean, y = CN_ratio, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
+                 formula = y ~ x, 
+                 parse = TRUE, 
+                 label.x.npc = "right",
+                 label.y.npc = 0.9) +
+    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
+    scale_y_continuous(
+      name = expression(paste("C/N-acquisition ratio")), 
+      expand = c(0,0),
+      limits = c(0, 1.5),
+      breaks = seq(0, 1.5, by = 0.5)) +
+    theme_JM + 
+    labs(x = "Monthly T at 20 cm depth [°C]") 
+
+plot_EEA_CN_warming_deep <- df_EEA_final %>%
+  filter(grepl("Bottom-soil", Layer)) %>%
+  ggplot(aes(x = deepTemp_mean, y = CN_ratio, color = Zone)) +
+    geom_point() +
+    geom_smooth(method = "lm", aes(color = Zone)) +
+    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
+                 formula = y ~ x, 
+                 parse = TRUE, 
+                 label.x.npc = "right",
+                 label.y.npc = 0.9) +
+    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
+    scale_y_continuous(
+      name = expression(paste("C/N-acquisition ratio")), 
+      expand = c(0,0),
+      limits = c(0, 1.5),
+      breaks = seq(0, 1.5, by = 0.5)) +
+    theme_JM + 
+    labs(x = "Monthly T at 80 cm depth [°C]") 
+
+plot_EEA_CN_warming_pin
+plot_EEA_CN_warming_deep 
+
+plot_CN_ratio_warming_pin_deep <- ggarrange(
+  plot_EEA_CN_warming_pin,
+  plot_EEA_CN_warming_deep, 
+  ncol = 1,
+  nrow = 2,
+  common.legend = TRUE,
+  legend = "bottom",
+  labels = c("C", "D"), 
+  font.label = list(size = 16, face = "bold") 
+)
+
+plot_CN_ratio_warming_pin_deep
+
+
+
+plot_CN_reg <- ggarrange(
+  plot_CN,
+  plot_CN_ratio_warming_pin_deep,
+  ncol = 2,
+  heights = c(1, 1.2),
+ # labels = c("A", "B", "C", "D"),
+  font.label = list(size = 16, face = "bold") # optional styling
+)
+
+plot_CN_reg
+```
+
 
 # Step 4: Statistics
 ## Step 4a: EEAs (factorial)
