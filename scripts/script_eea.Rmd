@@ -417,7 +417,6 @@ df_EEA_final <- df_EEA_wide %>%
   left_join(df_elevation_mean, by = "Plot") %>%
   left_join(df_iris_mean, by = c("Layer", "Plot")) %>%
   left_join(df_warming_all_2022_monthly, by = "Plot")
-#df_EEA_merged$Layer <- df_EEA_merged$Layer.x
 ```
 
 
@@ -437,8 +436,7 @@ plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
-    theme(strip.background = element_rect(fill = "grey44"),
-          legend.position = "none",
+    theme(legend.position = "none",
           axis.text.x = element_blank(),
           panel.spacing = unit(1, "lines"))  # Increase spacing between facets
 
@@ -454,13 +452,12 @@ plot_EEA_mean_layer_CHI_LEU <- df_EEA_merged %>%
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
-    theme(strip.background = element_rect(fill = "grey44"),
-          legend.position = "bottom",
+    theme(legend.position = "bottom",
           axis.text.x = element_blank(),
           panel.spacing = unit(1, "lines"))  # Increase spacing between facets
 
-# Combine plots
-ggarrange(
+# Plot C and N acquisition
+plot_CN <- ggarrange(
   plot_EEA_mean_layer_GLU,
   plot_EEA_mean_layer_CHI_LEU,
   ncol = 1,

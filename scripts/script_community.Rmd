@@ -192,8 +192,6 @@ theme_JM <- theme(
 )
 ```
 
-
-
 # Step 2: Compositional analysis using microviz package
 ## Step 2a: Create phyloseq objects
 ```{r}
@@ -276,113 +274,14 @@ ps_rare@sam_data[["Layer"]]  <- factor(ps_rare@sam_data[["Layer"]],levels=c("Top
 #saveRDS(ps, "./ps_raw.rds")
 ```
 
-## Step 2b: Create subsets of phyloseq objects
-```{r}
-#ps <- ps %>%
- # tax_fix() %>%
-  #phyloseq_validate()
-# Create subsets of phyloseq object 
-
-ps_PZ <- ps%>%
-  subset_samples(Zone =="PZ")
-
-ps_PZ_5 <- ps%>%
-  subset_samples(Zone  == "PZ")%>%
-  subset_samples(Depth == "0-5 cm")
-
-ps_PZ_10 <- ps%>%
-  subset_samples(Zone  == "PZ")%>%
-  subset_samples(Depth == "5-10 cm")
-
-ps_PZ_20 <- ps%>%
-  subset_samples(Zone  == "PZ")%>%
-  subset_samples(Depth == "20-30 cm")
-
-ps_PZ_40 <- ps%>%
-  subset_samples(Zone  == "PZ")%>%
-  subset_samples(Depth == "40-50 cm")
-
-ps_PZ_80 <- ps%>%
-  subset_samples(Zone  == "PZ")%>%
-  subset_samples(Depth == "80-100 cm")
-
-ps_LM <- ps%>%
-  subset_samples(Zone  == "LM")
-
-ps_LM_5 <- ps%>%
-  subset_samples(Zone  == "LM")%>%
-  subset_samples(Depth == "0-5 cm")
-
-ps_LM_10 <- ps%>%
-  subset_samples(Zone  == "LM")%>%
-  subset_samples(Depth == "5-10 cm")
-
-ps_LM_20 <- ps%>%
-  subset_samples(Zone  == "LM")%>%
-  subset_samples(Depth == "20-30 cm")
-
-ps_LM_40 <- ps%>%
-  subset_samples(Zone  == "LM")%>%
-  subset_samples(Depth == "40-50 cm")
-
-ps_LM_80 <- ps%>%
-  subset_samples(Zone  == "LM")%>%
-  subset_samples(Depth == "80-100 cm")
-
-ps_HM <- ps%>%
-  subset_samples(Zone =="HM")
-
-ps_HM_5 <- ps%>%
-  subset_samples(Zone  == "HM")%>%
-  subset_samples(Depth == "0-5 cm")
-
-ps_HM_10 <- ps%>%
-  subset_samples(Zone  == "HM")%>%
-  subset_samples(Depth == "5-10 cm")
-
-ps_HM_20 <- ps%>%
-  subset_samples(Zone  == "HM")%>%
-  subset_samples(Depth == "20-30 cm")
-
-ps_HM_40 <- ps%>%
-  subset_samples(Zone  == "HM")%>%
-  subset_samples(Depth == "40-50 cm")
-
-ps_HM_80 <- ps%>%
-  subset_samples(Zone  == "HM")%>%
-  subset_samples(Depth == "80-100 cm")
- 
-#ord_explore(ps_rare)
-
-#  ord_explore(ps_PZ)
-#  ord_explore(ps_PZ_5)
-#  ord_explore(ps_PZ_10)
-#  ord_explore(ps_PZ_20)
-#  ord_explore(ps_PZ_40)
-#  ord_explore(ps_PZ_80)
-  
-#  ord_explore(ps_LM)
-#  ord_explore(ps_LM_5)
-#  ord_explore(ps_LM_10)
-#  ord_explore(ps_LM_20)
-#  ord_explore(ps_LM_40)
-#  ord_explore(ps_LM_80)
-    
-#  ord_explore(ps_HM)
-#  ord_explore(ps_HM_5)
-#  ord_explore(ps_HM_10)
-#  ord_explore(ps_HM_20)
-#  ord_explore(ps_HM_40)
-#  ord_explore(ps_HM_80)
-```
-
-
 ## Step 2d: NMDS plots
 ```{r}
 # All analysis performed here are done on the filtered and rarefied data
 #ord_explore(ps_rare)
-
-#ps_rare$Treatment <- as.factor(ps_rare$Treatment)
+layer.labs <- c(
+  "Top-soil\n(0-30 cm)" = "Top-soil (0-30 cm)",
+  "Bottom-soil\n(40-100 cm)" = "Bottom-soil (40-100 cm)"
+)
 
 plot_all_treatment_layer_nmds <- ps_rare %>%
   tax_transform(rank = "unique", trans = "identity") %>%
@@ -406,36 +305,12 @@ plot_all_treatment_layer_nmds <- ps_rare %>%
     values = c("#4575B4", "#FDAE61", "#D73027"), 
     name = "Warming treatment:"
   ) +
- facet_grid(Layer ~ Zone) +  # Layers as rows (vertical), Zones as columns (horizontal)
+ facet_grid(Layer ~ Zone,   labeller = labeller(Layer = layer.labs)) +  # Layers as rows (vertical), Zones as columns (horizontal)
   theme_JM
 
 
 plot_all_treatment_layer_nmds
 ```
-
-## Step 2e: PcoA Plot
-```{r}
-head(metadata)
-metadata_1 <- metadata
-row.names(metadata_1) <- metadata_1$sample_name
-sam <- sample_data(metadata_1)
-plaply <- phyloseq(otu_table(ps_rare, taxa_are_rows = T), sam)
-pla = ordinate(ps_rare, "PCoA", "bray") 
-pplant = plot_ordination(plaply, pla, type = "Zone",color = "Treatment", shape = "Treatment", axes = 1:2)+
- # scale_color_manual(values = c("#4393c3", "#F6B394", "#cd4e44"))+
-  #scale_shape_manual(values = c(15, 19))+
-  geom_point(size=5)+
-  theme_JM +
-  facet_wrap(~Layer * Zone, ncol = 3) +
-  theme(legend.position = "none",
-        axis.text = element_text(size = 10, face = "bold"),
-        axis.title = element_text(size = 12,face = "bold"))+
-  stat_ellipse(aes(color = Treatment),level=0.65,linetype=2); pplant
-
-pplant
-```
-
-
 # Step 3: Statistics
 ## Step 3a: PERMANOVA bray curtis
 ```{r}
@@ -459,49 +334,6 @@ print(stat_pairwise_bray_layer)
 print(stat_pairwise_bray_treatment)
 ```
 
-## Step 3b: PERMANOVA aitchinson (Supplement figure)
-```{r}
-# Check permutations with permustats
-permustat(adonis2(dist_matrix ~ Zone, data = metadata))
-
-stat_PERM_bray_int <- stat_PERM_bray %>%
-  dist_permanova(
-    seed = 1,
-    variables = c("Zone", "Layer", "Treatment"),
-    interactions = c("Zone*Treatment", "Layer*Treatment", "Zone*Layer"),
-    n_processes = 1, n_perms = 9999
-  )
-
-stat_dist_ait <- ps %>%
-  tax_agg("unique") %>%
-  tax_transform("identity") %>%
-  dist_calc("aitchison")
-
-stat_PERM_ait <- stat_dist_ait %>%
-  dist_permanova(
-    seed = 1,
-    variables = c("Zone", "Layer", "Treatment"),
-    n_processes = 1,
-    n_perms = 9999 
-  )
-
-stat_PERM_ait_int <- stat_dist_ait %>%
-  dist_permanova(
-    seed = 1,
-    variables = c("Zone", "Layer", "Treatment"),
-    interactions = c("Zone*Treatment", "Layer*Treatment", "Zone*Depth"),
-    n_processes = 1, n_perms = 9999
-  )
-
-stat_PERM_bray
-stat_PERM_bray_int
-stat_PERM_ait
-stat_PERM_ait_int
-
-print(stat_PERM_bray)
-print(stat_PERM_ait_int)
-print(stat_PERM_bray_int)
-```
 
 
 # Step 4: Plots
@@ -1673,6 +1505,73 @@ summary(lm(Value ~ meanTemp, data = df_alpha_T))
 
 #### Supplement ####
 
+
+## Step 3b: PERMANOVA
+```{r}
+# Check permutations with permustats
+permustats(adonis2(dist_matrix ~ Zone, data = metadata))
+
+stat_dist_bray <- ps_rare %>%
+  tax_agg("unique") %>%
+  tax_transform("identity") %>%
+  dist_calc("bray")
+
+stat_perm_bray <- stat_dist_bray %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    n_processes = 1,
+    n_perms = 9999 
+  )
+
+stat_perm_bray_int <- stat_dist_bray %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    interactions = c("Zone*Treatment", "Layer*Treatment", "Zone*Layer"),
+    n_processes = 1, n_perms = 9999
+  )
+
+# Print PERMANOVA results 
+print(stat_perm_bray)
+print(stat_perm_bray_int)
+```
+
+# S1: PERMANOVA Ai  tchinson distance
+```{r}
+
+
+stat_dist_ait <- ps %>%
+  tax_agg("unique") %>%
+  tax_transform("identity") %>%
+  dist_calc("aitchison")
+
+stat_PERM_ait <- stat_dist_ait %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    n_processes = 1,
+    n_perms = 9999 
+  )
+
+stat_PERM_ait_int <- stat_dist_ait %>%
+  dist_permanova(
+    seed = 1,
+    variables = c("Zone", "Layer", "Treatment"),
+    interactions = c("Zone*Treatment", "Layer*Treatment", "Zone*Depth"),
+    n_processes = 1, n_perms = 9999
+  )
+
+stat_PERM_bray
+stat_PERM_bray_int
+stat_PERM_ait
+stat_PERM_ait_int
+
+print(stat_PERM_bray)
+print(stat_PERM_ait_int)
+print(stat_PERM_bray_int)
+```
+
 # Step S1: Venn diagramms
 ```{r,message=FALSE, warning=FALSE}
 # Subset ps objects for each Zone
@@ -1699,6 +1598,105 @@ plot_venn_D
 plot_venn_L
 ```
 
+## Step 2b: Create subsets of phyloseq objects
+```{r}
+#ps <- ps %>%
+ # tax_fix() %>%
+  #phyloseq_validate()
+# Create subsets of phyloseq object 
+
+ps_PZ <- ps%>%
+  subset_samples(Zone =="PZ")
+
+ps_PZ_5 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "0-5 cm")
+
+ps_PZ_10 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "5-10 cm")
+
+ps_PZ_20 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "20-30 cm")
+
+ps_PZ_40 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "40-50 cm")
+
+ps_PZ_80 <- ps%>%
+  subset_samples(Zone  == "PZ")%>%
+  subset_samples(Depth == "80-100 cm")
+
+ps_LM <- ps%>%
+  subset_samples(Zone  == "LM")
+
+ps_LM_5 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "0-5 cm")
+
+ps_LM_10 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "5-10 cm")
+
+ps_LM_20 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "20-30 cm")
+
+ps_LM_40 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "40-50 cm")
+
+ps_LM_80 <- ps%>%
+  subset_samples(Zone  == "LM")%>%
+  subset_samples(Depth == "80-100 cm")
+
+ps_HM <- ps%>%
+  subset_samples(Zone =="HM")
+
+ps_HM_5 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "0-5 cm")
+
+ps_HM_10 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "5-10 cm")
+
+ps_HM_20 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "20-30 cm")
+
+ps_HM_40 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "40-50 cm")
+
+ps_HM_80 <- ps%>%
+  subset_samples(Zone  == "HM")%>%
+  subset_samples(Depth == "80-100 cm")
+ 
+#ord_explore(ps_rare)
+
+#  ord_explore(ps_PZ)
+#  ord_explore(ps_PZ_5)
+#  ord_explore(ps_PZ_10)
+#  ord_explore(ps_PZ_20)
+#  ord_explore(ps_PZ_40)
+#  ord_explore(ps_PZ_80)
+  
+#  ord_explore(ps_LM)
+#  ord_explore(ps_LM_5)
+#  ord_explore(ps_LM_10)
+#  ord_explore(ps_LM_20)
+#  ord_explore(ps_LM_40)
+#  ord_explore(ps_LM_80)
+    
+#  ord_explore(ps_HM)
+#  ord_explore(ps_HM_5)
+#  ord_explore(ps_HM_10)
+#  ord_explore(ps_HM_20)
+#  ord_explore(ps_HM_40)
+#  ord_explore(ps_HM_80)
+```
 
 ## Step S2: PCA Plots 
 ```{r}
