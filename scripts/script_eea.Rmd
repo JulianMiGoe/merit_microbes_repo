@@ -234,16 +234,10 @@ ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
 
 # calculate the mean acitivity from the four technical replicates of each plate. The highest and the lowest of the four values are removed.
 df_EEA_merged <- df_EEA_merged %>%
-  group_by(Depth.x, Zone, Treatment, Enzyme, UID, ID.y, Layer) %>%
-#  mutate(rank = rank(Activity_OM, ties.method = "first")) %>%
- # filter(rank %in% c(2, 3)) %>%
+  group_by() %>%
   summarise(n = n(),
-            Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
-            sd = sd(Activity_OM, na.rm = TRUE),
-            se = sd / sqrt(n),
-            ci = qt(0.975, df = n - 1) * sd / sqrt(n),
+            _mean = mean(, na.rm = TRUE),
             .groups = "drop")
-
 
 df_EEA_merged <- df_EEA_merged %>%
   mutate(
@@ -306,6 +300,11 @@ df_EEA_merged <- df_EEA_merged %>%
 Outlier detection following: https://statsandr.com/blog/outliers-detection-in-r/ 
 ```{r}
 # Check data structure of Activity prior to filtering
+
+## Step 2d: Filtering of EEA data
+Outlier detection following: https://statsandr.com/blog/outliers-detection-in-r/ 
+```{r}
+# Check data structure of Activity prior to filtering
 ggplot(df_EEA_merged) +
   aes(x = Activity_OM) +
   geom_histogram(
@@ -355,23 +354,32 @@ ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
   facet_wrap(~Enzyme) +
   theme(legend.position = "none")
 
-# calculate the mean acitivity from the four technical replicates of each plate. The highest and the lowest of the four values are removed.
+# Summarise technical replicates by Blank, Standard, Sub_ctrl, Hom_ctrl, Quench, Assay
+# Alle anderen Spalten, die nicht aggregiert werden, werden mit first() übernommen
 df_EEA_merged <- df_EEA_merged_filtered %>%
-  group_by(Depth.x, Zone, Treatment, Enzyme, UID, ID.y, Layer) %>%
-#  mutate(rank = rank(Activity_OM, ties.method = "first")) %>%
- # filter(rank %in% c(2, 3)) %>%
-  summarise(n = n(),
-            Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
-            sd = sd(Activity_OM, na.rm = TRUE),
-            se = sd / sqrt(n),
-            ci = qt(0.975, df = n - 1) * sd / sqrt(n),
-            .groups = "drop")
-
+  group_by(Blank, Standard, Sub_ctrl, Hom_ctrl, Quench, Assay) %>%
+  summarise(
+    n = n(),
+    Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
+    sd = sd(Activity_OM, na.rm = TRUE),
+    se = sd / sqrt(n),
+    ci = qt(0.975, df = n - 1) * sd / sqrt(n),
+    # alle anderen Spalten übernehmen
+    UID = first(UID),
+    Depth.x = first(Depth.x),
+    Zone = first(Zone),
+    Treatment = first(Treatment),
+    Enzyme = first(Enzyme),
+    ID.y = first(ID.y),
+    Layer = first(Layer),
+    # ggf. weitere Spalten ergänzen, falls benötigt
+    .groups = "drop"
+  )
 
 ggplot(df_EEA_merged) +
-  aes(x = Activity_OM) +
+  aes(x = Activity_OM_mean) +
   geom_histogram(
-    bins = round(sqrt(length(df_EEA_merged_filtered$Activity_OM))),
+    bins = round(sqrt(length(df_EEA_merged$Activity_OM_mean))),
     fill = "steelblue", color = "black"
   ) +
   theme_minimal()
