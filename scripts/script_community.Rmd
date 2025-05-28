@@ -311,7 +311,8 @@ plot_all_treatment_layer_nmds <- ps_rare %>%
   facet_grid(rows = vars(Layer), cols = vars(Zone), labeller = labeller(Layer = layer.labs)) +
   theme_JM +
   theme(strip.text.y.left = element_text(angle = 0, hjust = 0.5, vjust = 0.5, size = 12),
-        strip.placement = "outside")
+        strip.placement = "outside") +
+  labs(subtitle = NULL, caption = NULL)
 
 plot_all_treatment_layer_nmds
 ```
@@ -523,31 +524,7 @@ plot_alpha_nmds_qpcr_bar <- ggarrange(
 plot_alpha_nmds_qpcr_bar
 ```
 
-## Step 5b: Alpha diversity statistics without random effect
-```{r}
-stat_aov_alpha <- aov(Value ~ Zone * Treatment * Layer, data = df_alpha_div_long)
-summary(stat_aov_alpha)
-TukeyHSD(stat_aov_alpha)
-
-# Perform TukeyHSD
-tukey_results <- TukeyHSD(stat_aov_alpha)
-
-# Convert TukeyHSD results to a data frame
-tukey_df <- do.call(rbind, lapply(names(tukey_results), function(x) {
-  data.frame(comparison = x, 
-             pair = rownames(tukey_results[[x]]), 
-             tukey_results[[x]], 
-             stringsAsFactors = FALSE)
-})
-
-# Filter significant comparisons
-significant_comparisons <- tukey_df[tukey_df$`p.adj` < 0.05, ]
-
-# View significant comparisons
-print(significant_comparisons)
-```
-
-## Step 5c: Alpha diversity statistics with random effect Plot
+## Step 5b: Alpha diversity statistics with random effect Plot
 ```{r}
 # Fit the linear mixed-effects model
 stat_model_alpha <- lmer(Value ~ Treatment * Zone * Layer + (1|Plot), data = df_alpha_div_long)
@@ -640,8 +617,8 @@ df_alpha_div_stat <- df_alpha_div_long %>%
   left_join(df_warming_mean, by = "Plot")
 
 # Split the data
-df_top_soil <- df_alpha_div_stat %>% filter(Layer == "Top-soil (0-30 cm)")
-df_bottom_soil <- df_alpha_div_stat %>% filter(Layer == "Bottom-soil (40-100 cm)")
+df_top_soil <- df_alpha_div_stat %>% filter(Layer == "Top-soil\n(0-30 cm)")
+df_bottom_soil <- df_alpha_div_stat %>% filter(Layer == "Bottom-soil\n(40-100 cm)")
 
 # Run models
 stat_model_elevation <- lm(Value ~ elevation_mean, data = df_alpha_div_stat)
@@ -689,7 +666,7 @@ run_models <- function(data, predictor) {
 
 # Run models for each Zone and Layer combination
 zones <- c("PZ", "LM", "HM")
-layers <- c("Top-soil (0-30 cm)", "Bottom-soil (40-100 cm)")
+layers <- c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)")
 predictors <- c("pin_mean", "deep_mean")
 
 results <- list()
@@ -737,8 +714,8 @@ df_alpha_sum <- df_alpha_div_long  %>%
 ```
 
 
-# Step 7: Warming data 
-## Step 7a: Calculate dissimilarities
+# Step 6: Warming data 
+## Step 6a: Calculate dissimilarities
 ```{r}
 # Filter the phyloseq object
 ps_top <- ps_filter(ps_rare, Layer == "Top-soil (0-30 cm)")
@@ -792,7 +769,7 @@ df_bray_curtis_bottom_plots <- df_bray_curtis_bottom_plots %>%
 ```
 
 
-## Step 7b: Calculate delta in temperature
+## Step 6b: Calculate delta in temperature
 ```{r}
 # Generate pairwise combinations of plots and calculate delta values
 df_warming_delta <- combn(unique(df_warming_all_2022_monthly$plotid), 2) %>%
@@ -849,7 +826,7 @@ df_warming_delta_2$plotid1 <- as.factor(df_warming_delta_2$plotid1)
 df_warming_delta_2$plotid2 <- as.factor(df_warming_delta_2$plotid2)
 ```
 
-## Step 7c: Calculate delta in elevation
+## Step 6c: Calculate delta in elevation
 ```{r}
 df_elevation_mean <- df_elevation %>%
   group_by(Plot) %>%
@@ -870,7 +847,7 @@ df_elevation_delta$plotid2 <- as.factor(df_elevation_delta$plotid2)
 ```
 
 
-## Step 7d: Merge delta data with bray curtis data
+## Step 6d: Merge delta data with bray curtis data
 ```{r}
 # Top-soil data 0-30 cm with warming
 df_bray_delta_top <- df_bray_curtis_top_plots %>%
@@ -948,7 +925,7 @@ df_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
   select(-sorted_plotids)
 ```
 
-## Step 7e: Plot dissimilarities & warming + Statistics
+## Step 6e: Plot dissimilarities & warming + Statistics
 ```{r}
 plot_bray_delta_top_surface <- df_bray_delta_top %>%
   filter(zone1 == zone2) %>%
@@ -1025,264 +1002,7 @@ ggarrange(plot_bray_delta_top_pin, plot_bray_delta_bottom_deep,
           ncol = 1, nrow = 2)
 ```
 
-### Step 7ei: PZ Plot dissimilarities & warming + Statistics 
-```{r}
-plot_bray_delta_top_surface_PZ <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "PZ") %>%
-  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Surface")
-
-plot_bray_delta_top_pin_PZ <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "PZ") %>%
-  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Pin")
-
-plot_bray_delta_top_deep_PZ <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "PZ") %>%
-  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Deep")
-
-plot_bray_delta_bottom_surface_PZ <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "PZ") %>%
-  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Surface")
-
-plot_bray_delta_bottom_pin_PZ <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "PZ") %>%
-  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Pin")
-
-plot_bray_delta_bottom_deep_PZ <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "PZ") %>%
-  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Deep")
-
-# Arrange all plots
-ggarrange(plot_bray_delta_top_surface_PZ, plot_bray_delta_top_pin_PZ, plot_bray_delta_top_deep_PZ,
-          plot_bray_delta_bottom_surface_PZ, plot_bray_delta_bottom_pin_PZ, plot_bray_delta_bottom_deep_PZ,
-          ncol = 3, nrow = 2)
-```
-
-
-
-### Step 7eii: LM Plot dissimilarities & warming + Statistics 
-```{r}
-plot_bray_delta_top_surface_LM <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "LM") %>%
-  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Surface")
-
-plot_bray_delta_top_pin_LM <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "LM") %>%
-  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Pin")
-
-plot_bray_delta_top_deep_LM <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "LM") %>%
-  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Deep")
-
-plot_bray_delta_bottom_surface_LM <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "LM") %>%
-  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Surface")
-
-plot_bray_delta_bottom_pin_LM <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "LM") %>%
-  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Pin")
-
-plot_bray_delta_bottom_deep_LM <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "LM") %>%
-  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Deep")
-
-# Arrange all plots
-ggarrange(plot_bray_delta_top_surface_LM, plot_bray_delta_top_pin_LM, plot_bray_delta_top_deep_LM,
-          plot_bray_delta_bottom_surface_LM, plot_bray_delta_bottom_pin_LM, plot_bray_delta_bottom_deep_LM,
-          ncol = 3, nrow = 2)
-```
-
-### Step 7eii: HM Plot dissimilarities & warming + Statistics 
-```{r}
- plot_bray_delta_top_surface_HM <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "HM") %>%
-  filter(!BrayCurtisDissimilarity == 0) %>%
-  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  ylim(0,1) +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Surface")
-
-plot_bray_delta_top_pin_HM <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "HM") %>%
-  filter(!BrayCurtisDissimilarity == 0) %>%
-  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  ylim(0,1) +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Pin")
-
-plot_bray_delta_top_deep_HM <- df_bray_delta_top %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "HM") %>%
-  filter(!BrayCurtisDissimilarity == 0) %>%
-  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  ylim(0,1) +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Top Deep")
-
-plot_bray_delta_bottom_surface_HM <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "HM") %>%
-  filter(!BrayCurtisDissimilarity == 0) %>%
-  ggplot(aes(x = delta_surfaceTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  ylim(0,1) +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Surface")
-
-plot_bray_delta_bottom_pin_HM <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "HM") %>%
-  filter(!BrayCurtisDissimilarity == 0) %>%
-  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  ylim(0,1) +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Pin")
-
-plot_bray_delta_bottom_deep_HM <- df_bray_delta_bottom %>%
-  filter(zone1 == zone2) %>%
-  filter(zone1 == "HM") %>%
-  filter(!BrayCurtisDissimilarity == 0) %>%
-  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
-  geom_point() +
-  ylim(0,1) +
-  geom_smooth(method = "lm") +
-  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
-               label.x = "left", label.y = 0.1,
-               formula = y ~ x, parse = TRUE, coef.digits = 3) +
-  theme_JM +
-  labs(title = "Bottom Deep")
-
-# Arrange all plots
-ggarrange(plot_bray_delta_top_surface_HM, plot_bray_delta_top_pin_HM, plot_bray_delta_top_deep_HM,
-          plot_bray_delta_bottom_surface_HM, plot_bray_delta_bottom_pin_HM, plot_bray_delta_bottom_deep_HM,
-          ncol = 3, nrow = 2)     
-
-```
-
-
-
-## Step 7f: Calculate delta in soil reduction (ri) and plot dissimilarity vs. delta_ri
+## Step 6f: Calculate delta in soil reduction (ri) and plot dissimilarity vs. delta_ri
 ```{r}
 # Calculate mean ri per plot and layer
 # (Assumes df_iris is already loaded and contains columns: plotid, Layer, ri)
@@ -1373,7 +1093,7 @@ if (!is.null(plot_bray_delta_top_ri) & !is.null(plot_bray_delta_bottom_ri)) {
 }
 ```
 
-## Step 7g: Plot dissimilarities & elevation + statistics
+## Step 6g: Plot dissimilarities & elevation + statistics
 ```{r}
 plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
   ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
@@ -1420,7 +1140,7 @@ plot_bray_delta_combined <- ggarrange(
 plot_bray_delta_combined
 ```
 
-## Step 7h: Regression analysis
+# Step 7: Regression analysis
 ```{r}
 # Create dataframe with top and bottom soil and Dissimilarities
 df_bray_delta_T <- df_bray_delta_top %>%

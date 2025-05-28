@@ -760,6 +760,12 @@ pairs(stat_C_treatment_layer_emm)
 stat_N_treatment_layer_emm <- emmeans(stat_model_N, ~ Treatment | Layer)
 pairs(stat_N_treatment_layer_emm)
 
+## For Treatment:Zone:Layer interaction
+stat_C_treatment_layer_zone_emm <- emmeans(stat_model_C, ~ Treatment | Layer | Zone)
+pairs(stat_C_treatment_layer_zone_emm)
+stat_N_treatment_layer_zone_emm <- emmeans(stat_model_N, ~ Treatment | Layer | Zone)
+pairs(stat_N_treatment_layer_zone_emm)
+
 # Visualizations
 ## Interaction plot for Zone and Treatment
 ggplot(df_EEA_merged, aes(x = Zone, y = Activity_OM, color = Treatment)) +
@@ -782,11 +788,20 @@ df_EEA_final <- df_EEA_final %>%
   ungroup() %>%
   mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
 
+# Regressions with warming
 summary(lm(Activity_C ~ meanTemp, data = df_EEA_final))
-
 summary(lm(Activity_N ~ meanTemp, data = df_EEA_final))
-
 summary(lm(Alpha_diversity ~ meanTemp, data = df_summary))
+
+# Regressions with elevation
+summary(lm(Activity_C ~ Elevation_mean, data = df_EEA_final))
+summary(lm(Activity_N ~ Elevation_mean, data = df_EEA_final))
+summary(lm(Alpha_diversity ~ Elevation_mean, data = df_summary))
+
+# Regressions with reduction index
+summary(lm(Activity_C ~ ri, data = df_EEA_final))
+summary(lm(Activity_N ~ ri, data = df_EEA_final))
+summary(lm(Alpha_diversity ~ ri, data = df_summary))
 ```
 
 ## Step 5c: EEAs (Regressions elevation data) 

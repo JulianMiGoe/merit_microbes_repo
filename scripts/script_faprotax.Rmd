@@ -301,9 +301,67 @@ if (nrow(df_merged_filtered_degradation) > 0) {
       labs(y = "Abundance", x = "Treatment")
   plot_degradation_bar
 }
+
+# Einfacher Barplot für gewünschte Degradationsfunktionen
+# (mittlere Abundanz pro Funktion und Treatment)
+df_bar_degradation <- df_merged_filtered_degradation %>%
+  group_by(Functional, Treatment) %>%
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop")
+
+ggplot(df_bar_degradation, aes(x = Functional, y = mean_abundance, fill = Treatment)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
+  scale_fill_manual(values = c("Ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027")) +
+  labs(x = "Degradationsfunktion", y = "Mittlere Abundanz", fill = "Treatment") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Optional: Facettierung nach Zone (auskommentieren, falls gewünscht)
+# df_bar_degradation_zone <- df_merged_filtered_degradation %>%
+#   group_by(Functional, Treatment, Zone) %>%
+#   summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop")
+#
+# ggplot(df_bar_degradation_zone, aes(x = Functional, y = mean_abundance, fill = Treatment)) +
+#   geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
+#   facet_wrap(~ Zone) +
+#   scale_fill_manual(values = c("Ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027")) +
+#   labs(x = "Degradationsfunktion", y = "Mittlere Abundanz", fill = "Treatment") +
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)
 ```
 
-## Step 2c: Warming data & Functional groups
+## Step 2c: Barplot for hydrocarbon_degradation with error bars and statistical letters
+```{r}
+# Barplot für hydrocarbon_degradation mit Fehlerbalken und statistischen Buchstaben
+library(emmeans)
+library(multcompView)
+
+# Daten für hydrocarbon_degradation filtern
+df_hydro <- df_merged_filtered_degradation %>%
+  filter(Functional == "hydrocarbon_degradation")
+
+# ANOVA und emmeans für statistische Buchstaben
+if (nrow(df_hydro) >= 3) {
+  mod_hydro <- aov(abundance ~ Treatment * Zone, data = df_hydro)
+  em_hydro <- emmeans(mod_hydro, ~ Treatment * Zone)
+  cld_hydro <- multcomp::cld(em_hydro, Letters = letters)
+  # y-Position für Buchstaben berechnen
+  sumdat_hydro <- df_hydro %>%
+    group_by(Treatment, Zone) %>%
+    summarise(ypos = max(abundance, na.rm = TRUE) + max(0.1, 0.1 * abs(max(abundance, na.rm = TRUE))), .groups = "drop")
+  cld_hydro <- dplyr::left_join(cld_hydro, sumdat_hydro, by = c("Treatment", "Zone"))
+
+  # Barplot mit Fehlerbalken und Buchstaben
+  ggplot(df_hydro, aes(x = Treatment, y = abundance, fill = Treatment)) +
+    stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9), alpha = 0.9, width = 0.7) +
+    stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.25, color = "black") +
+    scale_fill_manual(values = c("Ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+    facet_wrap(~ Zone + Layer) +
+    theme_JM +
+    labs(y = "Abundance", x = "Warming treatment")
+}
+```
+
+## Step 2d: Warming data & Functional groups
 ```{r}
 # Calculate mean abundance for each combination
 df_functional_all <- df_merged_filtered_all %>%
