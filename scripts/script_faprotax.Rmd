@@ -102,10 +102,10 @@ desired_functions_degradation <- c(
   "chitinolysis",
   "ligninolysis",
   "hydrocarbon_degradation",
-  "fermentation"
-#  "aliphatic_non_methane_hydrocarbon_degradation",
-#  "aromatic_hydrocarbon_degradation",
-#  "aromatic_compound_degradation"
+ # "fermentation",
+  "aliphatic_non_methane_hydrocarbon_degradation",
+  "aromatic_hydrocarbon_degradation",
+  "aromatic_compound_degradation"
 )
 
 desired_functions_all <- c(
@@ -172,6 +172,8 @@ df_heatmap_all <- df_merged_filtered_all %>%
 # Create the heatmap with zones side by side and shared y-axis
 # Define the custom color palette
 custom_palette <- c("#e0ecf4", "#8c96c6", "#810f7c")
+custom_palette <- c("#d73027", "#ffffbf", "#4575b4")
+
 
 # Modify plot_heatmap_functional_redox
 plot_heatmap_functional_redox <- ggplot(df_heatmap_redox, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
@@ -212,8 +214,7 @@ plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Tr
     panel.spacing = unit(0.1, "lines"),
     axis.title.y = element_text(margin = margin(r = 10))
   ) +
-  labs(x = "Treatment", y = "Functional Group", 
-       title = "Functional Group Abundance Across Zones and Treatments (Degradation)")
+  labs(x = "Treatment", y = "Functional Group")
 
 # Modify plot_heatmap_functional_all
 plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
@@ -335,7 +336,7 @@ ggplot(df_bar_degradation, aes(x = Functional, y = mean_abundance, fill = Treatm
 library(emmeans)
 library(multcompView)
 
-# Daten für hydrocarbon_degradation filtern
+# Hydrocarbon degradation summary
 df_hydro <- df_merged_filtered_degradation %>%
   filter(Functional == "hydrocarbon_degradation")
 

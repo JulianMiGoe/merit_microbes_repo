@@ -6,7 +6,8 @@ output: html_document
 ---
 
 # Versionlog
-## Version 1.0: Implementing old scripts (27.01.2025)
+## Version 1.0: Implementing old scripts - 27.01.2025 | JM
+## Version 1.1: Streamlined script - 02.06.2025 | JM
 
 
 # Step 1: Prepare R session
@@ -36,10 +37,8 @@ library(here)
 setwd("./")
 
 df_eub  <- read.delim(here("data", "qpcr", "df_copies_EUB.txt"), dec=".", sep="\t")
-df_dsrb <- read.delim(here("data", "qpcr", "df_copies_dsrB.txt"), dec=".", sep="\t")
-df_mcra <- read.delim(here("data", "qpcr", "df_copies_mcrA.txt"), dec=".", sep="\t")
-df_pmoa <- read.delim(here("data", "qpcr", "df_copies_pmoA.txt"), dec=".", sep="\t")
 ```
+
 ## Step 1d: Define plot theme
 ```{r message=FALSE, warning=FALSE}
 # Creates a theme for all plots in this study 
@@ -59,163 +58,66 @@ theme_JM <- theme(
 )
 ```
 
-
-## Step 1e: Combine and prepare dataframe
+## Step 1e: Prepare dataframe
 ```{r}
-# Combine the dataframes
-df_qpcr <- df_eub %>%
-  full_join(df_dsrb, by = "ID") %>%
-  full_join(df_mcra, by = "ID") %>%
-  full_join(df_pmoa, by = "ID")
-
-# Select the first 7 columns from df_eub and the 13th column (log10_copies) from each merged dataframe
-df_qpcr <- df_qpcr %>%
-  select(1:7, 
-    "log10_copies_eub" = "log10_copies.x",  # From df_eub 
-    "log10_copies_dsrb" = "log10_copies.y", # From df_dsrb
-    "log10_copies_mcra" = "log10_copies.x.x", # From df_mcra
-    "log10_copies_pmoa" = "log10_copies.y.y"    # From df_pmoa
-  )
-
-df_qpcr <- df_qpcr %>%
-  rename_with(~ gsub("\\.x$", "", .), .cols = 1:6)
-
 # Correctly format all factors
-df_qpcr$Depth <- recode_factor(df_qpcr$Depth, "0-10" = "0-10 cm", "20-30" = "20-30 cm")  
-df_qpcr$Treatment <- as.factor(df_qpcr$Treatment)
-df_qpcr$Zone <- as.factor(df_qpcr$Zone)
-df_qpcr$Treatment <- recode_factor(df_qpcr$Treatment, "ambient" = "ambient", "1.5C" = "+1.5°C", "3.0C" = "+3.0°C")
-df_qpcr$Zone <- factor(df_qpcr$Zone, levels = c("PZ", "LM", "HM"))
-
-#df_qpcr_ctr <- df_qpcr %>%
-#  filter(!Subplot == "non-veg") %>%
-#  filter(Depth == "0-10 cm")
-
-#df_qpcr <- df_qpcr_ctr
+df_eub$Depth <- recode_factor(df_eub$Depth, "0-10" = "0-10 cm", "20-30" = "20-30 cm")  
+df_eub$Treatment <- as.factor(df_eub$Treatment)
+df_eub$Zone <- as.factor(df_eub$Zone)
+df_eub$Treatment <- recode_factor(df_eub$Treatment, "ambient" = "ambient", "1.5C" = "+1.5°C", "3.0C" = "+3.0°C")
+df_eub$Zone <- factor(df_eub$Zone, levels = c("PZ", "LM", "HM"))
 ```
 
 # Step 2: Plots
-## Step 2a: Bar- and pointplot
+## Step 2a: Barplot for EUB abundances
 ```{r}
-# Function to create plot with gene label
-create_gene_plot <- function(data, y_var, gene_label) {
-  ggplot(data, aes(x = Zone, y = !!sym(y_var), fill = Treatment, color = Treatment)) +
-    stat_summary(fun = mean, geom = "point", position = position_dodge(width = 0.9), alpha = 0.9, size = 3) +
-    stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), 
-                 width = 0.25, color = "black") +
-    scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    labs(fill = "Treatment", y = paste(gene_label, "log 10 copies"), x = "Zone") +
-    theme_JM +
-    coord_cartesian(ylim = c(5, 7)) +
-    theme(legend.position = "none")
-}
-
-create_gene_barplot <- function(data, y_var, gene_label) {
-  ggplot(data, aes(x = Zone, y = !!sym(y_var), fill = Treatment)) +
-    stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9), alpha = 0.9, width = 0.7) +
-    stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), 
-                 width = 0.25, color = "black") +
-    scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    labs(fill = "Treatment", y = paste(gene_label, "log 10 copies"), x = "Zone") +
-    theme_JM + 
-    coord_cartesian(ylim = c(9.2, 10)) +
-    theme(legend.position = "top")
-}
-
-# Create individual plots
-plot_qpcr_point_eub <- create_gene_plot(df_qpcr, "log10_copies_eub", "eub")
-plot_qpcr_point_dsrb <- create_gene_plot(df_qpcr, "log10_copies_dsrb", "dsrb")
-plot_qpcr_point_mcra <- create_gene_plot(df_qpcr, "log10_copies_mcra", "mcra")
-plot_qpcr_point_pmoa <- create_gene_plot(df_qpcr, "log10_copies_pmoa", "pmoa")
-
-# Combine plots
-plot_qpcr_point_all <- ggarrange(plot_qpcr_point_eub, plot_qpcr_point_dsrb, 
-                           plot_qpcr_point_mcra, plot_qpcr_point_pmoa,
-                           common.legend = TRUE, legend = "bottom")
-
-# Create individual barplots
-plot_qpcr_bar_eub <- create_gene_barplot(df_qpcr, "log10_copies_eub", "eub")
-plot_qpcr_bar_dsrb <- create_gene_barplot(df_qpcr, "log10_copies_dsrb", "dsrb")
-plot_qpcr_bar_mcra <- create_gene_barplot(df_qpcr, "log10_copies_mcra", "mcra")
-plot_qpcr_bar_pmoa <- create_gene_barplot(df_qpcr, "log10_copies_pmoa", "pmoa")
-
-# Combine barplots
-plot_qpcr_bar_all <- ggarrange(plot_qpcr_bar_eub, plot_qpcr_bar_dsrb, 
-                              plot_qpcr_bar_mcra, plot_qpcr_bar_pmoa,
-                              common.legend = TRUE, legend = "bottom")
-
-plot_panel_qpcr <- ggarrange(
-  plot_qpcr_bar_eub,                       # First plot
-  NULL,                                    # Empty space for the second row
-  ggarrange(
-    plot_qpcr_point_dsrb, 
-    plot_qpcr_point_mcra, 
-    plot_qpcr_point_pmoa, 
-    ncol = 3                               # Three plots in the third row
-  ),
-  nrow = 3,                                # Total rows
-  heights = c(1, 0.1, 1)                   # Adjust heights for rows (optional)
-)
-
-plot_panel_qpcr
-plot_qpcr_point_all
-plot_qpcr_bar_all
-
-plot_qpcr_bar_eub <- plot_qpcr_bar_eub + 
-  ylab("log10 abundance 16S rRNA\n[copies/g OM]")
+ggplot(df_eub, aes(x = Zone, y = log10_copies, fill = Treatment)) +
+  stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9), alpha = 0.9, width = 0.7) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.25, color = "black") +
+  scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+  labs(fill = "Treatment", y = "log10 abundance 16S rRNA [copies/g OM]", x = "Zone") +
+  theme_JM
 ```
 
 # Step 3: Statistics
-## Step 3a: ANOVA on qPCRs
+## Step 3a: ANOVA on EUB
 ```{r}
-# Create core_id (if not already done)
-df_qpcr <- df_qpcr %>%
-  mutate(core_id = paste0(Plot, Subplot))
+# Remove the root-barrier samples from the dataframe.
+df_eub <- df_eub %>% 
+  mutate(core_id = paste0(Plot, Subplot)) %>%
+  filter(Subplot == "ctr")
 
-# Function to run analysis for each gene
-run_gene_analysis <- function(gene_name) {
-  formula <- as.formula(paste(gene_name, "~ Treatment * Zone + (1|core_id)"))
-  
-  # Model
-  model <- lmer(formula, data = df_qpcr)
-  
-  # ANOVA
-  anova_result <- Anova(model, type = 3)
-  
-  # Estimated marginal means
-  emm <- emmeans(model, ~ Treatment | Zone)
-  
-  # Pairwise comparisons
-  pairs <- pairs(emm)
-  
-  list(model = model, anova = anova_result, emm = emm, pairs = pairs)
-}
+stat_model_eub <- lmer(log10_copies ~ Treatment * Zone + (1|core_id), data = df_eub)
+stat_res_eub <- Anova(stat_model_eub, type = 3)
+stat_emm_eub <- emmeans(stat_model_eub, ~ Treatment | Zone)
+stat_pairs_eub <- pairs(stat_emm_eub)
 
-# Run analysis for each gene
-genes <- c("log10_copies_eub", "log10_copies_dsrb", "log10_copies_pmoa", "log10_copies_mcra")
-results <- lapply(genes, run_gene_analysis)
-
-# Print results
-for (i in seq_along(genes)) {
-  cat("\n\nResults for", genes[i], ":\n")
-  cat("\nANOVA:\n")
-  print(results[[i]]$anova)
-  cat("\nPairwise Comparisons:\n")
-  print(results[[i]]$pairs)
-}
-
+cat("\nANOVA EUB:\n")
+print(stat_res_eub)
+cat("\nPairwise Comparisons:\n")
+print(stat_pairs_eub)
 ```
 
-# Step 4: Summarise dataframes
+# Step 4: Summarise dataframe
 ```{r}
-df_qpcr$plotid <- as.factor(df_qpcr$Plot)
+df_eub_summary <- df_eub %>%
+  group_by(Zone, Treatment) %>%
+  summarise(
+    mean_abundance = mean(log10_copies, na.rm = TRUE),
+    se_abundance = sd(log10_copies, na.rm = TRUE)/sqrt(n()),
+    n = n(),
+    .groups = "drop"
+  )
+df_eub_summary <- df_eub_summary %>%
+  mutate(mean_se = paste0(round(mean_abundance, 2), " ± ", round(se_abundance, 2), " (n=", n, ")"))
+print(df_eub_summary)
 
-df_qpcr_sum  <- df_qpcr  %>%
- # rename("plotid" = "Plot") %>%
+df_qpcr_sum  <- df_eub  %>%
+  mutate(plotid = as.factor(Plot)) %>%
   group_by(plotid) %>%
-  summarise("Abundance" = mean(log10_copies_eub, na.rm=TRUE)) %>%
+  summarise("Abundance" = mean(log10_copies, na.rm=TRUE)) %>%
   ungroup()
+print(df_qpcr_sum)
 ```
 
 # References

@@ -4,9 +4,9 @@ author: "Julian Mittmann-Goetsch"
 date: "2025-04-24"
 output: html_document
 ---
-#Version log 
+#Versionlog 
 ## Version 1.0: basic outline of the script - 24.04.2025 | JM
-
+## Version 1.1: Streamlined script - 02.06.2025 | JM
 
 #Step 1: Prepare R Session
 ##Step 1a: Install packages
@@ -50,7 +50,6 @@ theme_JM <- theme(
 df_OM_19 <- read.delim(here("data", "om", "df_OM_MERIT_2019.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2019 @Hao Tang
 df_OM_21 <- read.delim(here("data", "om", "df_OM_MERIT_2021.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2021 @JulianMiGoe, @Lea Rebentisch
 df_OM_22 <- read.delim(here("data", "om", "df_OM_MERIT_2022.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2021 @JulianMiGoe
-df_OM_24 <- read.delim(here("data", "om", "df_OM_MERIT_2024.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2024 @JulianMiGoe, @annaschrdr
 ```
 
 ##Step 1e: Transform data
@@ -70,15 +69,10 @@ df_OM_22 <- df_OM_22 %>%
   mutate_at(c(2:4), as.factor)%>%
   mutate_at(c(5), as.numeric)
 
-df_OM_24 <- df_OM_24 %>% 
-  select(Year, Zone, Treatment, Depth, OM, Conductivity, pH) %>%
-  mutate_at(c(2:4), as.factor)
-
 df_OM_merged <- bind_rows(
   df_OM_19 %>% mutate(Year = 2019),
   df_OM_21 %>% mutate(Year = 2021),
-  df_OM_22 %>% mutate(Year = 2022),
-  df_OM_24 %>% mutate(Year = 2024)
+  df_OM_22 %>% mutate(Year = 2022)
 )
 
 df_OM_merged$Treatment <- recode_factor(df_OM_merged$Treatment, "ambient" = "ambient", "+1.5C" = "+1.5°C", "+3.0C" = "+3.0°C")
@@ -91,7 +85,6 @@ df_OM_merged$Zone <- recode_factor(df_OM_merged$Zone, "PZ" = "PZ", "LM" = "LM", 
 ```{r}
 Plot_OM_yearly_top <- df_OM_merged %>%
   filter(Depth %in% c("5", "10", "15", "20", "25")) %>%
-  filter(!Year == "2024") %>%
   ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
   stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
@@ -103,7 +96,6 @@ Plot_OM_yearly_top <- df_OM_merged %>%
 
 Plot_OM_yearly_bottom <- df_OM_merged %>%
   filter(Depth %in% c("30", "40", "50", "55", "60", "80")) %>%
-  filter(!Year == "2024") %>%
   ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
   stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
@@ -123,7 +115,7 @@ Plot_OM_yearly_bottom
 # Add Depth_ID as random factor or use Plot for accounting for the Plots not just the cores being non-independent
 
 # Fit the linear mixed-effects model
-stat_model_OM <- lmer(OM ~ Zone * Treatment * Year + (1|Depth), data = df_OM_merged %>% filter(Depth %in% c("5", "10", "15", "20", "25")) %>% filter(!Year == "2024"))
+stat_model_OM <- lmer(OM ~ Zone * Treatment * Year + (1|Depth), data = df_OM_merged %>% filter(Depth %in% c("5", "10", "15", "20", "25"))) 
  
 # Main effects
 anova(stat_model_OM)

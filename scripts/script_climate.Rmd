@@ -7,6 +7,7 @@ output: html_document
 
 # Versionlog
 ## Version 1.0: Basic script with data loading - 17.04.2025 | JM
+## Version 1.1: Streamlined script - 02.06.2025 | JM
 
 # Step 1: Prepare R Session
 ## Step 1a: Install all necessary packages
@@ -95,7 +96,6 @@ plot_climate_08 <- df_climate_08 %>%
   theme(axis.title.y.right = element_text(color = "steelblue"),
         axis.text.y.right = element_text(color = "steelblue"))
 ```
-
 
 # References
 ```{r}
