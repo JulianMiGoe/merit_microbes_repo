@@ -340,7 +340,7 @@ print(stat_pairwise_bray_layer)
 print(stat_pairwise_bray_treatment)
 ```
 
-# Step 4: Plots
+# Step 4: Taxonomic analysis
 ## Step 4a: Plot Barplot
 ```{r}
 # New ps object based on rarefied data
@@ -387,7 +387,7 @@ plot_stacked_bar <- ggplot(df_abundance_data, aes(x = Treatment, y = Abundance, 
   scale_y_continuous(breaks = seq(0, 15, by = 7.5), 
                      labels = seq(0, 100, by = 50)) +
   facet_wrap(~ Zone) +
-  theme(legend.position = "right")
+  theme(legend.position = "bottom")
 
 plot_stacked_bar_plot <- ggplot(df_abundance_data_plot, aes(x = Plot, y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", position = "stack") +
@@ -402,6 +402,9 @@ plot_stacked_bar_plot <- ggplot(df_abundance_data_plot, aes(x = Plot, y = Abunda
 # All Plots
 plot_stacked_bar
 plot_stacked_bar_plot
+
+# Add FAPROTAX plot
+ggarrange(plot_stacked_bar, plot_heatmap_functional_degradation,   labels = c("A", "B"), ncol = 2)
 ```
 
 ## Step 4b: Statistics for Top 10 Phyla
@@ -956,7 +959,7 @@ plot_bray_delta_top_pin <- df_bray_delta_top %>%
   ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
   geom_point() +
   theme_JM + 
-  xlab("Delta monthly T at 205 cm depth [°C]") +
+  xlab("Delta monthly T at 25 cm depth [°C]") +
   ylab("Dissimilarity") +
   ggtitle("Top-soil (0-30 cm)")
 

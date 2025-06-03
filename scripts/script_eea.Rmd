@@ -750,7 +750,6 @@ df_summary_bottom <- df_summary %>%
 df_summary_all <- df_summary %>%
   select(Layer, "EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
   ungroup()
-
 ```
 
 

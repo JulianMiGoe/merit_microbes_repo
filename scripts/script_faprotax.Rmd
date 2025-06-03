@@ -172,7 +172,7 @@ df_heatmap_all <- df_merged_filtered_all %>%
 # Create the heatmap with zones side by side and shared y-axis
 # Define the custom color palette
 custom_palette <- c("#e0ecf4", "#8c96c6", "#810f7c")
-custom_palette <- c("#d0d1e6", "#a6bddb", "#023858")
+custom_palette_2 <- c("#d0d1e6", "#a6bddb", "#023858")
 
 
 # Modify plot_heatmap_functional_redox
@@ -201,45 +201,50 @@ plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Tr
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(name = "Mean Abundance", 
-                       colors = custom_palette,
+                       colors = custom_palette_2,
                        values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
                                                   median(df_heatmap_degradation$mean_abundance),
                                                   max(df_heatmap_degradation$mean_abundance)))) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.text.y = element_text(size = 6),
+    axis.text.y = element_text(size = 10),
     strip.background = element_rect(fill = "lightgrey"),
     strip.text = element_text(face = "bold"),
+    legend.position = "bottom",
     panel.spacing = unit(0.1, "lines"),
     axis.title.y = element_text(margin = margin(r = 10))
   ) +
-  labs(x = "Treatment", y = "Functional Group")
+  labs(x = "Treatment", y = "Functional Group") +
+  scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
 
 # Modify plot_heatmap_functional_all
 plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(name = "Mean Abundance", 
-                       colors = custom_palette,
+                       colors = custom_palette_2,
                        values = scales::rescale(c(min(df_heatmap_all$mean_abundance),
                                                   median(df_heatmap_all$mean_abundance),
                                                   max(df_heatmap_all$mean_abundance)))) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.text.y = element_text(size = 6),
+    axis.text.y = element_text(size = 10),
     strip.background = element_rect(fill = "lightgrey"),
     strip.text = element_text(face = "bold"),
     panel.spacing = unit(0.1, "lines"),
     axis.title.y = element_text(margin = margin(r = 10))
   ) +
-  labs(x = "Treatment", y = "Functional Group")
+  labs(x = "Treatment", y = "Functional Group") +
+  scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
 
 
 # Display the plots
 plot_heatmap_functional_redox
 plot_heatmap_functional_degradation
 plot_heatmap_functional_all
+
 ```
+
 
