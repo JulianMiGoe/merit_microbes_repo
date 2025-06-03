@@ -6,8 +6,8 @@ output: html_document
 ---
 
 # Versionlog
-## Version 1.0: basic function to load data from raw files (08.06.2024)
-## Version 1.1: EEA data processing routine (11.02.2025)
+## Version 1.0: basic function to load data from raw files - 08.06.2024 | JM
+## Version 1.1: EEA data processing routine - 11.02.2025 | JM 
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
@@ -664,8 +664,6 @@ plot_CN_ratio_warming_pin_deep <- ggarrange(
 
 plot_CN_ratio_warming_pin_deep
 
-
-
 plot_CN_reg <- ggarrange(
   plot_CN,
   plot_CN_ratio_warming_pin_deep,
@@ -675,12 +673,89 @@ plot_CN_reg <- ggarrange(
   font.label = list(size = 16, face = "bold") # optional styling
 )
 
+plot_CN_bar <- ggarrange(
+  plot_CN,
+  ncol = 1,
+  heights = c(1, 1.2),
+  labels = c("A", "B"),
+  font.label = list(size = 16, face = "bold") # optional styling
+)
+
+# All plots
+plot_CN_ratio_warming_pin_deep
 plot_CN_reg
+plot_CN_bar
 ```
 
 
-# Step 4: Statistics
-## Step 4a: EEAs (factorial)
+
+# Step 4: Summarise dataframes
+```{r}
+#df_eea_c_sum  <- df_EEA_merged  %>%
+#  filter(Enzyme == "GLU") %>%##
+#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%
+#  summarise("EEA C" = mean(Activity_OM_mean, na.rm=TRUE)) %>%
+#  ungroup()
+
+#df_eea_n_sum  <- df_EEA_merged  %>%
+#  filter(Enzyme %in% c("CHI", "LEU")) %>%
+#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%
+#  summarise("EEA N" = mean(Activity_OM_mean, na.rm=TRUE)) %>%
+#  ungroup()
+
+#df_elevation_sum  <- df_elevation  %>%
+  #rename("Plot" = "plotid") %>%
+ # group_by(plotid) %>%
+  #summarise("Elevation" = mean(Elevation, na.rm=TRUE)) %>%
+ # ungroup()
+
+#df_iris_sum_2 <- df_iris_sum  %>%
+ # group_by(plotid) %>%
+ # summarise("Reduction index"= mean(ri, na.rm=TRUE)) %>%
+ # ungroup()
+
+#summarise warming data script_warming_data_2022
+df_warming_sum <- df_warming_all_2022_monthly %>%
+  group_by(plotid) %>%
+  summarise("Soil temperature" = mean(pinTemp_mean, na.rm=TRUE)) %>%
+  ungroup()
+
+# summarise alpha diversity (done in "script_community") Step 5e)
+# summarise Abundance (done in "script_qpcr_2023") Step 4)
+
+#df_eea_c_sum <- df_eea_c_sum %>% mutate(plotid = as.character(plotid))
+#df_eea_n_sum <- df_eea_n_sum %>% mutate(plotid = as.character(plotid))
+#df_elevation_sum <- df_elevation_sum %>% mutate(plotid = as.character(plotid))
+#df_iris_sum_2 <- df_iris_sum_2 %>% mutate(plotid = as.character(plotid))
+df_warming_sum <- df_warming_sum %>% mutate(plotid = as.character(plotid))
+df_qpcr_sum <- df_qpcr_sum %>% mutate(plotid = as.character(plotid))
+df_alpha_sum <- df_alpha_sum %>% mutate(plotid = as.character(plotid))
+df_EEA_final <- df_EEA_final %>% mutate(plotid = as.character(plotid))
+
+df_summary <- df_EEA_final %>%
+  left_join(df_alpha_sum, by = c("plotid", "Layer")) %>%
+  inner_join(df_qpcr_sum, by = "plotid") %>%
+  inner_join(df_warming_sum, by = "plotid")
+
+df_summary_top <- df_summary %>%
+  filter(Layer == "Top-soil\n(0-30 cm)") %>%
+  select("EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
+  ungroup()
+
+df_summary_bottom <- df_summary %>%
+  filter(Layer == "Bottom-soil\n(40-100 cm)") %>%
+  select("EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
+  ungroup()
+
+df_summary_all <- df_summary %>%
+  select(Layer, "EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
+  ungroup()
+
+```
+
+
+# Step 5: Statistics
+## Step 5a: EEAs (factorial)
 ```{r}
 # Add core_id as random factor or use Plot for accounting for the Plots not just the cores being non-independent
 df_EEA_merged <- df_EEA_merged %>%
@@ -788,6 +863,10 @@ df_EEA_final <- df_EEA_final %>%
   ungroup() %>%
   mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
 
+df_summary <- df_summary %>%
+  ungroup() %>%
+  mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
+
 # Regressions with warming
 summary(lm(Activity_C ~ meanTemp, data = df_EEA_final))
 summary(lm(Activity_N ~ meanTemp, data = df_EEA_final))
@@ -858,71 +937,7 @@ print(stats_eea_n_bottom)
 print(summary(stat_model_eea_n_bottom_elevation))
 ```
 
-# Step 6: Summarise dataframes
-```{r}
-#df_eea_c_sum  <- df_EEA_merged  %>%
-#  filter(Enzyme == "GLU") %>%##
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%
-#  summarise("EEA C" = mean(Activity_OM_mean, na.rm=TRUE)) %>%
-#  ungroup()
-
-#df_eea_n_sum  <- df_EEA_merged  %>%
-#  filter(Enzyme %in% c("CHI", "LEU")) %>%
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%
-#  summarise("EEA N" = mean(Activity_OM_mean, na.rm=TRUE)) %>%
-#  ungroup()
-
-#df_elevation_sum  <- df_elevation  %>%
-  #rename("Plot" = "plotid") %>%
- # group_by(plotid) %>%
-  #summarise("Elevation" = mean(Elevation, na.rm=TRUE)) %>%
- # ungroup()
-
-#df_iris_sum_2 <- df_iris_sum  %>%
- # group_by(plotid) %>%
- # summarise("Reduction index"= mean(ri, na.rm=TRUE)) %>%
- # ungroup()
-
-#summarise warming data script_warming_data_2022
-df_warming_sum <- df_warming_all_2022_monthly %>%
-  group_by(plotid) %>%
-  summarise("Soil temperature" = mean(pinTemp_mean, na.rm=TRUE)) %>%
-  ungroup()
-
-# summarise alpha diversity (done in "script_community") Step 5e)
-# summarise Abundance (done in "script_qpcr_2023") Step 4)
-
-#df_eea_c_sum <- df_eea_c_sum %>% mutate(plotid = as.character(plotid))
-#df_eea_n_sum <- df_eea_n_sum %>% mutate(plotid = as.character(plotid))
-#df_elevation_sum <- df_elevation_sum %>% mutate(plotid = as.character(plotid))
-#df_iris_sum_2 <- df_iris_sum_2 %>% mutate(plotid = as.character(plotid))
-df_warming_sum <- df_warming_sum %>% mutate(plotid = as.character(plotid))
-df_qpcr_sum <- df_qpcr_sum %>% mutate(plotid = as.character(plotid))
-df_alpha_sum <- df_alpha_sum %>% mutate(plotid = as.character(plotid))
-df_EEA_final <- df_EEA_final %>% mutate(plotid = as.character(plotid))
-
-df_summary <- df_EEA_final %>%
-  left_join(df_alpha_sum, by = c("plotid", "Layer")) %>%
-  inner_join(df_qpcr_sum, by = "plotid") %>%
-  inner_join(df_warming_sum, by = "plotid")
-
-df_summary_top <- df_summary %>%
-  filter(Layer == "Top-soil\n(0-30 cm)") %>%
-  select("EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
-  ungroup()
-
-df_summary_bottom <- df_summary %>%
-  filter(Layer == "Bottom-soil\n(40-100 cm)") %>%
-  select("EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
-  ungroup()
-
-df_summary_all <- df_summary %>%
-  select(Layer, "EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
-  ungroup()
-
-```
-
-#Step 7: Correlation Matrix
+#Step 6: Correlation Matrix
 # Following https://cran.r-project.org/web/packages/ggcorrplot/readme/README.html
 ```{r}
 # Retrieve numeric variables and remove plotid
@@ -1031,133 +1046,7 @@ plot_corr_mat_bottom<- ggstatsplot::ggcorrmat(
 ggarrange(plot_corr_mat_top, plot_corr_mat_bottom)
 ```
 
-# Suuplement
-## Step S1: EEAs (correaltion)
-```{r}
-library(ggplot2)
-library(ggpubr)
-
-# ---- Top-soil, C-acquisition ----
-plot_EEA_C_warming_pin <- df_EEA_final %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "left",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0,0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 20 cm depth [°C]")
-
-# ---- Top-soil, N-acquisition ----
-plot_EEA_N_warming_pin <- df_EEA_final %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = Activity_N, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "right",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0, 0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 20 cm depth [°C]")
-
-# ---- Bottom-soil, C-acquisition ----
-plot_EEA_C_warming_deep <- df_EEA_final %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = Activity_C, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "right",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0,0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 75 cm depth [°C]")
-
-# ---- Bottom-soil, N-acquisition ----
-plot_EEA_N_warming_deep <- df_EEA_final %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = Activity_N, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_cor(
-      method = "pearson",
-      aes(label = paste(..r.label.., ..p.label.., sep = "~")),
-      label.x.npc = "right",
-      label.y.npc = 0.9,
-      size = 5
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0, 0),
-      limits = c(0, 3000),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM +
-    labs(x = "Monthly T at 75 cm depth [°C]")
-
-# ---- Arrange all plots ----
-plot_CN_warming_pin_deep_cor <- ggarrange(
-  plot_EEA_C_warming_pin,
-  plot_EEA_N_warming_pin,
-  plot_EEA_C_warming_deep,
-  plot_EEA_N_warming_deep,
-  ncol = 2,
-  nrow = 2,
-  common.legend = TRUE,
-  legend = "top",
-  labels = c("A", "C", "B", "D"),
-  font.label = list(size = 16, face = "bold")
-)
-
-plot_CN_warming_pin_deep_cor
-```
-
+# Supplement
 # References
 ```{r}
 #Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.

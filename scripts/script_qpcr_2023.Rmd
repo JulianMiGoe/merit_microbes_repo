@@ -71,12 +71,13 @@ df_eub$Zone <- factor(df_eub$Zone, levels = c("PZ", "LM", "HM"))
 # Step 2: Plots
 ## Step 2a: Barplot for EUB abundances
 ```{r}
-ggplot(df_eub, aes(x = Zone, y = log10_copies, fill = Treatment)) +
+plot_qpcr_bar_eub <- ggplot(df_eub, aes(x = Zone, y = log10_copies, fill = Treatment)) +
   stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9), alpha = 0.9, width = 0.7) +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.25, color = "black") +
   scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
   labs(fill = "Treatment", y = "log10 abundance 16S rRNA [copies/g OM]", x = "Zone") +
-  theme_JM
+  theme_JM +
+  ylim(9, 9.2)
 ```
 
 # Step 3: Statistics
