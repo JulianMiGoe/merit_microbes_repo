@@ -10,8 +10,16 @@ output: html_document
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
-```{r}
-
+```{r, message=FALSE, warning=FALSE}
+#install.packages("tidyverse")
+#install.packages("ggplot2")
+#install.packages("dplyr")
+#install.packages("broom")
+#install.packages("purrr")
+#install.packages("here")
+#install.packages("emmeans")
+#install.packages("multcompView")
+#install.packages("ggh4x")
 ```
 
 ## Step 1b: Load necessary packages
@@ -200,11 +208,15 @@ plot_heatmap_functional_redox <- ggplot(df_heatmap_redox, aes(x = Treatment, y =
 plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
-  scale_fill_gradientn(name = "Mean Abundance", 
-                       colors = custom_palette_2,
-                       values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
-                                                  median(df_heatmap_degradation$mean_abundance),
-                                                  max(df_heatmap_degradation$mean_abundance)))) +
+  scale_fill_gradientn(
+    name = "Mean Abundance",
+    colors = custom_palette_2,
+    values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
+                               median(df_heatmap_degradation$mean_abundance),
+                               max(df_heatmap_degradation$mean_abundance))),
+    breaks = pretty(df_heatmap_degradation$mean_abundance, n = 5),
+    guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
+  ) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -222,11 +234,15 @@ plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Tr
 plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
-  scale_fill_gradientn(name = "Mean Abundance", 
-                       colors = custom_palette_2,
-                       values = scales::rescale(c(min(df_heatmap_all$mean_abundance),
-                                                  median(df_heatmap_all$mean_abundance),
-                                                  max(df_heatmap_all$mean_abundance)))) +
+  scale_fill_gradientn(
+    name = "Mean Abundance",
+    colors = custom_palette_2,
+    values = scales::rescale(c(min(df_heatmap_all$mean_abundance),
+                               median(df_heatmap_all$mean_abundance),
+                               max(df_heatmap_all$mean_abundance))),
+    breaks = pretty(df_heatmap_all$mean_abundance, n = 5),
+    guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
+  ) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -245,6 +261,19 @@ plot_heatmap_functional_redox
 plot_heatmap_functional_degradation
 plot_heatmap_functional_all
 
+```
+
+# References
+```{r}
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
+# broom: Robinson, D., Hayes, A., Couch, S., & González, I. (2024). broom: Convert Statistical Analysis Objects into Tidy Tibbles. R package version 1.0.5. https://CRAN.R-project.org/package=broom
+# purrr: Henry, L. & Wickham, H. (2024). purrr: Functional Programming Tools. R package version 1.0.2. https://CRAN.R-project.org/package=purrr
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# multcompView: Graves, S., Piepho, H.-P., Selzer, L., & Dorai-Raj, S. (2024). multcompView: Visualizations of Paired Comparisons. R package version 0.2-10. https://CRAN.R-project.org/package=multcompView
+# ggh4x: van den Brand, T. (2024). ggh4x: Hacks for 'ggplot2'. R package version 0.2.7. https://CRAN.R-project.org/package=ggh4x
 ```
 
 

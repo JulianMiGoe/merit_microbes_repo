@@ -5,25 +5,26 @@ date: "2025-02-27"
 output: html_document
 ---
 
-#Versionlog 
-## Version 1.0: basic outline of the script - 27.02.2025 | JM
+# Version log 
+## Version 1.0: Basic outline of the script - 27.02.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
 
-#Step 1: Prepare R Session
-##Step 1a: Install packages
-You only need to install the packages with the install.packages() command, when running the script for the first time (of the R Session)
+# Step 1: Prepare R session
+## Step 1a: Install necessary packages
 ```{r}
-#install.packages("ggplot2", repos = "http://cran.us.r-project.org") 
-#install.packages("dplyr")    
+#install.packages("ggplot2")
+#install.packages("dplyr")
 #install.packages("lubridate")
-#install.packages("ggpubr")   
+#install.packages("ggpubr")
 #install.packages("tidyverse")
 #install.packages("lme4")
 #install.packages("car")
 #install.packages("emmeans")
+#install.packages("here")
+#install.packages("performance")
 ```
 
-##Step 1b: Load packages
+## Step 1b: Load packages
 ```{r}
 library(ggplot2)
 library(dplyr)
@@ -34,10 +35,10 @@ library(lme4)
 library(car)
 library(emmeans)
 library(here)
+library(performance)
 ```
 
-
-##Step 1c: Define global plot theme
+## Step 1c: Define global plot theme
 ```{r}
 # Creates a theme for all plots in this study 
 theme_JM <- theme(
@@ -60,7 +61,7 @@ theme_JM <- theme(
 ## Step 2a: Load raw data
 This needs to be set individually. We do load the txt data which includes two campaigns in 2023 which were in the same months as the microbial sampling in 2022.
 ```{r}
-# load iris data
+# Load iris data
 df_iris <- read.delim(here("data", "iris", "df_iris_2023.txt"), dec = ".", sep = "\t")
 ```
 ## Step 2b: Re-order factors
@@ -77,7 +78,6 @@ df_iris <- df_iris %>%
 df_iris$Layer <- factor(df_iris$Layer, levels = c("Top-soil (0-30 cm)", "Bottom-soil (40-80 cm)"))
 ```
 
-
 # Step 3: Plots
 ## Step 3a: Barplot
 ```{r}
@@ -88,8 +88,7 @@ plot_iris_bar <- df_iris %>%
                position = position_dodge(width = 1), show.legend = TRUE) +
   stat_summary(geom = "errorbar", width = 0.5, size = 1, color = "black", 
                position = position_dodge(width = 1)) +
-  #scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-   scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+  scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
   scale_y_continuous(limits = c(0, 1), expand = c(0,0)) +
   labs(color = NULL, y = "Reduction index", x = "Zone") +
   theme_JM +
@@ -170,6 +169,14 @@ df_iris_sum$Plot <- as.character(df_iris_sum$plotid)
 
 # References
 ```{r}
-#ggpubr
-#Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
+# lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
+# car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
+# emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
 ```

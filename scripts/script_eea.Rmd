@@ -12,34 +12,29 @@ output: html_document
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r,  message=FALSE, warning=FALSE}
-#### Load the packages ####
-#install.packages("tidyverse")       # edit data frames (long format)
- #  install.packages("dplyr")
-#install.packages("ggplot2")         # Plot data 
-#install.packages("lubridate")
+#install.packages("here")
+#install.packages("tidyverse")
+#install.packages("ggplot2")
 #install.packages("ggpubr")
+#install.packages("ggpmisc")
 #install.packages("lme4")
 #install.packages("car")
 #install.packages("emmeans")
+#install.packages("lmerTest")
+#install.packages("performance")
+#install.packages("Hmisc")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-# Data wrangling
 library(here)
 library(tidyverse)
- library(dplyr)
- library(tidyr)
-
-# Plots
 library(ggplot2)
 library(ggpubr)
 library(ggpmisc)
-
-# Statistics
 library(lme4)
-library(car)  # For Anova() function
-library(emmeans)  # For post-hoc tests
+library(car)
+library(emmeans)
 library(lmerTest)
 library(performance)
 library(Hmisc)
@@ -63,7 +58,6 @@ theme_JM <- theme(
 )
 ```
 
-
 ## Step 1d: Load rawdata
 ```{r}
 # Load Exo-Enzyme data
@@ -75,7 +69,6 @@ df_elevation <- read.delim(here("data", "elevation", "df_iris_elevation.txt"), d
 # Add UID to metadata file, matching plate names
 df_EEA_metadata$UID <- df_EEA_metadata$Plate
 ```
-
 
 # Step 2: Transform EEA data
 ## Step 2a: Read and transform raw data from platereader
@@ -244,6 +237,12 @@ df_EEA_merged <- df_EEA_merged %>%
 
 # Plot: Sample size per plotid (before filtering)
 df_plotid_counts <- df_EEA_merged %>%
+    across(!where(is.numeric), ~first(.x)),
+    .groups = "drop"
+  )
+
+# Plot: Sample size per plotid (before filtering)
+df_plotid_counts <- df_EEA_merged %>%
   group_by(plotid = as.factor(Plot)) %>%
   summarise(n = n())
 
@@ -344,7 +343,6 @@ df_EEA_merged$Zone <- factor(df_EEA_merged$Zone, levels = c("PZ", "LM", "HM"))
 df_EEA_merged$Plot <- substring(df_EEA_merged$ID.y, 1,3)
 ```
 
-
 ## Step 2d: Calculate C/N aquisition ratio
 ```{r}
 df_glu_data <- df_EEA_merged %>%
@@ -376,7 +374,6 @@ df_C_N_ratio$Zone       <- df_C_N_ratio$Zone.x
 
 df_C_N_ratio
 ```
-
 
 ## Step 2e: Merge EEA data with elevation, warming and iris data
 ```{r}
@@ -687,31 +684,29 @@ plot_CN_reg
 plot_CN_bar
 ```
 
-
-
 # Step 4: Summarise dataframes
 ```{r}
 #df_eea_c_sum  <- df_EEA_merged  %>%
 #  filter(Enzyme == "GLU") %>%##
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%
-#  summarise("EEA C" = mean(Activity_OM_mean, na.rm=TRUE)) %>%
+#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%#
+#  summarise("EEA C" = mean(Activity_OM_mean, na.rm=TRUE)) %>%#
 #  ungroup()
 
-#df_eea_n_sum  <- df_EEA_merged  %>%
-#  filter(Enzyme %in% c("CHI", "LEU")) %>%
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%
-#  summarise("EEA N" = mean(Activity_OM_mean, na.rm=TRUE)) %>%
+#df_eea_n_sum  <- df_EEA_merged  %>%#
+#  filter(Enzyme %in% c("CHI", "LEU")) %>%#
+#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%#
+#  summarise("EEA N" = mean(Activity_OM_mean, na.rm=TRUE)) %>%#
 #  ungroup()
 
-#df_elevation_sum  <- df_elevation  %>%
-  #rename("Plot" = "plotid") %>%
- # group_by(plotid) %>%
-  #summarise("Elevation" = mean(Elevation, na.rm=TRUE)) %>%
+#df_elevation_sum  <- df_elevation  %>%#
+  #rename("Plot" = "plotid") %>%#
+ # group_by(plotid) %>%#
+  #summarise("Elevation" = mean(Elevation, na.rm=TRUE)) %>%#
  # ungroup()
 
-#df_iris_sum_2 <- df_iris_sum  %>%
- # group_by(plotid) %>%
- # summarise("Reduction index"= mean(ri, na.rm=TRUE)) %>%
+#df_iris_sum_2 <- df_iris_sum  %>%#
+ # group_by(plotid) %>%#
+ # summarise("Reduction index"= mean(ri, na.rm=TRUE)) %>%#
  # ungroup()
 
 #summarise warming data script_warming_data_2022
@@ -751,7 +746,6 @@ df_summary_all <- df_summary %>%
   select(Layer, "EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
   ungroup()
 ```
-
 
 # Step 5: Statistics
 ## Step 5a: EEAs (factorial)
@@ -1048,5 +1042,15 @@ ggarrange(plot_corr_mat_top, plot_corr_mat_bottom)
 # Supplement
 # References
 ```{r}
-#Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
+# ggpmisc: Aphalo, P. J. (2024). ggpmisc: Miscellaneous Extensions to 'ggplot2'. R package version 0.5.5. https://CRAN.R-project.org/package=ggpmisc
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
+# car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
+# emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# lmerTest: Kuznetsova, A., Brockhoff, P. B., & Christensen, R. H. B. (2024). lmerTest: Tests in Linear Mixed Effects Models. R package version 3.1-3. https://CRAN.R-project.org/package=lmerTest
+# performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
+# Hmisc: Harrell, F. E. Jr, et al. (2024). Hmisc: Harrell Miscellaneous. R package version 5.1-2. https://CRAN.R-project.org/package=Hmisc
 ```

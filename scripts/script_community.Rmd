@@ -92,11 +92,6 @@ output: pdf_document
 ## Step 1b: Load necessary packages
 ```{r,  message=FALSE, warning=FALSE}
 # Microbial data analysis
-#install.packages("installr")
-#library(installr)
-#options("install.lock"=FALSE) # Fixes an error with LOCK when installing ggside package
-#updateR()
-
 library(microViz)
 library(vegan)
 library(phyloseq)
@@ -110,8 +105,6 @@ options(DT.options = list(
 
 # Data wrangling
 library(tidyverse)
-library(dplyr)
-library(tidyr)
 library(knitr)   
 library(purrr)
 library(ggpubr)
@@ -125,7 +118,6 @@ library(pheatmap)
 
 # General setting & aesthetics
 library(RColorBrewer)
-#library(ggpubr)
 library(ggside)
 
 # Creating Tables
@@ -1202,12 +1194,25 @@ summary(lm(Value ~ meanTemp, data = df_alpha_T))
 
 # References
 ```{r}
-
-#ggpubr
-Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
-
-# pairwise adonis
-Martinez Arbizu, P. (2020). pairwiseAdonis: Pairwise multilevel comparison using adonis. R package version 0.4
-
+# Literatur- und Paketübersicht für Reproduzierbarkeit
+# ggpubr: Kassambara A (2023). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0, https://rpkgs.datanovia.com/ggpubr/.
+# pairwiseAdonis: Martinez Arbizu, P. (2020). pairwiseAdonis: Pairwise multilevel comparison using adonis. R package version 0.4
+# phyloseq: McMurdie, P.J. & Holmes, S. (2013). phyloseq: An R package for reproducible interactive analysis and graphics of microbiome census data. PLoS ONE 8(4): e61217
+# vegan: Oksanen, J. et al. (2022). vegan: Community Ecology Package. R package version 2.6-4. https://CRAN.R-project.org/package=vegan
+# microViz: David Barnett (2023). microViz: Microbiome Data Visualization and Ordination. https://david-barnett.github.io/microViz/
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48. https://doi.org/10.18637/jss.v067.i01
+# emmeans: Lenth, R. (2023). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.8.5. https://CRAN.R-project.org/package=emmeans
+# ggplot2: Wickham, H. (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. https://ggplot2.tidyverse.org
+# DT: Xie, Y. (2023). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.28. https://CRAN.R-project.org/package=DT
+# purrr: Henry, L. & Wickham, H. (2023). purrr: Functional Programming Tools. https://CRAN.R-project.org/package=purrr
+# pheatmap: Kolde, R. (2019). pheatmap: Pretty Heatmaps. https://CRAN.R-project.org/package=pheatmap
+# ANCOMBC: Lin, H. & Peddada, S.D. (2020). ANCOM-BC: Analysis of compositions of microbiomes with bias correction. https://github.com/FrederickHuangLin/ANCOMBC
+# MicEco: Russel, J. (2021). MicEco: Various functions for microbial community data. https://github.com/Russel88/MicEco
+# gt: Iannone, R. (2023). gt: Easily Create Presentation-Ready Display Tables. https://CRAN.R-project.org/package=gt
+# performance: Lüdecke, D. et al. (2021). performance: Assessment of Regression Models Performance. https://CRAN.R-project.org/package=performance
+# ggpmisc: Aphalo, P.J. (2023). ggpmisc: Miscellaneous Extensions to 'ggplot2'. https://CRAN.R-project.org/package=ggpmisc
+# RColorBrewer: Neuwirth, E. (2014). RColorBrewer: ColorBrewer Palettes. https://CRAN.R-project.org/package=RColorBrewer
+# ggside: Lin, H. (2023). ggside: Side Grammar Graphics for 'ggplot2'. https://CRAN.R-project.org/package=ggside
+# dplyr/tidyverse: Wickham, H. et al. (2019). Welcome to the tidyverse. JOSS, 4(43), 1686. https://doi.org/10.21105/joss.01686
 ```
 
