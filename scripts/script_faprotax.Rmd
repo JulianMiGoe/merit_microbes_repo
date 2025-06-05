@@ -43,8 +43,10 @@ df_metadata <-  read.delim(here::here("data", "metadata.txt"), dec = ".", sep= "
 
 ## Step 1d: Modify dataframes
 ```{r}
+df_metadata$Sample_ID <- as.factor(df_metadata$sample_name)
+
 df_metadata <- df_metadata %>%
-  rename("sample_name" = "Sample_ID") %>%
+ # rename("sample_name" = "Sample_ID") %>%
   mutate(Layer = case_when(
     Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
     Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
@@ -171,6 +173,11 @@ df_heatmap_degradation <- df_merged_filtered_degradation %>%
   summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
   ungroup()
 
+df_heatmap_degradation_layer <- df_merged_filtered_degradation %>%
+  group_by(Functional, Zone, Treatment, Layer) %>%
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
+  ungroup()
+
 # Calculate mean abundance for each combination
 df_heatmap_all <- df_merged_filtered_all %>%
   group_by(Functional, Zone, Treatment) %>%
@@ -208,6 +215,32 @@ plot_heatmap_functional_redox <- ggplot(df_heatmap_redox, aes(x = Treatment, y =
 plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
+  scale_fill_gradientn(
+    name = "Mean Abundance",
+    colors = custom_palette_2,
+    values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
+                               median(df_heatmap_degradation$mean_abundance),
+                               max(df_heatmap_degradation$mean_abundance))),
+    breaks = pretty(df_heatmap_degradation$mean_abundance, n = 5),
+    guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 10),
+    strip.background = element_rect(fill = "lightgrey"),
+    strip.text = element_text(face = "bold"),
+    legend.position = "bottom",
+    panel.spacing = unit(0.1, "lines"),
+    axis.title.y = element_text(margin = margin(r = 10))
+  ) +
+  labs(x = "Treatment", y = "Functional Group") +
+  scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
+
+# Modify plot_heatmap_functional_degradation with Layers
+plot_heatmap_functional_degradation_layer <- ggplot(df_heatmap_degradation_layer, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+  geom_tile() +
+  facet_grid(. ~ Zone * Layer, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(
     name = "Mean Abundance",
     colors = custom_palette_2,
