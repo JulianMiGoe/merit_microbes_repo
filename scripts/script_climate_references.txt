@@ -1,6 +1,0 @@
-ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
-lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
-ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
-tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
