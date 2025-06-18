@@ -25,35 +25,7 @@ output: pdf_document
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r,  message=FALSE, warning=FALSE}
-# Clean up: Remove or translate all remaining German comments and text in the script
-# (Below: Only English comments and labels)
-
-# Bug fixes
-#.libPaths("C:/Users/Bat1638/R_packages")
-#options("install.lock"=FALSE)
-#install.packages("xfun", type = "binary")
-#install.packages("stringi")
-#install.packages("ade4")
-#install.packages("data.table")
-#install.packages("e1071")
-#install.packages("tzdb")
-#install.packages("DescTools")
-#install.packages("Hmisc")
-#install.packages("zoo")
-#install.packages("devtools")
-#utils::install.packages("xfun", repos = "https://cran.rstudio.com/")
-#library(xfun)
-#library(stringi)
-#library(ade4)
-#library(data.table)
-#library(Hmisc)
-#library(e1071)
-#library(tzdb)
-#library(DescTools)
-#library(zoo)
-#update.packages()
-
-#### Load the packages ####
+#### Install packages ####
 #install.packages("tidyverse")       # Edit data frames (long format)
 #install.packages("ggplot2")         # Plot data (NDMS)
 #install.packages("tidyr")           # Edit data frames (wide format)
@@ -63,8 +35,8 @@ output: pdf_document
 #install.packages("ggpmisc")
 #install.packages("dplyr")           # Summarize function
 
-#install.packages("RStoolbox")       # NDMS 
-#install.packages("vegan")           # NDMS
+#install.packages("RStoolbox")       # NMDS
+#install.packages("vegan")           # NMDS
 #install.packages("viridis")
 #install.packages("RVAideMemoire")   # PERMANOVA post-hoc test
 #install.packages("xfun")            # Include pdf in knit output
@@ -72,14 +44,12 @@ output: pdf_document
 
 # BiocManager
 #if (!requireNamespace("BiocManager", quietly = TRUE))
-#    install.packages("BiocManager")
+ #   install.packages("BiocManager")
 #BiocManager::install("phyloseq")    # Create phyloseq object from raw-data
 #BiocManager::install("microbiome", force = TRUE)
-#BiocManager::install("ANCOMBC")
 #BiocManager::install(c("phyloseq", "microbiome", "ComplexHeatmap"), update = FALSE)
 #install.packages("biom")
 #install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
-#install.packages("pheatmap")
 #install.packages("shiny")
 #install.packages("microViz", repos = c(davidbarnett = "https://david-barnett.r-universe.dev", getOption("repos")))
 #install.packages("vegdist")
@@ -92,11 +62,9 @@ output: pdf_document
 ## Step 1b: Load necessary packages
 ```{r,  message=FALSE, warning=FALSE}
 # Microbial data analysis
-library(microViz)
+#library(microViz)
 library(vegan)
 library(phyloseq)
-library(MicEco) # Venn diagrams
-library(ANCOMBC)
 library(DT)
 options(DT.options = list(
   initComplete = JS("function(settings, json) {",
@@ -112,10 +80,6 @@ library(ggpubr)
 # Plots
 library(ggplot2)
 
-# DESeq analysis
-library(DESeq2) 
-library(pheatmap)
-
 # General setting & aesthetics
 library(RColorBrewer)
 library(ggside)
@@ -129,14 +93,14 @@ library(performance)
 library(ggpmisc)
 
 # Other currently unsorted
-library(RVAideMemoire)
-library(viridis)
-library(Matrix)
-library(reshape2)
-library(xfun)   
-library(pairwiseAdonis)
-library(microbiome)
-library(shiny)
+#library(RVAideMemoire)
+#library(viridis)
+#library(Matrix)
+#library(reshape2)
+#library(xfun)   
+#library(pairwiseAdonis)
+#library(microbiome)
+#library(shiny)
 ```
 
 ## Step 1c: Load sequencing data
@@ -351,6 +315,14 @@ df_abundance_data <- ps_phylum_rel %>%
   group_by(Sample, Zone, Treatment, Phylum) %>%
   summarise(Abundance = sum(Abundance), .groups = "drop")
 
+# Summarise on Zone / Treatment / Layer 
+df_abundance_data_layer <- ps_phylum_rel %>%
+  psmelt() %>%
+  mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
+  mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
+  group_by(Zone, Treatment, Phylum, Plot, Layer) %>%
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
 # Summarise on Plot level
 df_abundance_data_plot <- ps_phylum_rel %>%
   psmelt() %>%
@@ -368,6 +340,9 @@ df_temporal <- df_abundance_data %>%
 df_abundance_data$Phylum <- factor(df_abundance_data$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
 
 # Set order of Phyla to be descending and including others at the bottom
+df_abundance_data_layer$Phylum <- factor(df_abundance_data_layer$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
+
+# Set order of Phyla to be descending and including others at the bottom
 df_abundance_data_plot$Phylum <- factor(df_abundance_data_plot$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
 
 # Plot
@@ -381,6 +356,16 @@ plot_stacked_bar <- ggplot(df_abundance_data, aes(x = Treatment, y = Abundance, 
   facet_wrap(~ Zone) +
   theme(legend.position = "bottom")
 
+plot_stacked_bar_layer <- ggplot(df_abundance_data_layer, aes(x = Treatment, y = Abundance, fill = Phylum)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = c("#D73027", "#FDAE61", "#ffff99", "#b2df8a", "#33a02c", "#cab2d6", "#1f78b4", "#a6cee3", "black", "grey"))+
+  theme_JM +
+  labs(y = "Relative Abundance [%]") +
+  scale_y_continuous(breaks = seq(0, 5, by = 2.5), 
+                     labels = seq(0, 100, by = 50)) +
+  facet_wrap(~ Layer * Zone, scales = "free_x", nrow =2) +
+  theme(legend.position = "top")
+
 plot_stacked_bar_plot <- ggplot(df_abundance_data_plot, aes(x = Plot, y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", position = "stack") +
   scale_fill_manual(values = c("#D73027", "#FDAE61", "#ffff99", "#b2df8a", "#33a02c", "#cab2d6", "#1f78b4", "#a6cee3", "black", "grey"))+
@@ -393,6 +378,7 @@ plot_stacked_bar_plot <- ggplot(df_abundance_data_plot, aes(x = Plot, y = Abunda
 
 # All Plots
 plot_stacked_bar
+plot_stacked_bar_layer
 plot_stacked_bar_plot
 
 # Add FAPROTAX plot
@@ -492,7 +478,7 @@ plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y
 plot_alpha_div_zone_treatment_layer
 
 # Arranged Plots
-ggarrange(plot_alpha_div_zone_treatment_layer,plot_all_treatment_layer_nmds, ncol = 2)
+ggarrange(plot_alpha_div_zone_treatment_layer, plot_all_treatment_layer_nmds, ncol = 2)
 
 plot_alpha_nmds_qpcr_bar <- ggarrange(
   ggarrange(

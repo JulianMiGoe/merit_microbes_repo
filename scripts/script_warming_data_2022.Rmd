@@ -26,11 +26,7 @@ Here we load all encessary c
   #install.packages("lubridate") # convert time formats
   #install.packages("ggpubr")    # further plots options (visual)
   #install.packages("tidyverse") # data preperation tools
-  #install.packages("plotly")    # interactive plots for regular checks
-  #install.packages("mgcv")      # GAM model
-  #install.packages("rpart")     # regression trees
-  #install.packages("rpart.plot")# improve regression tree plots
-  #install.packages("car)        # ANOVA function for regression trees
+  #install.packages("here")
 ```
 
 ## Step 1b: Load all necessary packages
