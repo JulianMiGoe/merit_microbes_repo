@@ -4,29 +4,30 @@ author: "Julian Mittmann-Goetsch"
 date: "2025-04-24"
 output: html_document
 ---
-#Versionlog 
-## Version 1.0: basic outline of the script - 24.04.2025 | JM
+
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
+## Version 1.0: Basic outline of the script - 24.04.2025 | JM
 
 # Step 1: Prepare R session
 ## Step 1a: Install necessary packages
 ```{r}
-#install.packages("ggplot2")
 #install.packages("dplyr")
-#install.packages("lubridate")
-#install.packages("emmeans")
-#install.packages("performance")
+#install.packages("ggplot2")
 #install.packages("here")
+#install.packages("lme4")
+#install.packages("emmeans")
+#install.packages("lubridate")
+#install.packages("performance")
 ```
 
 ## Step 1b: Load packages
 ```{r}
-library(ggplot2)
 library(dplyr)
-library(lubridate)
+library(emmeans)
+library(ggplot2)
 library(here)
 library(lme4)
-library(emmeans)
+library(lubridate)
 library(performance)
 ```
 
@@ -80,7 +81,12 @@ df_OM_merged <- bind_rows(
 )
 
 df_OM_merged$Treatment <- recode_factor(df_OM_merged$Treatment, "ambient" = "ambient", "+1.5C" = "+1.5°C", "+3.0C" = "+3.0°C")
-df_OM_merged$Zone <- recode_factor(df_OM_merged$Zone, "PZ" = "PZ", "LM" = "LM", "HM" = "HM")
+df_OM_merged$Zone <- dplyr::recode(df_OM_merged$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_OM_merged$Zone <- factor(df_OM_merged$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"))
 ```
 
 # Step 2: Plots
@@ -184,11 +190,11 @@ performance::check_model(stat_model_OM)
 
 # References
 ```{r}
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
-# lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
+# emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
-# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2015). Fitting Linear Mixed-Effects Models Using lme4. J Stat Softw, 67(1), 1-48. https://doi.org/10.18637/jss.v067.i01
-# emmeans: Lenth, R. (2023). emmeans: Estimated Marginal Means, aka Least-Squares Means. https://CRAN.R-project.org/package=emmeans
-# performance: Lüdecke, D., et al. (2021). performance: Assessment of Regression Models Performance. https://CRAN.R-project.org/package=performance
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
+# lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
+# performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
 ```

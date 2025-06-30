@@ -5,32 +5,30 @@ date: "2025-01-27"
 output: html_document
 ---
 
-# Versionlog
-## Version 1.0: Implementing old scripts - 27.01.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
 
 
 # Step 1: Prepare R session
 ## Step 1a: Install necessary packages
 ```{r}
-#install.packages("tidyverse")
-#install.packages("ggplot2")
-#install.packages("ggpubr")
-#install.packages("lme4")
 #install.packages("car")
 #install.packages("emmeans")
+#install.packages("ggplot2")
+#install.packages("ggpubr")
 #install.packages("here")
+#install.packages("lme4")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(tidyverse)
-library(ggplot2)
-library(ggpubr)
-library(lme4)
 library(car)
 library(emmeans)
+library(ggplot2)
+library(ggpubr)
 library(here)
+library(lme4)
+library(tidyverse)
 ```
 
 ## Step 1c: Load sequencing data
@@ -67,7 +65,13 @@ df_eub$Depth <- recode_factor(df_eub$Depth, "0-10" = "0-10 cm", "20-30" = "20-30
 df_eub$Treatment <- as.factor(df_eub$Treatment)
 df_eub$Zone <- as.factor(df_eub$Zone)
 df_eub$Treatment <- recode_factor(df_eub$Treatment, "ambient" = "ambient", "1.5C" = "+1.5°C", "3.0C" = "+3.0°C")
-df_eub$Zone <- factor(df_eub$Zone, levels = c("PZ", "LM", "HM"))
+df_eub$Zone <- dplyr::recode(df_eub$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_eub$Zone <- factor(df_eub$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"),
+                     labels = c("Pioneer zone", "Low marsh", "High marsh"))
 ```
 
 # Step 2: Plots
@@ -125,12 +129,12 @@ print(df_qpcr_sum)
 
 # References
 ```{r}
-# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
-# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```
 

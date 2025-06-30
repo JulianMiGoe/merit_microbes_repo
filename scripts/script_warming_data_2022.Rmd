@@ -4,40 +4,29 @@ author: "Julian Mittmann-Goetsch"
 date: "2025-02-11"
 output: html_document
 ---
----
-title: "script_warming_data"
-author: "Julian Mittmann-Goetsch"
-date: "2025-02-05"
-output: html_document
----
-# Versionlog
-## Version 1.0: Basic script with data loading - 11.02.2025 | JM
+
 ## Version 1.1: Adapted script to match pre-filtered data from SERC - 10.04.2025 | JM
+## Version 1.0: Basic script with data loading - 11.02.2025 | JM
 
 # Step 1: Prepare R Session
 ## Step 1a: Install all necessary packages
-Here we load all encessary c
 ```{r message=FALSE, warning=FALSE}
-# Troubleshooting with LOCK file
-#options("install.lock"=FALSE)  
-# Install all necessary packages
-  #install.packages("ggplot2")   # plot package
-  #install.packages("dplyr")     # quick summarize functions
-  #install.packages("lubridate") # convert time formats
-  #install.packages("ggpubr")    # further plots options (visual)
-  #install.packages("tidyverse") # data preperation tools
-  #install.packages("here")
+#install.packages("dplyr")
+#install.packages("ggplot2")
+#install.packages("ggpubr")
+#install.packages("here")
+#install.packages("lubridate")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load all necessary packages
 ```{r}
-# Load all necessary packages  
-library(ggplot2)
 library(dplyr)
-library(lubridate)
+library(ggplot2)
 library(ggpubr)
-library(tidyverse)
 library(here)
+library(lubridate)
+library(tidyverse)
 ```
 
 ## Step 1c: Set global plot theme
@@ -89,7 +78,13 @@ plot_warming_2022
 # Step 3: Summarise 
 ## Step 3a: Summarise warming data
 ```{r}
-df_warming_2022_1_filtered$zone <- recode_factor(df_warming_2022_1_filtered$zone,"PIO" = "PZ", "LM" = "LM", "HM" = "HM")
+df_warming_2022_1_filtered$zone <- dplyr::recode(df_warming_2022_1_filtered$zone,
+  "PIO" = "Pioneer zone",
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_warming_2022_1_filtered$zone <- factor(df_warming_2022_1_filtered$zone, levels = c("Pioneer zone", "Low marsh", "High marsh"))
 df_warming_2022_1_filtered$treatment <- recode_factor(df_warming_2022_1_filtered$treatment,"amb" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
 
 # Filter data for the month of August
@@ -126,14 +121,11 @@ write.csv(df_warming_all_2022_yearly, "./df_warming_all_2022_yearly.csv")
 
 # References
 ```{r}
-# dplyr
-# Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2023). dplyr: A Grammar of Data Manipulation. R Package Version 1.1.4 Computer Software. https://doi.org/10.32614/CRAN.package.dplyr
-
-# here
-#Müller, K., & Bryan, J. (2020). here: A Simpler Way to Find Your Files. R Package Version 1.0.1 Computer Software. https://doi.org/10.32614/CRAN.package.here
-
-# lubridate
-# Spinu, V., Grolemund, G., Wickham, H., Vaughan, D., Lyttle, I., Costigan, I., Law, J., Mitarotonda, D., Larmarange, J., Bosier, J., & Lee, C. H. (2024). lubridate: Make Dealing with Dates a Little Easier. R Package Version 1.9.3 Computer Software, https://cran.r-project.org/web/packages/lubridate/.
-
+# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```
 

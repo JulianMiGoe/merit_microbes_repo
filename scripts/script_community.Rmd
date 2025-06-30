@@ -4,22 +4,15 @@ author: "Julian Mittmann-Goetsch"
 date: "2023-11-24"
 output: pdf_document
 ---
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{title.jpg}
-\end{figure}
-\pagebreak
 
-
-# Versionlog
-## Version 1.0: Display DNA and RNA concentrations (24.11.2023)
-## Version 1.1: Include jpg. images of Gels and TapeStation (27.11.2023)
-## Version 1.2: Included cDNA concentrations and decision plot for re-extraction (14.12.2023)
-## Version 1.3: RNA data analysis (01.02.2024)
-## Version 1.4: NMDS plots, stacked bar charts (14.02.2024)
-## Version 1.5: Tax4Fun2 included, changes to script style (25.07.2024)
-## Version 1.6: Compositional analysis via clr transformation (19.11.2024)
-## Version 1.7: DESeq2 Analysis of RNA data (18.01.2025)
+## Version 1.7: DESeq2 Analysis of RNA data - 18.01.2025 | JM
+## Version 1.6: Compositional analysis via clr transformation - 19.11.2024 | JM
+## Version 1.5: Tax4Fun2 included, changes to script style - 25.07.2024 | JM
+## Version 1.4: NMDS plots, stacked bar charts - 14.02.2024 | JM
+## Version 1.3: RNA data analysis - 01.02.2024 | JM
+## Version 1.2: Included cDNA concentrations and decision plot for re-extraction - 14.12.2023 | JM
+## Version 1.1: Include jpg. images of Gels and TapeStation - 27.11.2023 | JM
+## Version 1.0: Display DNA and RNA concentrations - 24.11.2023 | JM
 
 \
 # Step 1: Prepare session and load data
@@ -139,8 +132,8 @@ sample_data_df <- as(sample_data(ps), "data.frame")
 # Add a new column 'layer' based on the 'Depth' column
 sample_data_df <- sample_data_df %>%
   mutate(Layer = case_when(
-    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
-    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Subsoil (40-100 cm)",
     TRUE ~ NA_character_  # For unexpected values
   ))
 
@@ -148,10 +141,15 @@ sample_data_df <- sample_data_df %>%
 sample_data(ps) <- sample_data(sample_data_df)
 
 # Reorder Factors
-ps@sam_data[["Zone"]] <- factor(ps@sam_data[["Zone"]], levels = c("PZ","LM","HM"))
+ps@sam_data[["Zone"]] <- dplyr::recode(ps@sam_data[["Zone"]],
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+ps@sam_data[["Zone"]] <- factor(ps@sam_data[["Zone"]], levels = c("Pioneer zone","Low marsh","High marsh"))
 ps@sam_data[["Treatment"]] <- recode_factor(ps@sam_data[["Treatment"]],  "0" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
 ps@sam_data[["Depth"]]  <- factor(ps@sam_data[["Depth"]],levels=c("0-5 cm", "5-10 cm", "20-30 cm",  "40-50 cm", "80-100 cm" ))
-ps@sam_data[["Layer"]]  <- factor(ps@sam_data[["Layer"]],levels=c("Top-soil (0-30 cm)","Bottom-soil (40-100 cm)"))
+ps@sam_data[["Layer"]]  <- factor(ps@sam_data[["Layer"]],levels=c("Topsoil (0-30 cm)","Subsoil (40-100 cm)"))
 
 #plot_bar(ps, fill = "Family")
 
@@ -170,11 +168,10 @@ ps_rare <- subset_samples(ps_rare, !(sample_names(ps) %in% samples_to_remove))
 # Add a new column 'layer' based on the 'Depth' column
 sample_data_rare <- as(sample_data(ps_rare), "data.frame")
 
-# Add a new column 'layer' based on the 'Depth' column
 sample_data_rare <- sample_data_rare %>%
   mutate(Layer = case_when(
-    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
-    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Subsoil (40-100 cm)",
     TRUE ~ NA_character_  # For unexpected values
   ))
 
@@ -182,10 +179,15 @@ sample_data_rare <- sample_data_rare %>%
 sample_data(ps_rare) <- sample_data(sample_data_rare)
 
 # Reorder Factors
-ps_rare@sam_data[["Zone"]] <- factor(ps_rare@sam_data[["Zone"]], levels = c("PZ","LM","HM"))
+ps_rare@sam_data[["Zone"]] <- dplyr::recode(ps_rare@sam_data[["Zone"]],
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+ps_rare@sam_data[["Zone"]] <- factor(ps_rare@sam_data[["Zone"]], levels = c("Pioneer zone","Low marsh","High marsh"))
 ps_rare@sam_data[["Treatment"]] <- recode_factor(ps_rare@sam_data[["Treatment"]],  "0" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
 ps_rare@sam_data[["Depth"]]  <- factor(ps_rare@sam_data[["Depth"]],levels=c("0-5 cm", "5-10 cm", "20-30 cm",  "40-50 cm", "80-100 cm" ))
-ps_rare@sam_data[["Layer"]]  <- factor(ps_rare@sam_data[["Layer"]],levels=c("Top-soil (0-30 cm)","Bottom-soil (40-100 cm)"))
+ps_rare@sam_data[["Layer"]]  <- factor(ps_rare@sam_data[["Layer"]],levels=c("Topsoil (0-30 cm)","Subsoil (40-100 cm)"))
 
 # Save RDS
 #saveRDS(ps_rare, "./ps_rarefied.rds")
@@ -197,8 +199,8 @@ ps_rare@sam_data[["Layer"]]  <- factor(ps_rare@sam_data[["Layer"]],levels=c("Top
 # All analysis performed here are done on the filtered and rarefied data
 #ord_explore(ps_rare)
 layer.labs <- c(
-  "Top-soil (0-30 cm)" = "Top-soil\n(0-30 cm)",
-  "Bottom-soil (40-100 cm)" = "Bottom-soil\n(40-100 cm)"
+  "Topsoil (0-30 cm)" = "Topsoil\n(0-30 cm)",
+  "Subsoil (40-100 cm)" = "Subsoil\n(40-100 cm)"
 )
 
 plot_all_treatment_layer_nmds <- ps_rare %>%
@@ -280,7 +282,7 @@ df_abundance_data_layer <- ps_phylum_rel %>%
   mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
   mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
   group_by(Zone, Treatment, Phylum, Plot, Layer) %>%
-  summarise(Abundance = sum(Abundance), .groups = "drop")
+  summarise(Abundance = sum(Abundance), .groups = "drop"
 
 # Summarise on Plot level
 df_abundance_data_plot <- ps_phylum_rel %>%
@@ -288,7 +290,7 @@ df_abundance_data_plot <- ps_phylum_rel %>%
   mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
   mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
   group_by(Zone, Treatment, Phylum, Plot) %>%
-  summarise(Abundance = sum(Abundance), .groups = "drop")
+  summarise(Abundance = sum(Abundance), .groups = "drop"
 
 # See share of groups
 df_temporal <- df_abundance_data %>%
@@ -409,19 +411,24 @@ df_alpha_div <- df_alpha_div %>%
 df_alpha_div_long <- df_alpha_div %>%
   pivot_longer(cols = c("Shannon"), names_to = "Metric", values_to = "Value") %>%
     mutate(Layer = case_when(
-    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil\n(0-30 cm)",
-    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil\n(40-100 cm)",
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil\n(0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Subsoil\n(40-100 cm)",
     TRUE ~ NA_character_  # For unexpected values
   ))
 
 df_alpha_div_long$Treatment <- recode_factor(df_alpha_div_long$Treatment ,  "0" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
 
 # Reorder factors for streamlined plotting
-df_alpha_div_long$Zone <- factor(df_alpha_div_long$Zone, levels = c("PZ", "LM", "HM"))
+df_alpha_div_long$Zone <- dplyr::recode(df_alpha_div_long$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_alpha_div_long$Zone <- factor(df_alpha_div_long$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"))
 df_alpha_div_long$Treatment <- recode_factor(df_alpha_div_long$Treatment, "ambient" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
-df_alpha_div_long$Layer <- factor(df_alpha_div_long$Layer, levels = c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)"))
+df_alpha_div_long$Layer <- factor(df_alpha_div_long$Layer, levels = c("Topsoil\n(0-30 cm)", "Subsoil\n(40-100 cm)"))
 
-# Plot with depth layers
+# Plot mit neuen Levels
 plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y = Value, fill = Treatment)) +
   geom_boxplot(alpha = 0.7, outlier.shape = NA, position = position_dodge(width = 0.8), width = 0.6) +  
   geom_jitter(position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.8), 
@@ -570,8 +577,9 @@ df_alpha_div_stat <- df_alpha_div_long %>%
   left_join(df_warming_mean, by = "Plot")
 
 # Split the data
-df_top_soil <- df_alpha_div_stat %>% filter(Layer == "Top-soil\n(0-30 cm)")
-df_bottom_soil <- df_alpha_div_stat %>% filter(Layer == "Bottom-soil\n(40-100 cm)")
+
+df_top_soil <- df_alpha_div_stat %>% filter(Layer == "Topsoil\n(0-30 cm)")
+df_bottom_soil <- df_alpha_div_stat %>% filter(Layer == "Subsoil\n(40-100 cm)")
 
 # Run models
 stat_model_elevation <- lm(Value ~ elevation_mean, data = df_alpha_div_stat)
@@ -657,7 +665,7 @@ print(summary(model_deep_interaction))
 ```
 
 
-## Step 5e: Summarise alpha diversity dataframe
+# Step 5e: Summarise alpha diversity dataframe
 ```{r}
 # Summarise alpha diversity dataframe
 df_alpha_sum <- df_alpha_div_long  %>%
@@ -670,16 +678,14 @@ df_alpha_sum <- df_alpha_div_long  %>%
 # Step 6: Warming data 
 ## Step 6a: Calculate dissimilarities
 ```{r}
-# Filter the phyloseq object
-ps_top <- ps_filter(ps_rare, Layer == "Top-soil (0-30 cm)")
-ps_bottom <- ps_filter(ps_rare, Layer == "Bottom-soil (40-100 cm)")
-
-#ps_top <- ps_filter(ps, Layer == "Top-soil (0-30 cm)")
-#ps_bottom <- ps_filter(ps, Layer == "Bottom-soil (40-100 cm)")
+# Filter the phyloseq object for Topsoil
+ps_top <- subset_samples(ps_rare, Layer == "Topsoil (0-30 cm)")
+# Filter the phyloseq object for Subsoil
+ps_sub <- subset_samples(ps_rare, Layer == "Subsoil (40-100 cm)")
 
 # Calculate Bray-Curtis distances on the filtered object
 stat_bray_curtis_dist_top <- phyloseq::distance(ps_top, method = "bray")
-stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_bottom, method = "bray")
+stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_sub, method = "bray")
 
 # Calculate Aitchinson distance on clr transformed data 
 #### NOTE currently bray curtis is overwritten by Aitchinson

@@ -5,39 +5,38 @@ date: "2024-08-06"
 output: html_document
 ---
 
-# Versionlog
-## Version 1.0: basic function to load data from raw files - 08.06.2024 | JM
-## Version 1.1: EEA data processing routine - 11.02.2025 | JM 
+## Version 1.1: EEA data processing routine - 11.02.2025 | JM
+## Version 1.0: Basic function to load data from raw files - 08.06.2024 | JM
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
-```{r,  message=FALSE, warning=FALSE}
-#install.packages("here")
-#install.packages("tidyverse")
-#install.packages("ggplot2")
-#install.packages("ggpubr")
-#install.packages("ggpmisc")
-#install.packages("lme4")
+```{r, message=FALSE, warning=FALSE}
 #install.packages("car")
 #install.packages("emmeans")
+#install.packages("ggplot2")
+#install.packages("ggpmisc")
+#install.packages("ggpubr")
+#install.packages("here")
+#install.packages("Hmisc")
+#install.packages("lme4")
 #install.packages("lmerTest")
 #install.packages("performance")
-#install.packages("Hmisc")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(here)
-library(tidyverse)
-library(ggplot2)
-library(ggpubr)
-library(ggpmisc)
-library(lme4)
 library(car)
 library(emmeans)
+library(ggplot2)
+library(ggpmisc)
+library(ggpubr)
+library(here)
+library(Hmisc)
+library(lme4)
 library(lmerTest)
 library(performance)
-library(Hmisc)
+library(tidyverse)
 ```
 
 ## Step 1d: Define plot theme
@@ -304,8 +303,8 @@ df_EEA_merged <- df_EEA_merged %>%
 # Add Layer as depth factor
 df_EEA_merged <- df_EEA_merged %>%
   mutate(Layer = case_when(
-    Depth.x %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil\n(0-30 cm)",
-    Depth.x %in% c("40-50 cm", "60-80 cm", "80-100 cm") ~ "Bottom-soil\n(40-100 cm)",
+    Depth.x %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil\n(0-30 cm)",
+    Depth.x %in% c("40-50 cm", "60-80 cm", "80-100 cm") ~ "Subsoil\n(40-100 cm)",
     TRUE ~ NA_character_  # For unexpected values
   ))
 
@@ -337,9 +336,10 @@ ggplot(df_EEA_merged_filtered) +
 # Rewrite filtered data
 df_EEA_merged <- df_EEA_merged_filtered 
 
-df_EEA_merged$Layer <- factor(df_EEA_merged$Layer, levels = c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)"))
+df_EEA_merged$Layer <- factor(df_EEA_merged$Layer, levels = c("Topsoil\n(0-30 cm)", "Subsoil\n(40-100 cm)"))
 df_EEA_merged$Treatment  <- factor(df_EEA_merged$Treatment, levels = c("ambient", "+1.5°C", "+3.0°C"))
-df_EEA_merged$Zone <- factor(df_EEA_merged$Zone, levels = c("PZ", "LM", "HM"))
+df_EEA_merged$Zone <- factor(df_EEA_merged$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"),
+                            labels = c("Pioneer zone", "Low marsh", "High marsh"))
 df_EEA_merged$Plot <- substring(df_EEA_merged$ID.y, 1,3)
 ```
 
@@ -427,7 +427,7 @@ df_EEA_final$CN_ratio <- (df_EEA_final$GLU / (df_EEA_final$CHI + df_EEA_final$LE
 # Step 3: Plots
 ## Step 3a: EEAs (factorial)
 ```{r}
-# Plot C-Acquisition
+# Plot C acquisition
 plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
   filter(Enzyme == "GLU") %>%
   ggplot(aes(x = Treatment, y = Activity_OM, fill = Treatment)) +
@@ -436,7 +436,7 @@ plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
     stat_summary(fun.data = mean_se, geom = "errorbar",
                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
+    scale_y_continuous(name = expression(paste("C acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
@@ -444,6 +444,7 @@ plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
           axis.text.x = element_blank(),
           panel.spacing = unit(1, "lines"))  # Increase spacing between facets
 
+# Plot N acquisition
 plot_EEA_mean_layer_CHI_LEU <- df_EEA_merged %>%
   filter(!Enzyme == "GLU") %>%
   ggplot(aes(x = Treatment, y = Activity_OM, fill = Treatment)) +
@@ -452,7 +453,7 @@ plot_EEA_mean_layer_CHI_LEU <- df_EEA_merged %>%
     stat_summary(fun.data = mean_se, geom = "errorbar",
                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
+    scale_y_continuous(name = expression(paste("N acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
@@ -475,9 +476,9 @@ plot_CN
 
 ## Step 3b: EEAs (regressions)
 ```{r}
+# Regression-Plot: Anpassung der Farben und Legenden
 plot_EEA_C_warming_pin <- df_EEA_final %>%
-  #filter(Enzyme == "GLU") %>%
-  filter(grepl("Top-soil", Layer)) %>%
+  filter(grepl("Topsoil", Layer)) %>%
   ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
     geom_point() +
     geom_smooth(method = "lm") +
@@ -486,9 +487,9 @@ plot_EEA_C_warming_pin <- df_EEA_final %>%
                  parse = TRUE, 
                  label.x.npc = "right",
                  label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
+    scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
     scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
+      name = expression(paste("C acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
       expand = c(0,0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)) +
@@ -497,7 +498,7 @@ plot_EEA_C_warming_pin <- df_EEA_final %>%
 
 plot_EEA_N_warming_pin <- df_EEA_final %>%
  # filter(Enzyme %in% c("CHI", "LEU")) %>%
-  filter(grepl("Top-soil", Layer)) %>%
+  filter(grepl("Topsoil", Layer)) %>%
   ggplot(aes(x = pinTemp_mean, y = Activity_N, color = Zone)) +
     geom_point() +
     geom_smooth(method = "lm") +
@@ -509,11 +510,11 @@ plot_EEA_N_warming_pin <- df_EEA_final %>%
       label.y.npc = 0.9       # Vertical position of the label
     ) +
     scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
+      values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"),
       name = "Zone:"
     ) +
     scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      name = expression(paste("N acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
       expand = c(0, 0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)
@@ -523,7 +524,7 @@ plot_EEA_N_warming_pin <- df_EEA_final %>%
 
 plot_EEA_C_warming_deep <- df_EEA_final %>%
 #  filter(Enzyme == "GLU") %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
+  filter(grepl("Subsoil", Layer)) %>%
   ggplot(aes(x = deepTemp_mean, y = Activity_C, color = Zone)) +
     geom_point() +
     geom_smooth(method = "lm") +
@@ -532,9 +533,9 @@ plot_EEA_C_warming_deep <- df_EEA_final %>%
                  parse = TRUE, 
                  label.x.npc = "right",
                  label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
+    scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
     scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
+      name = expression(paste("C acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
       expand = c(0,0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)) +
@@ -543,7 +544,7 @@ plot_EEA_C_warming_deep <- df_EEA_final %>%
 
 plot_EEA_N_warming_deep <- df_EEA_final %>%
  # filter(Enzyme %in% c("CHI", "LEU")) %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
+  filter(grepl("Subsoil", Layer)) %>%
   ggplot(aes(x = deepTemp_mean, y = Activity_N, color = Zone)) +
     geom_point() +
     geom_smooth(method = "lm") +
@@ -555,11 +556,11 @@ plot_EEA_N_warming_deep <- df_EEA_final %>%
       label.y.npc = 0.9       # Vertical position of the label
     ) +
     scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
+      values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"),
       name = "Zone:"
     ) +
     scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      name = expression(paste("N acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
       expand = c(0, 0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)
@@ -608,7 +609,7 @@ plot_EEA_ratio
 ## Step 3d: EEA-ratio (regression)
 ```{r}
 plot_EEA_CN_warming_pin <- df_EEA_final %>%
-  filter(grepl("Top-soil", Layer)) %>%
+  filter(grepl("Topsoil", Layer)) %>%
   ggplot(aes(x = pinTemp_mean, y = CN_ratio, color = Zone)) +
     geom_point() +
     geom_smooth(method = "lm") +
@@ -617,7 +618,7 @@ plot_EEA_CN_warming_pin <- df_EEA_final %>%
                  parse = TRUE, 
                  label.x.npc = "right",
                  label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
+    scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
     scale_y_continuous(
       name = expression(paste("C/N-acquisition ratio")), 
       expand = c(0,0),
@@ -627,7 +628,7 @@ plot_EEA_CN_warming_pin <- df_EEA_final %>%
     labs(x = "Monthly T at 20 cm depth [°C]") 
 
 plot_EEA_CN_warming_deep <- df_EEA_final %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
+  filter(grepl("Subsoil", Layer)) %>%
   ggplot(aes(x = deepTemp_mean, y = CN_ratio, color = Zone)) +
     geom_point() +
     geom_smooth(method = "lm", aes(color = Zone)) +
@@ -636,7 +637,7 @@ plot_EEA_CN_warming_deep <- df_EEA_final %>%
                  parse = TRUE, 
                  label.x.npc = "right",
                  label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
+    scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
     scale_y_continuous(
       name = expression(paste("C/N-acquisition ratio")), 
       expand = c(0,0),
@@ -658,8 +659,6 @@ plot_CN_ratio_warming_pin_deep <- ggarrange(
   labels = c("C", "D"), 
   font.label = list(size = 16, face = "bold") 
 )
-
-plot_CN_ratio_warming_pin_deep
 
 plot_CN_reg <- ggarrange(
   plot_CN,
@@ -1042,15 +1041,15 @@ ggarrange(plot_corr_mat_top, plot_corr_mat_bottom)
 # Supplement
 # References
 ```{r}
-# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
-# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
-# ggpmisc: Aphalo, P. J. (2024). ggpmisc: Miscellaneous Extensions to 'ggplot2'. R package version 0.5.5. https://CRAN.R-project.org/package=ggpmisc
-# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpmisc: Aphalo, P. J. (2024). ggpmisc: Miscellaneous Extensions to 'ggplot2'. R package version 0.5.5. https://CRAN.R-project.org/package=ggpmisc
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# Hmisc: Harrell, F. E. Jr, et al. (2024). Hmisc: Harrell Miscellaneous. R package version 5.1-2. https://CRAN.R-project.org/package=Hmisc
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # lmerTest: Kuznetsova, A., Brockhoff, P. B., & Christensen, R. H. B. (2024). lmerTest: Tests in Linear Mixed Effects Models. R package version 3.1-3. https://CRAN.R-project.org/package=lmerTest
 # performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
-# Hmisc: Harrell, F. E. Jr, et al. (2024). Hmisc: Harrell Miscellaneous. R package version 5.1-2. https://CRAN.R-project.org/package=Hmisc
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```

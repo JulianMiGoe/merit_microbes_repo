@@ -5,34 +5,33 @@ date: "2025-01-31"
 output: html_document
 ---
 
-# Versionlog
-## Version 1.0: Basic script using FAPROTAX output table (31.01.2025)
+## Version 1.0: Basic script using FAPROTAX output table - 31.01.2025 | JM
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
-#install.packages("tidyverse")
-#install.packages("ggplot2")
-#install.packages("dplyr")
 #install.packages("broom")
-#install.packages("purrr")
-#install.packages("here")
+#install.packages("dplyr")
 #install.packages("emmeans")
-#install.packages("multcompView")
+#install.packages("ggplot2")
 #install.packages("ggh4x")
+#install.packages("here")
+#install.packages("multcompView")
+#install.packages("purrr")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(tidyverse)
-library(ggplot2)
-library(dplyr)
 library(broom)
-library(purrr)
-library(here)
+library(dplyr)
 library(emmeans)
-library(multcompView)
+library(ggplot2)
 library(ggh4x)
+library(here)
+library(multcompView)
+library(purrr)
+library(tidyverse)
 ```
 
 ## Step 1c: Load sequencing data
@@ -48,12 +47,19 @@ df_metadata$Sample_ID <- as.factor(df_metadata$sample_name)
 df_metadata <- df_metadata %>%
  # rename("sample_name" = "Sample_ID") %>%
   mutate(Layer = case_when(
-    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
-    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Subsoil (40-100 cm)",
     TRUE ~ NA_character_  # For unexpected values
   ))
 df_metadata <- df_metadata %>%
   mutate_at(c(5:9), as.factor)
+
+df_metadata$Zone <- dplyr::recode(df_metadata$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_metadata$Zone <- factor(df_metadata$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"))
 ```
 
 ```{r}
@@ -75,11 +81,9 @@ df_merged <- df_merged %>%
     Treatment == "3" ~ "+3.0°C",
     TRUE ~ Treatment
   )) %>%
-  mutate(Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C")))
-
-# Reorder Zone factor
-df_merged <- df_merged %>%
-  mutate(Zone = factor(Zone, levels = c("PZ", "LM", "HM")))
+  mutate(Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C"))) %>%
+  mutate(Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"),
+                      labels = c("Pioneer zone", "Low marsh", "High marsh")))
 ```
 
 
@@ -298,15 +302,15 @@ plot_heatmap_functional_all
 
 # References
 ```{r}
-# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
 # broom: Robinson, D., Hayes, A., Couch, S., & González, I. (2024). broom: Convert Statistical Analysis Objects into Tidy Tibbles. R package version 1.0.5. https://CRAN.R-project.org/package=broom
-# purrr: Henry, L. & Wickham, H. (2024). purrr: Functional Programming Tools. R package version 1.0.2. https://CRAN.R-project.org/package=purrr
-# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
-# multcompView: Graves, S., Piepho, H.-P., Selzer, L., & Dorai-Raj, S. (2024). multcompView: Visualizations of Paired Comparisons. R package version 0.2-10. https://CRAN.R-project.org/package=multcompView
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # ggh4x: van den Brand, T. (2024). ggh4x: Hacks for 'ggplot2'. R package version 0.2.7. https://CRAN.R-project.org/package=ggh4x
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# multcompView: Graves, S., Piepho, H.-P., Selzer, L., & Dorai-Raj, S. (2024). multcompView: Visualizations of Paired Comparisons. R package version 0.2-10. https://CRAN.R-project.org/package=multcompView
+# purrr: Henry, L. & Wickham, H. (2024). purrr: Functional Programming Tools. R package version 1.0.2. https://CRAN.R-project.org/package=purrr
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```
 
 

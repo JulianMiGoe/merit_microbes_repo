@@ -5,37 +5,36 @@ date: "2025-02-27"
 output: html_document
 ---
 
-# Version log 
-## Version 1.0: Basic outline of the script - 27.02.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
+## Version 1.0: Basic outline of the script - 27.02.2025 | JM
 
 # Step 1: Prepare R session
 ## Step 1a: Install necessary packages
 ```{r}
-#install.packages("ggplot2")
-#install.packages("dplyr")
-#install.packages("lubridate")
-#install.packages("ggpubr")
-#install.packages("tidyverse")
-#install.packages("lme4")
 #install.packages("car")
+#install.packages("dplyr")
 #install.packages("emmeans")
+#install.packages("ggplot2")
+#install.packages("ggpubr")
 #install.packages("here")
+#install.packages("lme4")
+#install.packages("lubridate")
 #install.packages("performance")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load packages
 ```{r}
-library(ggplot2)
-library(dplyr)
-library(lubridate)
-library(ggpubr)
-library(tidyverse)
-library(lme4)
 library(car)
+library(dplyr)
 library(emmeans)
+library(ggplot2)
+library(ggpubr)
 library(here)
+library(lme4)
+library(lubridate)
 library(performance)
+library(tidyverse)
 ```
 
 ## Step 1c: Define global plot theme
@@ -67,15 +66,21 @@ df_iris <- read.delim(here("data", "iris", "df_iris_2023.txt"), dec = ".", sep =
 ## Step 2b: Re-order factors
 ```{r}
 df_iris$Treatment <- factor(df_iris$Treatment, levels = c("ambient", "+1.5°C", "+3.0°C"))
-df_iris$Zone <- factor(df_iris$Zone, levels = c("PZ", "LM", "HM"))
+df_iris$Zone <- dplyr::recode(df_iris$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_iris$Zone <- factor(df_iris$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"),
+                      labels = c("Pioneer zone", "Low marsh", "High marsh"))
 # Add a new column 'layer' based on the 'Depth' column
 df_iris <- df_iris %>%
   mutate(Layer = case_when(
-    Depth %in% c("0-10 cm", "10-20 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
-    Depth %in% c("40-50 cm", "50-60 cm", "60-70 cm", "70-80 cm") ~ "Bottom-soil (40-80 cm)",
+    Depth %in% c("0-10 cm", "10-20 cm", "20-30 cm") ~ "Topsoil (0-30 cm)",
+    Depth %in% c("40-50 cm", "50-60 cm", "60-70 cm", "70-80 cm") ~ "Subsoil (40-80 cm)",
     TRUE ~ NA_character_  # For unexpected values
   ))
-df_iris$Layer <- factor(df_iris$Layer, levels = c("Top-soil (0-30 cm)", "Bottom-soil (40-80 cm)"))
+df_iris$Layer <- factor(df_iris$Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-80 cm)"))
 ```
 
 # Step 3: Plots
@@ -158,9 +163,9 @@ pairs(stat_iris_treatment_layer_zone_emm)
 # Step 5: Summarise dataframe for further calculations
 ```{r}
 df_iris_sum <- df_iris %>%
-    mutate(Layer = recode_factor(Layer, "Bottom-soil (40-80 cm)" = "Bottom-soil\n(40-100 cm)")) %>%
-    mutate(Layer = recode_factor(Layer, "Top-soil (0-30 cm)" = "Top-soil\n(0-30 cm)")) %>%
-  filter(!Layer == "Top-soil (0-30 cm)" | !Layer == "Bottom-soil (40-100 cm)") %>%
+    mutate(Layer = recode_factor(Layer, "Subsoil (40-80 cm)" = "Subsoil\n(40-100 cm)")) %>%
+    mutate(Layer = recode_factor(Layer, "Topsoil (0-30 cm)" = "Topsoil\n(0-30 cm)")) %>%
+  filter(!Layer == "Topsoil (0-30 cm)" | !Layer == "Subsoil (40-100 cm)") %>%
   group_by(plotid, Layer) %>%
   summarise(ri = mean(ri)) 
 
@@ -169,14 +174,14 @@ df_iris_sum$Plot <- as.character(df_iris_sum$plotid)
 
 # References
 ```{r}
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
-# lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
-# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
-# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
+# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
+# lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
 # performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```
