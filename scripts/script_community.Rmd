@@ -440,33 +440,6 @@ plot_alpha_div_zone_treatment_layer <- ggplot(df_alpha_div_long, aes(x = Zone, y
   labs(x = "Zone", y = "Alpha Diversity (Shannon Index)") +
   facet_grid(rows = vars(Layer)) 
 
-# Plot
-plot_alpha_div_zone_treatment_layer
-
-# Arranged Plots
-ggarrange(plot_alpha_div_zone_treatment_layer, plot_all_treatment_layer_nmds, ncol = 2)
-
-plot_alpha_nmds_qpcr_bar <- ggarrange(
-  ggarrange(
-    plot_alpha_div_zone_treatment_layer + theme(legend.position = "none"),
-    plot_all_treatment_layer_nmds + theme(legend.position = "none"), 
-    ncol = 2,
-    labels = c("A", "B")
-  ),
-  ggarrange(
-    plot_qpcr_bar_eub +
-      theme(legend.position = "right",
-            legend.box = "vertical",
-            legend.key.size = unit(0.5, "cm"),
-            legend.text = element_text(size = 8),
-            legend.title = element_text(size = 9)) +
-      guides(color = guide_legend(ncol = 1)),
-    labels = "C"
-  ),
-  nrow = 2,
-  heights = c(1, 0.8)  
-)
-
 plot_alpha_nmds <- ggarrange(
   ggarrange(
     plot_alpha_div_zone_treatment_layer + theme(legend.position = "top"),
@@ -476,9 +449,6 @@ plot_alpha_nmds <- ggarrange(
     nrow = 1,
     heights = c(1.5, 2)
 )
-
-# Three panel Plot 
-plot_alpha_nmds_qpcr_bar
 
 # Two panel Plot
 plot_alpha_nmds
@@ -549,119 +519,6 @@ ggplot(df_alpha_div_long, aes(x = Zone, y = Value, color = Treatment)) +
   theme_JM +
   labs(title = "Interaction between Zone and Treatment by Layer across all Enzymes",
        y = "Response Variable")
-```
-
-## Step 5d: Alpha diversity statistics with elevational and warming data
-```{r}
-#df_EEA_final <- df_alpha_div %>%
-#  ungroup() %>%
-# mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
-
-#summary(lm(Value~ meanTemp, data = df_alpha_div_long))
-
-# Prepare warming and elevation data
-df_elevation_mean <- df_elevation %>%
-  group_by(Plot) %>%
-  summarise(elevation_mean = mean(Elevation))
-df_elevation_mean$Plot <- as.factor(df_elevation_mean$Plot)
-
-df_warming_mean <- df_warming_all_2022_yearly %>%
-  group_by(plotid) %>%
-  summarise(pin_mean = mean(pinTemp_mean),
-            deep_mean = mean (deepTemp_mean))
-
-df_warming_mean$Plot <- as.factor(df_warming_mean$plotid)
-
-df_alpha_div_stat <- df_alpha_div_long %>%
-  left_join(df_elevation_mean, by = "Plot") %>%
-  left_join(df_warming_mean, by = "Plot")
-
-# Split the data
-
-df_top_soil <- df_alpha_div_stat %>% filter(Layer == "Topsoil\n(0-30 cm)")
-df_bottom_soil <- df_alpha_div_stat %>% filter(Layer == "Subsoil\n(40-100 cm)")
-
-# Run models
-stat_model_elevation <- lm(Value ~ elevation_mean, data = df_alpha_div_stat)
-stat_model_top_elevation <- lm(Value ~ elevation_mean, data = df_top_soil)
-stat_model_bottom_elevation <- lm(Value ~ elevation_mean, data = df_bottom_soil)
-
-# Function to extract R2 and p-value
-get_stats <- function(model) {
-  r_squared <- summary(model)$r.squared
-  f_statistic <- summary(model)$fstatistic
-  p_value <- pf(f_statistic[1], f_statistic[2], f_statistic[3], lower.tail = FALSE)
-  return(c(R_squared = r_squared, P_value = p_value))
-}
-
-# Get statistics
-stats_alpha_all <- get_stats(stat_model_elevation)
-stats_alpha_top <- get_stats(stat_model_top_elevation)
-stats_alpha_bottom <- get_stats(stat_model_bottom_elevation)
-
-# Print results
-print("All:")
-print(stats_alpha_all)
-print(summary(stat_model_elevation))
-
-print("Top Soil:")
-print(stats_alpha_top)
-print(summary(stat_model_top_elevation))
-
-print("Bottom Soil:")
-print(stats_alpha_bottom)
-print(summary(stat_model_bottom_elevation))
-
-# ANCOVA to test for interaction
-model_interaction <- lm(Value ~ Layer * elevation_mean, data = df_alpha_div_stat)
-print("Interaction Model:")
-print(summary(model_interaction))
-
-## Warming data
-# Run model
-run_models <- function(data, predictor) {
-  model <- lm(as.formula(paste("Value ~", predictor)), data = data)
-  stats <- get_stats(model)
-  return(list(model = model, stats = stats))
-}
-
-# Run models for each Zone and Layer combination
-zones <- c("PZ", "LM", "HM")
-layers <- c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)")
-predictors <- c("pin_mean", "deep_mean")
-
-results <- list()
-
-for (zone in zones) {
-  for (layer in layers) {
-    for (predictor in predictors) {
-      data_subset <- df_alpha_div_stat %>% 
-        filter(Zone == zone, Layer == layer)
-      
-      model_results <- run_models(data_subset, predictor)
-      
-      key <- paste(zone, layer, predictor, sep = "_")
-      results[[key]] <- model_results
-    }
-  }
-}
-
-# Print results
-for (key in names(results)) {
-  cat("\n", key, ":\n")
-  print(results[[key]]$stats)
-  print(summary(results[[key]]$model))
-}
-
-# ANCOVA to test for interactions
-model_pin_interaction <- lm(Value ~ Zone * Layer * pin_mean, data = df_alpha_div_stat)
-model_deep_interaction <- lm(Value ~ Zone * Layer * deep_mean, data = df_alpha_div_stat)
-
-print("Pin Mean Interaction Model:")
-print(summary(model_pin_interaction))
-
-print("Deep Mean Interaction Model:")
-print(summary(model_deep_interaction))
 ```
 
 
@@ -905,7 +762,7 @@ plot_bray_delta_top_pin <- df_bray_delta_top %>%
   theme_JM + 
   xlab("Delta monthly T at 25 cm depth [°C]") +
   ylab("Dissimilarity") +
-  ggtitle("Top-soil (0-30 cm)")
+  ggtitle("Topsoil (0-30 cm)")
 
 plot_bray_delta_top_deep <- df_bray_delta_top %>%
   filter(zone1 == zone2) %>%
@@ -950,7 +807,7 @@ plot_bray_delta_bottom_deep <- df_bray_delta_bottom %>%
   theme_JM +
   xlab("Delta monthly T at 75 cm depth [°C]") +
   ylab("Dissimilarity") +
-  ggtitle("Bottom-soil (40-100 cm)")
+  ggtitle("Subsoil (40-100 cm)")
 
 # Arrange all plots
 ggarrange(plot_bray_delta_top_surface, plot_bray_delta_top_pin, plot_bray_delta_top_deep,
@@ -987,8 +844,8 @@ df_ri_delta$plotid2 <- as.factor(df_ri_delta$plotid2)
 # Merge delta_ri with Bray-Curtis for top-soil
 if (exists("df_bray_curtis_top_plots")) {
   df_bray_delta_top_ri <- df_bray_curtis_top_plots %>%
-    left_join(df_ri_delta %>% filter(Layer == "Top-soil (0-30 cm)"), by = c("plotid1", "plotid2")) %>%
-    left_join(df_ri_delta %>% filter(Layer == "Top-soil (0-30 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Topsoil (0-30 cm)"), by = c("plotid1", "plotid2")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Topsoil (0-30 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
     mutate(delta_ri = coalesce(delta_ri, delta_ri_rev)) %>%
     select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_ri, everything(), -ends_with("_rev")) %>%
     rowwise() %>%
@@ -1003,8 +860,8 @@ if (exists("df_bray_curtis_top_plots")) {
 # Merge delta_ri with Bray-Curtis for bottom-soil
 if (exists("df_bray_curtis_bottom_plots")) {
   df_bray_delta_bottom_ri <- df_bray_curtis_bottom_plots %>%
-    left_join(df_ri_delta %>% filter(Layer == "Bottom-soil (40-80 cm)"), by = c("plotid1", "plotid2")) %>%
-    left_join(df_ri_delta %>% filter(Layer == "Bottom-soil (40-80 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Subsoil (40-80 cm)"), by = c("plotid1", "plotid2")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Subsoil (40-80 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
     mutate(delta_ri = coalesce(delta_ri, delta_ri_rev)) %>%
     select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_ri, everything(), -ends_with("_rev")) %>%
     rowwise() %>%
@@ -1028,7 +885,7 @@ if (!is.null(df_bray_delta_top_ri)) {
     theme_JM +
     xlab("Delta reduction index") +
     ylab("Dissimilarity") +
-    ggtitle("Top-soil (0-30 cm)")
+    ggtitle("Topsoil (0-30 cm)")
 } else {
   plot_bray_delta_top_ri <- NULL
 }
@@ -1041,7 +898,7 @@ if (!is.null(df_bray_delta_bottom_ri)) {
     theme_JM +
     xlab("Delta reduction index") +
     ylab("Dissimilarity") +
-    ggtitle("Bottom-soil (40-100 cm)")
+    ggtitle("Subsoil (40-100 cm)")
 } else {
   plot_bray_delta_bottom_ri <- NULL
 }
@@ -1064,7 +921,7 @@ plot_bray_delta_top_elevation <- df_bray_delta_top_elevation %>%
   theme_JM +
   xlab("Delta elevation [cm]") +
   ylab("Dissimilarity") +
-  ggtitle("Top-soil (0-30 cm)")
+  ggtitle("Topsoil (0-30 cm)")
 
 plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
   ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
@@ -1076,7 +933,7 @@ plot_bray_delta_bottom_elevation <- df_bray_delta_bottom_elevation %>%
   theme_JM +
   xlab("Delta elevation [cm]") +
   ylab("Dissimilarity") +
-  ggtitle("Bottom-soil (40-100 cm)")
+  ggtitle("Subsoil (40-100 cm)")
 
 # Arrange all plots
 ggarrange(plot_bray_delta_top_elevation, plot_bray_delta_bottom_elevation, ncol = 1, nrow = 2)

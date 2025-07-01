@@ -92,6 +92,17 @@ df_OM_merged$Zone <- factor(df_OM_merged$Zone, levels = c("Pioneer zone", "Low m
 # Step 2: Plots
 ## Step 2a: Point plots
 ```{r}
+Plot_OM_yearly <- df_OM_merged %>% 
+  ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
+  stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
+  stat_summary(fun = mean, geom = "line", size = 1, position = position_dodge(width = 0.2)) +
+  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
+  theme_JM +
+  theme(legend.position = "bottom") +
+  labs(y = "Organic matter content [%]") +
+  facet_wrap(~Zone) 
+
 Plot_OM_yearly_top <- df_OM_merged %>% 
   filter(Depth %in% c("5", "10", "15", "20", "25")) %>% 
   ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
@@ -114,6 +125,8 @@ Plot_OM_yearly_bottom <- df_OM_merged %>%
   theme(legend.position = "bottom") +
   facet_wrap(~Zone) 
 
+# All Plots
+Plot_OM_yearly
 Plot_OM_yearly_top
 Plot_OM_yearly_bottom
 ```

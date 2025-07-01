@@ -308,6 +308,14 @@ df_EEA_merged <- df_EEA_merged %>%
     TRUE ~ NA_character_  # For unexpected values
   ))
 
+df_EEA_merged$Zone <- dplyr::recode(df_EEA_merged$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+df_EEA_merged$Zone <- factor(df_EEA_merged$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"),
+                     labels = c("Pioneer zone", "Low marsh", "High marsh"))
+
 ```
 
 ## Step 2d: Filtering of EEA data
@@ -436,7 +444,7 @@ plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
     stat_summary(fun.data = mean_se, geom = "errorbar",
                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("C acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
+    scale_y_continuous(name = expression(paste("Carbon acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
@@ -453,7 +461,7 @@ plot_EEA_mean_layer_CHI_LEU <- df_EEA_merged %>%
     stat_summary(fun.data = mean_se, geom = "errorbar",
                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("N acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
+    scale_y_continuous(name = expression(paste("Nitrogen acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
@@ -489,7 +497,7 @@ plot_EEA_C_warming_pin <- df_EEA_final %>%
                  label.y.npc = 0.9) +
     scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
     scale_y_continuous(
-      name = expression(paste("C acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
+     name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
       expand = c(0,0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)) +
@@ -514,7 +522,7 @@ plot_EEA_N_warming_pin <- df_EEA_final %>%
       name = "Zone:"
     ) +
     scale_y_continuous(
-      name = expression(paste("N acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
       expand = c(0, 0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)
@@ -535,7 +543,7 @@ plot_EEA_C_warming_deep <- df_EEA_final %>%
                  label.y.npc = 0.9) +
     scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
     scale_y_continuous(
-      name = expression(paste("C acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
+      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]", 
       expand = c(0,0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)) +
@@ -560,7 +568,7 @@ plot_EEA_N_warming_deep <- df_EEA_final %>%
       name = "Zone:"
     ) +
     scale_y_continuous(
-      name = expression(paste("N acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
       expand = c(0, 0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)
