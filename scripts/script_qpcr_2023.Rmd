@@ -35,7 +35,6 @@ library(tidyverse)
 ```{r}
 # Set working directory
 setwd("./")
-
 df_eub  <- read.delim(here("data", "qpcr", "df_copies_EUB.txt"), dec=".", sep="\t")
 ```
 
@@ -94,7 +93,16 @@ df_eub <- df_eub %>%
   mutate(core_id = paste0(Plot, Subplot)) %>%
   filter(Subplot == "ctr")
 
+
 stat_model_eub <- lmer(log10_copies ~ Treatment * Zone + (1|core_id), data = df_eub)
+anova(stat_model_eub)
+plot(stat_model_eub)
+summary(stat_model_eub)
+
+# Pairwise comparisons
+stat_model_eub_emm <- emmeans(stat_model_eub , ~ Zone)
+pairs(stat_model_eub_emm)
+
 stat_res_eub <- Anova(stat_model_eub, type = 3)
 stat_emm_eub <- emmeans(stat_model_eub, ~ Treatment | Zone)
 stat_pairs_eub <- pairs(stat_emm_eub)

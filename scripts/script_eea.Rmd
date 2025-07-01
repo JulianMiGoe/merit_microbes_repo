@@ -790,10 +790,6 @@ abline(h = 0, col = "red")
 check_model(stat_model_C)
 check_model(stat_model_N)
 
-# ANOVA
-anova(stat_model_C)
-anova(stat_model_N)
-
 # Model summary
 summary(stat_model_C)
 summary(stat_model_N)
