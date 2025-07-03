@@ -22,6 +22,7 @@ output: html_document
 #install.packages("lmerTest")
 #install.packages("performance")
 #install.packages("tidyverse")
+#install.packages("ggstatsplot")
 ```
 
 ## Step 1b: Load necessary packages
@@ -37,6 +38,7 @@ library(lme4)
 library(lmerTest)
 library(performance)
 library(tidyverse)
+library(ggstatsplot)
 ```
 
 ## Step 1d: Define plot theme
@@ -522,7 +524,7 @@ plot_EEA_N_warming_pin <- df_EEA_final %>%
       name = "Zone:"
     ) +
     scale_y_continuous(
-      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
+      name = "Nitrogen acquisition\n[nmol g OM⁻¹ h⁻¹]",
       expand = c(0, 0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)
@@ -568,7 +570,7 @@ plot_EEA_N_warming_deep <- df_EEA_final %>%
       name = "Zone:"
     ) +
     scale_y_continuous(
-      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
+      name = "Nitrogen acquisition\n[nmol g OM⁻¹ h⁻¹]",
       expand = c(0, 0),
       limits = c(0, 3500),
       breaks = seq(0, 3000, by = 1000)
@@ -693,42 +695,12 @@ plot_CN_bar
 
 # Step 4: Summarise dataframes
 ```{r}
-#df_eea_c_sum  <- df_EEA_merged  %>%
-#  filter(Enzyme == "GLU") %>%##
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%#
-#  summarise("EEA C" = mean(Activity_OM_mean, na.rm=TRUE)) %>%#
-#  ungroup()
-
-#df_eea_n_sum  <- df_EEA_merged  %>%#
-#  filter(Enzyme %in% c("CHI", "LEU")) %>%#
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%#
-#  summarise("EEA N" = mean(Activity_OM_mean, na.rm=TRUE)) %>%#
-#  ungroup()
-
-#df_elevation_sum  <- df_elevation  %>%#
-  #rename("Plot" = "plotid") %>%#
- # group_by(plotid) %>%#
-  #summarise("Elevation" = mean(Elevation, na.rm=TRUE)) %>%#
- # ungroup()
-
-#df_iris_sum_2 <- df_iris_sum  %>%#
- # group_by(plotid) %>%#
- # summarise("Reduction index"= mean(ri, na.rm=TRUE)) %>%#
- # ungroup()
-
 #summarise warming data script_warming_data_2022
 df_warming_sum <- df_warming_all_2022_monthly %>%
   group_by(plotid) %>%
   summarise("Soil temperature" = mean(pinTemp_mean, na.rm=TRUE)) %>%
   ungroup()
 
-# summarise alpha diversity (done in "script_community") Step 5e)
-# summarise Abundance (done in "script_qpcr_2023") Step 4)
-
-#df_eea_c_sum <- df_eea_c_sum %>% mutate(plotid = as.character(plotid))
-#df_eea_n_sum <- df_eea_n_sum %>% mutate(plotid = as.character(plotid))
-#df_elevation_sum <- df_elevation_sum %>% mutate(plotid = as.character(plotid))
-#df_iris_sum_2 <- df_iris_sum_2 %>% mutate(plotid = as.character(plotid))
 df_warming_sum <- df_warming_sum %>% mutate(plotid = as.character(plotid))
 df_qpcr_sum <- df_qpcr_sum %>% mutate(plotid = as.character(plotid))
 df_alpha_sum <- df_alpha_sum %>% mutate(plotid = as.character(plotid))
@@ -934,90 +906,17 @@ print(summary(stat_model_eea_n_bottom_elevation))
 ```
 
 #Step 6: Correlation Matrix
-# Following https://cran.r-project.org/web/packages/ggcorrplot/readme/README.html
 ```{r}
-# Retrieve numeric variables and remove plotid
-stat_numeric_vars_top <- df_summary_top %>%
-  select(where(is.numeric))
-
-stat_numeric_vars_bottom <- df_summary_bottom  %>%
-  select(where(is.numeric))
-
-# Calculate correlation and p-values for both top and bottom soil layers
-df_cor_res_top <- rcorr(as.matrix(stat_numeric_vars_top), type = "pearson")
-df_cor_matrix_top <- df_cor_res_top$r
-df_p_matrix_top <- df_cor_res_top$P
-
-df_cor_res_bottom <- rcorr(as.matrix(stat_numeric_vars_bottom), type = "pearson")
-df_cor_matrix_bottom <- df_cor_res_bottom$r
-df_p_matrix_bottom <- df_cor_res_bottom$P
-
-# Convert to long format
-df_cor_long_top <- as.data.frame(as.table(df_cor_matrix_top))
-df_p_long_top <- as.data.frame(as.table(df_p_matrix_top))
-colnames(df_cor_long_top) <- c("Var1", "Var2", "cor")
-colnames(df_p_long_top) <- c("Var1", "Var2", "p")
-
-df_cor_long_bottom  <- as.data.frame(as.table(df_cor_matrix_bottom ))
-df_p_long_bottom  <- as.data.frame(as.table(df_p_matrix_bottom ))
-colnames(df_cor_long_bottom ) <- c("Var1", "Var2", "cor")
-colnames(df_p_long_bottom ) <- c("Var1", "Var2", "p")
-
-# Merge and keep upper triangle only (no duplicates, no diagonal)
-df_cor_merged_top <- left_join(df_cor_long_top, df_p_long_top, by = c("Var1", "Var2")) %>%
-  filter(as.numeric(factor(Var1)) < as.numeric(factor(Var2)))
-
-df_cor_merged_bottom <- left_join(df_cor_long_bottom, df_p_long_bottom, by = c("Var1", "Var2")) %>%
-  filter(as.numeric(factor(Var1)) < as.numeric(factor(Var2)))
-
-# Add significance flag
-df_cor_merged_top <- df_cor_merged_top %>%
-  mutate(sig = p < 0.05)
-
-df_cor_merged_bottom <- df_cor_merged_bottom %>%
-  mutate(sig = p < 0.05)
-
-plot_corr_mat_top <- ggplot(df_cor_merged_top, aes(x = Var1, y = Var2, fill = cor)) +
-  geom_tile(color = "white") +
-  geom_text(
-    aes(label = round(cor, 2), fontface = ifelse(sig, "bold", "plain")),
-    color = "black"
-  ) +
-  scale_fill_gradient2(
-    low = "#E46726", high = "#6D9EC1", mid = "white", midpoint = 0,
-    limit = c(-1, 1), name = "Pearson\nCorrelation"
-  ) +
-  labs(x = NULL, y = NULL) +  
-  theme_JM +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-    legend.position = "right"  
-  ) +
-  coord_fixed() 
-
-plot_corr_mat_bottom <- ggplot(df_cor_merged_bottom, aes(x = Var1, y = Var2, fill = cor)) +
-  geom_tile(color = "white") +
-  geom_text(
-    aes(label = round(cor, 2), fontface = ifelse(sig, "bold", "plain")),
-    color = "black"
-  ) +
-  scale_fill_gradient2(
-    low = "#E46726", high = "#6D9EC1", mid = "white", midpoint = 0,
-    limit = c(-1, 1), name = "Pearson\nCorrelation"
-  ) +
-  labs(x = NULL, y = NULL) +  
-  theme_JM +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-    legend.position = "right"  
-  ) +
-  coord_fixed() 
-
-#install.packages("ggstatsplot")
-library(ggstatsplot)
-
 ###      Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach.
 ##      Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
+df_summary_all <- df_summary_all %>%
+  rename(
+    "Nitrogen acquisition" = `EEA N`,
+    "Carbon Acquisition" = `EEA C`,
+    "Microbial abundance" = Abundance,
+    "Marsh surface elevation" = `Soil elevation`,
+    "Reduction index" = `Soil reduction`
+  )
 
 plot_corr_mat_all <- ggstatsplot::grouped_ggcorrmat(
   data = df_summary_all,
@@ -1027,22 +926,8 @@ plot_corr_mat_all <- ggstatsplot::grouped_ggcorrmat(
   colors = c("darkred", "white", "steelblue") # change default colors
 )
 
-plot_corr_mat_top <- ggstatsplot::ggcorrmat(
-  data = df_summary_top,
-  type = "parametric", # parametric for Pearson, nonparametric for Spearman's correlation
-  colors = c("darkred", "white", "steelblue") # change default colors
-)
-
-plot_corr_mat_bottom<- ggstatsplot::ggcorrmat(
-  data = df_summary_bottom,
-  type = "parametric", # parametric for Pearson, nonparametric for Spearman's correlation
-  colors = c("darkred", "white", "steelblue") # change default colors
-)
-
-ggarrange(plot_corr_mat_top, plot_corr_mat_bottom)
 ```
 
-# Supplement
 # References
 ```{r}
 # car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car

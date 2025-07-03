@@ -94,29 +94,12 @@ df_merged <- df_merged %>%
 df_merged_filtered <- df_merged %>%
   filter(!str_detect(Functional, regex("human", ignore_case = TRUE)))
 
-desired_functions_redox <- c(
-  "methanogenesis_by_CO2_reduction_with_H2",
-  "methanogenesis_by_reduction_of_methyl_compounds_with_H2",
-  "hydrogenotrophic_methanogenesis",
-  "methanogenesis",
-  "nitrogen_fixation",
-  "nitrification",
-  "denitrification",
-  "sulfate_respiration",
-  "methanotrophy",
-  "dark_hydrogen_oxidation",
-  "fermentation",
-  "aerobic_chemoheterotrophy",
-  "dark_iron_oxidation",
-  "iron_respiration"
-)
-
 desired_functions_degradation <- c(
   "cellulolysis",
   "chitinolysis",
   "ligninolysis",
   "hydrocarbon_degradation",
- # "fermentation",
+  "fermentation",
   "aliphatic_non_methane_hydrocarbon_degradation",
   "aromatic_hydrocarbon_degradation",
   "aromatic_compound_degradation"
@@ -156,20 +139,11 @@ desired_functions_all <- c(
   "iron_respiration"
 )
 
-df_merged_filtered_redox <- df_merged_filtered %>%
-  filter(Functional %in% desired_functions_redox)
-
 df_merged_filtered_degradation <- df_merged_filtered %>%
   filter(Functional %in% desired_functions_degradation)
 
 df_merged_filtered_all <- df_merged_filtered %>%
   filter(Functional %in% desired_functions_all)
-
-# Calculate mean abundance for each combination
-df_heatmap_redox <- df_merged_filtered_redox %>%
-  group_by(Functional, Zone, Treatment) %>%
-  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
-  ungroup()
 
 # Calculate mean abundance for each combination
 df_heatmap_degradation <- df_merged_filtered_degradation %>%
@@ -192,28 +166,6 @@ df_heatmap_all <- df_merged_filtered_all %>%
 # Define the custom color palette
 custom_palette <- c("#e0ecf4", "#8c96c6", "#810f7c")
 custom_palette_2 <- c("#d0d1e6", "#a6bddb", "#023858")
-
-
-# Modify plot_heatmap_functional_redox
-plot_heatmap_functional_redox <- ggplot(df_heatmap_redox, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
-  geom_tile() +
-  facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
-  scale_fill_gradientn(name = "Mean Abundance", 
-                       colors = custom_palette,
-                       values = scales::rescale(c(min(df_heatmap_redox$mean_abundance),
-                                                  median(df_heatmap_redox$mean_abundance),
-                                                  max(df_heatmap_redox$mean_abundance)))) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.text.y = element_text(size = 6),
-    strip.background = element_rect(fill = "lightgrey"),
-    strip.text = element_text(face = "bold"),
-    panel.spacing = unit(0.1, "lines"),
-    axis.title.y = element_text(margin = margin(r = 10))
-  ) +
-  labs(x = "Treatment", y = "Functional Group", 
-       title = "Functional Group Abundance Across Zones and Treatments (Redox)")
 
 # Modify plot_heatmap_functional_degradation
 plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
@@ -241,10 +193,10 @@ plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Tr
   labs(x = "Treatment", y = "Functional Group") +
   scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
 
-# Modify plot_heatmap_functional_degradation with Layers
+# Plot with Layers
 plot_heatmap_functional_degradation_layer <- ggplot(df_heatmap_degradation_layer, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
-  facet_grid(. ~ Zone * Layer, scales = "free_x", space = "free_x") +
+  facet_grid(fct_rev(Layer) ~ Zone, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(
     name = "Mean Abundance",
     colors = custom_palette_2,
@@ -294,9 +246,9 @@ plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Fun
 
 
 # Display the plots
-plot_heatmap_functional_redox
 plot_heatmap_functional_degradation
 plot_heatmap_functional_all
+plot_heatmap_functional_degradation_layer
 
 ```
 

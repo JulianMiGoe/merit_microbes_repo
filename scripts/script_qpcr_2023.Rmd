@@ -18,6 +18,7 @@ output: html_document
 #install.packages("here")
 #install.packages("lme4")
 #install.packages("tidyverse")
+#install.packages("lmerTest")
 ```
 
 ## Step 1b: Load necessary packages
@@ -29,6 +30,7 @@ library(ggpubr)
 library(here)
 library(lme4)
 library(tidyverse)
+library(lmerTest)
 ```
 
 ## Step 1c: Load sequencing data
@@ -92,7 +94,6 @@ plot_qpcr_bar_eub <- ggplot(df_eub, aes(x = Zone, y = log10_copies, fill = Treat
 df_eub <- df_eub %>% 
   mutate(core_id = paste0(Plot, Subplot)) %>%
   filter(Subplot == "ctr")
-
 
 stat_model_eub <- lmer(log10_copies ~ Treatment * Zone + (1|core_id), data = df_eub)
 anova(stat_model_eub)

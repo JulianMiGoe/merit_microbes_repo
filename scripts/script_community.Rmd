@@ -34,6 +34,7 @@ output: pdf_document
 #install.packages("RColorBrewer")
 #install.packages("tidyverse")
 #install.packages("vegan")
+#install.packages("microViz")
 ```
 
 ## Step 1b: Load necessary packages
@@ -53,6 +54,7 @@ library(purrr)
 library(RColorBrewer)
 library(tidyverse)
 library(vegan)
+library(microViz)
 ```
 
 ## Step 1c: Load sequencing data
@@ -276,13 +278,29 @@ df_abundance_data <- ps_phylum_rel %>%
   group_by(Sample, Zone, Treatment, Phylum) %>%
   summarise(Abundance = sum(Abundance), .groups = "drop")
 
-# Summarise on Zone / Treatment / Layer 
-df_abundance_data_layer <- ps_phylum_rel %>%
+# Summarise for topsoil samples
+df_abundance_data_top <- ps_phylum_rel %>%
   psmelt() %>%
   mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
   mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
-  group_by(Zone, Treatment, Phylum, Plot, Layer) %>%
-  summarise(Abundance = sum(Abundance), .groups = "drop"
+  filter(Layer == "Topsoil (0-30 cm)") %>%
+  group_by(Zone, Treatment, Phylum) %>%
+  summarise(Abundance = mean(Abundance), .groups = "drop") %>%  
+  group_by(Zone, Treatment) %>%
+  mutate(Abundance = Abundance / sum(Abundance)) %>%  # Normalize to sum to 1
+  ungroup()
+
+# Summarise for subsoil samples
+df_abundance_data_sub <- ps_phylum_rel %>%
+  psmelt() %>%
+  mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
+  mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
+  filter(Layer == "Subsoil (40-100 cm)") %>%
+  group_by(Zone, Treatment, Phylum) %>%
+  summarise(Abundance = mean(Abundance), .groups = "drop") %>%  
+  group_by(Zone, Treatment) %>%
+  mutate(Abundance = Abundance / sum(Abundance)) %>%  # Normalize to sum to 1
+  ungroup()
 
 # Summarise on Plot level
 df_abundance_data_plot <- ps_phylum_rel %>%
@@ -290,18 +308,27 @@ df_abundance_data_plot <- ps_phylum_rel %>%
   mutate(Phylum = tax_table(ps_phylum_rel)[OTU, "Phylum"]) %>%
   mutate(Phylum = ifelse(Phylum %in% top_phyla, as.character(Phylum), "Others")) %>%
   group_by(Zone, Treatment, Phylum, Plot) %>%
-  summarise(Abundance = sum(Abundance), .groups = "drop"
+  summarise(Abundance = sum(Abundance), .groups = "drop")
 
 # See share of groups
-df_temporal <- df_abundance_data %>%
+df_temporal <- df_abundance_data_layer %>%
   group_by(Phylum) %>%
   summarise(Mean = sum(Abundance))
 
 # Set order of Phyla to be descending and including others at the bottom
 df_abundance_data$Phylum <- factor(df_abundance_data$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
 
-# Set order of Phyla to be descending and including others at the bottom
-df_abundance_data_layer$Phylum <- factor(df_abundance_data_layer$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
+# Set factor levels for topsoil data
+df_abundance_data_top$Phylum <- factor(df_abundance_data_top$Phylum, 
+                                      levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", 
+                                               "Planctomycetota", "Acidobacteriota", "Desulfobacterota", 
+                                               "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
+
+# Set factor levels for subsoil data  
+df_abundance_data_sub$Phylum <- factor(df_abundance_data_sub$Phylum, 
+                                      levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", 
+                                               "Planctomycetota", "Acidobacteriota", "Desulfobacterota", 
+                                               "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
 
 # Set order of Phyla to be descending and including others at the bottom
 df_abundance_data_plot$Phylum <- factor(df_abundance_data_plot$Phylum, levels = c("Gemmatimonadota", "Myxococcota", "Actinobacteriota", "Planctomycetota", "Acidobacteriota", "Desulfobacterota", "Firmicutes", "Chloroflexi", "Proteobacteria", "Others"))
@@ -317,15 +344,25 @@ plot_stacked_bar <- ggplot(df_abundance_data, aes(x = Treatment, y = Abundance, 
   facet_wrap(~ Zone) +
   theme(legend.position = "bottom")
 
-plot_stacked_bar_layer <- ggplot(df_abundance_data_layer, aes(x = Treatment, y = Abundance, fill = Phylum)) +
+plot_stacked_bar_top <- ggplot(df_abundance_data_top, aes(x = Treatment, y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", position = "stack") +
   scale_fill_manual(values = c("#D73027", "#FDAE61", "#ffff99", "#b2df8a", "#33a02c", "#cab2d6", "#1f78b4", "#a6cee3", "black", "grey"))+
   theme_JM +
   labs(y = "Relative Abundance [%]") +
-  scale_y_continuous(breaks = seq(0, 5, by = 2.5), 
-                     labels = seq(0, 100, by = 50)) +
-  facet_wrap(~ Layer * Zone, scales = "free_x", nrow =2) +
-  theme(legend.position = "top")
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25), 
+                   labels = seq(0, 100, by = 25)) +
+  facet_wrap(~ Zone) +
+  theme(legend.position = "none")
+
+plot_stacked_bar_sub <- ggplot(df_abundance_data_sub, aes(x = Treatment, y = Abundance, fill = Phylum)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = c("#D73027", "#FDAE61", "#ffff99", "#b2df8a", "#33a02c", "#cab2d6", "#1f78b4", "#a6cee3", "black", "grey"))+
+  theme_JM +
+  labs(y = "Relative Abundance [%]") +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25), 
+                   labels = seq(0, 100, by = 25)) +
+  facet_wrap(~ Zone) +
+  theme(legend.position = "none")
 
 plot_stacked_bar_plot <- ggplot(df_abundance_data_plot, aes(x = Plot, y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", position = "stack") +
@@ -342,57 +379,23 @@ plot_stacked_bar
 plot_stacked_bar_layer
 plot_stacked_bar_plot
 
-# Add FAPROTAX plot
-ggarrange(plot_stacked_bar, plot_heatmap_functional_degradation,   labels = c("A", "B"), ncol = 2)
+# Final plot
+plot_barplot_final <- ggarrange(plot_stacked_bar_top, plot_stacked_bar_sub,
+                               labels = c("A", "B"), 
+                               ncol = 1,
+                               common.legend = TRUE,
+                               legend = "top")
+
+# Add layer labels on the right side
+plot_barplot_final <- annotate_figure(plot_barplot_final,
+                                     right = textGrob(c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)"), 
+                                                     x = c(0.5, 0.5),
+                                                     y = c(0.7, 0.25),  
+                                                     rot = 270,
+                                                     gp = gpar(fontsize = 12, fontface = "bold")))
+
+plot_barplot_final
 ```
-
-## Step 4b: Statistics for Top 10 Phyla
-```{r}
-df_top10_abundance <- df_abundance_data %>%
-  group_by(Phylum) %>%
-  summarise(percent = mean(Abundance))
-
-df_top10_abundance_factors <- df_abundance_data %>%
-  group_by(Phylum, Treatment, Zone) %>%
-  summarise(percent = mean(Abundance))
-
-sum(df_top10_abundance$percent)
-
-df_abundance_diff <- df_top10_abundance_factors %>%
-  group_by(Phylum, Zone) %>%
-  pivot_wider(names_from = Treatment, values_from = percent) %>%
-  mutate(
-    diff_ambient_1_5 = ambient - `+1.5°C`,
-    diff_ambient_3_0 = ambient - `+3.0°C`,
-    diff_1_5_3_0 = `+1.5°C` - `+3.0°C`
-  ) %>%
-  select(Phylum, Zone, starts_with("diff")) %>%
-  arrange(Phylum, Zone)
-
-# Perform two-way ANOVA for each phylum
-anova_results <- df_abundance_data %>%
-  group_by(Phylum) %>%
-  nest() %>%
-  mutate(
-    anova = map(data, ~aov(Abundance ~ Zone * Treatment, data = .x)),
-    tidy_anova = map(anova, tidy)
-  ) %>%
-  unnest(tidy_anova) %>%
-  select(Phylum, term, statistic, p.value)
-
-# Print the results
-print(anova_results)
-
-# Optionally, you can adjust p-values for multiple comparisons
-anova_results_adjusted <- anova_results %>%
-  group_by(term) %>%
-  mutate(p.adjusted = p.adjust(p.value, method = "holm")) %>%
-  ungroup()
-
-# Print the adjusted results
-print(anova_results_adjusted)
-```
-
 
 # Step 5: Alpha diversity
 ## Step 5a: Alpha diversity (compositional)
@@ -526,7 +529,7 @@ ggplot(df_alpha_div_long, aes(x = Zone, y = Value, color = Treatment)) +
 ```{r}
 # Summarise alpha diversity dataframe
 df_alpha_sum <- df_alpha_div_long  %>%
-  rename("Plot" = "plotid") %>%
+  rename("plotid" = "Plot") %>%
   group_by(plotid, Layer) %>%
   summarise("Alpha_diversity" = mean(Value, na.rm=TRUE))
 ```
