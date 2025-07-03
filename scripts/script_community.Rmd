@@ -512,26 +512,37 @@ pairs(stat_alpha_treatment_layer_emm)
 stat_alpha_treatment_layer_zone_emm <- emmeans(stat_model_alpha, ~ Treatment | Layer | Zone)
 pairs(stat_alpha_treatment_layer_zone_emm)
 
-# Visualizations
-## Interaction plot for Zone and Treatment
-ggplot(df_alpha_div_long, aes(x = Zone, y = Value, color = Treatment)) +
-  stat_summary(fun = mean, geom = "point") +
-  stat_summary(fun = mean, geom = "line", aes(group = Treatment)) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
-  facet_wrap(~ Layer) +
-  theme_JM +
-  labs(title = "Interaction between Zone and Treatment by Layer across all Enzymes",
-       y = "Response Variable")
-```
+# Shapiro-Wilk test for normality of residuals
+shapiro.test(resid(stat_model_alpha))
 
+# Log-transformation and model if not normal
+stat_model_alpha_log <- lmer(log(Value + 1) ~ Treatment * Zone * Layer + (1|Plot), data = df_alpha_div_long)
+shapiro.test(resid(stat_model_alpha_log))
 
-# Step 5e: Summarise alpha diversity dataframe
-```{r}
-# Summarise alpha diversity dataframe
-df_alpha_sum <- df_alpha_div_long  %>%
-  rename("plotid" = "Plot") %>%
-  group_by(plotid, Layer) %>%
-  summarise("Alpha_diversity" = mean(Value, na.rm=TRUE))
+# Robust mixed model
+if (!requireNamespace("robustlmm", quietly = TRUE)) install.packages("robustlmm")
+library(robustlmm)
+stat_model_alpha_robust <- rlmer(Value ~ Treatment * Zone * Layer + (1|Plot), data = df_alpha_div_long)
+summary(stat_model_alpha_robust)
+
+# Pairwise comparisons for robust model
+library(emmeans)
+# Main effects
+stat_alpha_zone_emm_robust <- emmeans(stat_model_alpha_robust, ~ Zone)
+pairs(stat_alpha_zone_emm_robust)
+stat_alpha_treatment_emm_robust <- emmeans(stat_model_alpha_robust, ~ Treatment)
+pairs(stat_alpha_treatment_emm_robust)
+stat_alpha_layer_emm_robust <- emmeans(stat_model_alpha_robust, ~ Layer)
+pairs(stat_alpha_layer_emm_robust)
+# Interactions
+stat_alpha_zone_treatment_emm_robust <- emmeans(stat_model_alpha_robust, ~ Zone | Treatment)
+pairs(stat_alpha_zone_treatment_emm_robust)
+stat_alpha_zone_layer_emm_robust <- emmeans(stat_model_alpha_robust, ~ Zone | Layer)
+pairs(stat_alpha_zone_layer_emm_robust)
+stat_alpha_treatment_layer_emm_robust <- emmeans(stat_model_alpha_robust, ~ Treatment | Layer)
+pairs(stat_alpha_treatment_layer_emm_robust)
+stat_alpha_treatment_layer_zone_emm_robust <- emmeans(stat_model_alpha_robust, ~ Treatment | Layer | Zone)
+pairs(stat_alpha_treatment_layer_zone_emm_robust)
 ```
 
 
@@ -550,7 +561,7 @@ stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_sub, method = "bray")
 # Calculate Aitchinson distance on clr transformed data 
 #### NOTE currently bray curtis is overwritten by Aitchinson
 #stat_bray_curtis_dist_top <- phyloseq::distance(ps_top, method = "euclidean", transform = "clr")
-#stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_bottom, method = "euclidean", transform = "clr")
+#stat_bray_curtis_dist_bottom <- phyloseq::distance(ps_sub, method = "euclidean", transform = "clr")
 
 
 # Convert the distance matrix to a dataframe 

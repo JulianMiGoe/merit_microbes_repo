@@ -576,7 +576,7 @@ plot_EEA_N_warming_deep <- df_EEA_final %>%
       breaks = seq(0, 3000, by = 1000)
     ) +
     theme_JM + 
-    labs(x = "Monthly T  at 75 cm depth [°C]") 
+    labs(x = "Monthly T at 80 cm depth [°C]") 
 
 plot_CN_warming_pin_deep <- ggarrange(
   plot_EEA_C_warming_pin,
@@ -588,7 +588,7 @@ plot_CN_warming_pin_deep <- ggarrange(
   common.legend = TRUE,
   legend = "top",
   labels = c("A", "C", "B", "D"), 
-  font.label = list(size = 16, face = "bold") 
+  font.label = list(size = 16, face = "bold") # optional styling
 )
 
 plot_CN_warming_pin_deep
@@ -752,12 +752,6 @@ qqline(resid(stat_model_C))
 qqnorm(resid(stat_model_N))
 qqline(resid(stat_model_N))
 
-# Residuals vs. Fitted values
-plot(fitted(stat_model_C), resid(stat_model_C))
-abline(h = 0, col = "red")
-plot(fitted(stat_model_N), resid(stat_model_N))
-abline(h = 0, col = "red")
-
 # Additional diagnostic plots using performance package
 check_model(stat_model_C)
 check_model(stat_model_N)
@@ -822,6 +816,73 @@ ggplot(df_EEA_merged, aes(x = Zone, y = Activity_OM, color = Treatment)) +
 
 performance::check_model(stat_model_C)
 performance::check_model(stat_model_N)
+
+# Shapiro-Wilk-Test auf Normalverteilung der Residuen
+shapiro.test(resid(stat_model_C))
+shapiro.test(resid(stat_model_N))
+
+# Log-Transformation der abhängigen Variable und erneute Modellierung
+stat_model_C_log <- lmer(log(Activity_OM + 1) ~ Zone * Treatment * Layer + (1|Plot/core_id), data = df_EEA_merged %>% filter(Enzyme == "GLU"))
+stat_model_N_log <- lmer(log(Activity_OM + 1) ~ Zone * Treatment * Layer + (1|Plot/core_id), data = df_EEA_merged %>% filter(Enzyme %in% c("LEU", "CHI")))
+
+# Shapiro-Wilk-Test für die Residuen der log-transformierten Modelle
+shapiro.test(resid(stat_model_C_log))
+shapiro.test(resid(stat_model_N_log))
+
+# QQ-Plot für die log-transformierten Modelle
+qqnorm(resid(stat_model_C_log))
+qqline(resid(stat_model_C_log))
+qqnorm(resid(stat_model_N_log))
+qqline(resid(stat_model_N_log))
+
+# Robustes gemischtes Modell mit robustlmm::rlmer
+if (!requireNamespace("robustlmm", quietly = TRUE)) install.packages("robustlmm")
+library(robustlmm)
+
+stat_model_C_robust <- rlmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), data = df_EEA_merged %>% filter(Enzyme == "GLU"))
+stat_model_N_robust <- rlmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), data = df_EEA_merged %>% filter(Enzyme %in% c("LEU", "CHI")))
+
+summary(stat_model_C_robust)
+summary(stat_model_N_robust)
+
+# Main effects für robuste Modelle
+anova(stat_model_C_robust)
+anova(stat_model_N_robust)
+
+# Pairwise Comparisons für robuste Modelle
+library(emmeans)
+# Zone
+stat_C_zone_emm_robust <- emmeans(stat_model_C_robust, ~ Zone)
+pairs(stat_C_zone_emm_robust)
+stat_N_zone_emm_robust <- emmeans(stat_model_N_robust, ~ Zone)
+pairs(stat_N_zone_emm_robust)
+# Treatment
+stat_C_treatment_emm_robust <- emmeans(stat_model_C_robust, ~ Treatment)
+pairs(stat_C_treatment_emm_robust)
+stat_N_treatment_emm_robust <- emmeans(stat_model_N_robust, ~ Treatment)
+pairs(stat_N_treatment_emm_robust)
+# Layer
+stat_C_layer_emm_robust <- emmeans(stat_model_C_robust, ~ Layer)
+pairs(stat_C_layer_emm_robust)
+stat_N_layer_emm_robust <- emmeans(stat_model_N_robust, ~ Layer)
+pairs(stat_N_layer_emm_robust)
+# Interaktionen
+stat_C_zone_treatment_emm_robust <- emmeans(stat_model_C_robust, ~ Zone | Treatment)
+pairs(stat_C_zone_treatment_emm_robust)
+stat_N_zone_treatment_emm_robust <- emmeans(stat_model_N_robust, ~ Zone | Treatment)
+pairs(stat_N_zone_treatment_emm_robust)
+stat_C_zone_layer_emm_robust <- emmeans(stat_model_C_robust, ~ Zone | Layer)
+pairs(stat_C_zone_layer_emm_robust)
+stat_N_zone_layer_emm_robust <- emmeans(stat_model_N_robust, ~ Zone | Layer)
+pairs(stat_N_zone_layer_emm_robust)
+stat_C_treatment_layer_emm_robust <- emmeans(stat_model_C_robust, ~ Treatment | Layer)
+pairs(stat_C_treatment_layer_emm_robust)
+stat_N_treatment_layer_emm_robust <- emmeans(stat_model_N_robust, ~ Treatment | Layer)
+pairs(stat_N_treatment_layer_emm_robust)
+stat_C_treatment_layer_zone_emm_robust <- emmeans(stat_model_C_robust, ~ Treatment | Layer | Zone)
+pairs(stat_C_treatment_layer_zone_emm_robust)
+stat_N_treatment_layer_zone_emm_robust <- emmeans(stat_model_N_robust, ~ Treatment | Layer | Zone)
+pairs(stat_N_treatment_layer_zone_emm_robust)
 ```
 
 ## Step 5b: EEAs (Regressions warming data)
