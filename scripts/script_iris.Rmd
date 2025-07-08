@@ -139,6 +139,12 @@ df_iris_summarized_2_final <- df_iris_1_processed %>%
   mutate(Plot = as.character(plotid))
 ```
 
+# Export summarized IRIS data for correlation matrix integration
+```{r}
+# Exportiere df_iris_summarized_2_final als df_iris_summary.csv für die Korrelationsmatrix.
+write.csv(df_iris_summarized_2_final, here("data", "iris", "df_iris_summary.csv"), row.names = FALSE)
+```
+
 # Summary: Data overview
 ## Summary of all main dataframes
 ```{r}

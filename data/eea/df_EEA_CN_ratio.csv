@@ -1,0 +1,2360 @@
+"ID.y","GLU_value","Depth.x.x","Zone.x","Treatment.x","Layer.x","CHI_value","Depth.x.y","Zone.y","Treatment.y","Layer.y","LEU_value","Depth.x","Zone","Treatment","Layer","GLU_CHI_ratio","Depth"
+"121(C2)0-5",1539.75047513148,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",54.7350656582847,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",812.702050559859,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1.77505717284094,"0-5 cm"
+"121(C2)5-10",1648.00268088974,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",73.2419340967683,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",659.073590959271,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",2.25039975871551,"5-10 cm"
+"121(C2)20-30",1177.2547386225,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,250.57717482201,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"121(C2)40-50",998.493647516138,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",15.9662131381608,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",373.4003436368,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",2.56440526322149,"40-50 cm"
+"121(C2)60-80",845.36380382098,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.16822252875734,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",276.738462631017,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",3.05288333264041,"60-80 cm"
+"121(C2)80-100",719.327090131807,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",10.493585664083,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",193.772904101449,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",3.52151295573488,"80-100 cm"
+"372(G5)0-5",917.813994690836,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",216.249286498254,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",751.749344211106,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.94815629441361,"0-5 cm"
+"372(G5)5-10",1154.9620776852,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",211.785074492844,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",795.120859588859,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1.14704069028903,"5-10 cm"
+"372(G5)20-30",1148.98124783522,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",337.762406280438,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1625.13793034542,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.585348744608331,"20-30 cm"
+"372(G5)40-50",965.571425086247,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",121.033396366607,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",992.029271653461,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.867490620994251,"40-50 cm"
+"372(G5)60-80",1127.21406769538,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",143.791272075498,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1570.56039336578,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.657516243847919,"60-80 cm"
+"372(G5)80-100",776.673182182762,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",313.03388146238,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1805.48015392739,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.366612242925202,"80-100 cm"
+"391(C2)0-5",1388.50764055938,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",418.831377483733,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",519.722519292672,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.47941172619751,"0-5 cm"
+"391(C2)5-10",1664.45946394406,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",398.87288891783,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",757.766742698381,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.439047580981,"5-10 cm"
+"391(C2)20-30",1759.67062012617,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",397.78257401848,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1094.88475407266,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.17887662375278,"20-30 cm"
+"391(C2)40-50",373.502704637887,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",60.3729177812396,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",963.827368819712,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.364677406874629,"40-50 cm"
+"391(C2)60-80",1030.3747074289,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",127.400750647475,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",933.958548960146,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.970806688941086,"60-80 cm"
+"391(C2)80-100",1005.56633250975,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",124.853115163017,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",447.151170896281,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1.75796992613008,"80-100 cm"
+"370(G5)0-5",727.859660626022,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",401.006616642799,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1000.94685983792,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.519175331304964,"0-5 cm"
+"370(G5)5-10",830.034792142417,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",650.541150428958,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1203.93599429742,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.447584266273008,"5-10 cm"
+"370(G5)20-30",1242.56926192742,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",590.238210785127,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1549.12802348732,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.580811850734846,"20-30 cm"
+"370(G5)40-50",169.07590464572,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",530.715957656606,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1605.13689799397,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.079160839286478,"40-50 cm"
+"370(G5)60-80",146.012273812425,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",13.1012326552793,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",888.699698411007,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.161911868553718,"60-80 cm"
+"120(C2)0-5",836.245864896993,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",260.712077927646,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1539.59206446237,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.464502549989594,"0-5 cm"
+"120(C2)5-10",815.041161611397,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",61.4463195916884,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1980.16115416706,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.399215408489294,"5-10 cm"
+"120(C2)20-30",691.66448016377,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",54.3094732237999,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1971.58700751889,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.34141156112291,"20-30 cm"
+"120(C2)40-50",421.718758258479,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",43.0215319763554,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1491.41288554884,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.274836613049025,"40-50 cm"
+"120(C2)60-80",265.172424394326,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",46.2638103881386,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1100.19126650357,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.231297701706085,"60-80 cm"
+"120(C2)80-100",119.125760611324,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",31.1580006927231,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",358.365626403016,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.305824223037554,"80-100 cm"
+"121(A2)0-5",1015.6299116027,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",75.0839066713123,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",444.395174838814,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1.95509299171443,"0-5 cm"
+"121(A2)5-10",677.998178792666,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",90.3537483553807,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",672.342133126571,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.888949573813465,"5-10 cm"
+"121(A2)20-30",947.172957593087,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",22.7580885727096,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",453.02390758772,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1.99077091028411,"20-30 cm"
+"121(A2)40-50",508.865977694945,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",7.66964918501587,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",408.450370571728,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",1.22288271059974,"40-50 cm"
+"121(A2)60-80",341.454305942545,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.921178403778222,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",75.8943963113893,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",4.44511815746558,"60-80 cm"
+"121(A2)80-100",360.887775061871,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,155.979632730502,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"390(A2)0-5",802.851063193101,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",249.4901772118,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",3162.80961460049,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.235281514572523,"0-5 cm"
+"390(A2)5-10",1044.15521562469,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",425.080758012661,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",4012.16338993514,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.23531615137914,"5-10 cm"
+"390(A2)20-30",1570.70080163953,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",549.39839117825,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",7659.04602169321,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.191351822907706,"20-30 cm"
+"390(A2)40-50",597.189527118002,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",56.2390640989735,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",4095.49638192038,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.143840939501717,"40-50 cm"
+"390(A2)60-80",50.595824268236,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",6.3055444305388,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",2993.67015306856,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.0168654113799704,"60-80 cm"
+"390(A2)80-100",210.732757043814,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",273.192460581987,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",4430.89267682245,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.044797819530981,"80-100 cm"
+"390(G5)0-5",1077.88391283969,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",957.997978340576,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1587.69669886674,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.423414450480036,"0-5 cm"
+"390(G5)5-10",1478.91164246233,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",603.281359990374,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",768.330961150889,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1.07822860706864,"5-10 cm"
+"390(G5)40-50",867.508349391158,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",151.900072154227,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",2966.90466377138,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.278154108013978,"40-50 cm"
+"390(G5)60-80",282.266317830795,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",48.7501533698759,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",2533.3101793953,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.109318250332482,"60-80 cm"
+"390(G5)80-100",107.910056481223,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",3.39339261276049,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1848.040097965,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.058284597869918,"80-100 cm"
+"371(G5)0-5",792.802352786027,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",340.269018200716,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1040.78857114677,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.574054520898439,"0-5 cm"
+"371(G5)5-10",1682.3090251721,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",426.209299034962,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1496.16157413003,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.875121990587772,"5-10 cm"
+"371(G5)20-30",936.655630759616,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",302.399136451567,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1850.25879030476,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.435115871926288,"20-30 cm"
+"371(G5)40-50",333.748477835279,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",139.188916783934,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1513.13666015653,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.201987115912873,"40-50 cm"
+"371(G5)60-80",662.221874609218,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",203.529985804755,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1907.30399862137,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.313725228746144,"60-80 cm"
+"371(G5)80-100",567.861264758811,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",94.9863415253854,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1389.21075215456,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.382605024074563,"80-100 cm"
+"132(G5)0-5",1507.21153184879,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",198.106660418647,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1054.60922564488,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1.20315511970155,"0-5 cm"
+"132(G5)5-10",286.770812088265,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",81.9073041574565,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1397.57994113181,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.193831216187467,"5-10 cm"
+"132(G5)20-30",82.2438205517548,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",59.3545627485411,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1171.01878471025,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.066844605112441,"20-30 cm"
+"132(G5)40-50",396.625710774195,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",17.7915799477835,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",633.0851718713,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.609371451147544,"40-50 cm"
+"132(G5)60-80",104.520880784804,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",8.66195141150126,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",459.423480159732,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.223294453822149,"60-80 cm"
+"132(G5)80-100",36.6599083269752,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",2.17660356436286,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",419.341490597891,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0869711379764965,"80-100 cm"
+"391(G5)0-5",1228.7275915263,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",149.991546509193,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",507.011408183397,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.8702010131769,"0-5 cm"
+"391(G5)5-10",1117.29617404332,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",162.709206342859,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",517.103671547514,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.64353487611262,"5-10 cm"
+"391(G5)20-30",778.279643281965,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",60.6692288456726,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",767.84420755701,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.939368764689167,"20-30 cm"
+"391(G5)40-50",252.911134305499,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",9.22458914810372,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",681.744425170655,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.366023843420605,"40-50 cm"
+"391(G5)60-80",217.373897525322,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",32.6636607255829,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",673.332721009604,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.307896616964331,"60-80 cm"
+"391(G5)80-100",212.863095555204,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",9.29523494135633,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",440.192816090994,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.473567862518962,"80-100 cm"
+"381(C2)0-5",604.0460651773,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",183.270975380794,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",693.81616538154,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.688695611991625,"0-5 cm"
+"381(C2)5-10",666.058482570195,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",197.342754443905,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1312.87540904565,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.441034612529874,"5-10 cm"
+"381(C2)20-30",555.17920123252,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",164.696925935362,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1958.72002905671,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.261455575141432,"20-30 cm"
+"381(C2)40-50",948.625649216885,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",254.922765313119,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",3070.78935221849,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.285239857116968,"40-50 cm"
+"381(C2)60-80",755.898610699166,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",94.3055307482533,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",3191.00060319486,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.230084680051388,"60-80 cm"
+"120(A2)0-5",222.711492665871,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",119.128726434788,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",577.609425296244,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.319648769214875,"0-5 cm"
+"120(A2)5-10",97.7970839350891,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",92.3190302378954,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",461.298772276353,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.176650901562314,"5-10 cm"
+"120(A2)20-30",450.07679670831,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",32.9243707661699,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",274.437004031182,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1.46432451704464,"20-30 cm"
+"120(A2)40-50",128.558987169625,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",34.9391566730026,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",259.673488844938,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.436366154424951,"40-50 cm"
+"120(A2)60-80",51.1098850905492,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",18.8042809815266,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",99.8177319781842,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.430863410722159,"60-80 cm"
+"120(A2)80-100",23.1792237825254,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",19.0309691061381,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",217.041738381144,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0981868002838664,"80-100 cm"
+"130(A2)0-5",1789.22228312711,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",882.194531417997,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1358.01630828174,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.798684771727527,"0-5 cm"
+"130(A2)5-10",984.497428408217,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",128.390113124531,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1939.27755919516,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.476139101843054,"5-10 cm"
+"130(A2)20-30",650.764416790392,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",21.6679888940055,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1843.26597014087,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.348947700607676,"20-30 cm"
+"130(A2)40-50",482.988378899195,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",45.3634193603925,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1477.2859981446,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.317202616273034,"40-50 cm"
+"130(A2)60-80",231.243523892201,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",6.63281984029502,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1163.85666944612,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.1975613843685,"60-80 cm"
+"130(A2)80-100",51.3007145178278,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,354.145945057801,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"372(C2)0-5",760.156889785039,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",255.429311084002,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",352.530768922145,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1.25034013709807,"0-5 cm"
+"372(C2)5-10",565.646631714113,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",142.75172117216,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",471.056186589015,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.921536892180605,"5-10 cm"
+"372(C2)20-30",1103.45371664955,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",576.036250061617,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",892.106351819871,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.751598458647973,"20-30 cm"
+"372(C2)40-50",942.594112379057,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",348.6331654706,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1071.6149114662,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.663682723944994,"40-50 cm"
+"372(C2)60-80",314.275752080032,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",58.4410080197612,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",852.985753930749,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.344817340460205,"60-80 cm"
+"372(C2)80-100",606.303705007209,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",310.289297053628,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",982.812245273128,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.468875556297188,"80-100 cm"
+"390(A6)20-30",507.277093528548,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",285.550316604217,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",628.679527409326,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.554868227995666,"20-30 cm"
+"390(A6)80-100",72.2281202100699,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.431856841746791,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",468.09348685179,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.154160540475084,"80-100 cm"
+"132(C2)0-5",155.125558775179,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",217.915794379401,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1014.78229397383,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.125842296861522,"0-5 cm"
+"132(C2)5-10",128.787507492647,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",22.727249199727,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",826.091755790427,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.151725523033195,"5-10 cm"
+"132(C2)20-30",117.187112655252,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,1341.84240205456,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"132(C2)40-50",137.478693113699,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",16.0392728637062,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",1004.08736592793,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.134766300462995,"40-50 cm"
+"132(C2)60-80",52.7334996211669,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,269.388845896968,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"132(C2)80-100",23.0297013263532,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,159.33149440267,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"371(C2)0-5",484.902495859895,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",325.615808530707,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",756.824949366365,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.44797139457493,"0-5 cm"
+"371(C2)5-10",496.343565813155,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",140.166890124737,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1370.82955904938,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.328487579229222,"5-10 cm"
+"371(C2)20-30",587.149529577126,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",181.912066798235,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1812.2796685728,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.294429827966308,"20-30 cm"
+"371(C2)40-50",546.218750772391,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",233.534672773281,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1860.91708393088,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.260793188013996,"40-50 cm"
+"371(C2)60-80",104.50300819874,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",2.11179173050203,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",970.835905637346,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.1074086597681,"60-80 cm"
+"371(C2)80-100",36.3416056694503,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",9.44766450519699,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",585.214428617931,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0611130356041133,"80-100 cm"
+"391(A2)0-5",730.136579361599,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",300.052987711682,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",874.996228905634,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.621366806629161,"0-5 cm"
+"391(A2)5-10",977.744217651788,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",107.470453917626,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",975.975355914073,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.902439428699872,"5-10 cm"
+"391(A2)20-30",1448.47865471316,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",297.820306708214,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1041.44098441952,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.08155045196107,"20-30 cm"
+"391(A2)40-50",2440.03632436881,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",254.313572034501,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1313.48604043399,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1.55634451301273,"40-50 cm"
+"391(A2)60-80",965.699048031314,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",372.413917572451,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1083.79444676023,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.663159937605395,"60-80 cm"
+"391(A2)80-100",1530.22893944751,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",176.355921527107,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1363.19564769813,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.993944581029905,"80-100 cm"
+"132(A6)0-5",648.649614097522,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",124.52396053773,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",614.085058776778,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.878204296367142,"0-5 cm"
+"132(A6)5-10",662.513521420806,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",103.724670102339,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",962.429843198306,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.621404789977176,"5-10 cm"
+"132(A6)20-30",345.236165095858,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",86.4401804118461,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",918.470002568357,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.343549275291461,"20-30 cm"
+"132(A6)40-50",189.34539129718,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",102.034806195207,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",748.838057343156,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.222530767416633,"40-50 cm"
+"132(A6)60-80",142.464892554093,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",49.2651071412398,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",508.390362359306,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.255471165165274,"60-80 cm"
+"132(A6)80-100",35.1851039557795,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",9.58306930408182,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",459.982689708043,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0749311534763568,"80-100 cm"
+"380(A6)0-5",801.642947102943,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",356.524164944312,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",720.020733353543,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.744644230231768,"0-5 cm"
+"380(A6)5-10",1043.8057803975,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",462.902057758988,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",688.111527629672,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.906857915187021,"5-10 cm"
+"380(A6)20-30",1228.38725854935,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",535.233073951147,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1745.51098688494,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.538590576488902,"20-30 cm"
+"380(A6)40-50",260.649131182318,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",168.051949142073,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1320.74013536064,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.17507423225546,"40-50 cm"
+"380(A6)60-80",106.031699380358,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",63.2596145571561,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",843.919640031402,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.116880648277663,"60-80 cm"
+"380(A6)80-100",95.1724072131116,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",44.7813219845231,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",959.084912421873,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.0948058655139335,"80-100 cm"
+"130(A6)0-5",1306.16732161406,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",443.476466421667,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",2303.61733486833,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.475472414156629,"0-5 cm"
+"130(A6)5-10",421.451890239868,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",355.31842843142,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1706.18303378436,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.204439287560279,"5-10 cm"
+"130(A6)20-30",415.02866984585,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",6.74179562874159,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",2707.12676494713,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.152928802770677,"20-30 cm"
+"130(A6)40-50",381.513918968813,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",30.9928542947848,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",2630.49637736814,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.143346031398534,"40-50 cm"
+"130(A6)60-80",164.925035572294,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",34.1914366903927,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",2194.80571412645,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0739906892711169,"60-80 cm"
+"130(A6)80-100",72.9642625187594,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",17.4803769245494,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1408.96737307093,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0511510235961958,"80-100 cm"
+"380(G5)0-5",886.986768061215,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",52.5644792635398,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",445.868132826943,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1.77955203280358,"0-5 cm"
+"380(G5)5-10",1880.89161728653,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",192.680793385602,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",914.314343259694,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1.69909654977031,"5-10 cm"
+"380(G5)20-30",1209.64745077464,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",123.69635063127,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",663.010963283351,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1.53760798886627,"20-30 cm"
+"380(G5)40-50",1446.47923513323,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",254.097044809554,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1294.76438610287,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.933898414838262,"40-50 cm"
+"380(G5)60-80",892.005642127573,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",43.3609225842057,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1070.45080018438,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.800858550770439,"60-80 cm"
+"380(G5)80-100",211.203594511862,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",107.412804676408,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1456.5035911437,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.135047880485394,"80-100 cm"
+"110(C2)0-5",675.959992096661,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",122.265887915138,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",792.421713937219,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.739006400357626,"0-5 cm"
+"110(C2)5-10",390.125992204272,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",100.63756249529,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",573.714902917618,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.57851941264187,"5-10 cm"
+"110(C2)20-30",10.2825394191862,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.904071300351099,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",12.7164653293648,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.75492909704841,"20-30 cm"
+"110(C2)40-50",188.542073388393,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",7.3010334440182,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",205.998938819924,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.883929197867343,"40-50 cm"
+"110(C2)60-80",397.098465274594,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",9.76685302802776,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",45.6508648566299,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",7.16555066560274,"60-80 cm"
+"110(C2)80-100",109.704413385128,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",4.2729253922123,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",115.322350957516,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.917297210504564,"80-100 cm"
+"250(C2)0-5",1430.34171676514,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",267.492250734267,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",947.396719579478,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1.17734356942573,"0-5 cm"
+"250(C2)5-10",1234.37892865095,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",273.257645289458,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",859.711437449787,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1.08950804347328,"5-10 cm"
+"250(C2)20-30",977.745067258769,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",124.733409386059,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1266.10335121203,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.702990526967606,"20-30 cm"
+"250(C2)40-50",1163.28943238451,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",91.6776114182295,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1033.29162998372,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1.03406332330901,"40-50 cm"
+"250(C2)60-80",482.417052491781,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",44.3839071803639,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1283.66508162639,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.363252452701484,"60-80 cm"
+"250(C2)80-100",593.46045088154,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",29.2014289769627,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1031.57248622487,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.559459883370741,"80-100 cm"
+"370(A2)0-5",648.566384103083,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",326.240689619467,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",555.456571084957,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.735588521149445,"0-5 cm"
+"370(A2)5-10",823.058008387081,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",337.877560866247,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",855.613664721098,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.68962216959914,"5-10 cm"
+"370(A2)20-30",1038.23951308283,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",259.478172913718,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1570.96357177995,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",0.567207077795627,"20-30 cm"
+"370(A2)40-50",743.342593534325,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",243.061840594826,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1112.99935980649,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.548163013081077,"40-50 cm"
+"370(A2)60-80",434.624455511807,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",144.701085114187,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",769.898885677014,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.475207160935969,"60-80 cm"
+"370(A2)80-100",163.299299056268,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",30.8975228565134,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",361.092821527814,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",0.416590105842405,"80-100 cm"
+"131(A6)0-5",262.950388152705,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",101.993574423343,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",526.38594380021,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.418457923160948,"0-5 cm"
+"131(A6)5-10",122.80184010091,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",103.786519175589,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",299.73847097001,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.304322763397134,"5-10 cm"
+"131(A6)20-30",125.583512062395,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",8.82963970104561,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",183.9686084796,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.651372682311548,"20-30 cm"
+"131(A6)40-50",28.5907593853738,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",7.82465830734953,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",135.141007532116,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.199983396135671,"40-50 cm"
+"131(A6)60-80",15.805014012802,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,92.0739116402234,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"131(A6)80-100",33.4587349705905,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,40.0557345175358,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"110(A2)0-5",310.722847059758,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",88.4207673763707,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",418.975525167158,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.612386908666861,"0-5 cm"
+"110(A2)5-10",120.177797153456,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",114.304558980374,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",370.238478386303,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.248022957478825,"5-10 cm"
+"110(A2)20-30",512.226306970797,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",31.5499575764983,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",440.323133034931,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1.08551709593586,"20-30 cm"
+"110(A2)40-50",180.818525623177,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",16.4905229399542,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",120.439438112537,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1.32051834553477,"40-50 cm"
+"110(A2)60-80",25.7115790629724,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",5.88628294072157,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",49.5589710468153,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.463729124024788,"60-80 cm"
+"110(A2)80-100",1461.97938588891,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",241.353156185305,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",862.009895434582,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1.32502115576784,"80-100 cm"
+"250(A2)0-5",609.015571398355,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",314.64800280559,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",496.747605944063,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.750577849856543,"0-5 cm"
+"250(A2)5-10",376.514145719817,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",379.883665727353,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",601.782329861338,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.383546081265682,"5-10 cm"
+"250(A2)20-30",187.971828800195,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",132.153269234864,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",459.530815303515,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.317689513225368,"20-30 cm"
+"250(A2)40-50",167.680289922551,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",9.06134402117381,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",204.461473120626,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.785303847931134,"40-50 cm"
+"250(A2)60-80",87.0829167252748,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",4.32207692862997,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",264.261947744616,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.324229696204822,"60-80 cm"
+"250(A2)80-100",135.142035741674,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,107.425136170951,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"392(C2)0-5",1175.18219523963,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",407.279980624196,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",997.593358749501,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.836504019475188,"0-5 cm"
+"392(C2)5-10",1696.32210737632,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",358.822564500698,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1425.55710375431,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.95065088307983,"5-10 cm"
+"392(C2)20-30",1438.14960353148,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",275.347234804874,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1882.74108784182,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.666399789313408,"20-30 cm"
+"392(C2)40-50",2101.13530992165,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",442.097826851689,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",2010.99790524236,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.856523975983623,"40-50 cm"
+"392(C2)60-80",688.793772159948,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",2.32216157529834,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1245.3469897065,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.552064440683102,"60-80 cm"
+"392(C2)80-100",314.816945353526,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",61.3307263522213,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",527.095285562401,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.535015344289716,"80-100 cm"
+"130(G5)0-5",1379.93919838654,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",125.900700962116,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1119.67637857199,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1.10787138031048,"0-5 cm"
+"130(G5)5-10",807.388025212236,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",472.092885899401,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1478.4414396135,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.413931718427939,"5-10 cm"
+"130(G5)20-30",387.71340506168,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",21.5593025193067,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1306.29005155238,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.291985987621866,"20-30 cm"
+"130(G5)40-50",216.674629735945,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",32.7917912359017,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1199.11546754943,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.175885504522141,"40-50 cm"
+"130(G5)60-80",85.5573577635971,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,1335.41442343358,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"130(G5)80-100",93.2249673570742,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",16.2564274415099,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",602.246323872668,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.150726843427927,"80-100 cm"
+"382(A2)0-5",779.319353632548,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",207.764523506517,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",379.690955252477,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1.32660155843447,"0-5 cm"
+"382(A2)5-10",830.040324738652,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",318.108040436176,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",321.916307764384,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1.29688866848945,"5-10 cm"
+"382(A2)20-30",548.675794648735,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",140.293642425111,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",564.278904010591,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.778735699289422,"20-30 cm"
+"382(A2)40-50",420.309901740859,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",149.631501482975,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",977.463855272038,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.372914234116766,"40-50 cm"
+"382(A2)60-80",670.827484083546,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",166.815457002293,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",977.772643745076,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.586086369101272,"60-80 cm"
+"382(A2)80-100",906.307716869731,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",145.310407327025,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1122.16390136403,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.715050167609069,"80-100 cm"
+"260(A2)0-5",761.503407564943,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",453.907771783928,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",729.325090071296,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.643578649743517,"0-5 cm"
+"260(A2)5-10",784.952167606654,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",407.470582165063,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",704.189924373362,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.706107811683353,"5-10 cm"
+"260(A2)20-30",831.313829265962,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",156.441717169365,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",707.449660303797,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.962289763439371,"20-30 cm"
+"260(A2)40-50",711.258238622156,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",133.53960521608,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",983.179152208954,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.636917965148359,"40-50 cm"
+"260(A2)60-80",489.612182520074,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",21.0789700725213,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",872.425432949377,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.547968404928022,"60-80 cm"
+"260(A2)80-100",217.374442196957,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",17.2879549779045,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",347.816816103439,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.595375517972969,"80-100 cm"
+"391(A6)0-5",646.362160395936,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",341.958800523493,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",617.534161285384,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.67364971513432,"0-5 cm"
+"391(A6)5-10",816.302125666907,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",385.322801357462,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",779.166403452528,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.700995872091492,"5-10 cm"
+"391(A6)20-30",1542.80514838491,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",155.008221101443,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",860.310037504622,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1.51952861608442,"20-30 cm"
+"391(A6)40-50",2397.56479909682,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",100.144770888009,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1263.1047529517,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1.7587131021648,"40-50 cm"
+"391(A6)60-80",763.311323151059,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",104.502189187263,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",637.438711083989,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1.02880340317132,"60-80 cm"
+"391(A6)80-100",835.099668330027,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",132.538599782971,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",328.391965828086,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1.81176890975527,"80-100 cm"
+"261(G5)0-5",668.813108912493,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",622.379677054349,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",725.339301707918,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.496255613708672,"0-5 cm"
+"261(G5)5-10",844.311679950069,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",592.103343089614,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",651.969315349472,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.678667499219386,"5-10 cm"
+"261(G5)20-30",147.10150657847,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",362.93738005615,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",602.572159400458,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.152356347158682,"20-30 cm"
+"261(G5)40-50",158.182427601567,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",221.024667705539,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",728.183049976131,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.166646798856534,"40-50 cm"
+"261(G5)60-80",294.315230991563,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",44.6045076099431,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",295.489116391064,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.865394733159393,"60-80 cm"
+"261(G5)80-100",69.7543938230915,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",41.5281732213993,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",321.077930580502,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.192369607383112,"80-100 cm"
+"392(A6)0-5",636.460435962436,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",296.910786798905,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",821.929750490263,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.568857146975129,"0-5 cm"
+"392(A6)5-10",410.406334365651,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",290.243580605447,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",679.463896695135,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.423226946241683,"5-10 cm"
+"392(A6)20-30",557.897601552915,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",157.176689441768,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1208.42499155181,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.408536112189759,"20-30 cm"
+"392(A6)40-50",429.111210828751,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",80.3310052376987,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",847.670485972067,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.462403578974157,"40-50 cm"
+"392(A6)60-80",254.676068853568,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",36.8749447563098,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",326.381471830249,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.701091728115095,"60-80 cm"
+"392(A6)80-100",81.7538362675007,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",127.670134665057,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",749.007202329809,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0932541914996252,"80-100 cm"
+"262(G5)0-5",600.289313952632,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",429.934518543432,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",582.139883876923,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.593127651995794,"0-5 cm"
+"262(G5)5-10",759.380796627741,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",581.988735316892,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",621.790824294184,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.63083044612677,"5-10 cm"
+"262(G5)20-30",293.513444756006,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",490.371164418876,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",791.426533499601,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.228985779294693,"20-30 cm"
+"262(G5)40-50",596.932686903411,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",94.8870312478421,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",962.788981443589,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.564381417126419,"40-50 cm"
+"262(G5)60-80",340.241153822479,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",91.0717657393204,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",504.549957594291,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.571236978930515,"60-80 cm"
+"262(G5)80-100",217.000108012398,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",240.482838675106,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",387.601139587957,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.345495372469939,"80-100 cm"
+"392(A2)0-5",887.338761459595,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",417.95827515286,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",445.121613503792,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1.02810733180297,"0-5 cm"
+"392(A2)5-10",578.0353671562,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",514.559139309799,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",531.853017973495,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.552397411605865,"5-10 cm"
+"392(A2)20-30",799.506526516034,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",265.833195167493,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",820.237655884425,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.736145828554066,"20-30 cm"
+"392(A2)40-50",1031.20424284516,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",244.356099701399,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",818.944996553498,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.96981395625116,"40-50 cm"
+"392(A2)60-80",252.163510282604,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",71.5066775410125,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",283.362709373119,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.710581187279533,"60-80 cm"
+"392(A2)80-100",142.452991531771,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",43.3791023597369,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",238.49393707005,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.505379981781674,"80-100 cm"
+"262(A2)0-5",1251.19224135097,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",153.181926976508,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",578.659674448618,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1.7096489717372,"0-5 cm"
+"262(A2)5-10",2648.68728970813,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",124.541586463289,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",584.62852049132,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",3.73491107949035,"5-10 cm"
+"262(A2)20-30",1090.29315024354,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",79.5350643649209,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",532.390288745276,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1.78174207801977,"20-30 cm"
+"262(A2)40-50",1223.06191719579,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",71.8636307175248,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",685.797062642888,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1.61426074747418,"40-50 cm"
+"262(A2)80-100",265.343707845132,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",24.0930307696249,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",109.215560085061,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1.99044717331362,"80-100 cm"
+"240(G5)0-5",1091.17670483542,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,901.144327800907,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,"0-5 cm"
+"240(G5)5-10",813.313476454888,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,988.439791923757,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,"5-10 cm"
+"240(G5)20-30",558.256605337948,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,1202.18234725339,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"240(G5)40-50",625.207902461114,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,1152.89340957529,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,"40-50 cm"
+"240(G5)60-80",49.4283387916082,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,1079.48327518291,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"240(G5)80-100",35.9072159605073,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,601.962661219814,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"392(G5)0-5",942.795485359102,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",372.144856700807,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",624.012801350682,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.946432000736947,"0-5 cm"
+"392(G5)5-10",1003.6034238311,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",181.057715689843,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",555.468003155473,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1.362618301238,"5-10 cm"
+"392(G5)20-30",1175.18860228498,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",457.881792359799,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",939.402266851249,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.841052035581462,"20-30 cm"
+"392(G5)40-50",666.036021440214,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",77.5501072173062,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",424.642677443808,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1.32625565675871,"40-50 cm"
+"392(G5)60-80",446.133403147599,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",151.219406100463,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",483.599559491058,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.702772644374123,"60-80 cm"
+"392(G5)80-100",111.949238368527,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,184.722211160156,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"112(G5)0-5",180.692790152824,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",241.729749835371,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",603.392925855329,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.213806581399733,"0-5 cm"
+"112(G5)20-30",22.2912785580168,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",450.068735891453,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",304.533206835013,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0295404468181937,"20-30 cm"
+"112(G5)40-50",53.2670618433843,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",33.1659215833567,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",248.452938454741,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.189145932329171,"40-50 cm"
+"112(G5)60-80",11.1312504370374,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",13.65831074884,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",138.080228588356,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0733580966685155,"60-80 cm"
+"262(A6)5-10",360.292961677285,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1141.08978488756,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",415.038518825089,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.231531655081197,"5-10 cm"
+"262(A6)20-30",712.112983523027,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",268.71717629796,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",237.270260331322,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1.40737285547421,"20-30 cm"
+"262(A6)40-50",295.993293416822,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",258.407789299199,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",336.543579586697,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.497508382863456,"40-50 cm"
+"262(A6)60-80",147.960534154447,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",43.1593997823789,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",137.606993423183,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.818517930964032,"60-80 cm"
+"262(A6)80-100",164.240724779444,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",223.797240683736,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",216.255550711459,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.373229594246445,"80-100 cm"
+"260(C2)0-5",735.938601506688,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",318.054368505588,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",744.686242652084,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.692491275650989,"0-5 cm"
+"260(C2)5-10",732.562453243605,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",286.661692968557,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",670.588644603789,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.765277821788432,"5-10 cm"
+"260(C2)20-30",133.245176754455,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",86.7816327005394,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1198.60065341183,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.103661905251125,"20-30 cm"
+"260(C2)40-50",518.86209750118,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",156.170319547375,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1163.91645147831,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.393051509104992,"40-50 cm"
+"260(C2)60-80",269.761190053993,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",123.525351010389,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1241.30288591722,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.197652116768377,"60-80 cm"
+"260(C2)80-100",49.0316526543115,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",11.6956109593241,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",279.127059410952,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.168596391030604,"80-100 cm"
+"381(A6)0-5",422.746403682277,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",231.125973153486,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1287.58121613327,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.278359387948125,"0-5 cm"
+"381(A6)5-10",2037.51817901793,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",2487.53713912304,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",7762.60623541634,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.198779480887943,"5-10 cm"
+"381(A6)20-30",199.425250346147,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",91.9489099699689,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",2473.24040856237,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0777428975340684,"20-30 cm"
+"381(A6)40-50",173.793185200937,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",58.206291741186,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",2441.02003725165,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0695387941399346,"40-50 cm"
+"381(A6)60-80",248.683175089677,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",89.5297928269145,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",2710.62954152699,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0888103659097874,"60-80 cm"
+"381(A6)80-100",118.86351814126,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,2202.72739590407,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"111(C2)0-5",327.018455569162,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",214.803792219262,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",572.820136512299,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.415196191532439,"0-5 cm"
+"111(C2)5-10",252.86617523719,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",31.0267556907407,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",307.666480727228,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.746593518995276,"5-10 cm"
+"111(C2)20-30",60.1651349970779,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",64.6783580736911,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",174.910215614229,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.251118549065061,"20-30 cm"
+"111(C2)40-50",33.7756799747727,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",16.2735915997287,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",71.0839603840822,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.386637207748588,"40-50 cm"
+"111(C2)60-80",53.3699921224845,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",16.6166646359324,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",74.9001758282049,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.583171270465774,"60-80 cm"
+"111(C2)80-100",4.87419755697322,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",2.68071944086297,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",38.7408060387258,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.117673057680482,"80-100 cm"
+"112(C2)0-5",68.9238275413572,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",277.90073533009,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",723.436740657292,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0688317667062185,"0-5 cm"
+"112(C2)5-10",38.7284655950117,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",643.764098261852,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1263.91660495986,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0203013352966283,"5-10 cm"
+"112(C2)20-30",37.0720390495052,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",141.436916014409,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",510.481995163113,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0568660279888863,"20-30 cm"
+"112(C2)40-50",40.8457474272377,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",20.0341998471709,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",513.078757973647,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0766174350632951,"40-50 cm"
+"112(C2)60-80",18.0507467141331,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",20.4309749159708,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",209.065275835258,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0786537760640797,"60-80 cm"
+"112(C2)80-100",23.9243052963881,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",9.13188431490502,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",71.0120766788894,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.298516631817593,"80-100 cm"
+"382(G5)0-5",292.665446272944,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",269.154929085803,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",313.95917035052,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.501900822764969,"0-5 cm"
+"382(G5)5-10",311.912120520485,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",316.371286313878,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",318.824560317816,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.491048740596285,"5-10 cm"
+"382(G5)20-30",650.415296009942,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",346.838904278223,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",348.262149142968,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.93571329349695,"20-30 cm"
+"382(G5)40-50",72.7559712140448,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",105.442020438529,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",360.865060166139,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.15602587702443,"40-50 cm"
+"382(G5)60-80",230.285562565402,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",285.636991930996,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",455.637771427855,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.310661544070294,"60-80 cm"
+"382(G5)80-100",63.4684714688517,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",299.416459045191,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",181.767056627522,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.131900760108376,"80-100 cm"
+"110(A6)0-5",86.9319303181667,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",315.752391112064,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",333.678345168841,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.133858663382641,"0-5 cm"
+"110(A6)5-10",46.1166288148626,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",134.967619555938,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",275.367094008402,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.112387831909892,"5-10 cm"
+"110(A6)20-30",64.6273028654818,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",203.825136677561,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",105.085266138723,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.209210509831607,"20-30 cm"
+"110(A6)40-50",58.97889518604,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",81.7628594043542,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",91.7475831897819,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.339915536519029,"40-50 cm"
+"110(A6)60-80",22.7160712815702,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",19.7272025292101,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",93.0811419347741,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.201368714251654,"60-80 cm"
+"110(A6)80-100",51.7945267328727,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",18.3212332291124,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",65.6415830056855,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.616874576813048,"80-100 cm"
+"372(A6)0-5",511.408188835361,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",299.869843660317,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1000.90939619629,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.393155251225978,"0-5 cm"
+"372(A6)5-10",347.919768089793,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",441.921651767984,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1432.18490399313,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.185645670477095,"5-10 cm"
+"372(A6)20-30",700.841950060008,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",479.154115307168,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1567.8404228003,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.342376072340655,"20-30 cm"
+"372(A6)40-50",93.4271414846389,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",133.540415475107,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",2185.84408866073,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0402810061540219,"40-50 cm"
+"372(A6)60-80",47.3211685453357,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",74.6229346172466,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1889.60733057224,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0240914567828283,"60-80 cm"
+"372(A6)80-100",28.7165861628416,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",28.6364873590918,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1675.63173150022,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0168498044175594,"80-100 cm"
+"381(A2)0-5",837.70923826431,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",363.58944561467,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",919.111841442804,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.653082090676015,"0-5 cm"
+"381(A2)5-10",374.793311495562,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",278.684269487638,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1210.29035085391,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.251712357198937,"5-10 cm"
+"381(A2)20-30",353.065421518229,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",151.246587009489,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1556.42551077391,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",0.206752468449017,"20-30 cm"
+"381(A2)40-50",416.516873976308,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",113.472114805337,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1330.98290329104,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",0.288355725002242,"40-50 cm"
+"131(G5)0-5",658.022083878208,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",78.7442013067614,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",961.207698223113,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.632742806831428,"0-5 cm"
+"131(G5)5-10",211.79036053778,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",125.150101839163,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",550.846625316027,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.313300866749846,"5-10 cm"
+"131(G5)20-30",116.194636841021,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",2.73989932331385,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1381.79279763416,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.0839233606373906,"20-30 cm"
+"131(G5)40-50",88.9201689947832,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",33.1479514969459,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",846.517620456001,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.101084061750162,"40-50 cm"
+"131(G5)60-80",13.08276590636,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,397.993986839543,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"131(G5)80-100",37.8470214737083,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,532.203780833178,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"110(G5)0-5",868.133275618245,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",87.6315433004984,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1094.50649590937,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.734375552451132,"0-5 cm"
+"110(G5)5-10",774.537189420512,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",56.1585962065341,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1623.26749611628,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.461191589770557,"5-10 cm"
+"110(G5)20-30",312.623462330759,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",58.4748102551696,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1149.7824237592,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.258739160445235,"20-30 cm"
+"110(G5)40-50",405.086158023984,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",18.8764306083051,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",1424.28448975801,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.280693685858097,"40-50 cm"
+"110(G5)60-80",149.568118530139,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",9.47643014376524,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",497.018758064685,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.295300176610135,"60-80 cm"
+"110(G5)80-100",29.7385076213704,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",2.81677042023987,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",396.800059188346,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0744175555631591,"80-100 cm"
+"131(C2)0-5",362.631558364515,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",243.523010152572,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",813.216500244327,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.343160783520165,"0-5 cm"
+"131(C2)5-10",239.365900716769,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",49.0543196441447,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",840.47412145629,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.269093026885851,"5-10 cm"
+"131(C2)20-30",128.824600929962,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",29.2937961991332,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",656.698249690635,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.187793140899862,"20-30 cm"
+"131(C2)40-50",226.462390551061,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",16.3904311128355,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",294.567354277291,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.728273743868296,"40-50 cm"
+"131(C2)60-80",43.0870586566348,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",5.46027771932413,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",94.99701019035,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.428909236484429,"60-80 cm"
+"131(C2)80-100",1.26056833744903,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",2.27709061152681,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",60.6852500195234,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.0200209891311977,"80-100 cm"
+"131(A2)0-5",167.848845363592,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",293.662143906962,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",857.792730591372,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.145771101483,"0-5 cm"
+"131(A2)5-10",172.768438954902,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",175.415528180132,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1547.29302522556,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.100288837954249,"5-10 cm"
+"131(A2)20-30",460.674581739092,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",46.490327928372,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1403.45365700757,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.317718881919046,"20-30 cm"
+"131(A2)40-50",271.4699971784,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",25.5985056941872,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",690.856236601493,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.37890739100777,"40-50 cm"
+"131(A2)60-80",163.176015889197,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",23.8038139651895,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",807.166011599471,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.196368160273829,"60-80 cm"
+"131(A2)80-100",3.30861785682767,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",6.29349292449518,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",482.009038739903,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.00677575405056804,"80-100 cm"
+"130(C2)0-5",141.249496585902,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",326.475876947391,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",756.719745725192,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.130400726913385,"0-5 cm"
+"130(C2)5-10",313.78205753756,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",95.1967725572899,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",404.185239516988,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.628340729042695,"5-10 cm"
+"130(C2)20-30",154.910040920675,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",98.2280129915716,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",899.34315503159,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.155287207455737,"20-30 cm"
+"130(C2)40-50",383.576791675028,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",35.6114139671007,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",533.522925565012,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.673965292606256,"40-50 cm"
+"130(C2)60-80",166.472037682799,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",25.7267352824117,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",347.406611019656,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.446146235206845,"60-80 cm"
+"130(C2)80-100",39.1975702343991,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,294.447177509915,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"122(A6)0-5",422.092992082429,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",319.541600879228,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1083.68779389721,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.300801133195814,"0-5 cm"
+"122(A6)5-10",40.6590377987526,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",195.544932814341,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",801.195615719796,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0407919973342592,"5-10 cm"
+"122(A6)20-30",28.7225159546843,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",142.292752111408,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1391.23636094552,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0187296841710615,"20-30 cm"
+"122(A6)40-50",260.17809739287,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,787.408553182498,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,"40-50 cm"
+"122(A6)60-80",6.64636962707314,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,535.429211508358,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"112(A2)0-5",397.515612674659,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",43.4608094697494,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1293.74998320406,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.297272213814405,"0-5 cm"
+"112(A2)5-10",214.475142247445,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",27.9246107470601,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",2668.15141672121,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0795508509635192,"5-10 cm"
+"112(A2)20-30",63.5400435235014,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1.19100223180198,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1929.03043647448,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0329185254341018,"20-30 cm"
+"112(A2)40-50",70.5077318921775,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",9.6511465186478,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",1279.95973016856,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0546736485918141,"40-50 cm"
+"112(A2)60-80",101.187303029819,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",8.15043523086294,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",1186.59911206325,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0846933177409356,"60-80 cm"
+"112(A2)80-100",60.1281880544661,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",14.9657880835267,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",806.522462012948,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0731942155562233,"80-100 cm"
+"122(C2)0-5",648.790765486083,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",159.34254396177,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",756.321689037099,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.708546585205413,"0-5 cm"
+"122(C2)5-10",456.601442166066,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",75.1988022421215,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",982.077004541368,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.431865970295081,"5-10 cm"
+"122(C2)20-30",336.658781773706,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",76.9154498613419,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",983.513847523834,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.317474048108483,"20-30 cm"
+"122(C2)40-50",442.10217936567,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",57.2908757473351,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",585.768153601791,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.687498595289369,"40-50 cm"
+"122(C2)60-80",97.1467239446898,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",31.5361054326177,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",374.222265942408,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.239420134735559,"60-80 cm"
+"122(C2)80-100",113.392216029426,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",12.9353498805351,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",249.841350370328,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.431515487945372,"80-100 cm"
+"240(C2)0-5",736.894315939059,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",147.743577536392,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1126.85524267214,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.57813823789551,"0-5 cm"
+"240(C2)5-10",760.162671846276,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",181.666491005393,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1033.09374789333,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.625771775783035,"5-10 cm"
+"240(C2)20-30",412.282784781746,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",271.652971285495,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1169.53724884534,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.286071039771777,"20-30 cm"
+"240(C2)40-50",311.882461819213,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",71.484727185798,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1211.48648075366,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.243093890096035,"40-50 cm"
+"240(C2)60-80",368.326955631221,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",188.420874808381,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1033.76694652676,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.301366900570858,"60-80 cm"
+"240(C2)80-100",672.470117247244,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",95.2421384870219,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",982.212393220791,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.624128533926485,"80-100 cm"
+"122(G5)0-5",480.322293285059,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",164.716549541497,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",665.481913558914,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.57856321666903,"0-5 cm"
+"122(G5)5-10",646.50387121579,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",125.471404122388,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",708.583674600367,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.775133306790512,"5-10 cm"
+"122(G5)20-30",264.392770170361,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",38.4045482987434,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",808.49858531641,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.312187733964042,"20-30 cm"
+"122(G5)40-50",432.145256157255,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",51.7184419808172,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",544.772432089664,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.724479241749796,"40-50 cm"
+"122(G5)60-80",817.703434884825,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",160.365352817912,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",862.529296179927,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.799401419966322,"60-80 cm"
+"122(G5)80-100",131.448351883902,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",5.13347036262234,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",292.962783129158,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.440959422817859,"80-100 cm"
+"111(A2)5-10",412.778280284771,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",136.253218047595,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1015.54887445785,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.358376046519309,"5-10 cm"
+"111(A2)20-30",152.116731252526,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",71.3377208761632,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",541.083800099822,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.248385672355382,"20-30 cm"
+"111(A2)60-80",140.722252366312,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",9.71699080525899,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",443.339049336953,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.310606723888153,"60-80 cm"
+"111(A2)80-100",58.8178744058717,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",4.35609760810909,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",334.218496314742,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.173722055528107,"80-100 cm"
+"111(A6)0-5",436.835525242278,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",82.7751242461329,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",799.474591287177,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.495138187693511,"0-5 cm"
+"111(A6)5-10",450.899697824828,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",122.02871197586,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",652.822145101248,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.581918047462336,"5-10 cm"
+"111(A6)20-30",219.723224147167,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",15.8461856933771,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",749.912456255412,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.28693535026649,"20-30 cm"
+"111(A6)40-50",158.845344248728,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",17.5329767861117,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",740.522929268259,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.209543046865115,"40-50 cm"
+"111(A6)80-100",118.338054519227,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",8.97023026779463,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",672.99300072961,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.173525564341866,"80-100 cm"
+"241(C2)0-5",799.041095805943,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",93.8701586500913,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",457.36510211884,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1.44954641452243,"0-5 cm"
+"241(C2)5-10",852.528800349553,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",48.2342663344391,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",375.939816397814,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",2.00985594135813,"5-10 cm"
+"241(C2)20-30",547.713139786894,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,317.434436197311,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"241(C2)40-50",843.024767391494,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",45.5037345488365,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",654.758403893475,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1.20387026673575,"40-50 cm"
+"241(C2)60-80",780.790295657205,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",41.9751366008941,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",339.677550553692,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",2.04581369904243,"60-80 cm"
+"241(C2)80-100",631.055007535127,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,352.597041467671,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"252(A6)0-5",675.422297938964,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,790.13985438465,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,"0-5 cm"
+"252(A6)5-10",380.070931877226,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,933.060430463571,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,"5-10 cm"
+"252(A6)20-30",581.361744318773,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,1108.62829850182,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"252(A6)40-50",297.70282069856,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,880.760477394368,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,"40-50 cm"
+"252(A6)60-80",207.868505858468,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,936.012050121283,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"252(A6)80-100",13.3978950776172,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,678.391869280971,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"372(A2)0-5",691.338002382761,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",198.762307477824,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1227.42016586806,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.48474722926643,"0-5 cm"
+"372(A2)5-10",689.155852597293,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1096.24048212378,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",751.75833650702,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.372920072052802,"5-10 cm"
+"372(A2)20-30",602.494267198094,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",643.496330810265,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1274.47296968078,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.314131340394156,"20-30 cm"
+"372(A2)40-50",890.095588531104,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",995.766060033042,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1719.46382691365,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.327815921889409,"40-50 cm"
+"372(A2)60-80",420.007019121651,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",274.397687317355,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1418.40870442842,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.248112850453325,"60-80 cm"
+"372(A2)80-100",841.088053938714,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",229.708621181112,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1097.96120992801,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.63350694143293,"80-100 cm"
+"241(G5)0-5",589.958800952853,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",362.072027076127,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",948.980182977186,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.449988792535472,"0-5 cm"
+"241(G5)5-10",190.319676110438,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",178.580797507631,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",2826.67074381901,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0633290336909447,"5-10 cm"
+"241(G5)20-30",193.545350330125,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",68.8736260132155,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1831.72041812811,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.101834134925729,"20-30 cm"
+"241(G5)40-50",223.317217797233,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",69.216258701999,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",2056.32200722405,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.105063842593273,"40-50 cm"
+"241(G5)60-80",61.2396637675394,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",149.853577278719,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1655.92276579188,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0339132052552009,"60-80 cm"
+"241(G5)80-100",15.7418340697575,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,2302.45591069075,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"261(A6)0-5",190.048804610293,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",360.219871120796,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",863.663334934316,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.15528344834706,"0-5 cm"
+"261(A6)5-10",297.316094624213,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",641.78505749301,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",920.43851348235,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.190315970228631,"5-10 cm"
+"261(A6)20-30",228.136037085989,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",296.151765152177,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1266.28359221162,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.14601310448511,"20-30 cm"
+"261(A6)40-50",307.526814286828,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",128.572699674204,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",912.240515195333,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.295467822557745,"40-50 cm"
+"261(A6)60-80",141.577878346614,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",141.478972796751,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",638.413448831897,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.181535137950125,"60-80 cm"
+"261(A6)80-100",245.981508417932,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",66.9938773965015,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",544.479272958278,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.402276875567165,"80-100 cm"
+"111(G5)0-5",497.23575835176,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",239.173658291173,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",789.294226144323,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.483472324101478,"0-5 cm"
+"111(G5)5-10",463.109978954143,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",297.242653762239,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",690.676477776275,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.468773165909773,"5-10 cm"
+"111(G5)20-30",41.9097775557532,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",13.7878288227749,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",407.728860956436,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.0994261403450133,"20-30 cm"
+"111(G5)40-50",135.408413284069,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,321.025132868993,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"40-50 cm"
+"111(G5)60-80",102.129824243744,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,269.964329387369,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"111(G5)80-100",3561.26210234649,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,121.890903177677,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"382(C2)0-5",446.271606061344,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",591.390557538523,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",803.182714655477,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.320005850505977,"0-5 cm"
+"382(C2)5-10",340.41937190469,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",845.923693273731,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",917.133698932673,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.19308467972144,"5-10 cm"
+"382(C2)20-30",566.384419135118,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",990.929901701079,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",2553.49462950571,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",0.159795874943422,"20-30 cm"
+"382(C2)40-50",544.882193095074,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1899.68606632512,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",2591.54913970258,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.121321233046042,"40-50 cm"
+"382(C2)60-80",540.103209618923,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1384.9468008889,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",2454.79515898167,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.140661329657978,"60-80 cm"
+"382(C2)80-100",41.0502716544952,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",61.1637709807506,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",864.425237197772,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0443504312300321,"80-100 cm"
+"261(C2)0-5",726.528657750737,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",318.588727792261,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",284.905406841602,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1.20387028813713,"0-5 cm"
+"261(C2)5-10",828.853816708403,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",259.956944104563,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",342.990904135194,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1.37466916770357,"5-10 cm"
+"261(C2)20-30",166.601975565076,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",58.1174135600494,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",360.718848517718,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.397773523091326,"20-30 cm"
+"261(C2)40-50",396.107859039001,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",51.4865794980315,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",271.418426483785,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1.22670089252598,"40-50 cm"
+"261(C2)60-80",429.813619573838,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",173.635355515717,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",567.755501909055,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.579739573626252,"60-80 cm"
+"261(C2)80-100",111.755736638472,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",55.0668915897634,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",167.542118602446,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.50202701383011,"80-100 cm"
+"262(C2)0-5",373.751927638064,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",143.01847374395,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",818.793758038492,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.388591364600783,"0-5 cm"
+"262(C2)5-10",325.55810944309,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",346.998087980248,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1991.04430335054,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.139243886530982,"5-10 cm"
+"262(C2)20-30",260.715762746243,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",384.171715325145,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1393.18279192784,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.146687541333099,"20-30 cm"
+"262(C2)40-50",118.245465304939,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",187.214211177126,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",2422.60279412814,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0453079526513042,"40-50 cm"
+"262(C2)60-80",167.016734497358,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",116.264888803552,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1438.76470113328,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.10740421634301,"60-80 cm"
+"262(C2)80-100",198.66902177027,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",166.662116819862,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",2009.94395417897,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.091274679611227,"80-100 cm"
+"241(A2)0-5",412.994390794104,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",340.750232159825,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1305.74645342101,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.250832202949994,"0-5 cm"
+"241(A2)5-10",166.378255684982,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",159.353674920739,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",994.762530691397,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.144160748177638,"5-10 cm"
+"241(A2)20-30",190.436386688198,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",15.7004797534468,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",2008.36384569666,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0940861336735671,"20-30 cm"
+"241(A2)40-50",236.507385067954,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",119.845554047803,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1481.70992531815,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.147673551191362,"40-50 cm"
+"241(A2)60-80",146.614336220663,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",21.7684291182602,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1190.67184463796,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.120924996797113,"60-80 cm"
+"260(G5)0-5",245.978156057166,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",345.259665376401,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",689.999506682839,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.237600557131882,"0-5 cm"
+"260(G5)5-10",367.742861138154,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",203.740793781995,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",952.018511937962,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.318182911717138,"5-10 cm"
+"260(G5)20-30",101.912467670866,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",292.156537386768,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",936.650072350699,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.0829361323932326,"20-30 cm"
+"260(G5)40-50",287.463568398066,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",58.8283126160922,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",902.41992585691,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.299052374706785,"40-50 cm"
+"260(G5)60-80",255.013076368184,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",131.277603148179,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",958.765517399863,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.233947695793879,"60-80 cm"
+"260(G5)80-100",283.208107204363,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",150.088846675402,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",676.09865021154,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.342789146860108,"80-100 cm"
+"112(A6)0-5",229.637747209089,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",217.054403168282,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",623.455192706891,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.273212522898065,"0-5 cm"
+"112(A6)5-10",13.7581377056644,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",61.9188637987009,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",794.30813710819,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0160683296498384,"5-10 cm"
+"122(A2)0-5",769.045363503999,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",104.198647198324,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",1087.05729570964,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.645575258685962,"0-5 cm"
+"122(A2)5-10",478.049247646802,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",57.1760631413568,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",904.917081987182,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.496884579281492,"5-10 cm"
+"122(A2)20-30",103.779772622105,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",19.9701063455551,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",314.151847461319,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.310604470731938,"20-30 cm"
+"122(A2)40-50",140.877211087822,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",1.72656748038897,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",768.817649324218,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.182828198584151,"40-50 cm"
+"122(A2)60-80",40.9042332051995,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",1.68539810565144,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",582.196652418142,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0700556442324351,"60-80 cm"
+"122(A2)80-100",5.28086064005251,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,174.001895500234,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"120(G5)0-5",203.517256102775,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",2007.2540889088,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",857.487554935828,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.0710420978240972,"0-5 cm"
+"120(G5)5-10",34.1422995205988,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",262.657415400062,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",1136.34825586969,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.0244046898606286,"5-10 cm"
+"120(G5)20-30",205.214842523835,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",233.481888484625,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",298.648425127328,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.385647720632364,"20-30 cm"
+"120(G5)40-50",28.6585300427454,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",74.5950696266901,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",417.1980802098,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0582735445832738,"40-50 cm"
+"120(G5)60-80",8.93629728721992,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",42.5983164888712,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",442.181374306339,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0184337286748981,"60-80 cm"
+"120(G5)80-100",33.12437657131,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",32.8808430712865,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",113.763305342797,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.225882702648153,"80-100 cm"
+"121(G5)0-5",526.856561207832,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",240.63839321676,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1069.97160355093,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.401993394302806,"0-5 cm"
+"121(G5)5-10",80.7488718999936,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",101.310570430397,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1104.63953438896,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.0669587170955878,"5-10 cm"
+"121(G5)20-30",408.970297786289,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,586.950553075202,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"121(G5)40-50",101.546923895981,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",49.5456653078467,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",693.435325700449,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.136674995894811,"40-50 cm"
+"121(G5)60-80",10.9471142013771,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",13.180282356635,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",328.497602956357,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.0320392822361011,"60-80 cm"
+"121(G5)80-100",149.234254750973,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",62.0339259935358,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",1010.44365989114,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.139149066344236,"80-100 cm"
+"120(A6)0-5",111.850489702867,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",152.62182758694,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",408.241443590356,"0-5 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.199425591674213,"0-5 cm"
+"120(A6)5-10",16.5531649286046,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",96.2212480292103,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",329.892063373349,"5-10 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.0388468618220811,"5-10 cm"
+"120(A6)20-30",6.54544469837172,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",7.30479622719362,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",255.695264415184,"20-30 cm","Pioneer zone","ambient","Topsoil
+(0-30 cm)",0.0248876166886976,"20-30 cm"
+"120(A6)40-50",17.0134702385799,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",33.7944130791761,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",95.5810726503318,"40-50 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.131504590244792,"40-50 cm"
+"120(A6)60-80",7.04800919239207,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",12.7352652219374,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",145.125177002257,"60-80 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.0446470888658885,"60-80 cm"
+"120(A6)80-100",12.17298875273,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",8.82331629149181,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",82.1932698549841,"80-100 cm","Pioneer zone","ambient","Subsoil
+(40-100 cm)",0.133744730143357,"80-100 cm"
+"121(A6)0-5",304.0276697853,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",64.8945688943158,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",697.219991074008,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.398926468217503,"0-5 cm"
+"121(A6)5-10",59.5306807479296,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",14.624227609659,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",601.568724657874,"5-10 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.0966104538016254,"5-10 cm"
+"121(A6)20-30",7.23700606942898,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,364.713522295891,"20-30 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",NA,"20-30 cm"
+"121(A6)40-50",6.77926108864758,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",90.7828183496186,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",184.412032102713,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.0246344038687667,"40-50 cm"
+"121(A6)60-80",2.89744946936053,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,96.6643273565078,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"121(A6)80-100",3.08420192810774,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,146.249172340741,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"132(A2)0-5",31.3078087976131,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",131.258269148408,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",462.183580076476,"0-5 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0527563211770546,"0-5 cm"
+"132(A2)5-10",5.66965597727985,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",26.639708177614,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",89.0031186738596,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.0490273035660197,"5-10 cm"
+"132(A2)20-30",63.8614893757865,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",34.4848664829421,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",255.829529051321,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",0.219973554043928,"20-30 cm"
+"132(A2)40-50",5.4438009643211,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",71.7256280695554,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",146.181310901072,"40-50 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0249822286065654,"40-50 cm"
+"132(A2)60-80",18.9906226550233,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",30.738482790207,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",71.6101400259196,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.185548394619249,"60-80 cm"
+"132(A2)80-100",3.56123523208197,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",19.9044536535506,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",107.046573220345,"80-100 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",0.0280520395917668,"80-100 cm"
+"250(G5)0-5",356.816782851578,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",356.317300099803,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",907.434084212752,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.282347293368684,"0-5 cm"
+"250(G5)5-10",247.522544916131,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",244.846995534034,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1115.52503184677,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.1819520983482,"5-10 cm"
+"250(G5)20-30",230.272021421637,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",179.803005514383,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1376.92112229593,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.147920891895944,"20-30 cm"
+"250(G5)40-50",62.8238075784964,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",146.99934053955,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1111.81513510432,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.0499071219739212,"40-50 cm"
+"250(G5)60-80",278.158068631948,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",162.554234238488,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1171.87219180578,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.208447662008995,"60-80 cm"
+"250(G5)80-100",58.2367464161666,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",46.8896181517733,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",457.348823749636,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.115494459717439,"80-100 cm"
+"252(A2)0-5",952.869734821442,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",179.488357867038,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",640.983506827696,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1.16136795888299,"0-5 cm"
+"252(A2)5-10",197.106874787201,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",43.9360453781032,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",622.810503293299,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.295624889517565,"5-10 cm"
+"252(A2)20-30",54.4691672041251,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",19.7931131614182,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",670.804658163873,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.0788724920145573,"20-30 cm"
+"252(A2)40-50",6.21371454343785,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",20.4462383578523,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",431.965877470788,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0137346333708521,"40-50 cm"
+"252(A2)60-80",200.95351525956,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",85.5625913209126,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",872.02236774702,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.209854502576104,"60-80 cm"
+"252(A2)80-100",14.8616367705707,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",12.4698039723577,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",220.578764230754,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0637705560053824,"80-100 cm"
+"251(A6)0-5",495.236324345755,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",618.277742154821,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",927.570331846809,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.320365456783713,"0-5 cm"
+"251(A6)5-10",274.355026754923,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",647.622859107094,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1010.00727530118,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.165510400094686,"5-10 cm"
+"251(A6)20-30",130.21053116255,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",492.372859455458,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",1207.39203754683,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0766050242549369,"20-30 cm"
+"251(A6)40-50",72.5697300302409,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",235.395620073748,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",664.933974934879,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0806035150155711,"40-50 cm"
+"251(A6)60-80",17.8578471517968,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",75.0106301376225,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1493.8488936405,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0113826935306429,"60-80 cm"
+"250(A6)0-5",784.888128062696,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",873.812370227219,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",803.973900514033,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.46781174798619,"0-5 cm"
+"250(A6)5-10",164.54282652644,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",953.940044424153,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",498.858869607805,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.113259188823169,"5-10 cm"
+"250(A6)20-30",38.967343379041,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",103.401190924561,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",423.372640094655,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.0739735747761918,"20-30 cm"
+"250(A6)40-50",30.048085633712,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",153.855661213637,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",599.509090238454,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.0398851759068832,"40-50 cm"
+"250(A6)60-80",14.0959827384664,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",51.9387280095728,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",307.733046635374,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.0391912397139903,"60-80 cm"
+"250(A6)80-100",14.2893863609389,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",5.33090672090202,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",178.997622833145,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.0775212952412181,"80-100 cm"
+"252(C2)0-5",518.076168552079,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",185.974276441097,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",803.959210850884,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.523344421825051,"0-5 cm"
+"252(C2)5-10",417.314827570459,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",104.443199778773,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1048.79795698269,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.361862586262844,"5-10 cm"
+"252(C2)20-30",28.2858061570997,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",97.3265688186657,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",729.383195511834,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.0342149172267326,"20-30 cm"
+"252(C2)40-50",144.650099962942,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",42.4062711908918,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",446.623529918859,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.295789949067908,"40-50 cm"
+"252(C2)60-80",151.483122530947,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",22.871756236462,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1110.76081542778,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.133626296841984,"60-80 cm"
+"252(C2)80-100",28.3801644738654,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",28.6712373540439,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",202.031702911151,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.123016050169288,"80-100 cm"
+"251(A2)0-5",392.470756016442,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",292.374522528665,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",535.292494854608,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.474189194172876,"0-5 cm"
+"251(A2)5-10",46.32955229832,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",293.748046364858,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",712.485603365806,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0460425392360123,"5-10 cm"
+"251(A2)20-30",93.450464761627,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",143.965805091908,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",540.843409925029,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.136462043314233,"20-30 cm"
+"251(A2)40-50",6.61611501700723,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",42.8311261629447,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",335.974823548109,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0174657104041103,"40-50 cm"
+"242(A6)0-5",437.009864763344,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",880.828502217526,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",510.439969313483,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.314108939939133,"0-5 cm"
+"242(A6)5-10",222.03811909245,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1282.28137461014,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",568.616137506059,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.119962406151049,"5-10 cm"
+"242(A6)20-30",732.422828406934,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1229.85262455485,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",789.465681241998,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.362707962535857,"20-30 cm"
+"242(A6)40-50",176.069821108757,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",766.123621262139,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1062.82652481884,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0962682451930327,"40-50 cm"
+"242(A6)60-80",312.949040580086,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",544.048375413472,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",803.458772016269,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.232242954092682,"60-80 cm"
+"242(A6)80-100",96.9060682209055,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",198.241999175809,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",481.873230485204,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.142484779041349,"80-100 cm"
+"260(A6)0-5",720.944470315674,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1228.30170223656,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",NA,NA,"Low marsh","ambient",NA,NA,"0-5 cm"
+"260(A6)5-10",1064.94461309931,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1374.03416173736,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",2051.09474890099,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.310921031261517,"5-10 cm"
+"260(A6)20-30",658.720243532453,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1201.51129536017,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1875.22691795172,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",0.214096942236561,"20-30 cm"
+"260(A6)40-50",505.922630742483,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",893.677341452898,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1794.47665328263,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.188204482233265,"40-50 cm"
+"260(A6)60-80",766.716416150132,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",732.201094321765,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",3001.7704360121,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.205335367428893,"60-80 cm"
+"260(A6)80-100",17.9333030557562,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",15.7577013614548,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",466.250458993703,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",0.0372053930426041,"80-100 cm"
+"242(G5)0-5",456.594474867636,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,NA,NA,NA,NA,949.857978852856,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",NA,"0-5 cm"
+"242(G5)5-10",551.988429615084,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",931.114670380054,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",813.747617555883,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.316350713423953,"5-10 cm"
+"242(G5)20-30",542.262842265401,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1278.14215321502,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1370.03586869091,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.204768273801746,"20-30 cm"
+"242(G5)60-80",233.017512208386,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,1292.37256892361,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,"60-80 cm"
+"242(G5)80-100",144.022028383739,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,NA,NA,NA,NA,916.468326605703,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",NA,"80-100 cm"
+"241(A6)0-5",216.894380757187,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",179.522469897713,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",749.285385988773,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.233519106651155,"0-5 cm"
+"241(A6)5-10",103.461194258867,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",61.575057222987,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",335.388552560372,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.260631432476469,"5-10 cm"
+"241(A6)20-30",116.572329478439,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",120.74939199724,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",330.545092583086,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.25830656802031,"20-30 cm"
+"241(A6)40-50",311.568348656367,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",122.408336092693,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",215.268665686622,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.922681577408664,"40-50 cm"
+"241(A6)60-80",6.84669891063935,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",15.0345060290024,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",124.113653105284,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0492043800883621,"60-80 cm"
+"241(A6)80-100",147.76133162334,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",97.5860189190902,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",150.341917729934,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.595985001208302,"80-100 cm"
+"251(G5)0-5",129.55444106471,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",405.824029859,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",616.54293121155,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.126720097575385,"0-5 cm"
+"251(G5)5-10",107.842367205442,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",558.473160543389,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",582.028077854718,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0945569926402814,"5-10 cm"
+"251(G5)20-30",18.8074934934735,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",137.591878522428,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",425.815509408417,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",0.0333816948381621,"20-30 cm"
+"251(G5)40-50",63.726598669022,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",127.455552996581,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",434.779038385882,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.113345211493171,"40-50 cm"
+"251(G5)60-80",9.07828085107901,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",6.25702477008546,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",126.454691631118,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",0.0684060239537124,"60-80 cm"
+"242(A2)0-5",303.112794808334,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",929.037759477599,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",856.561701353175,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.169754080608485,"0-5 cm"
+"242(A2)5-10",152.110175533931,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",991.668755058077,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",749.729019091081,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.0873494716669496,"5-10 cm"
+"242(A2)20-30",39.0605646662966,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",201.009589537208,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1548.96320524418,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",0.0223206696599967,"20-30 cm"
+"242(A2)40-50",88.8582108846293,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",157.715277397505,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1187.59609793905,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0660502932731093,"40-50 cm"
+"242(A2)60-80",193.749822358298,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",161.676836387652,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",618.942527676124,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.248200123232491,"60-80 cm"
+"242(A2)80-100",21.5910128035151,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",132.806821998914,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",716.129908012332,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",0.0254330058298091,"80-100 cm"
+"111(A6)60-80",46.4852491120492,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",15.7659260514335,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",459.658641907812,"60-80 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.0977762872280382,"60-80 cm"
+"111(A2)0-5",1089.72567548499,"80-100 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",151.438374604253,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",1298.04681613516,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",0.751801868999505,"80-100 cm"
+"111(A2)40-50",109.004298613266,"0-5 cm","Pioneer zone","+1.5°C","Topsoil
+(0-30 cm)",11.8549832586254,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",249.697114396422,"40-50 cm","Pioneer zone","+1.5°C","Subsoil
+(40-100 cm)",0.416759412715659,"0-5 cm"
+"390(A6)0-5",NA,NA,NA,NA,NA,227.905538890724,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",422.077766745458,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"390(A6)5-10",NA,NA,NA,NA,NA,26.1166073667927,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",72.3189755769984,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"390(A6)40-50",NA,NA,NA,NA,NA,68.7193143374633,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",749.254578489423,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"390(A6)60-80",NA,NA,NA,NA,NA,27.5469522404201,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",744.397119500815,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"240(A2)0-5",NA,NA,NA,NA,NA,336.215660500175,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",531.187089110409,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"240(A2)5-10",NA,NA,NA,NA,NA,300.931327403388,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",510.328982120223,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"240(A2)20-30",NA,NA,NA,NA,NA,72.4652907337706,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",608.980118168525,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"240(A2)40-50",NA,NA,NA,NA,NA,26.7257231350907,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",390.087815457514,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"240(A2)60-80",NA,NA,NA,NA,NA,36.6536527414348,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",323.249004228996,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"240(A2)80-100",NA,NA,NA,NA,NA,10.0282081678331,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",102.710602701077,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"261(A2)0-5",NA,NA,NA,NA,NA,194.234922070804,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",384.186101642848,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"261(A2)5-10",NA,NA,NA,NA,NA,213.996577215944,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",462.648901754172,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"261(A2)20-30",NA,NA,NA,NA,NA,144.998386423031,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",607.326024883584,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"261(A2)40-50",NA,NA,NA,NA,NA,267.325786090784,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",567.293386135297,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"261(A2)60-80",NA,NA,NA,NA,NA,3.09806278389617,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",364.254450542725,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"261(A2)80-100",NA,NA,NA,NA,NA,6.84916071415,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",227.868952178677,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"262(A2)60-80",NA,NA,NA,NA,NA,19.61776323307,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",256.139854675049,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"390(C2)0-5",NA,NA,NA,NA,NA,513.296855506943,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",709.849333911088,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"390(C2)5-10",NA,NA,NA,NA,NA,660.102484406251,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",807.154457008887,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"390(C2)20-30",NA,NA,NA,NA,NA,408.672790268617,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1467.83637980633,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"390(C2)40-50",NA,NA,NA,NA,NA,153.819955372549,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1084.78378263435,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"390(C2)60-80",NA,NA,NA,NA,NA,39.8420697653541,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",745.130818273077,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"390(C2)80-100",NA,NA,NA,NA,NA,65.4542459072587,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",937.717161257128,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"381(G5)0-5",NA,NA,NA,NA,NA,421.261130188025,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",874.493506673505,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"381(G5)5-10",NA,NA,NA,NA,NA,592.200538879209,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",918.986726748985,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"381(G5)20-30",NA,NA,NA,NA,NA,632.865672325543,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1681.88812205943,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"381(G5)40-50",NA,NA,NA,NA,NA,218.778877367834,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1559.07584321353,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"381(G5)60-80",NA,NA,NA,NA,NA,355.32220427058,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1346.77676450179,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"381(G5)80-100",NA,NA,NA,NA,NA,181.014247232844,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1585.12519362615,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"242(C2)0-5",NA,NA,NA,NA,NA,466.801486232932,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",945.558386413821,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"242(C2)5-10",NA,NA,NA,NA,NA,383.840448324692,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",895.781109154994,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"242(C2)20-30",NA,NA,NA,NA,NA,135.52145813494,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",1084.08614500648,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"242(C2)40-50",NA,NA,NA,NA,NA,160.038639290334,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",1182.78376400835,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"242(C2)60-80",NA,NA,NA,NA,NA,217.68760032339,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",910.468049748472,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"242(C2)80-100",NA,NA,NA,NA,NA,65.3984905127211,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",900.825131757781,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"240(A6)0-5",NA,NA,NA,NA,NA,438.582414263251,"0-5 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1216.99918051033,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"240(A6)5-10",NA,NA,NA,NA,NA,401.154368740513,"5-10 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1265.97677403587,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"240(A6)20-30",NA,NA,NA,NA,NA,169.694311328897,"20-30 cm","Low marsh","ambient","Topsoil
+(0-30 cm)",1641.65551348715,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"240(A6)40-50",NA,NA,NA,NA,NA,156.285137534675,"40-50 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1180.47782068591,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"240(A6)60-80",NA,NA,NA,NA,NA,133.128713212875,"60-80 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1599.1234571902,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"240(A6)80-100",NA,NA,NA,NA,NA,117.880092026996,"80-100 cm","Low marsh","ambient","Subsoil
+(40-100 cm)",1458.50392685353,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"380(A2)0-5",NA,NA,NA,NA,NA,348.781508471637,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",921.691162450106,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"380(A2)5-10",NA,NA,NA,NA,NA,342.420884430067,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1178.2681735298,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"380(A2)20-30",NA,NA,NA,NA,NA,224.458309010062,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1509.5459716488,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"380(A2)40-50",NA,NA,NA,NA,NA,105.030163235011,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1894.46601579917,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"380(A2)60-80",NA,NA,NA,NA,NA,35.8594321726355,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1594.95590683053,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"380(A2)80-100",NA,NA,NA,NA,NA,26.5012801692076,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",876.004000507708,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"380(C2)0-5",NA,NA,NA,NA,NA,247.050219355702,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",626.508258437995,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"380(C2)20-30",NA,NA,NA,NA,NA,128.459652504941,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",943.499221745909,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"380(C2)40-50",NA,NA,NA,NA,NA,206.01600080626,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",970.725501565065,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"380(C2)60-80",NA,NA,NA,NA,NA,36.8463695178578,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",214.465160626932,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"380(C2)80-100",NA,NA,NA,NA,NA,24.6093751913489,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",183.396312945696,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"251(A2)60-80",NA,NA,NA,NA,NA,118.561053810619,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",358.067295180178,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"251(A2)80-100",NA,NA,NA,NA,NA,32.1385020771228,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",178.126893330915,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"370(C2)0-5",NA,NA,NA,NA,NA,229.130086600876,"0-5 cm","High marsh","ambient","Topsoil
+(0-30 cm)",916.712035676532,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"370(C2)5-10",NA,NA,NA,NA,NA,238.012780183807,"5-10 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1215.06271709274,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"370(C2)20-30",NA,NA,NA,NA,NA,188.005631951648,"20-30 cm","High marsh","ambient","Topsoil
+(0-30 cm)",1827.64042842387,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"370(C2)40-50",NA,NA,NA,NA,NA,422.939927902004,"40-50 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1632.12888243789,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"370(C2)60-80",NA,NA,NA,NA,NA,176.262935545037,"60-80 cm","High marsh","ambient","Subsoil
+(40-100 cm)",1449.16763019182,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"370(C2)80-100",NA,NA,NA,NA,NA,240.070755186048,"80-100 cm","High marsh","ambient","Subsoil
+(40-100 cm)",2116.00396112912,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"371(A2)0-5",NA,NA,NA,NA,NA,300.397112950559,"0-5 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1237.40379867551,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"371(A2)5-10",NA,NA,NA,NA,NA,298.056638290042,"5-10 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1539.33633367581,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"371(A2)20-30",NA,NA,NA,NA,NA,291.138436518837,"20-30 cm","High marsh","+1.5°C","Topsoil
+(0-30 cm)",1929.6241586996,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"371(A2)40-50",NA,NA,NA,NA,NA,120.168385317987,"40-50 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1607.23489406814,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"371(A2)60-80",NA,NA,NA,NA,NA,187.334797238846,"60-80 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1849.52954857587,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"371(A2)80-100",NA,NA,NA,NA,NA,183.220350327428,"80-100 cm","High marsh","+1.5°C","Subsoil
+(40-100 cm)",1602.03826315771,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"382(A6)0-5",NA,NA,NA,NA,NA,507.842037194287,"0-5 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",734.623549598637,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"382(A6)5-10",NA,NA,NA,NA,NA,901.680890314787,"5-10 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",772.619816523774,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"382(A6)20-30",NA,NA,NA,NA,NA,1551.27447200593,"20-30 cm","High marsh","+3.0°C","Topsoil
+(0-30 cm)",1443.02917399596,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"382(A6)40-50",NA,NA,NA,NA,NA,1199.93229214072,"40-50 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1648.44802523089,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"382(A6)60-80",NA,NA,NA,NA,NA,160.685371500493,"60-80 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",1799.39529753746,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"382(A6)80-100",NA,NA,NA,NA,NA,302.073469160777,"80-100 cm","High marsh","+3.0°C","Subsoil
+(40-100 cm)",487.621911409579,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"252(G5)0-5",NA,NA,NA,NA,NA,845.756253752995,"0-5 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",670.56194116127,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"252(G5)5-10",NA,NA,NA,NA,NA,1649.8356986046,"5-10 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",600.438106824948,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"252(G5)20-30",NA,NA,NA,NA,NA,245.490865668866,"20-30 cm","Low marsh","+3.0°C","Topsoil
+(0-30 cm)",450.917534455626,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"252(G5)40-50",NA,NA,NA,NA,NA,27.5172946497382,"40-50 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",244.557952224945,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"252(G5)60-80",NA,NA,NA,NA,NA,115.328528462093,"60-80 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",453.53228029314,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"252(G5)80-100",NA,NA,NA,NA,NA,11.315143686762,"80-100 cm","Low marsh","+3.0°C","Subsoil
+(40-100 cm)",98.3945675217618,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"112(A6)20-30",NA,NA,NA,NA,NA,26.3854194737728,"20-30 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",948.279167275308,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"112(A6)60-80",NA,NA,NA,NA,NA,27.0642554961738,"60-80 cm","Pioneer zone","+3.0°C","Subsoil
+(40-100 cm)",557.221221730901,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"112(G5)5-10",NA,NA,NA,NA,NA,186.682552288956,"5-10 cm","Pioneer zone","+3.0°C","Topsoil
+(0-30 cm)",485.497844627466,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"251(C2)0-5",NA,NA,NA,NA,NA,102.972507938305,"0-5 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",945.812177746585,"0-5 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"251(C2)5-10",NA,NA,NA,NA,NA,104.820262189268,"5-10 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",811.361196049505,"5-10 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"251(C2)20-30",NA,NA,NA,NA,NA,43.8940929519617,"20-30 cm","Low marsh","+1.5°C","Topsoil
+(0-30 cm)",942.794407123681,"20-30 cm",NA,NA,"Topsoil
+(0-30 cm)",NA,NA
+"251(C2)40-50",NA,NA,NA,NA,NA,60.8136424210962,"40-50 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",1236.02138522397,"40-50 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"251(C2)60-80",NA,NA,NA,NA,NA,99.1602395480839,"60-80 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",879.221940814834,"60-80 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"251(C2)80-100",NA,NA,NA,NA,NA,17.79201701466,"80-100 cm","Low marsh","+1.5°C","Subsoil
+(40-100 cm)",705.461972217275,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"122(A6)80-100",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,340.661267508171,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"241(A2)80-100",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,439.303095970822,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA
+"251(G5)80-100",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,51.2357487318747,"80-100 cm",NA,NA,"Subsoil
+(40-100 cm)",NA,NA

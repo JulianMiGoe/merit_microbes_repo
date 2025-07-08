@@ -140,6 +140,9 @@ df_eub_3_plot_summary <- df_eub_1_processed %>%
 
 cat("\nSummary statistics by plot:\n")
 print(df_eub_3_plot_summary)
+
+# Export summarized qPCR data for correlation matrix integration
+write.csv(df_eub_3_plot_summary, here("data", "qpcr", "df_qpcr_summary.csv"), row.names = FALSE)
 ```
 
 # References

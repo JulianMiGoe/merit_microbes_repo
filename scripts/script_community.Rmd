@@ -852,5 +852,13 @@ cat("Combined elevation:", summary(stat_lm_combined_elevation_1_main)$r.squared,
 # robustlmm: Koller, M. (2024). robustlmm: Robust Linear Mixed Effects Models. R package version 3.2-2. https://CRAN.R-project.org/package=robustlmm
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 # vegan: Oksanen, J. et al. (2024). vegan: Community Ecology Package. R package version 2.6-4. https://CRAN.R-project.org/package=vegan
+````rmd
+# Export summarized alpha diversity data for correlation matrix integration
+# Exportiere Mittelwert pro Plot und Layer (wie für IRIS und qPCR)
+df_alpha_summary_export <- df_alpha_div_3_long %>%
+  group_by(Plot, Layer) %>%
+  summarise(alpha_diversity = mean(Value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(plotid = as.character(Plot))
+write.csv(df_alpha_summary_export, here("data", "rna", "df_alpha_summary.csv"), row.names = FALSE)
 ```
 

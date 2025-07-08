@@ -82,6 +82,20 @@ if(exists("df_warming_all_2022_monthly")) {
     df_warming_0_monthly <- NULL
   })
 }
+
+# IRIS data (from script_iris.Rmd)
+if(exists("df_iris_summarized_2_final")) {
+  df_iris_0_summary <- df_iris_summarized_2_final
+  print("IRIS dataset loaded from environment")
+} else {
+  tryCatch({
+    df_iris_0_summary <- read.csv(here("data", "iris", "df_iris_summary.csv"))
+    print("IRIS dataset loaded from file")
+  }, error = function(e) {
+    warning("IRIS dataset not found. Some correlations may be missing.")
+    df_iris_0_summary <- NULL
+  })
+}
 ```
 
 # Step 2: Prepare correlation datasets
@@ -118,6 +132,14 @@ if(!is.null(df_warming_0_monthly)) {
     left_join(df_warming_0_monthly, by = "plotid")
 }
 
+# Add IRIS data if available
+if(!is.null(df_iris_0_summary)) {
+  df_iris_0_summary <- df_iris_0_summary %>% 
+    mutate(plotid = as.character(plotid))
+  df_corr_1_base <- df_corr_1_base %>%
+    left_join(df_iris_0_summary, by = c("plotid", "Layer"))
+}
+
 print("Base correlation dataset created")
 print(paste("Dimensions:", nrow(df_corr_1_base), "rows x", ncol(df_corr_1_base), "columns"))
 ```
@@ -125,13 +147,16 @@ print(paste("Dimensions:", nrow(df_corr_1_base), "rows x", ncol(df_corr_1_base),
 ## Step 2b: Select and rename variables for correlation analysis
 ```{r}
 # Select key variables and rename for better visualization
+# Die Alpha-Diversity-Spalte heißt vermutlich nicht exakt 'Alpha_diversity'.
+# Prüfe Alternativen wie 'alpha_diversity', 'AlphaDiversity', 'Shannon', etc.
+# Passe ggf. den Spaltennamen hier an!
 df_corr_2_selected <- df_corr_1_base %>%
   select(
     Layer,
     "Carbon acquisition" = Activity_C,
     "Nitrogen acquisition" = Activity_N,
-    "Microbial abundance" = Abundance,
-    "Alpha diversity" = Alpha_diversity,
+    "Microbial abundance" = Abundance, # qPCR
+    "Alpha diversity" = alpha_diversity, # ggf. anpassen!
     "Soil temperature" = pinTemp_mean,
     "Marsh surface elevation" = Elevation_mean,
     "Reduction index" = ri
@@ -180,149 +205,6 @@ plot_corr_by_layer <- ggstatsplot::grouped_ggcorrmat(
 
 print("Layer-specific correlation matrices generated")
 plot_corr_by_layer
-```
-
-## Step 3c: Zone-specific correlation matrices (if zone data available)
-```{r}
-# Check if Zone information is available
-if("Zone" %in% colnames(df_corr_1_base)) {
-  df_corr_by_zone <- df_corr_1_base %>%
-    select(
-      Zone,
-      "Carbon acquisition" = Activity_C,
-      "Nitrogen acquisition" = Activity_N,
-      "Microbial abundance" = Abundance,
-      "Alpha diversity" = Alpha_diversity,
-      "Soil temperature" = pinTemp_mean,
-      "Marsh surface elevation" = Elevation_mean,
-      "Reduction index" = ri
-    ) %>%
-    filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na))
-  
-  plot_corr_by_zone <- ggstatsplot::grouped_ggcorrmat(
-    data = df_corr_by_zone,
-    grouping.var = Zone,
-    matrix.type = "lower",
-    type = "parametric",
-    colors = c("darkred", "white", "steelblue"),
-    title.prefix = "Correlation Matrix",
-    subtitle.prefix = "Pearson correlations"
-  )
-  
-  print("Zone-specific correlation matrices generated")
-  plot_corr_by_zone
-} else {
-  print("Zone information not available - skipping zone-specific correlations")
-}
-```
-
-## Step 3d: Treatment-specific correlation matrices (if treatment data available)
-```{r}
-# Check if Treatment information is available
-if("Treatment" %in% colnames(df_corr_1_base)) {
-  df_corr_by_treatment <- df_corr_1_base %>%
-    select(
-      Treatment,
-      "Carbon acquisition" = Activity_C,
-      "Nitrogen acquisition" = Activity_N,
-      "Microbial abundance" = Abundance,
-      "Alpha diversity" = Alpha_diversity,
-      "Soil temperature" = pinTemp_mean,
-      "Marsh surface elevation" = Elevation_mean,
-      "Reduction index" = ri
-    ) %>%
-    filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na))
-  
-  plot_corr_by_treatment <- ggstatsplot::grouped_ggcorrmat(
-    data = df_corr_by_treatment,
-    grouping.var = Treatment,
-    matrix.type = "lower",
-    type = "parametric",
-    colors = c("darkred", "white", "steelblue"),
-    title.prefix = "Correlation Matrix",
-    subtitle.prefix = "Pearson correlations"
-  )
-  
-  print("Treatment-specific correlation matrices generated")
-  plot_corr_by_treatment
-} else {
-  print("Treatment information not available - skipping treatment-specific correlations")
-}
-```
-
-# Step 4: Export correlation results
-## Step 4a: Calculate correlation coefficients and p-values
-```{r}
-# Function to extract correlation statistics
-extract_correlation_stats <- function(data, group_var = NULL) {
-  if(!is.null(group_var)) {
-    # Grouped correlations
-    data %>%
-      group_by(!!sym(group_var)) %>%
-      summarise(
-        cors = list(cor(select(., where(is.numeric)), use = "complete.obs")),
-        .groups = "drop"
-      )
-  } else {
-    # Overall correlation
-    numeric_data <- data %>% select(where(is.numeric))
-    cor_matrix <- cor(numeric_data, use = "complete.obs")
-    
-    # Extract upper triangle
-    cor_matrix[lower.tri(cor_matrix)] <- NA
-    
-    # Convert to long format
-    cor_long <- cor_matrix %>%
-      as.data.frame() %>%
-      rownames_to_column("Variable1") %>%
-      pivot_longer(-Variable1, names_to = "Variable2", values_to = "Correlation") %>%
-      filter(!is.na(Correlation), Variable1 != Variable2)
-    
-    return(cor_long)
-  }
-}
-
-# Extract overall correlations
-correlations_overall <- extract_correlation_stats(df_corr_overall)
-
-# Export correlation table
-write.csv(correlations_overall, here("tables", "correlation_matrix_overall.csv"), row.names = FALSE)
-
-print("Correlation statistics exported")
-print("Top correlations (absolute value):")
-print(correlations_overall %>% 
-  arrange(desc(abs(Correlation))) %>% 
-  head(10))
-```
-
-# Step 5: Statistical summary
-```{r}
-# Summary of correlation analysis
-print("=== CORRELATION ANALYSIS SUMMARY ===")
-print(paste("Total variables included:", ncol(df_corr_overall)))
-print(paste("Total observations:", nrow(df_corr_2_selected)))
-
-# Summary by layer if available
-if("Layer" %in% colnames(df_corr_2_selected)) {
-  layer_summary <- df_corr_2_selected %>%
-    group_by(Layer) %>%
-    summarise(
-      n_obs = n(),
-      n_complete = sum(complete.cases(select(., where(is.numeric)))),
-      .groups = "drop"
-    )
-  
-  print("=== OBSERVATIONS BY LAYER ===")
-  print(layer_summary)
-}
-
-# Identify strongest correlations
-strong_correlations <- correlations_overall %>%
-  filter(abs(Correlation) > 0.5) %>%
-  arrange(desc(abs(Correlation)))
-
-print("=== STRONG CORRELATIONS (|r| > 0.5) ===")
-print(strong_correlations)
 ```
 
 # References

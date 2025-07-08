@@ -214,23 +214,25 @@ df_eea_2_merged$Inc_start <- as.POSIXct(df_eea_2_merged$Inc_start, format="%H:%M
 df_eea_2_merged$Inc_end <- as.POSIXct(df_eea_2_merged$Inc_end, format="%H:%M", tz="UTC")
 
 # Calculate incubation time and enzyme activities
-df_eea_2_merged <- df_eea_2_merged %>%
-  mutate(Inc_start = as.POSIXct(df_eea_2_merged$Inc_start, format="%H:%M")) %>%
-  mutate(Inc_end = as.POSIXct(df_eea_2_merged$Inc_end, format="%H:%M")) %>%
-  # Calculate incubation time (24h + difference)
-  mutate(Inc_time = 24 + difftime(df_eea_2_merged$Inc_end, df_eea_2_merged$Inc_start, units="hours")) %>%
-  # Calculate total weight
-  mutate(Total_g = df_eea_2_merged$EEA_g + df_eea_2_merged$EEA_buffer) %>%
-  # Calculate quench coefficient
-  mutate(Quench_coeff = ((df_eea_2_merged$Quench - df_eea_2_merged$Hom_ctrl)/df_eea_2_merged$Standard)) %>%
-  # Calculate emission coefficient
-  mutate(Emission_coeff = (df_eea_2_merged$Standard / df_eea_2_merged$n))
+# Ensure all variables are present and use only column names in mutate
+# Remove df_eea_2_merged$ prefix inside mutate
 
 df_eea_2_merged <- df_eea_2_merged %>%
-  # Calculate Net Fluorescence
-  mutate(Net_fluorescence = ((df_eea_2_merged$Assay - df_eea_2_merged$Hom_ctrl) / df_eea_2_merged$Quench_coeff) - df_eea_2_merged$Sub_ctrl) %>%
-  # Calculate activity per g organic matter
-  mutate(Activity_OM = ((df_eea_2_merged$Net_fluorescence * df_eea_2_merged$EEA_buffer) / (df_eea_2_merged$OM_g * df_eea_2_merged$Inc_time * df_eea_2_merged$Emission_coeff * 0.2)))
+  mutate(
+    Inc_start = as.POSIXct(Inc_start, format="%H:%M"),
+    Inc_end = as.POSIXct(Inc_end, format="%H:%M"),
+    Inc_time = 24 + as.numeric(difftime(Inc_end, Inc_start, units="hours")),
+    Total_g = EEA_g + EEA_buffer,
+    Quench_coeff = (Quench - Hom_ctrl) / Standard,
+    Emission_coeff = Standard / n,
+    Net_fluorescence = ((Assay - Hom_ctrl) / Quench_coeff) - Sub_ctrl,
+    Activity_OM = ifelse(
+      is.na(Net_fluorescence) | is.na(EEA_buffer) | is.na(OM_g) | is.na(Inc_time) | is.na(Emission_coeff) |
+      OM_g == 0 | Inc_time == 0 | Emission_coeff == 0,
+      NA,
+      (Net_fluorescence * EEA_buffer) / (OM_g * Inc_time * Emission_coeff * 0.2)
+    )
+  )
 
 # Convert Inc_time to numeric
 df_eea_2_merged$Inc_time <- as.numeric(df_eea_2_merged$Inc_time)
