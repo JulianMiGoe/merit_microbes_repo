@@ -554,6 +554,13 @@ df_elevation_delta_1_processed$plotid2 <- as.factor(df_elevation_delta_1_process
 ## Step 6d: Merge environmental data with community dissimilarities
 ```{r}
 # Merge topsoil dissimilarities with temperature data
+df_bray_curtis_topsoil_2_merged$plotid1 <- as.factor(df_bray_curtis_topsoil_2_merged$plotid1)
+df_bray_curtis_topsoil_2_merged$plotid2 <- as.factor(df_bray_curtis_topsoil_2_merged$plotid2)
+
+df_bray_curtis_subsoil_2_merged$plotid1 <- as.factor(df_bray_curtis_subsoil_2_merged$plotid1)
+df_bray_curtis_subsoil_2_merged$plotid2 <- as.factor(df_bray_curtis_subsoil_2_merged$plotid2)
+
+
 df_bray_delta_topsoil_1_processed <- df_bray_curtis_topsoil_2_merged %>%
   left_join(df_warming_delta_1_processed, by = c("plotid1", "plotid2")) %>%
   left_join(df_warming_delta_1_processed, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), 

@@ -224,11 +224,11 @@ df_eea_2_merged <- df_eea_2_merged %>%
   # Calculate quench coefficient
   mutate(Quench_coeff = ((df_eea_2_merged$Quench - df_eea_2_merged$Hom_ctrl)/df_eea_2_merged$Standard)) %>%
   # Calculate emission coefficient
-  mutate(Emission_coeff = (df_eea_2_merged$Standard / df_eea_2_merged$n)) %>%
+  mutate(Emission_coeff = (df_eea_2_merged$Standard / df_eea_2_merged$n))
+
+df_eea_2_merged <- df_eea_2_merged %>%
   # Calculate Net Fluorescence
   mutate(Net_fluorescence = ((df_eea_2_merged$Assay - df_eea_2_merged$Hom_ctrl) / df_eea_2_merged$Quench_coeff) - df_eea_2_merged$Sub_ctrl) %>%
-  # Calculate activity per g fresh weight
-  mutate(Activity_FW = ((df_eea_2_merged$Net_fluorescence * df_eea_2_merged$EEA_buffer) / (df_eea_2_merged$EEA_g * df_eea_2_merged$Inc_time * df_eea_2_merged$Emission_coeff * 0.2))) %>%
   # Calculate activity per g organic matter
   mutate(Activity_OM = ((df_eea_2_merged$Net_fluorescence * df_eea_2_merged$EEA_buffer) / (df_eea_2_merged$OM_g * df_eea_2_merged$Inc_time * df_eea_2_merged$Emission_coeff * 0.2)))
 
