@@ -1,26 +1,16 @@
 ---
-title: "script_om"
+title: "Organic Matter Content Analysis"
 author: "Julian Mittmann-Goetsch"
-date: "2025-04-24"
+date: "2025-01-31"
 output: html_document
 ---
 
+## Version 2.0: Unified script structure, English comments, hierarchical naming - 31.01.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
 ## Version 1.0: Basic outline of the script - 24.04.2025 | JM
 
-# Step 1: Prepare R session
-## Step 1a: Install necessary packages
-```{r}
-#install.packages("dplyr")
-#install.packages("ggplot2")
-#install.packages("here")
-#install.packages("lme4")
-#install.packages("emmeans")
-#install.packages("lubridate")
-#install.packages("performance")
-```
-
-## Step 1b: Load packages
+# Step 1: Prepare session and load data
+## Step 1a: Load necessary packages
 ```{r}
 library(dplyr)
 library(emmeans)
@@ -29,11 +19,12 @@ library(here)
 library(lme4)
 library(lubridate)
 library(performance)
+library(tidyverse)
 ```
 
-## Step 1c: Define global plot theme
-```{r}
-# Creates a theme for all plots in this study 
+## Step 1b: Define global plot theme
+```{r message=FALSE, warning=FALSE}
+# Global theme for all plots in this analysis
 theme_JM <- theme(
   axis.title.x      = element_text(colour = "black", size = 12),
   axis.text.x       = element_text(colour = "black", size = 12), 
@@ -50,49 +41,73 @@ theme_JM <- theme(
 )
 ```
 
-## Step 1d: Load data
+## Step 1c: Load organic matter data
 ```{r}
-df_OM_19 <- read.delim(here("data", "om", "df_OM_MERIT_2019.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2019 @Hao Tang
-df_OM_21 <- read.delim(here("data", "om", "df_OM_MERIT_2021.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2021 @JulianMiGoe, @Lea Rebentisch
-df_OM_22 <- read.delim(here("data", "om", "df_OM_MERIT_2022.txt"), dec=".", sep="\t")    # L0 raw data MERIT OM 2021 @JulianMiGoe
+# Load organic matter content data from multiple years
+df_om_0_raw_2019 <- read.delim(here("data", "om", "df_OM_MERIT_2019.txt"), dec=".", sep="\t")
+df_om_0_raw_2021 <- read.delim(here("data", "om", "df_OM_MERIT_2021.txt"), dec=".", sep="\t")
+df_om_0_raw_2022 <- read.delim(here("data", "om", "df_OM_MERIT_2022.txt"), dec=".", sep="\t")
 ```
 
-## Step 1e: Transform data
+# Step 2: Data preprocessing
+## Step 2a: Process and format individual datasets
 ```{r}
-# correctly format coloumns to either numeric or factor
-df_OM_19 <- df_OM_19 %>% 
+# Process 2019 data
+df_om_1_processed_2019 <- df_om_0_raw_2019 %>% 
   select(Zone, Treatment, Depth, OM) %>% 
-  mutate_at(c(1:3), as.factor)
+  mutate(
+    Year = 2019,
+    Zone = as.factor(Zone),
+    Treatment = as.factor(Treatment),
+    Depth = as.factor(Depth),
+    OM = as.numeric(OM)
+  )
 
-df_OM_21 <- df_OM_21 %>% 
+# Process 2021 data
+df_om_1_processed_2021 <- df_om_0_raw_2021 %>% 
   select(Year, Zone, Treatment, Depth, OM) %>% 
-  mutate_at(c(2:4), as.factor) %>% 
-  mutate_at(c(5), as.numeric)
+  mutate(
+    Zone = as.factor(Zone),
+    Treatment = as.factor(Treatment),
+    Depth = as.factor(Depth),
+    OM = as.numeric(OM)
+  )
 
-df_OM_22 <- df_OM_22 %>% 
+# Process 2022 data
+df_om_1_processed_2022 <- df_om_0_raw_2022 %>% 
   select(Year, Zone, Treatment, Depth, OM) %>% 
-  mutate_at(c(2:4), as.factor) %>% 
-  mutate_at(c(5), as.numeric)
-
-df_OM_merged <- bind_rows(
-  df_OM_19 %>% mutate(Year = 2019),
-  df_OM_21 %>% mutate(Year = 2021),
-  df_OM_22 %>% mutate(Year = 2022)
-)
-
-df_OM_merged$Treatment <- recode_factor(df_OM_merged$Treatment, "ambient" = "ambient", "+1.5C" = "+1.5°C", "+3.0C" = "+3.0°C")
-df_OM_merged$Zone <- dplyr::recode(df_OM_merged$Zone,
-  "PZ" = "Pioneer zone",
-  "LM" = "Low marsh",
-  "HM" = "High marsh"
-)
-df_OM_merged$Zone <- factor(df_OM_merged$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"))
+  mutate(
+    Zone = as.factor(Zone),
+    Treatment = as.factor(Treatment),
+    Depth = as.factor(Depth),
+    OM = as.numeric(OM)
+  )
 ```
 
-# Step 2: Plots
-## Step 2a: Point plots
+## Step 2b: Merge datasets and apply unified formatting
 ```{r}
-Plot_OM_yearly <- df_OM_merged %>% 
+# Combine all years into single dataset
+df_om_2_merged <- bind_rows(
+  df_om_1_processed_2019,
+  df_om_1_processed_2021,
+  df_om_1_processed_2022
+)
+
+# Apply unified factor levels and labels
+df_om_3_final <- df_om_2_merged %>%
+  mutate(
+    Treatment = recode_factor(Treatment, "ambient" = "ambient", "+1.5C" = "+1.5°C", "+3.0C" = "+3.0°C"),
+    Zone = dplyr::recode(Zone, "PZ" = "Pioneer zone", "LM" = "Low marsh", "HM" = "High marsh"),
+    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
+    Year = as.factor(Year)
+  )
+```
+
+# Step 3: Data visualization
+## Step 3a: Create temporal plots for organic matter content
+```{r}
+# Plot showing organic matter content over years by zone and treatment
+plot_om_yearly <- df_om_3_final %>% 
   ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
   stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
@@ -100,10 +115,17 @@ Plot_OM_yearly <- df_OM_merged %>%
   scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
   theme_JM +
   theme(legend.position = "bottom") +
-  labs(y = "Organic matter content [%]") +
-  facet_wrap(~Zone) 
+  labs(y = "Organic matter content [%]", x = "Year") +
+  facet_wrap(~Zone)
 
-Plot_OM_yearly_top <- df_OM_merged %>% 
+# Display main plot
+print(plot_om_yearly)
+```
+
+## Step 3b: Create depth-specific plots
+```{r}
+# Plot for surface layers (5-25 cm depth)
+plot_om_yearly_surface <- df_om_3_final %>% 
   filter(Depth %in% c("5", "10", "15", "20", "25")) %>% 
   ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
   stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
@@ -112,93 +134,142 @@ Plot_OM_yearly_top <- df_OM_merged %>%
   scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
   theme_JM +
   theme(legend.position = "bottom") +
-  facet_wrap(~Zone) 
+  labs(y = "Organic matter content [%]", x = "Year", title = "Surface layers (5-25 cm)") +
+  facet_wrap(~Zone)
 
-Plot_OM_yearly_bottom <- df_OM_merged %>% 
+# Plot for deeper layers (30-80 cm depth)
+plot_om_yearly_deep <- df_om_3_final %>% 
   filter(Depth %in% c("30", "40", "50", "55", "60", "80")) %>% 
   ggplot(aes(x = Year, y = OM, color = Treatment, group = Treatment)) +
   stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.2)) +
   stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.2)) +
   stat_summary(fun = mean, geom = "line", size = 1, position = position_dodge(width = 0.2)) +
-  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027")) +
+  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
   theme_JM +
   theme(legend.position = "bottom") +
-  facet_wrap(~Zone) 
+  labs(y = "Organic matter content [%]", x = "Year", title = "Deep layers (30-80 cm)") +
+  facet_wrap(~Zone)
 
-# All Plots
-Plot_OM_yearly
-Plot_OM_yearly_top
-Plot_OM_yearly_bottom
+# Display depth-specific plots
+print(plot_om_yearly_surface)
+print(plot_om_yearly_deep)
 ```
 
-# Step 3: Statistics
-## Step 3a: Model with random effects
+# Step 4: Statistical analysis
+## Step 4a: Linear mixed-effects model for surface layers
 ```{r}
-# Add Depth_ID as random factor or use Plot for accounting for the Plots not just the cores being non-independent
+# Fit model for surface layers only (5-25 cm depth)
+df_om_surface <- df_om_3_final %>% 
+  filter(Depth %in% c("5", "10", "15", "20", "25"))
 
-# Fit the linear mixed-effects model
-stat_model_OM <- lmer(OM ~ Zone * Treatment * Year + (1|Depth), data = df_OM_merged %>% filter(Depth %in% c("5", "10", "15", "20", "25"))) 
- 
-# Main effects
-anova(stat_model_OM)
+stat_model_om <- lmer(OM ~ Zone * Treatment * Year + (1|Depth), data = df_om_surface)
 
 # Model diagnostics
-#  Residual plots
-plot(stat_model_OM)
+cat("Model diagnostics:\n")
+print(performance::check_model(stat_model_om))
 
-# QQ plot of residuals
-qqnorm(resid(stat_model_OM))
-qqline(resid(stat_model_OM))
-
-# Residuals vs. Fitted values
-plot(fitted(stat_model_OM), resid(stat_model_OM))
-abline(h = 0, col = "red")
-
-# Additional diagnostic plots using performance package
-check_model(stat_model_OM)
-
-# ANOVA
-anova(stat_model_OM)
+# ANOVA results
+cat("\nANOVA results:\n")
+print(anova(stat_model_om))
 
 # Model summary
-summary(stat_model_OM)
+cat("\nModel summary:\n")
+print(summary(stat_model_om))
+```
 
-# Pairwise comparisons
-## For Zone
-stat_OM_zone_emm <- emmeans(stat_model_OM, ~ Zone)
-pairs(stat_OM_zone_emm)
+## Step 4b: Post-hoc comparisons
+```{r}
+# Pairwise comparisons between zones
+stat_emm_zones <- emmeans(stat_model_om, ~ Zone)
+stat_pairs_zones <- pairs(stat_emm_zones)
 
-## For Treatment
-stat_OM_treatment_emm <- emmeans(stat_model_OM, ~ Treatment)
-pairs(stat_OM_treatment_emm)
+cat("Zone comparisons:\n")
+print(stat_pairs_zones)
 
-## For Layer
-stat_OM_year_emm <- emmeans(stat_model_OM, ~ Year)
-pairs(stat_OM_year_emm)
+# Pairwise comparisons between treatments
+stat_emm_treatments <- emmeans(stat_model_om, ~ Treatment)
+stat_pairs_treatments <- pairs(stat_emm_treatments)
 
-## For Zone:Treatment interaction
-stat_OM_zone_treatment_emm <- emmeans(stat_model_OM, ~ Zone | Treatment)
-pairs(stat_OM_zone_treatment_emm)
+cat("\nTreatment comparisons:\n")
+print(stat_pairs_treatments)
 
-## For Zone:Layer interaction
-#stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone | Layer)
-#pairs(stat_C_zone_layer_emm)
+# Pairwise comparisons between years
+stat_emm_years <- emmeans(stat_model_om, ~ Year)
+stat_pairs_years <- pairs(stat_emm_years)
 
-## For Treatment:Layer interaction
-stat_OM_treatment_year_emm <- emmeans(stat_model_OM, ~ Treatment | Year)
-pairs(stat_OM_treatment_year_emm)
-# Visualizations
-## Interaction plot for Zone and Treatment
-ggplot(df_OM_merged, aes(x = Zone, y = OM, color = Treatment)) +
-  stat_summary(fun = mean, geom = "point") +
-  stat_summary(fun = mean, geom = "line", aes(group = Treatment)) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
-#  facet_wrap(~ Layer) +
+cat("\nYear comparisons:\n")
+print(stat_pairs_years)
+
+# Zone x Treatment interaction
+stat_emm_zone_treatment <- emmeans(stat_model_om, ~ Zone | Treatment)
+stat_pairs_zone_treatment <- pairs(stat_emm_zone_treatment)
+
+cat("\nZone comparisons within treatments:\n")
+print(stat_pairs_zone_treatment)
+
+# Treatment x Year interaction
+stat_emm_treatment_year <- emmeans(stat_model_om, ~ Treatment | Year)
+stat_pairs_treatment_year <- pairs(stat_emm_treatment_year)
+
+cat("\nTreatment comparisons within years:\n")
+print(stat_pairs_treatment_year)
+```
+
+## Step 4c: Create interaction plot
+```{r}
+# Interaction plot for Zone and Treatment
+plot_om_interaction <- ggplot(df_om_surface, aes(x = Zone, y = OM, color = Treatment)) +
+  stat_summary(fun = mean, geom = "point", size = 3, position = position_dodge(width = 0.3)) +
+  stat_summary(fun = mean, geom = "line", aes(group = Treatment), size = 1, position = position_dodge(width = 0.3)) +
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2, position = position_dodge(width = 0.3)) +
+  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027")) +
   theme_JM +
-  labs(title = "Interaction between Zone and Treatment by Layer across all Enzymes",
-       y = "Response Variable")
+  labs(title = "Zone x Treatment Interaction for Organic Matter Content",
+       y = "Organic matter content [%]",
+       x = "Zone")
 
-performance::check_model(stat_model_OM)
+print(plot_om_interaction)
+```
+
+# Step 5: Data summary
+## Step 5a: Create comprehensive summary statistics
+```{r}
+# Summary by zone, treatment, and year
+df_om_4_summary <- df_om_3_final %>%
+  group_by(Zone, Treatment, Year) %>%
+  summarise(
+    mean_om = mean(OM, na.rm = TRUE),
+    se_om = sd(OM, na.rm = TRUE)/sqrt(n()),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(mean_se = paste0(round(mean_om, 2), " ± ", round(se_om, 2), " (n=", n, ")"))
+
+cat("Summary statistics by zone, treatment, and year:\n")
+print(df_om_4_summary)
+
+# Summary for surface layers only
+df_om_5_surface_summary <- df_om_surface %>%
+  group_by(Zone, Treatment, Year) %>%
+  summarise(
+    mean_om = mean(OM, na.rm = TRUE),
+    se_om = sd(OM, na.rm = TRUE)/sqrt(n()),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(mean_se = paste0(round(mean_om, 2), " ± ", round(se_om, 2), " (n=", n, ")"))
+
+cat("\nSummary statistics for surface layers (5-25 cm):\n")
+print(df_om_5_surface_summary)
+
+# Overall dataset summary
+cat("\nOverall dataset summary:\n")
+cat("Total observations:", nrow(df_om_3_final), "\n")
+cat("Number of years:", length(unique(df_om_3_final$Year)), "\n")
+cat("Number of zones:", length(unique(df_om_3_final$Zone)), "\n")
+cat("Number of treatments:", length(unique(df_om_3_final$Treatment)), "\n")
+cat("Depth range:", min(as.numeric(as.character(df_om_3_final$Depth))), "-", max(as.numeric(as.character(df_om_3_final$Depth))), "cm\n")
+cat("OM content range:", round(min(df_om_3_final$OM, na.rm = TRUE), 2), "-", round(max(df_om_3_final$OM, na.rm = TRUE), 2), "%\n")
 ```
 
 # References
@@ -210,4 +281,5 @@ performance::check_model(stat_model_OM)
 # lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
 # performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```

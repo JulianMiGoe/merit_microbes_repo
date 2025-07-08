@@ -1,48 +1,35 @@
 ---
-title: "script_qpcr_2023"
+title: "qPCR Analysis - Bacterial Abundance (16S rRNA)"
 author: "Julian Mittmann-Goetsch"
-date: "2025-01-27"
+date: "2025-01-31"
 output: html_document
 ---
 
+## Version 2.0: Unified script structure, English comments, hierarchical naming - 31.01.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
 
 
-# Step 1: Prepare R session
-## Step 1a: Install necessary packages
+# Step 1: Prepare session and load data
+## Step 1a: Load necessary packages
 ```{r}
-#install.packages("car")
-#install.packages("emmeans")
-#install.packages("ggplot2")
-#install.packages("ggpubr")
-#install.packages("here")
-#install.packages("lme4")
-#install.packages("tidyverse")
-#install.packages("lmerTest")
-```
-
-## Step 1b: Load necessary packages
-```{r}
-library(car)
 library(emmeans)
 library(ggplot2)
 library(ggpubr)
 library(here)
 library(lme4)
+library(performance)
 library(tidyverse)
-library(lmerTest)
 ```
 
-## Step 1c: Load sequencing data
+## Step 1b: Load qPCR data
 ```{r}
-# Set working directory
-setwd("./")
-df_eub  <- read.delim(here("data", "qpcr", "df_copies_EUB.txt"), dec=".", sep="\t")
+# Load bacterial abundance data from qPCR analysis
+df_eub_0_raw <- read.delim(here("data", "qpcr", "df_copies_EUB.txt"), dec=".", sep="\t")
 ```
 
-## Step 1d: Define plot theme
+## Step 1c: Define plot theme
 ```{r message=FALSE, warning=FALSE}
-# Creates a theme for all plots in this study 
+# Global theme for all plots in this analysis
 theme_JM <- theme(
   axis.title.x      = element_text(colour = "black", size = 12),
   axis.text.x       = element_text(colour = "black", size = 12), 
@@ -59,81 +46,101 @@ theme_JM <- theme(
 )
 ```
 
-## Step 1e: Prepare dataframe
+# Step 2: Data preprocessing
+## Step 2a: Process and format data
 ```{r}
-# Correctly format all factors
-df_eub$Depth <- recode_factor(df_eub$Depth, "0-10" = "0-10 cm", "20-30" = "20-30 cm")  
-df_eub$Treatment <- as.factor(df_eub$Treatment)
-df_eub$Zone <- as.factor(df_eub$Zone)
-df_eub$Treatment <- recode_factor(df_eub$Treatment, "ambient" = "ambient", "1.5C" = "+1.5°C", "3.0C" = "+3.0°C")
-df_eub$Zone <- dplyr::recode(df_eub$Zone,
-  "PZ" = "Pioneer zone",
-  "LM" = "Low marsh",
-  "HM" = "High marsh"
-)
-df_eub$Zone <- factor(df_eub$Zone, levels = c("Pioneer zone", "Low marsh", "High marsh"),
-                     labels = c("Pioneer zone", "Low marsh", "High marsh"))
+# Apply hierarchical naming and factor processing
+df_eub_1_processed <- df_eub_0_raw %>%
+  mutate(
+    Depth = recode_factor(Depth, "0-10" = "0-10 cm", "20-30" = "20-30 cm"),
+    Treatment = recode_factor(Treatment, "ambient" = "ambient", "1.5C" = "+1.5°C", "3.0C" = "+3.0°C"),
+    Zone = dplyr::recode(Zone, "PZ" = "Pioneer zone", "LM" = "Low marsh", "HM" = "High marsh"),
+    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
+    core_id = paste0(Plot, Subplot)
+  ) %>%
+  filter(Subplot == "ctr")  # Remove root-barrier samples
 ```
 
-# Step 2: Plots
-## Step 2a: Barplot for EUB abundances
+# Step 3: Data visualization
+## Step 3a: Create barplot for bacterial abundances
 ```{r}
-plot_qpcr_bar_eub <- ggplot(df_eub, aes(x = Zone, y = log10_copies, fill = Treatment)) +
+# Generate barplot showing bacterial abundances by zone and treatment
+plot_qpcr_bar_eub <- ggplot(df_eub_1_processed, aes(x = Zone, y = log10_copies, fill = Treatment)) +
   stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9), alpha = 0.9, width = 0.7) +
   stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.25, color = "black") +
   scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
   labs(fill = "Treatment", y = "log10 abundance 16S rRNA [copies/g OM]", x = "Zone") +
   theme_JM +
   ylim(9, 9.2)
+
+# Display plot
+print(plot_qpcr_bar_eub)
 ```
 
-# Step 3: Statistics
-## Step 3a: ANOVA on EUB
+# Step 4: Statistical analysis
+## Step 4a: Linear mixed-effects model for bacterial abundance
 ```{r}
-# Remove the root-barrier samples from the dataframe.
-df_eub <- df_eub %>% 
-  mutate(core_id = paste0(Plot, Subplot)) %>%
-  filter(Subplot == "ctr")
+# Fit linear mixed-effects model with treatment and zone interaction
+stat_model_eub <- lmer(log10_copies ~ Treatment * Zone + (1|core_id), data = df_eub_1_processed)
 
-stat_model_eub <- lmer(log10_copies ~ Treatment * Zone + (1|core_id), data = df_eub)
-anova(stat_model_eub)
-plot(stat_model_eub)
-summary(stat_model_eub)
+# Model diagnostics
+cat("Model diagnostics:\n")
+print(performance::check_model(stat_model_eub))
 
-# Pairwise comparisons
-stat_model_eub_emm <- emmeans(stat_model_eub , ~ Zone)
-pairs(stat_model_eub_emm)
+# ANOVA results
+cat("\nANOVA results:\n")
+print(anova(stat_model_eub))
 
-stat_res_eub <- Anova(stat_model_eub, type = 3)
-stat_emm_eub <- emmeans(stat_model_eub, ~ Treatment | Zone)
-stat_pairs_eub <- pairs(stat_emm_eub)
-
-cat("\nANOVA EUB:\n")
-print(stat_res_eub)
-cat("\nPairwise Comparisons:\n")
-print(stat_pairs_eub)
+# Model summary
+cat("\nModel summary:\n")
+print(summary(stat_model_eub))
 ```
 
-# Step 4: Summarise dataframe
+## Step 4b: Post-hoc comparisons
 ```{r}
-df_eub_summary <- df_eub %>%
+# Pairwise comparisons between zones
+stat_emm_zones <- emmeans(stat_model_eub, ~ Zone)
+stat_pairs_zones <- pairs(stat_emm_zones)
+
+cat("Zone comparisons:\n")
+print(stat_pairs_zones)
+
+# Pairwise comparisons between treatments within zones
+stat_emm_treatment_zone <- emmeans(stat_model_eub, ~ Treatment | Zone)
+stat_pairs_treatment_zone <- pairs(stat_emm_treatment_zone)
+
+cat("\nTreatment comparisons within zones:\n")
+print(stat_pairs_treatment_zone)
+```
+
+# Step 5: Data summary
+## Step 5a: Create summary statistics
+```{r}
+# Summary by zone and treatment
+df_eub_2_summary <- df_eub_1_processed %>%
   group_by(Zone, Treatment) %>%
   summarise(
     mean_abundance = mean(log10_copies, na.rm = TRUE),
     se_abundance = sd(log10_copies, na.rm = TRUE)/sqrt(n()),
     n = n(),
     .groups = "drop"
-  )
-df_eub_summary <- df_eub_summary %>%
+  ) %>%
   mutate(mean_se = paste0(round(mean_abundance, 2), " ± ", round(se_abundance, 2), " (n=", n, ")"))
-print(df_eub_summary)
 
-df_qpcr_sum  <- df_eub  %>%
+cat("Summary statistics by zone and treatment:\n")
+print(df_eub_2_summary)
+
+# Summary by plot for export
+df_eub_3_plot_summary <- df_eub_1_processed %>%
   mutate(plotid = as.factor(Plot)) %>%
   group_by(plotid) %>%
-  summarise("Abundance" = mean(log10_copies, na.rm=TRUE)) %>%
-  ungroup()
-print(df_qpcr_sum)
+  summarise(
+    Abundance = mean(log10_copies, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+cat("\nSummary statistics by plot:\n")
+print(df_eub_3_plot_summary)
 ```
 
 # References

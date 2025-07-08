@@ -1,37 +1,37 @@
 ---
-title: "script_warming_data_2022"
+title: "Warming Data Analysis 2022"
 author: "Julian Mittmann-Goetsch"
 date: "2025-02-11"
 output: html_document
 ---
 
+## Version 2.0: Streamlined and hierarchical data structure - 11.02.2025 | JM  
 ## Version 1.1: Adapted script to match pre-filtered data from SERC - 10.04.2025 | JM
 ## Version 1.0: Basic script with data loading - 11.02.2025 | JM
+## Purpose: Process and summarize soil temperature data from experimental warming plots
 
 # Step 1: Prepare R Session
 ## Step 1a: Install all necessary packages
 ```{r message=FALSE, warning=FALSE}
-#install.packages("dplyr")
-#install.packages("ggplot2")
-#install.packages("ggpubr")
 #install.packages("here")
 #install.packages("lubridate")
 #install.packages("tidyverse")
+#install.packages("ggplot2")
+#install.packages("ggpubr")
 ```
 
 ## Step 1b: Load all necessary packages
 ```{r}
-library(dplyr)
-library(ggplot2)
-library(ggpubr)
 library(here)
 library(lubridate)
 library(tidyverse)
+library(ggplot2)
+library(ggpubr)
 ```
 
 ## Step 1c: Set global plot theme
 ```{r}
-# Creates a theme for all plots in this study 
+# Standard theme for all plots in this study 
 theme_JM <- theme(
   axis.title.x      = element_text(colour = "black", size = 12),
   axis.text.x       = element_text(colour = "black", size = 12), 
@@ -51,81 +51,160 @@ theme_JM <- theme(
 ## Step 1d: Load warming data
 ```{r}
 # Load cleaned warming data (cleaning protocol from SERC - Roy Rich)
-df_warming_2022_0_raw <- read.csv(here("data", "warming", "MERIT_2022_daily_cleaned.csv"))
+df_warming_0_raw <- read.csv(here("data", "warming", "MERIT_2022_daily_cleaned.csv"))
+
+print("Raw warming data loaded successfully")
+print(paste("Dimensions:", nrow(df_warming_0_raw), "rows x", ncol(df_warming_0_raw), "columns"))
+print(paste("Date range:", min(df_warming_0_raw$date, na.rm = TRUE), "to", max(df_warming_0_raw$date, na.rm = TRUE)))
 ```
 
-## Step 1e: Filter warming data
+# Step 2: Data preprocessing  
+## Step 2a: Filter and standardize warming data
 ```{r}
-# We select only the relevatn coloumns from the raw data
-df_warming_2022_1_filtered <- df_warming_2022_0_raw %>%
-   select(date, yday, plotid, treatment, zone, aboveTemp, airTemp, deepTemp, lagTemp, pinTemp, surfaceTemp, rh_avg, vp_avg, wind_speed_avg,)
-```
+# Select relevant columns from raw data
+df_warming_1_filtered <- df_warming_0_raw %>%
+   select(date, yday, plotid, treatment, zone, aboveTemp, airTemp, deepTemp, 
+          lagTemp, pinTemp, surfaceTemp, rh_avg, vp_avg, wind_speed_avg) %>%
+   # Convert date column to proper date format
+   mutate(date = as.Date(date))
 
-# Step 2: Plots
-## Step 2a: Yearly plot
-```{r}
-plot_warming_2022 <- df_warming_2022_1_filtered %>%
-  ggplot(aes(x = date, y = surfaceTemp, color = treatment)) +
-  geom_line() +
-  scale_color_manual(values = c("amb" = "#4575B4", "1.5" = "#FDAE61", "3" = "#D73027"), name = "Warming treatment:") +
-  theme_JM +
-  facet_grid(~ zone)
-
-# All Plots
-plot_warming_2022
-```
-
-# Step 3: Summarise 
-## Step 3a: Summarise warming data
-```{r}
-df_warming_2022_1_filtered$zone <- dplyr::recode(df_warming_2022_1_filtered$zone,
+# Standardize zone and treatment names
+df_warming_1_filtered$zone <- dplyr::recode(df_warming_1_filtered$zone,
   "PIO" = "Pioneer zone",
-  "PZ" = "Pioneer zone",
+  "PZ" = "Pioneer zone", 
   "LM" = "Low marsh",
   "HM" = "High marsh"
 )
-df_warming_2022_1_filtered$zone <- factor(df_warming_2022_1_filtered$zone, levels = c("Pioneer zone", "Low marsh", "High marsh"))
-df_warming_2022_1_filtered$treatment <- recode_factor(df_warming_2022_1_filtered$treatment,"amb" = "ambient", "1.5" = "+1.5°C", "3" = "+3.0°C")
 
-# Filter data for the month of August
-df_warming_all_2022_monthly <- df_warming_2022_1_filtered %>%
-  filter(between(date(date), as.Date("2022-08-11"), as.Date("2022-09-11"))) %>%
+df_warming_1_filtered$treatment <- dplyr::recode(df_warming_1_filtered$treatment,
+  "amb" = "ambient",
+  "1.5" = "+1.5°C", 
+  "3" = "+3.0°C"
+)
+
+# Set factor levels for consistent ordering
+df_warming_1_filtered$zone <- factor(df_warming_1_filtered$zone, 
+                                     levels = c("Pioneer zone", "Low marsh", "High marsh"))
+df_warming_1_filtered$treatment <- factor(df_warming_1_filtered$treatment, 
+                                          levels = c("ambient", "+1.5°C", "+3.0°C"))
+
+print("Data preprocessing completed")
+```
+
+# Step 3: Plots
+## Step 3a: Yearly temperature plot
+```{r}
+# Plot surface temperature over time by treatment and zone
+plot_warming_2022 <- df_warming_1_filtered %>%
+  ggplot(aes(x = date, y = surfaceTemp, color = treatment)) +
+  geom_line() +
+  scale_color_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), 
+                     name = "Warming treatment:") +
+  labs(x = "Date", y = "Surface temperature [°C]", 
+       title = "Surface temperature variation by treatment and zone") +
+  theme_JM +
+  facet_grid(~ zone)
+
+plot_warming_2022
+```
+
+# Step 4: Summarize warming data
+## Step 4a: Create monthly, weekly, and yearly summaries
+```{r}
+# Monthly summary (4 weeks prior to sampling: August 11 - September 11, 2022)
+df_warming_2_monthly <- df_warming_1_filtered %>%
+  filter(between(date, as.Date("2022-08-11"), as.Date("2022-09-11"))) %>%
   group_by(zone, treatment, plotid) %>%
-  summarise(across(c(pinTemp, aboveTemp, airTemp, lagTemp, deepTemp, surfaceTemp, rh_avg, vp_avg, wind_speed_avg), 
+  summarise(across(c(pinTemp, aboveTemp, airTemp, lagTemp, deepTemp, surfaceTemp, 
+                     rh_avg, vp_avg, wind_speed_avg), 
                    list(mean = ~mean(., na.rm = TRUE),
                         se = ~sd(., na.rm = TRUE) / sqrt(sum(!is.na(.))))),
             .groups = "drop")
 
-# Creating a dataframe with temperature 2 weeks before sampling
-df_warming_all_2022_weekly <- df_warming_2022_1_filtered %>%
-  filter(between(date(date), as.Date("2022-09-01"), as.Date("2022-09-11"))) %>%
+# Weekly summary (2 weeks prior to sampling: September 1 - September 11, 2022)
+df_warming_3_weekly <- df_warming_1_filtered %>%
+  filter(between(date, as.Date("2022-09-01"), as.Date("2022-09-11"))) %>%
   group_by(zone, treatment, plotid) %>%
-  summarise(across(c(pinTemp, aboveTemp, airTemp, lagTemp, deepTemp, surfaceTemp, rh_avg, vp_avg, wind_speed_avg), 
+  summarise(across(c(pinTemp, aboveTemp, airTemp, lagTemp, deepTemp, surfaceTemp, 
+                     rh_avg, vp_avg, wind_speed_avg), 
                    list(mean = ~mean(., na.rm = TRUE),
                         se = ~sd(., na.rm = TRUE) / sqrt(sum(!is.na(.))))),
             .groups = "drop")
 
-# Creating a dataframe with warming data until the sampling date (yearly)
-df_warming_all_2022_yearly <- df_warming_2022_1_filtered %>%
-  filter(year(date) == 2022, date(date) <= as.Date("2022-09-11") )%>%
+# Yearly summary (entire season until sampling date)
+df_warming_4_yearly <- df_warming_1_filtered %>%
+  filter(year(date) == 2022, date <= as.Date("2022-09-11")) %>%
   group_by(zone, treatment, plotid) %>%
-  summarise(across(c(pinTemp, aboveTemp, airTemp, lagTemp, deepTemp, surfaceTemp, rh_avg, vp_avg, wind_speed_avg), 
+  summarise(across(c(pinTemp, aboveTemp, airTemp, lagTemp, deepTemp, surfaceTemp, 
+                     rh_avg, vp_avg, wind_speed_avg), 
                    list(mean = ~mean(., na.rm = TRUE),
                         se = ~sd(., na.rm = TRUE) / sqrt(sum(!is.na(.))))),
             .groups = "drop")
 
-write.csv(df_warming_all_2022_monthly, "./df_warming_all_2022_monthly.csv")
-write.csv(df_warming_all_2022_weekly, "./df_warming_all_2022_weekly.csv")
-write.csv(df_warming_all_2022_yearly, "./df_warming_all_2022_yearly.csv")
+print("Warming data summaries created successfully")
+```
+
+# Step 5: Save processed datasets
+```{r}
+# Save summary datasets for use in other scripts
+write.csv(df_warming_2_monthly, here("scripts", "df_warming_all_2022_monthly.csv"), row.names = FALSE)
+write.csv(df_warming_3_weekly, here("scripts", "df_warming_all_2022_weekly.csv"), row.names = FALSE)
+write.csv(df_warming_4_yearly, here("scripts", "df_warming_all_2022_yearly.csv"), row.names = FALSE)
+
+print("Warming datasets saved to scripts folder")
+```
+
+# Step 6: Summary of dataframes
+```{r}
+# Summary of warming datasets
+print("=== WARMING DATA SUMMARY ===")
+
+print("=== RAW DATA (df_warming_0_raw) ===")
+str(df_warming_0_raw)
+
+print("=== FILTERED DATA (df_warming_1_filtered) ===")
+str(df_warming_1_filtered)
+summary(df_warming_1_filtered[c("pinTemp", "deepTemp", "surfaceTemp")])
+
+print("=== MONTHLY SUMMARY (df_warming_2_monthly) ===")
+str(df_warming_2_monthly)
+print("Sample distribution by treatment and zone:")
+table(df_warming_2_monthly$treatment, df_warming_2_monthly$zone)
+
+print("=== WEEKLY SUMMARY (df_warming_3_weekly) ===")
+str(df_warming_3_weekly)
+
+print("=== YEARLY SUMMARY (df_warming_4_yearly) ===")
+str(df_warming_4_yearly)
+
+print("=== TEMPERATURE SUMMARY STATISTICS ===")
+# Pin temperature summary
+pin_temp_summary <- df_warming_2_monthly %>%
+  group_by(treatment) %>%
+  summarise(
+    mean_pinTemp = mean(pinTemp_mean, na.rm = TRUE),
+    sd_pinTemp = sd(pinTemp_mean, na.rm = TRUE)
+  )
+print("Pin temperature by treatment (monthly data):")
+print(pin_temp_summary)
+
+# Deep temperature summary
+deep_temp_summary <- df_warming_2_monthly %>%
+  group_by(treatment) %>%
+  summarise(
+    mean_deepTemp = mean(deepTemp_mean, na.rm = TRUE),
+    sd_deepTemp = sd(deepTemp_mean, na.rm = TRUE)
+  )
+print("Deep temperature by treatment (monthly data):")
+print(deep_temp_summary)
 ```
 
 # References
 ```{r}
-# dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
 # lubridate: Spinu, V., Grolemund, G., & Wickham, H. (2024). lubridate: Make Dealing with Dates a Little Easier. R package version 1.9.3. https://CRAN.R-project.org/package=lubridate
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
 ```
 

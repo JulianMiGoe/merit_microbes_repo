@@ -1,26 +1,16 @@
 ---
-title: "script_climate"
+title: "Climate Data Analysis - Schleswig-Holstein Regional Averages"
 author: "Julian Mittmann-Goetsch"
-date: "2025-04-17"
+date: "2025-01-31"
 output: html_document
 ---
 
-# Versionlog
-## Version 1.0: Basic script with data loading - 17.04.2025 | JM
+## Version 2.0: Unified script structure, English comments, hierarchical naming - 31.01.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
+## Version 1.0: Basic script with data loading - 17.04.2025 | JM
 
-# Step 1: Prepare R session
-## Step 1a: Install necessary packages
-```{r}
-#install.packages("dplyr")
-#install.packages("ggplot2")
-#install.packages("ggpubr")
-#install.packages("here")
-#install.packages("lubridate")
-#install.packages("tidyverse")
-```
-
-## Step 1b: Load all necessary packages
+# Step 1: Prepare session and load data
+## Step 1a: Load necessary packages
 ```{r}
 library(dplyr)
 library(ggplot2)
@@ -30,9 +20,9 @@ library(lubridate)
 library(tidyverse)
 ```
 
-## Step 1c: Set global plot theme
-```{r}
-# Creates a theme for all plots in this study 
+## Step 1b: Define global plot theme
+```{r message=FALSE, warning=FALSE}
+# Global theme for all plots in this analysis
 theme_JM <- theme(
   axis.title.x      = element_text(colour = "black", size = 12),
   axis.text.x       = element_text(colour = "black", size = 12), 
@@ -49,31 +39,53 @@ theme_JM <- theme(
 )
 ```
 
-## Step 1d: Load raw data (source DWD)
+## Step 1c: Load climate data from DWD regional averages
 ```{r}
-df_precipitation_08 <- read.delim(here("data", "climate", "regional_averages_rr_08.txt"), dec = ".", sep = ";", skip = 1)
-df_temperature_08 <- read.delim(here("data", "climate", "regional_averages_tm_08.txt"), dec = ".", sep = ";", skip = 1)
+# Load precipitation and temperature data for Schleswig-Holstein (month 08 - August)
+df_precipitation_0_raw <- read.delim(here("data", "climate", "regional_averages_rr_08.txt"), dec = ".", sep = ";", skip = 1)
+df_temperature_0_raw <- read.delim(here("data", "climate", "regional_averages_tm_08.txt"), dec = ".", sep = ";", skip = 1)
 ```
 
-## Step 1e: Merge raw data
+# Step 2: Data preprocessing
+## Step 2a: Process and standardize column names
 ```{r}
-df_precipitation_08 <- df_precipitation_08 %>%
-  select(Year = Jahr, Month = Monat, Precipitation = Schleswig.Holstein)
+# Process precipitation data
+df_precipitation_1_processed <- df_precipitation_0_raw %>%
+  select(Year = Jahr, Month = Monat, Precipitation = Schleswig.Holstein) %>%
+  mutate(
+    Year = as.numeric(Year),
+    Month = as.numeric(Month),
+    Precipitation = as.numeric(Precipitation)
+  )
 
-df_temperature_08 <- df_temperature_08 %>%
-  select(Year = Jahr, Month = Monat, Temperature = Schleswig.Holstein)
-
-df_climate_08 <- df_precipitation_08 %>%
-  left_join(df_temperature_08, by = c("Year", "Month"))
+# Process temperature data
+df_temperature_1_processed <- df_temperature_0_raw %>%
+  select(Year = Jahr, Month = Monat, Temperature = Schleswig.Holstein) %>%
+  mutate(
+    Year = as.numeric(Year),
+    Month = as.numeric(Month),
+    Temperature = as.numeric(Temperature)
+  )
 ```
 
-# Step 2: Plot climate data
+## Step 2b: Merge climate datasets
 ```{r}
-max_temp <- max(df_climate_08$Temperature, na.rm = TRUE)
-max_precip <- max(df_climate_08$Precipitation, na.rm = TRUE)
+# Combine precipitation and temperature data
+df_climate_2_merged <- df_precipitation_1_processed %>%
+  left_join(df_temperature_1_processed, by = c("Year", "Month")) %>%
+  filter(!is.na(Precipitation) & !is.na(Temperature))  # Remove rows with missing data
+```
+
+# Step 3: Data visualization
+## Step 3a: Create climate overview plot
+```{r}
+# Calculate scaling factor for dual y-axis
+max_temp <- max(df_climate_2_merged$Temperature, na.rm = TRUE)
+max_precip <- max(df_climate_2_merged$Precipitation, na.rm = TRUE)
 scaling_factor <- max_temp / max_precip
 
-plot_climate_08 <- df_climate_08 %>%
+# Create combined temperature and precipitation plot for study period
+plot_climate_overview <- df_climate_2_merged %>%
   filter(Year > 2001 & Year < 2023) %>%
   ggplot(aes(x = Year)) +
   geom_col(aes(y = Precipitation * scaling_factor), 
@@ -81,16 +93,94 @@ plot_climate_08 <- df_climate_08 %>%
            fill = "steelblue",
            alpha = 0.6) +
   geom_line(aes(y = Temperature), color = "red", linewidth = 1) +
+  geom_point(aes(y = Temperature), color = "red", size = 2) +
   scale_y_continuous(
     name = "Mean monthly temperature [°C]",
     sec.axis = sec_axis(~./scaling_factor, 
                         name = "Mean monthly precipitation [mm]")
   ) +
   scale_x_continuous(breaks = seq(2002, 2022, by = 2)) +
-  labs(x = "Year") +
+  labs(x = "Year", 
+       title = "Climate Overview: Temperature and Precipitation (August)",
+       subtitle = "Schleswig-Holstein regional averages, 2002-2022") +
   theme_JM +
   theme(axis.title.y.right = element_text(color = "steelblue"),
         axis.text.y.right = element_text(color = "steelblue"))
+
+# Display plot
+print(plot_climate_overview)
+```
+
+## Step 3b: Create separate plots for temperature and precipitation
+```{r}
+# Temperature trend plot
+plot_temperature <- df_climate_2_merged %>%
+  filter(Year > 2001 & Year < 2023) %>%
+  ggplot(aes(x = Year, y = Temperature)) +
+  geom_line(color = "red", linewidth = 1) +
+  geom_point(color = "red", size = 2) +
+  geom_smooth(method = "lm", se = TRUE, color = "darkred", alpha = 0.3) +
+  scale_x_continuous(breaks = seq(2002, 2022, by = 2)) +
+  labs(x = "Year", 
+       y = "Mean monthly temperature [°C]",
+       title = "Temperature Trend (August)",
+       subtitle = "Schleswig-Holstein regional averages, 2002-2022") +
+  theme_JM
+
+# Precipitation trend plot
+plot_precipitation <- df_climate_2_merged %>%
+  filter(Year > 2001 & Year < 2023) %>%
+  ggplot(aes(x = Year, y = Precipitation)) +
+  geom_col(fill = "steelblue", alpha = 0.7, width = 0.7) +
+  geom_smooth(method = "lm", se = TRUE, color = "darkblue", alpha = 0.3) +
+  scale_x_continuous(breaks = seq(2002, 2022, by = 2)) +
+  labs(x = "Year", 
+       y = "Mean monthly precipitation [mm]",
+       title = "Precipitation Trend (August)",
+       subtitle = "Schleswig-Holstein regional averages, 2002-2022") +
+  theme_JM
+
+# Display individual plots
+print(plot_temperature)
+print(plot_precipitation)
+```
+
+# Step 4: Data summary
+## Step 4a: Calculate summary statistics
+```{r}
+# Summary statistics for study period (2002-2022)
+df_climate_3_summary <- df_climate_2_merged %>%
+  filter(Year > 2001 & Year < 2023) %>%
+  summarise(
+    mean_temperature = mean(Temperature, na.rm = TRUE),
+    se_temperature = sd(Temperature, na.rm = TRUE)/sqrt(n()),
+    min_temperature = min(Temperature, na.rm = TRUE),
+    max_temperature = max(Temperature, na.rm = TRUE),
+    mean_precipitation = mean(Precipitation, na.rm = TRUE),
+    se_precipitation = sd(Precipitation, na.rm = TRUE)/sqrt(n()),
+    min_precipitation = min(Precipitation, na.rm = TRUE),
+    max_precipitation = max(Precipitation, na.rm = TRUE),
+    n_years = n(),
+    .groups = "drop"
+  )
+
+cat("Climate summary statistics for August (2002-2022):\n")
+cat("Temperature:\n")
+cat("  Mean ± SE:", round(df_climate_3_summary$mean_temperature, 2), "±", round(df_climate_3_summary$se_temperature, 2), "°C\n")
+cat("  Range:", round(df_climate_3_summary$min_temperature, 2), "-", round(df_climate_3_summary$max_temperature, 2), "°C\n")
+cat("Precipitation:\n")
+cat("  Mean ± SE:", round(df_climate_3_summary$mean_precipitation, 2), "±", round(df_climate_3_summary$se_precipitation, 2), "mm\n")
+cat("  Range:", round(df_climate_3_summary$min_precipitation, 2), "-", round(df_climate_3_summary$max_precipitation, 2), "mm\n")
+cat("Number of years:", df_climate_3_summary$n_years, "\n")
+
+# Yearly summary for export
+df_climate_4_yearly_summary <- df_climate_2_merged %>%
+  filter(Year > 2001 & Year < 2023) %>%
+  select(Year, Temperature, Precipitation) %>%
+  arrange(Year)
+
+cat("\nYearly climate data (August):\n")
+print(df_climate_4_yearly_summary)
 ```
 
 # References
