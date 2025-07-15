@@ -177,8 +177,15 @@ plot_heatmap_degradation_layer_2_final <- ggplot(df_heatmap_degradation_layer_1_
     values = scales::rescale(c(min(df_heatmap_degradation_1_processed$mean_abundance),
                                median(df_heatmap_degradation_1_processed$mean_abundance),
                                max(df_heatmap_degradation_1_processed$mean_abundance))),
-    breaks = pretty(df_heatmap_degradation_1_processed$mean_abundance, n = 5),
-    guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
+    breaks = pretty(df_heatmap_degradation_1_processed$mean_abundance, n = 3),
+    guide = guide_colorbar(
+      barwidth = 1, 
+      barheight = 8, 
+      title.position = "top", 
+      title.hjust = 0.5,
+      label.theme = element_text(size = 8, angle = 0),
+      title.theme = element_text(size = 10)
+    )
   ) +
   theme_minimal() +
   theme(
@@ -186,7 +193,7 @@ plot_heatmap_degradation_layer_2_final <- ggplot(df_heatmap_degradation_layer_1_
     axis.text.y = element_text(size = 10),
     strip.background = element_rect(fill = "lightgrey"),
     strip.text = element_text(face = "bold"),
-    legend.position = "bottom",
+    legend.position = "right",
     panel.spacing = unit(0.1, "lines"),
     axis.title.y = element_text(margin = margin(r = 10))
   ) +

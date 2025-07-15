@@ -3,15 +3,17 @@
 ## Overview
 This repository contains R scripts and data for analyzing microbial communities and enzymatic activities from the MERIT (Marine Ecosystem Response to warming In Tidal wetlands) whole-ecosystem warming experiment. The study was conducted in a Wadden Sea salt marsh (Hamburger Hallig, Schleswig-Holstein, Germany).
 
-**Publication**: Despite Overall Resilience, High Marsh Zones in Saltmarshes Show Signs of Drought-Induced Stress in Microbial Communities
+**Publication**: Hydrology Masks Warming Effects on Microbial Communities in Salt Marsh Soils
 
-**Authors**: Julian Mittmann-Goetsch¹, Johann Jaitner¹, Alexander Bartholomäus², Simon Thomsen¹, Roy Rich³, Kai Jensen¹, Susanne Liebner²˒⁴, Peter Mueller⁵˒⁶, Viktoria Unger¹  
-¹ Institute of Plant Science and Microbiology, Universität Hamburg, Hamburg, Germany  
-² GFZ German Research Center for Geosciences, Geomicrobiology, Potsdam, Germany  
-³ Smithsonian Environmental Research Center, Edgewater, MD, USA  
-⁴ Institute for Biochemistry and Biology, Universität Potsdam, Potsdam, Germany  
-⁵ Institute of Landscape Ecology, Universität Münster, Münster, Germany  
-⁶ Institute of Environmental Sciences, Rheinland-Pfälzische Technische Universität, Kaiserslautern Landau, Germany
+**Authors**: Julian Mittmann-Goetsch¹, Peter Mueller²'³, Kai Jensen¹, Susanne Liebner⁴'⁵, Simon Thomsen¹, Roy Rich³, Alexander Bartholomäus⁴, Dirk Granse¹, Johann Jaitner¹, Viktoria Unger¹  
+
+**Affiliations**:  
+¹ Institute of Plant Science and Microbiology, University of Hamburg, Hamburg, Germany  
+² Institute of Landscape Ecology, Universität Münster, Münster, Germany  
+³ Institute for Environmental Sciences, Rheinland-Pfälzische Technische Universität, Kaiserslautern Landau, Germany  
+⁴ GFZ German Research Center for Geosciences, Geomicrobiology, Potsdam, Germany  
+⁵ Institute for Biochemistry and Biology, Universität Potsdam, Potsdam, Germany  
+⁶ Smithsonian Environmental Research Center, Edgewater, MD, USA
 
 ## Repository Structure
 
