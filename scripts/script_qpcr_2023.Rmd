@@ -62,21 +62,6 @@ df_eub_1_processed <- df_eub_0_raw %>%
   filter(Subplot == "ctr")  # Remove root-barrier samples
 ```
 
-# Step 3: Data visualization
-## Step 3a: Create barplot for bacterial abundances
-```{r}
-# Generate barplot showing bacterial abundances by zone and treatment
-plot_qpcr_bar_eub <- ggplot(df_eub_1_processed, aes(x = Zone, y = log10_copies, fill = Treatment)) +
-  scale_y_continuous(limits = c(9, 10)) + 
-  stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9), alpha = 0.9, width = 0.7) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(width = 0.9), width = 0.25, color = "black") +
-  scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-  labs(fill = "Treatment", y = "log10 abundance 16S rRNA [copies/g OM]", x = "Zone") +
-  theme_JM 
-# Display plot
-print(plot_qpcr_bar_eub)
-```
-
 # Step 4: Statistical analysis
 ## Step 4a: Linear mixed-effects model for bacterial abundance
 ```{r}
