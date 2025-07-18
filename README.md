@@ -185,14 +185,3 @@ Julian Mittmann-Goetsch (julian.johannes.mittmann-goetsch@uni-hamburg.de)
 Institute of Plant Science and Microbiology, University of Hamburg
 
 ---
-### R Version
-R ≥ 4.0.0
-
-### Required Packages
-See individual script headers for specific package requirements. Key packages include:
-- `phyloseq`, `vegan`: Community ecology analysis
-- `lme4`, `robustlmm`: Mixed-effects modeling
-- `emmeans`: Post-hoc comparisons
-- `ggplot2`, `ggpubr`: Data visualization
-- `dplyr`, `tidyverse`: Data manipulation
----
