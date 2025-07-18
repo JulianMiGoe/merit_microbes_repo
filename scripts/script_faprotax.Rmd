@@ -1,227 +1,153 @@
 ---
-title: "script_faprotax"
+title: "Functional Analysis using FAPROTAX Database"
 author: "Julian Mittmann-Goetsch"
 date: "2025-01-31"
 output: html_document
 ---
 
-# Versionlog
-## Version 1.0: Basic script using FAPROTAX output table (31.01.2025)
+## Version 2.1: Updated version log format - 17.07.2025 | JM
+## Version 2.0: Unified script structure, English comments, hierarchical naming - 31.01.2025 | JM
+## Version 1.0: Basic script using FAPROTAX output table - 31.01.2025 | JM
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
-#install.packages("tidyverse")
-#install.packages("ggplot2")
 #install.packages("dplyr")
-#install.packages("broom")
-#install.packages("purrr")
-#install.packages("here")
-#install.packages("emmeans")
-#install.packages("multcompView")
+#install.packages("ggplot2")
 #install.packages("ggh4x")
+#install.packages("here")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(tidyverse)
-library(ggplot2)
 library(dplyr)
-library(broom)
-library(purrr)
-library(here)
-library(emmeans)
-library(multcompView)
+library(ggplot2)
 library(ggh4x)
+library(here)
+library(tidyverse)
 ```
 
-## Step 1c: Load sequencing data
+## Step 1c: Load functional and metadata data
 ```{r}
-df_functional <- read.delim(here::here("data", "faprotax", "df_functional_database.tsv"), dec = ".", sep = "\t")
-df_metadata <-  read.delim(here::here("data", "metadata.txt"), dec = ".", sep= "\t")
+# Load functional database from FAPROTAX
+df_functional_0_raw <- read.delim(here::here("data", "faprotax", "df_functional_database.tsv"), 
+                                 dec = ".", sep = "\t")
+
+# Load metadata
+df_metadata_0_raw <- read.delim(here::here("data", "metadata.txt"), dec = ".", sep= "\t")
 ```
 
-## Step 1d: Modify dataframes
+# Step 2: Data preprocessing
+## Step 2a: Process metadata and functional data
 ```{r}
-df_metadata$Sample_ID <- as.factor(df_metadata$sample_name)
-
-df_metadata <- df_metadata %>%
- # rename("sample_name" = "Sample_ID") %>%
+# Process metadata with hierarchical naming
+df_metadata_1_processed <- df_metadata_0_raw %>%
+  mutate(Sample_ID = as.factor(sample_name)) %>%
   mutate(Layer = case_when(
-    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil (0-30 cm)",
-    Depth %in% c("40-50 cm", "80-100 cm") ~ "Bottom-soil (40-100 cm)",
-    TRUE ~ NA_character_  # For unexpected values
-  ))
-df_metadata <- df_metadata %>%
+    Depth %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil (0-30 cm)",
+    Depth %in% c("40-50 cm", "80-100 cm") ~ "Subsoil (40-100 cm)",
+    TRUE ~ NA_character_
+  )) %>%
   mutate_at(c(5:9), as.factor)
-```
 
-```{r}
-# Assuming df_functional has Sample_IDs as column names
-df_functional_long <- df_functional %>%
-  pivot_longer(cols = -X.group, names_to = "Sample_ID", values_to = "abundance")
+# Recode zone names for consistency
+df_metadata_1_processed$Zone <- dplyr::recode(df_metadata_1_processed$Zone,
+  "PZ" = "Pioneer zone", "LM" = "Low marsh", "HM" = "High marsh"
+)
+df_metadata_1_processed$Zone <- factor(df_metadata_1_processed$Zone, 
+                                      levels = c("Pioneer zone", "Low marsh", "High marsh"))
 
-df_functional_long$Functional <- df_functional_long$X.group
+# Transform functional data to long format
+df_functional_1_long <- df_functional_0_raw %>%
+  pivot_longer(cols = -X.group, names_to = "Sample_ID", values_to = "abundance") %>%
+  rename(Functional = X.group)
 
-# Merge with metadata
-df_merged <- df_functional_long %>%
-  inner_join(df_metadata, by = "Sample_ID")
+# Merge functional data with metadata
+df_merged_1_processed <- df_functional_1_long %>%
+  inner_join(df_metadata_1_processed, by = "Sample_ID")
 
-# Reorder Factors
-df_merged <- df_merged %>%
+# Reorder treatment factors
+df_merged_2_final <- df_merged_1_processed %>%
   mutate(Treatment = case_when(
     Treatment == "ambient" ~ "Ambient",
     Treatment == "1.5" ~ "+1.5°C",
     Treatment == "3" ~ "+3.0°C",
     TRUE ~ Treatment
   )) %>%
-  mutate(Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C")))
-
-# Reorder Zone factor
-df_merged <- df_merged %>%
-  mutate(Zone = factor(Zone, levels = c("PZ", "LM", "HM")))
+  mutate(Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C"))) %>%
+  mutate(Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")))
 ```
 
 
-# Step 2: Plots
-## Step 2a: Heatmaps
+# Step 3: Functional analysis and visualization
+## Step 3a: Create heatmaps for functional groups
 ```{r}
 # Filter out functional groups containing "human"
-df_merged_filtered <- df_merged %>%
+df_merged_filtered_1_processed <- df_merged_2_final %>%
   filter(!str_detect(Functional, regex("human", ignore_case = TRUE)))
 
-desired_functions_redox <- c(
-  "methanogenesis_by_CO2_reduction_with_H2",
+# Define functional groups for degradation processes
+functional_groups_degradation <- c(
+  "cellulolysis", "chitinolysis", "ligninolysis", "hydrocarbon_degradation",
+  "fermentation", "aliphatic_non_methane_hydrocarbon_degradation",
+  "aromatic_hydrocarbon_degradation", "aromatic_compound_degradation"
+)
+
+# Define broader functional groups
+functional_groups_all <- c(
+  "aerobic_chemoheterotrophy", "photoautotrophy", "nitrite_respiration",
+  "nitrate_reduction", "aerobic_nitrite_oxidation", "hydrocarbon_degradation",
+  "fermentation", "sulfate_respiration", "xylanolysis", "chitinolysis",
+  "cellulolysis", "methanotrophy", "aerobic_ammonia_oxidation",
+  "anoxygenic_photoautotrophy", "nitrate_denitrification", "dark_hydrogen_oxidation",
+  "urelolysis", "dark_sulfite_oxidation", "dark_sulfur_oxidation",
+  "dark_oxidation_of_sulfur_compounds", "dark_sulfide_oxidation",
+  "animal_parasites_or_symbionts", "nitrate_respiration", "methanol_oxidation",
+  "methylotrophy", "methanogenesis", "methanogenesis_by_CO2_reduction_with_H2",
   "methanogenesis_by_reduction_of_methyl_compounds_with_H2",
-  "hydrogenotrophic_methanogenesis",
-  "methanogenesis",
-  "nitrogen_fixation",
-  "nitrification",
-  "denitrification",
-  "sulfate_respiration",
-  "methanotrophy",
-  "dark_hydrogen_oxidation",
-  "fermentation",
-  "aerobic_chemoheterotrophy",
-  "dark_iron_oxidation",
-  "iron_respiration"
+  "hydrogenotrophic_methanogenesis", "dark_iron_oxidation", "iron_respiration"
 )
 
-desired_functions_degradation <- c(
-  "cellulolysis",
-  "chitinolysis",
-  "ligninolysis",
-  "hydrocarbon_degradation",
- # "fermentation",
-  "aliphatic_non_methane_hydrocarbon_degradation",
-  "aromatic_hydrocarbon_degradation",
-  "aromatic_compound_degradation"
-)
+# Filter data for degradation processes
+df_filtered_degradation_1_processed <- df_merged_filtered_1_processed %>%
+  filter(Functional %in% functional_groups_degradation)
 
-desired_functions_all <- c(
-  "aerobic_chemoheterotrophy",
-  "photoautotrophy",
-  "nitrite_respiration",
-  "nitrate_reduction",
-  "aerobic_nitrite_oxidation",
-  "hydrocarbon_degradation",
-  "fermentation",
-  "sulfate_respiration",
-  "xylanolysis",
-  "chitinolysis",
-  "cellulolysis",
-  "methanotrophy",
-  "aerobic_ammonia_oxidation",
-  "anoxygenic_photoautotrophy",
-  "nitrate_denitrification",
-  "dark_hydrogen_oxidation",
-  "urelolysis",
-  "dark_sulfite_oxidation",
-  "dark_sulfur_oxidation",
-  "dark_oxidation_of_sulfur_compounds",
-  "dark_sulfide_oxidation",
-  "animal_parasites_or_symbionts",
-  "nitrate_respiration",
-  "methanol_oxidation",
-  "methylotrophy",
-  "methanogenesis",
-  "methanogenesis_by_CO2_reduction_with_H2",
-  "methanogenesis_by_reduction_of_methyl_compounds_with_H2",
-  "hydrogenotrophic_methanogenesis",
-  "dark_iron_oxidation",
-  "iron_respiration"
-)
+# Filter data for all functional groups
+df_filtered_all_1_processed <- df_merged_filtered_1_processed %>%
+  filter(Functional %in% functional_groups_all)
 
-df_merged_filtered_redox <- df_merged_filtered %>%
-  filter(Functional %in% desired_functions_redox)
-
-df_merged_filtered_degradation <- df_merged_filtered %>%
-  filter(Functional %in% desired_functions_degradation)
-
-df_merged_filtered_all <- df_merged_filtered %>%
-  filter(Functional %in% desired_functions_all)
-
-# Calculate mean abundance for each combination
-df_heatmap_redox <- df_merged_filtered_redox %>%
+# Calculate mean abundance for degradation heatmap
+df_heatmap_degradation_1_processed <- df_filtered_degradation_1_processed %>%
   group_by(Functional, Zone, Treatment) %>%
-  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
-  ungroup()
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop")
 
-# Calculate mean abundance for each combination
-df_heatmap_degradation <- df_merged_filtered_degradation %>%
-  group_by(Functional, Zone, Treatment) %>%
-  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
-  ungroup()
-
-df_heatmap_degradation_layer <- df_merged_filtered_degradation %>%
+# Calculate mean abundance with layer separation
+df_heatmap_degradation_layer_1_processed <- df_filtered_degradation_1_processed %>%
   group_by(Functional, Zone, Treatment, Layer) %>%
-  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
-  ungroup()
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop")
 
-# Calculate mean abundance for each combination
-df_heatmap_all <- df_merged_filtered_all %>%
+# Calculate mean abundance for all functional groups
+df_heatmap_all_1_processed <- df_filtered_all_1_processed %>%
   group_by(Functional, Zone, Treatment) %>%
-  summarise(mean_abundance = mean(abundance, na.rm = TRUE)) %>%
-  ungroup()
+  summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop")
 
-# Create the heatmap with zones side by side and shared y-axis
-# Define the custom color palette
-custom_palette <- c("#e0ecf4", "#8c96c6", "#810f7c")
-custom_palette_2 <- c("#d0d1e6", "#a6bddb", "#023858")
+# Define color palettes
+custom_palette_1 <- c("#d0d1e6", "#a6bddb", "#023858")
+custom_palette_2 <- c("#e0ecf4", "#8c96c6", "#810f7c")
 
-
-# Modify plot_heatmap_functional_redox
-plot_heatmap_functional_redox <- ggplot(df_heatmap_redox, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
-  geom_tile() +
-  facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
-  scale_fill_gradientn(name = "Mean Abundance", 
-                       colors = custom_palette,
-                       values = scales::rescale(c(min(df_heatmap_redox$mean_abundance),
-                                                  median(df_heatmap_redox$mean_abundance),
-                                                  max(df_heatmap_redox$mean_abundance)))) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.text.y = element_text(size = 6),
-    strip.background = element_rect(fill = "lightgrey"),
-    strip.text = element_text(face = "bold"),
-    panel.spacing = unit(0.1, "lines"),
-    axis.title.y = element_text(margin = margin(r = 10))
-  ) +
-  labs(x = "Treatment", y = "Functional Group", 
-       title = "Functional Group Abundance Across Zones and Treatments (Redox)")
-
-# Modify plot_heatmap_functional_degradation
-plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+# Create degradation heatmap
+plot_heatmap_degradation_2_final <- ggplot(df_heatmap_degradation_1_processed, 
+                                          aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(
     name = "Mean Abundance",
-    colors = custom_palette_2,
-    values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
-                               median(df_heatmap_degradation$mean_abundance),
-                               max(df_heatmap_degradation$mean_abundance))),
-    breaks = pretty(df_heatmap_degradation$mean_abundance, n = 5),
+    colors = custom_palette_1,
+    values = scales::rescale(c(min(df_heatmap_degradation_1_processed$mean_abundance),
+                               median(df_heatmap_degradation_1_processed$mean_abundance),
+                               max(df_heatmap_degradation_1_processed$mean_abundance))),
+    breaks = pretty(df_heatmap_degradation_1_processed$mean_abundance, n = 5),
     guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
   ) +
   theme_minimal() +
@@ -237,18 +163,26 @@ plot_heatmap_functional_degradation <- ggplot(df_heatmap_degradation, aes(x = Tr
   labs(x = "Treatment", y = "Functional Group") +
   scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
 
-# Modify plot_heatmap_functional_degradation with Layers
-plot_heatmap_functional_degradation_layer <- ggplot(df_heatmap_degradation_layer, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+# Create degradation heatmap with layers
+plot_heatmap_degradation_layer_2_final <- ggplot(df_heatmap_degradation_layer_1_processed, 
+                                                 aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
-  facet_grid(. ~ Zone * Layer, scales = "free_x", space = "free_x") +
+  facet_grid(fct_rev(Layer) ~ Zone, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(
     name = "Mean Abundance",
-    colors = custom_palette_2,
-    values = scales::rescale(c(min(df_heatmap_degradation$mean_abundance),
-                               median(df_heatmap_degradation$mean_abundance),
-                               max(df_heatmap_degradation$mean_abundance))),
-    breaks = pretty(df_heatmap_degradation$mean_abundance, n = 5),
-    guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
+    colors = custom_palette_1,
+    values = scales::rescale(c(min(df_heatmap_degradation_1_processed$mean_abundance),
+                               median(df_heatmap_degradation_1_processed$mean_abundance),
+                               max(df_heatmap_degradation_1_processed$mean_abundance))),
+    breaks = pretty(df_heatmap_degradation_1_processed$mean_abundance, n = 3),
+    guide = guide_colorbar(
+      barwidth = 1, 
+      barheight = 8, 
+      title.position = "top", 
+      title.hjust = 0.5,
+      label.theme = element_text(size = 8, angle = 0),
+      title.theme = element_text(size = 10)
+    )
   ) +
   theme_minimal() +
   theme(
@@ -256,24 +190,25 @@ plot_heatmap_functional_degradation_layer <- ggplot(df_heatmap_degradation_layer
     axis.text.y = element_text(size = 10),
     strip.background = element_rect(fill = "lightgrey"),
     strip.text = element_text(face = "bold"),
-    legend.position = "bottom",
+    legend.position = "right",
     panel.spacing = unit(0.1, "lines"),
     axis.title.y = element_text(margin = margin(r = 10))
   ) +
   labs(x = "Treatment", y = "Functional Group") +
   scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
 
-# Modify plot_heatmap_functional_all
-plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Functional, fill = mean_abundance)) +
+# Create heatmap for all functional groups
+plot_heatmap_all_2_final <- ggplot(df_heatmap_all_1_processed, 
+                                  aes(x = Treatment, y = Functional, fill = mean_abundance)) +
   geom_tile() +
   facet_grid(. ~ Zone, scales = "free_x", space = "free_x") +
   scale_fill_gradientn(
     name = "Mean Abundance",
-    colors = custom_palette_2,
-    values = scales::rescale(c(min(df_heatmap_all$mean_abundance),
-                               median(df_heatmap_all$mean_abundance),
-                               max(df_heatmap_all$mean_abundance))),
-    breaks = pretty(df_heatmap_all$mean_abundance, n = 5),
+    colors = custom_palette_1,
+    values = scales::rescale(c(min(df_heatmap_all_1_processed$mean_abundance),
+                               median(df_heatmap_all_1_processed$mean_abundance),
+                               max(df_heatmap_all_1_processed$mean_abundance))),
+    breaks = pretty(df_heatmap_all_1_processed$mean_abundance, n = 5),
     guide = guide_colorbar(barwidth = 12, barheight = 1.2, title.position = "top", title.hjust = 0.5)
   ) +
   theme_minimal() +
@@ -288,25 +223,51 @@ plot_heatmap_functional_all <- ggplot(df_heatmap_all, aes(x = Treatment, y = Fun
   labs(x = "Treatment", y = "Functional Group") +
   scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
 
+# Display plots
+plot_heatmap_degradation_2_final
+plot_heatmap_all_2_final
+plot_heatmap_degradation_layer_2_final
+```
 
-# Display the plots
-plot_heatmap_functional_redox
-plot_heatmap_functional_degradation
-plot_heatmap_functional_all
+# Summary: Data overview
+## Summary of all main dataframes
+```{r}
+# Metadata summary
+cat("Metadata summary:\n")
+summary(df_metadata_1_processed)
 
+# Functional data summary
+cat("\nFunctional data summary:\n")
+cat("Total functional groups:", length(unique(df_merged_2_final$Functional)), "\n")
+cat("Total samples:", length(unique(df_merged_2_final$Sample_ID)), "\n")
+
+# Functional groups summary
+cat("\nFunctional abundance summary:\n")
+summary(df_merged_2_final$abundance)
+
+# Degradation processes summary
+cat("\nDegradation processes summary:\n")
+summary(df_heatmap_degradation_1_processed$mean_abundance)
+
+# All functional groups summary
+cat("\nAll functional groups summary:\n")
+summary(df_heatmap_all_1_processed$mean_abundance)
+
+# Key functional groups
+cat("\nKey degradation functional groups analyzed:\n")
+print(functional_groups_degradation)
+
+cat("\nTotal functional groups in comprehensive analysis:\n")
+print(length(functional_groups_all))
 ```
 
 # References
 ```{r}
-# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # dplyr: Wickham, H., François, R., Henry, L., Müller, K., Vaughan, D., & PBC, P. S. (2024). dplyr: A Grammar of Data Manipulation. R package version 1.1.4. https://CRAN.R-project.org/package=dplyr
-# broom: Robinson, D., Hayes, A., Couch, S., & González, I. (2024). broom: Convert Statistical Analysis Objects into Tidy Tibbles. R package version 1.0.5. https://CRAN.R-project.org/package=broom
-# purrr: Henry, L. & Wickham, H. (2024). purrr: Functional Programming Tools. R package version 1.0.2. https://CRAN.R-project.org/package=purrr
-# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
-# emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
-# multcompView: Graves, S., Piepho, H.-P., Selzer, L., & Dorai-Raj, S. (2024). multcompView: Visualizations of Paired Comparisons. R package version 0.2-10. https://CRAN.R-project.org/package=multcompView
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # ggh4x: van den Brand, T. (2024). ggh4x: Hacks for 'ggplot2'. R package version 0.2.7. https://CRAN.R-project.org/package=ggh4x
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```
 
 

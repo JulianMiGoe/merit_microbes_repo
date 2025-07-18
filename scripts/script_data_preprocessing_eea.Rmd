@@ -1,0 +1,368 @@
+---
+title: "EEA Data Preprocessing"
+author: "Julian Mittmann-Goetsch"
+date: "2024-08-06"
+output: html_document
+---
+
+## Version 1.1: Updated version log format - 17.07.2025 | JM
+## Version 1.0: EEA raw data processing routine - 11.02.2025 | JM
+## Purpose: Process raw platereader data files into standardized EEA dataset
+
+# Step 1: Prepare session and load data
+## Step 1a: Install necessary packages
+```{r, message=FALSE, warning=FALSE}
+#install.packages("here")
+#install.packages("tidyverse")
+```
+
+## Step 1b: Load necessary packages
+```{r}
+library(here)
+library(tidyverse)
+```
+
+## Step 1c: Load metadata
+```{r}
+# Load EEA metadata
+df_eea_0_metadata <- read.delim(here("data", "eea", "df_EEA_metadata_all.txt"), dec=".", sep="\t")
+
+# Add UID to metadata file, matching plate names
+df_eea_0_metadata$UID <- df_eea_0_metadata$Plate
+
+print("Metadata loaded successfully")
+str(df_eea_0_metadata)
+```
+
+# Step 2: Transform raw platereader data
+## Step 2a: Read and transform raw data from platereader
+```{r}
+# Define the directory containing raw data 
+data_dir <- here("data", "eea", "raw")
+
+# Define the list of file numbers (missing files: 101, 199, 267, 294)
+file_numbers <- sprintf("%03d", c(1:100, 102:198, 200:266, 268:293, 295:325))
+file_names <- paste0("Plate_", file_numbers, ".txt")
+
+# Construct full file paths 
+file_paths <- file.path(data_dir, file_names)
+
+# Initialize an empty list to store dataframes
+df_list <- list()
+
+print(paste("Processing", length(file_paths), "plate files..."))
+
+# Loop through each file path
+for (file_path in file_paths) {
+  if (!file.exists(file_path)) {
+    warning(paste("File not found:", file_path))
+    next
+  }
+  
+  df_plate <- read.delim(file_path, dec = ".", sep = "\t")
+  
+  plate_id <- gsub("\\.txt$", "", basename(file_path))
+  
+  # Extract blocks from rows 1 to 4
+  block_ref1 <- df_plate[1:4, 1:3]
+  block_sam1 <- df_plate[1:4, 4:6]
+  block_sam2 <- df_plate[1:4, 7:9]
+  block_sam3 <- df_plate[1:4, 10:12]
+  
+  # Create dataframes for rows 1 to 4
+  df_sam1 <- data.frame(
+    Plate = plate_id,
+    ID = 1,
+    Depth = "0-5 cm",
+    Blank = block_ref1[, 1],
+    Standard = block_ref1[, 2],
+    Sub_ctrl = block_ref1[, 3],
+    Hom_ctrl = block_sam1[, 1],
+    Quench = block_sam1[, 2],
+    Assay = block_sam1[, 3],
+    n = 5
+  )
+  
+  df_sam2 <- data.frame(
+    Plate = plate_id,
+    ID = 2,
+    Depth = "5-10 cm",
+    Blank = block_ref1[, 1],
+    Standard = block_ref1[, 2],
+    Sub_ctrl = block_ref1[, 3],
+    Hom_ctrl = block_sam2[, 1],
+    Quench = block_sam2[, 2],
+    Assay = block_sam2[, 3],
+    n = 5
+  )
+  
+  df_sam3 <- data.frame(
+    Plate = plate_id,
+    ID = 3,
+    Depth = "20-30 cm",
+    Blank = block_ref1[, 1],
+    Standard = block_ref1[, 2],
+    Sub_ctrl = block_ref1[, 3],
+    Hom_ctrl = block_sam3[, 1],
+    Quench = block_sam3[, 2],
+    Assay = block_sam3[, 3],
+    n = 5
+  )
+  
+  # Extract blocks from rows 5 to 8
+  block_ref2 <- df_plate[5:8, 1:3]
+  block_sam4 <- df_plate[5:8, 4:6]
+  block_sam5 <- df_plate[5:8, 7:9]
+  block_sam6 <- df_plate[5:8, 10:12]
+  
+  # Create dataframes for rows 5 to 8
+  df_sam4 <- data.frame(
+    Plate = plate_id,
+    ID = 4,
+    Depth = "40-50 cm",
+    Blank = block_ref2[, 1],
+    Standard = block_ref2[, 2],
+    Sub_ctrl = block_ref2[, 3],
+    Hom_ctrl = block_sam4[, 1],
+    Quench = block_sam4[, 2],
+    Assay = block_sam4[, 3],
+    n = 5
+  )
+  
+  df_sam5 <- data.frame(
+    Plate = plate_id,
+    ID = 5,
+    Depth = "60-80 cm",
+    Blank = block_ref2[, 1],
+    Standard = block_ref2[, 2],
+    Sub_ctrl = block_ref2[, 3],
+    Hom_ctrl = block_sam5[, 1],
+    Quench = block_sam5[, 2],
+    Assay = block_sam5[, 3],
+    n = 5
+  )
+  
+  df_sam6 <- data.frame(
+    Plate = plate_id,
+    ID = 6,
+    Depth = "80-100 cm",
+    Blank = block_ref2[, 1],
+    Standard = block_ref2[, 2],
+    Sub_ctrl = block_ref2[, 3],
+    Hom_ctrl = block_sam6[, 1],
+    Quench = block_sam6[, 2],
+    Assay = block_sam6[, 3],
+    n = 5
+  )
+  
+  # Combine all dataframes 
+  df_combined <- rbind(df_sam1, df_sam2, df_sam3, df_sam4, df_sam5, df_sam6)
+  
+  # Append combined dataframe to the list
+  df_list[[plate_id]] <- df_combined
+}
+
+# Combine all plates into one dataframe
+df_eea_1_raw_combined <- bind_rows(df_list)
+
+# Create a unique identifier column
+df_eea_1_raw_combined$UID <- paste(df_eea_1_raw_combined$Plate, df_eea_1_raw_combined$ID, sep = "-")
+
+print(paste("Successfully processed", length(df_list), "plates"))
+print(paste("Total rows in combined dataset:", nrow(df_eea_1_raw_combined)))
+```
+
+## Step 2b: Merge with metadata and calculate technical replicates
+```{r}
+# Merge with metadata
+df_eea_2_merged <- merge(df_eea_1_raw_combined, df_eea_0_metadata, by="UID", all.x=TRUE)
+
+# Convert relevant columns to numeric
+df_eea_2_merged <- df_eea_2_merged %>%
+  mutate_at(c(23:24,28:34), as.numeric)
+
+# Calculate the means from the four technical replicates of each plate
+df_eea_2_merged <- df_eea_2_merged %>%
+  group_by(UID, Plate.x, Depth.x, ID.y, Subplot, Depth.y, Zone, Sampling_date, 
+           Dominant_plant_species_1, Subdominant_plant_species_1, Plate.y, Date, 
+           Inc_start, Inc_end, Crucible_ID) %>%
+  summarise(
+    across(where(is.numeric), ~mean(.x, na.rm = TRUE)),
+    across(!where(is.numeric), ~first(.x)),
+    .groups = "drop"
+  )
+
+print("Technical replicates averaged successfully")
+```
+
+## Step 2c: Assign enzyme types and calculate activities
+```{r}
+# Assign enzyme types based on plate numbers
+df_eea_2_merged <- df_eea_2_merged %>%
+  mutate(
+    Enzyme = case_when(
+      Plate.x %in% paste0("Plate_", sprintf("%03d", 1:109)) ~ "GLU",
+      Plate.x %in% c(paste0("Plate_", sprintf("%03d", c(110:198, 200:214))), 
+                     "Plate_324", 
+                     "Plate_325") ~ "CHI",  
+      Plate.x %in% paste0("Plate_", sprintf("%03d", c(215:266, 268:293, 295:323))) ~ "LEU",
+      TRUE ~ NA_character_
+    )
+  )
+
+# Convert time columns
+df_eea_2_merged$Inc_start <- as.POSIXct(df_eea_2_merged$Inc_start, format="%H:%M", tz="UTC")
+df_eea_2_merged$Inc_end <- as.POSIXct(df_eea_2_merged$Inc_end, format="%H:%M", tz="UTC")
+
+# Calculate incubation time and enzyme activities
+# Ensure all variables are present and use only column names in mutate
+# Remove df_eea_2_merged$ prefix inside mutate
+
+df_eea_2_merged <- df_eea_2_merged %>%
+  mutate(
+    Inc_start = as.POSIXct(Inc_start, format="%H:%M"),
+    Inc_end = as.POSIXct(Inc_end, format="%H:%M"),
+    Inc_time = 24 + as.numeric(difftime(Inc_end, Inc_start, units="hours")),
+    Total_g = EEA_g + EEA_buffer,
+    Quench_coeff = (Quench - Hom_ctrl) / Standard,
+    Emission_coeff = Standard / n,
+    Net_fluorescence = ((Assay - Hom_ctrl) / Quench_coeff) - Sub_ctrl,
+    Activity_OM = ifelse(
+      is.na(Net_fluorescence) | is.na(EEA_buffer) | is.na(OM_g) | is.na(Inc_time) | is.na(Emission_coeff) |
+      OM_g == 0 | Inc_time == 0 | Emission_coeff == 0,
+      NA,
+      (Net_fluorescence * EEA_buffer) / (OM_g * Inc_time * Emission_coeff * 0.2)
+    )
+  )
+
+# Convert Inc_time to numeric
+df_eea_2_merged$Inc_time <- as.numeric(df_eea_2_merged$Inc_time)
+
+print("Enzyme activities calculated successfully")
+```
+
+## Step 2d: Add treatment and layer classifications
+```{r}
+# Add warming treatment classification
+df_eea_2_merged <- df_eea_2_merged %>%
+  mutate(Treatment = case_when(
+    Plot %in% c("110","120","130","240","250","260","370","380","390") ~ "ambient",
+    Plot %in% c("111","121","131","241","251","261","371","381","391") ~ "+1.5°C",
+    Plot %in% c("112","122","132","242","252","262","372","382","392") ~ "+3.0°C",
+  ))
+
+# Add layer classification
+df_eea_2_merged <- df_eea_2_merged %>%
+  mutate(Layer = case_when(
+    Depth.x %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Topsoil\n(0-30 cm)",
+    Depth.x %in% c("40-50 cm", "60-80 cm", "80-100 cm") ~ "Subsoil\n(40-100 cm)",
+    TRUE ~ NA_character_
+  ))
+
+# Recode and factor zone names
+df_eea_2_merged$Zone <- dplyr::recode(df_eea_2_merged$Zone,
+  "PZ" = "Pioneer zone",
+  "LM" = "Low marsh",
+  "HM" = "High marsh"
+)
+
+df_eea_2_merged$Zone <- factor(df_eea_2_merged$Zone, 
+                               levels = c("Pioneer zone", "Low marsh", "High marsh"))
+
+print("Treatment and layer classifications added successfully")
+```
+
+## Step 2e: Data filtering and quality control
+```{r}
+# Check data structure before filtering
+print("Data distribution before filtering:")
+summary(df_eea_2_merged$Activity_OM)
+
+# Filter outliers (remove negative values and extreme outliers)
+df_eea_3_filtered <- df_eea_2_merged %>%
+  filter(!Activity_OM <= 0 & !Activity_OM >= 10000) 
+
+print("Data distribution after filtering:")
+summary(df_eea_3_filtered$Activity_OM)
+
+# Apply filtered data
+df_eea_3_filtered$Layer <- factor(df_eea_3_filtered$Layer, 
+                                  levels = c("Topsoil\n(0-30 cm)", "Subsoil\n(40-100 cm)"))
+df_eea_3_filtered$Treatment <- factor(df_eea_3_filtered$Treatment, 
+                                      levels = c("ambient", "+1.5°C", "+3.0°C"))
+df_eea_3_filtered$Zone <- factor(df_eea_3_filtered$Zone, 
+                                 levels = c("Pioneer zone", "Low marsh", "High marsh"))
+df_eea_3_filtered$Plot <- substring(df_eea_3_filtered$ID.y, 1,3)
+
+print("Data filtering completed successfully")
+```
+
+## Step 2f: Calculate C/N acquisition ratio
+```{r}
+# Separate enzyme data for ratio calculation
+df_glu_data <- df_eea_3_filtered %>%
+  filter(Enzyme == "GLU") %>%
+  select(ID.y, GLU_value = Activity_OM, Depth.x, Zone, Treatment, Layer)  
+
+df_chi_data <- df_eea_3_filtered %>%
+  filter(Enzyme == "CHI") %>%
+  select(ID.y, CHI_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
+
+df_leu_data <- df_eea_3_filtered %>%
+  filter(Enzyme == "LEU") %>%
+  select(ID.y, LEU_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
+
+# Combine for C/N ratio calculation
+df_eea_4_cn_ratio <- df_glu_data %>%
+  full_join(df_chi_data, by = "ID.y") %>%
+  full_join(df_leu_data, by = "ID.y") %>%
+  mutate(GLU_CHI_ratio = GLU_value / (CHI_value + LEU_value)) %>%
+  # Clean up duplicate columns
+  mutate(
+    Depth = Depth.x.x,
+    Treatment = Treatment.x,
+    Zone = Zone.x
+  )
+
+print("C/N acquisition ratios calculated successfully")
+```
+
+# Step 3: Save processed data
+```{r}
+# Save main processed EEA dataset
+write.csv(df_eea_3_filtered, here("data", "eea", "df_EEA_processed.csv"), row.names = FALSE)
+
+# Save C/N ratio dataset
+write.csv(df_eea_4_cn_ratio, here("data", "eea", "df_EEA_CN_ratio.csv"), row.names = FALSE)
+
+print("Processed datasets saved successfully:")
+print(paste("- Main EEA dataset:", nrow(df_eea_3_filtered), "rows"))
+print(paste("- C/N ratio dataset:", nrow(df_eea_4_cn_ratio), "rows"))
+```
+
+# Step 4: Summary of dataframes
+```{r}
+# Summary of processed EEA data
+print("=== EEA PROCESSED DATA SUMMARY ===")
+str(df_eea_3_filtered)
+summary(df_eea_3_filtered[c("Activity_OM", "Activity_FW")])
+
+# Summary by enzyme type
+print("=== ENZYME TYPE DISTRIBUTION ===")
+table(df_eea_3_filtered$Enzyme)
+
+# Summary by treatment and zone
+print("=== TREATMENT x ZONE DISTRIBUTION ===")
+table(df_eea_3_filtered$Treatment, df_eea_3_filtered$Zone)
+
+# Summary of C/N ratio data
+print("=== C/N RATIO DATA SUMMARY ===")
+str(df_eea_4_cn_ratio)
+summary(df_eea_4_cn_ratio$GLU_CHI_ratio)
+```
+
+# References
+```{r}
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+```

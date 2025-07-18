@@ -1,46 +1,44 @@
 ---
-title: "EEA"
+title: "EEA Analysis"
 author: "Julian Mittmann-Goetsch"
 date: "2024-08-06"
 output: html_document
 ---
 
-# Versionlog
-## Version 1.0: basic function to load data from raw files - 08.06.2024 | JM
-## Version 1.1: EEA data processing routine - 11.02.2025 | JM 
+## Version 2.1: EEA analysis routine - removed robustlmm and log-transformed analyses - 17.07.2025 | JM
+## Version 2.0: EEA analysis routine - streamlined and cleaned - 11.07.2025 | JM
+## Version 1.1: EEA data processing routine - 02.07.2025 | JM  
+## Version 1.0: Basic function to load data from raw files - 02.02.2024 | JM
+## Purpose: Statistical analysis and visualization of extracellular enzyme activities
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
-```{r,  message=FALSE, warning=FALSE}
-#install.packages("here")
-#install.packages("tidyverse")
-#install.packages("ggplot2")
-#install.packages("ggpubr")
-#install.packages("ggpmisc")
-#install.packages("lme4")
-#install.packages("car")
+```{r, message=FALSE, warning=FALSE}
 #install.packages("emmeans")
+#install.packages("ggplot2")
+#install.packages("ggpmisc")
+#install.packages("ggpubr")
+#install.packages("here")
+#install.packages("lme4")
 #install.packages("lmerTest")
 #install.packages("performance")
-#install.packages("Hmisc")
+#install.packages("tidyverse")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(here)
-library(tidyverse)
-library(ggplot2)
-library(ggpubr)
-library(ggpmisc)
-library(lme4)
-library(car)
 library(emmeans)
+library(ggplot2)
+library(ggpmisc)
+library(ggpubr)
+library(here)
+library(lme4)
 library(lmerTest)
 library(performance)
-library(Hmisc)
+library(tidyverse)
 ```
 
-## Step 1d: Define plot theme
+## Step 1c: Define plot theme
 ```{r,message=FALSE, warning=FALSE}
 theme_JM <- theme(
   axis.title.x      = element_text(colour = "black", size = 12),
@@ -58,377 +56,116 @@ theme_JM <- theme(
 )
 ```
 
-## Step 1d: Load rawdata
+## Step 1d: Load preprocessed data
 ```{r}
-# Load Exo-Enzyme data
-df_EEA_metadata <- read.delim(here("data", "eea", "df_EEA_metadata_all.txt"), dec=".", sep="\t")
+# Load preprocessed EEA data (created by script_data_preprocessing_eea.Rmd)
+df_eea_0_processed <- read.csv(here("data", "eea", "df_EEA_processed.csv"))
+df_eea_0_cn_ratio <- read.csv(here("data", "eea", "df_EEA_CN_ratio.csv"))
 
 # Load elevation data
-df_elevation <- read.delim(here("data", "elevation", "df_iris_elevation.txt"), dec=".", sep="\t")
+df_elevation_0_raw <- read.delim(here("data", "elevation", "df_iris_elevation.txt"), dec=".", sep="\t")
 
-# Add UID to metadata file, matching plate names
-df_EEA_metadata$UID <- df_EEA_metadata$Plate
+# Load IRIS data (created by script_iris.Rmd) - if available
+# df_iris_0_summary <- read.csv(here("data", "iris", "df_iris_summary.csv"))
+
+# Load warming data (created by script_warming_data_2022.Rmd) - if available  
+# df_warming_0_monthly <- read.csv(here("scripts", "df_warming_all_2022_monthly.csv"))
+
+print("Preprocessed EEA data loaded successfully")
 ```
 
-# Step 2: Transform EEA data
-## Step 2a: Read and transform raw data from platereader
+# Step 2: Prepare final analysis datasets
+## Step 2a: Calculate elevation means and merge environmental data
 ```{r}
-# Define the directory containing your data 
-data_dir <- here("data", "eea", "raw")
+# Calculate mean elevation per plot
+df_elevation_1_mean <- df_elevation_0_raw %>%
+  group_by(Plot) %>%
+  summarise(Elevation_mean = mean(Elevation)) %>%
+  mutate(Plot = as.factor(Plot))
 
-#Define the list of file numbers file names
-file_numbers <- sprintf("%03d", c(1:100, 102:198, 200:266, 268:293, 295:325))
-file_names <- paste0("Plate_", file_numbers, ".txt")
-
-# Construct full file paths 
-file_paths <- file.path(data_dir, file_names)
-
-# Initialize an empty list to store dataframes
-df_list <- list()
-
-# Loop through each file path
-for (file_path in file_paths) {
-  df_plate <- read.delim(file_path, dec = ".", sep = "\t")
-  
-  plate_id <- gsub("\\.txt$", "", basename(file_path))
-  
-  # Extract blocks from rows 1 to 4
-  block_ref1 <- df_plate[1:4, 1:3]
-  block_sam1 <- df_plate[1:4, 4:6]
-  block_sam2 <- df_plate[1:4, 7:9]
-  block_sam3 <- df_plate[1:4, 10:12]
-  
-  # Create dataframes for rows 1 to 4
-  df_sam1 <- data.frame(
-    Plate = plate_id,
-    ID = 1,
-    Depth = "0-5 cm",
-    Blank = block_ref1[, 1],
-    Standard = block_ref1[, 2],
-    Sub_ctrl = block_ref1[, 3],
-    Hom_ctrl = block_sam1[, 1],
-    Quench = block_sam1[, 2],
-    Assay = block_sam1[, 3],
-    n = 5
-  )
-  
-  df_sam2 <- data.frame(
-    Plate = plate_id,
-    ID = 2,
-    Depth = "5-10 cm",
-    Blank = block_ref1[, 1],
-    Standard = block_ref1[, 2],
-    Sub_ctrl = block_ref1[, 3],
-    Hom_ctrl = block_sam2[, 1],
-    Quench = block_sam2[, 2],
-    Assay = block_sam2[, 3],
-    n = 5
-  )
-  
-  df_sam3 <- data.frame(
-    Plate = plate_id,
-    ID = 3,
-    Depth = "20-30 cm",
-    Blank = block_ref1[, 1],
-    Standard = block_ref1[, 2],
-    Sub_ctrl = block_ref1[, 3],
-    Hom_ctrl = block_sam3[, 1],
-    Quench = block_sam3[, 2],
-    Assay = block_sam3[, 3],
-    n = 5
-  )
-  
-  # Extract blocks from rows 5 to 8
-  block_ref2 <- df_plate[5:8, 1:3]
-  block_sam4 <- df_plate[5:8, 4:6]
-  block_sam5 <- df_plate[5:8, 7:9]
-  block_sam6 <- df_plate[5:8, 10:12]
-  
-  # Create dataframes for rows 5 to 8
-  df_sam4 <- data.frame(
-    Plate = plate_id,
-    ID = 4,
-    Depth = "40-50 cm",
-    Blank = block_ref2[, 1],
-    Standard = block_ref2[, 2],
-    Sub_ctrl = block_ref2[, 3],
-    Hom_ctrl = block_sam4[, 1],
-    Quench = block_sam4[, 2],
-    Assay = block_sam4[, 3],
-    n = 5
-  )
-  
-  df_sam5 <- data.frame(
-    Plate = plate_id,
-    ID = 5,
-    Depth = "60-80 cm",
-    Blank = block_ref2[, 1],
-    Standard = block_ref2[, 2],
-    Sub_ctrl = block_ref2[, 3],
-    Hom_ctrl = block_sam5[, 1],
-    Quench = block_sam5[, 2],
-    Assay = block_sam5[, 3],
-    n = 5
-  )
-  
-  df_sam6 <- data.frame(
-    Plate = plate_id,
-    ID = 6,
-    Depth = "80-100 cm",
-    Blank = block_ref2[, 1],
-    Standard = block_ref2[, 2],
-    Sub_ctrl = block_ref2[, 3],
-    Hom_ctrl = block_sam6[, 1],
-    Quench = block_sam6[, 2],
-    Assay = block_sam6[, 3],
-    n = 5
-  )
-  
-  # Combine all dataframes 
-  df_combined <- rbind(df_sam1, df_sam2, df_sam3, df_sam4, df_sam5, df_sam6)
-  
-  # Append combined dataframe to the list
-  df_list[[plate_id]] <- df_combined
+# Prepare IRIS reduction index data if available
+if(!is.null(df_iris_0_summary)) {
+  df_iris_1_mean <- df_iris_0_summary %>%
+    group_by(Plot, Layer) %>%
+    summarise("ri" = mean(ri, na.rm = TRUE)) %>%
+    ungroup() %>%
+    mutate(Plot = as.factor(Plot), Layer = as.factor(Layer))
+  print("IRIS reduction index data prepared")
+} else {
+  df_iris_1_mean <- NULL
+  warning("IRIS data not available - reduction index will be missing")
 }
 
-# Combine all plates into one dataframe
-df_EEA_raw_combined <- bind_rows(df_list)
+# Prepare warming data if available  
+if(!is.null(df_warming_0_monthly)) {
+  df_warming_1_monthly <- df_warming_0_monthly %>%
+    mutate(Plot = as.factor(plotid))
+  print("Warming data prepared")
+} else {
+  df_warming_1_monthly <- NULL
+  warning("Warming data not available - temperature variables will be missing")
+}
 
-# Create a unique identifier column
-df_EEA_raw_combined$UID <- paste(df_EEA_raw_combined$Plate, df_EEA_raw_combined$ID, sep = "-")
-
-# View the combined dataframe
-print(head(df_EEA_raw_combined))
+print("Environmental data preparation completed")
 ```
 
-## Step 2b: Prepare dataframes and metadata
+## Step 2b: Create EEA summary datasets
 ```{r}
-# merge with metadata
-df_EEA_merged <- merge(df_EEA_raw_combined, df_EEA_metadata, by="UID", all.x=TRUE)
+# Prepare main EEA data
+df_eea_1_main <- df_eea_0_processed %>%
+  mutate(plotid = substring(ID.y, 1, 3),
+         Plot = as.factor(plotid))
 
-df_EEA_merged <- df_EEA_merged %>%
-  mutate_at(c(23:24,28:34), as.numeric)
-```
-
-## Step 2c: Calculate activity for Enzymes
-```{r}
-# Plot: Sample size per plotid (before filtering)
-df_plotid_counts <- df_EEA_merged %>%
-  group_by(plotid = as.factor(Plot)) %>%
-  summarise(n = n())
-
-ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
-  geom_col(color = "black") +
-  geom_text(aes(label = n), vjust = -0.5, size = 4) +
-  scale_fill_brewer(palette = "Set2", name = "Sample size") +
-  labs(x = "Plot ID", y = "Number of samples", title = "Sample size per plotid before filtering") +
-  theme_minimal() +
-  theme(legend.position = "none")
-
-# calculate the means from the four technical replicates of each plate. 
-df_EEA_merged <- df_EEA_merged %>%
- # filter(!Subplot == "(A6)") %>%
-  group_by(UID, Plate.x, Depth.x, ID.y, Subplot, Depth.y, Zone, Sampling_date, Dominant_plant_species_1, Subdominant_plant_species_1, Plate.y, Date, Inc_start, Inc_end, Crucible_ID) %>%
-  summarise(
-    across(where(is.numeric), ~mean(.x, na.rm = TRUE)),
-    across(!where(is.numeric), ~first(.x)),
-    .groups = "drop"
-  )
-
-# Plot: Sample size per plotid (before filtering)
-df_plotid_counts <- df_EEA_merged %>%
-    across(!where(is.numeric), ~first(.x)),
-    .groups = "drop"
-  )
-
-# Plot: Sample size per plotid (before filtering)
-df_plotid_counts <- df_EEA_merged %>%
-  group_by(plotid = as.factor(Plot)) %>%
-  summarise(n = n())
-
-ggplot(df_plotid_counts, aes(x = plotid, y = n, fill = as.factor(n))) +
-  geom_col(color = "black") +
-  geom_text(aes(label = n), vjust = -0.5, size = 4) +
-  scale_fill_brewer(palette = "Set2", name = "Sample size") +
-  labs(x = "Plot ID", y = "Number of samples", title = "Sample size per plotid before filtering") +
-  theme_minimal() +
-  theme(legend.position = "none")
-
-df_EEA_merged <- df_EEA_merged %>%
-  mutate(
-    Enzyme = case_when(
-      Plate.x %in% paste0("Plate_", sprintf("%03d", 1:109)) ~ "GLU",
-      Plate.x %in% c(paste0("Plate_", sprintf("%03d", c(110:198, 200:214))), 
-                     "Plate_324", 
-                     "Plate_325") ~ "CHI",  
-      Plate.x %in% paste0("Plate_", sprintf("%03d", c(215:266, 268:293, 295:323))) ~ "LEU",
-      TRUE ~ NA_character_
-    )
-  )
-
-df_EEA_merged$Inc_start <- as.POSIXct(df_EEA_merged$Inc_start, format="%H:%M", tz="UTC")
-df_EEA_merged$Inc_end <- as.POSIXct(df_EEA_merged$Inc_end, format="%H:%M", tz="UTC")
-
-df_EEA_merged <- df_EEA_merged %>%
-  mutate(Inc_start        = as.POSIXct(df_EEA_merged$Inc_start, format="%H:%M"))%>%
-  mutate(Inc_end          = as.POSIXct(df_EEA_merged$Inc_end, format="%H:%M"))%>%
-  # calculate incubation time
-  mutate(Inc_time         = 24 + difftime(df_EEA_merged$Inc_end, df_EEA_merged$Inc_start, units="hours"))                             
-df_EEA_merged$Inc_time <- as.numeric(df_EEA_merged$Inc_time)        
-             
-df_EEA_merged <- df_EEA_merged %>%
-  # calculate total weight
-  mutate(Total_g = df_EEA_merged$EEA_g + df_EEA_merged$EEA_buffer)%>%            
-  # calculate quench coefficient
-  mutate(Quench_coeff = ((df_EEA_merged$Quench - df_EEA_merged$Hom_ctrl)/df_EEA_merged$Standard)) %>%              # calculate emission coefficient
-  mutate(Emission_coeff = (df_EEA_merged$Standard / df_EEA_merged$n))                                                               
-# calculate Net Fluorescence
-df_EEA_merged <- df_EEA_merged %>%
-  mutate(Net_fluorescence = ((df_EEA_merged$Assay - df_EEA_merged$Hom_ctrl) / df_EEA_merged$Quench_coeff) - df_EEA_merged$Sub_ctrl)      
-
-# calculate activity per g FW
-df_EEA_merged <- df_EEA_merged %>%  
-  mutate(Activity_FW = ((df_EEA_merged$Net_fluorescence * df_EEA_merged$EEA_buffer) / (df_EEA_merged$EEA_g * df_EEA_merged$Inc_time * df_EEA_merged$Emission_coeff * 0.2))) 
-
-# calculate activity per g OM
-df_EEA_merged <- df_EEA_merged %>%  
-  mutate(Activity_OM = ((df_EEA_merged$Net_fluorescence * df_EEA_merged$EEA_buffer) / (df_EEA_merged$OM_g * df_EEA_merged$Inc_time * df_EEA_merged$Emission_coeff * 0.2))) 
-
-df_EEA_merged <- df_EEA_merged %>%  
-  mutate(Treatment = case_when(
-    Plot %in% c("110","120","130","240","250","260","370","380","390") ~ "ambient",
-    Plot %in% c("111","121","131","241","251","261","371","381","391") ~ "+1.5°C",
-    Plot %in% c("112","122","132","242","252","262","372","382","392") ~ "+3.0°C",
-  ))
-
-# Add Layer as depth factor
-df_EEA_merged <- df_EEA_merged %>%
-  mutate(Layer = case_when(
-    Depth.x %in% c("0-5 cm", "5-10 cm", "20-30 cm") ~ "Top-soil\n(0-30 cm)",
-    Depth.x %in% c("40-50 cm", "60-80 cm", "80-100 cm") ~ "Bottom-soil\n(40-100 cm)",
-    TRUE ~ NA_character_  # For unexpected values
-  ))
-
-```
-
-## Step 2d: Filtering of EEA data
-Outlier detection following: https://statsandr.com/blog/outliers-detection-in-r/ 
-```{r}
-# Check data structure of Activity prior to filtering
-ggplot(df_EEA_merged) +
-  aes(x = Activity_OM) +
-  geom_histogram(
-    bins = round(sqrt(length(df_EEA_merged$Activity_OM))),
-    fill = "steelblue", color = "black"
-  ) +
-  theme_minimal()
-
-df_EEA_merged_filtered <- df_EEA_merged %>%
-  filter(!Activity_OM <= 0 & !Activity_OM >= 10000) 
-
-ggplot(df_EEA_merged_filtered) +
-  aes(x = Activity_OM) +
-  geom_histogram(
-    bins = round(sqrt(length(df_EEA_merged_filtered$Activity_OM))),
-    fill = "steelblue", color = "black"
-  ) +
-  theme_minimal()
-
-# Rewrite filtered data
-df_EEA_merged <- df_EEA_merged_filtered 
-
-df_EEA_merged$Layer <- factor(df_EEA_merged$Layer, levels = c("Top-soil\n(0-30 cm)", "Bottom-soil\n(40-100 cm)"))
-df_EEA_merged$Treatment  <- factor(df_EEA_merged$Treatment, levels = c("ambient", "+1.5°C", "+3.0°C"))
-df_EEA_merged$Zone <- factor(df_EEA_merged$Zone, levels = c("PZ", "LM", "HM"))
-df_EEA_merged$Plot <- substring(df_EEA_merged$ID.y, 1,3)
-```
-
-## Step 2d: Calculate C/N aquisition ratio
-```{r}
-df_glu_data <- df_EEA_merged %>%
-  filter(Enzyme == "GLU") %>%
-  select(ID.y, GLU_value = Activity_OM, Depth.x, Zone, Treatment, Layer)  
-
-df_chi_data <- df_EEA_merged %>%
-  filter(Enzyme == "CHI") %>%
-  select(ID.y, CHI_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
-
-df_leu_data <- df_EEA_merged %>%
-  filter(Enzyme == "LEU") %>%
-  select(ID.y, LEU_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
-
-df_C_N_ratio <- df_glu_data %>%
-  full_join(df_chi_data, by = "ID.y") %>%
-  full_join(df_leu_data, by = "ID.y")
-
-#df_C_N_ratio <- df_glu_data %>%
- # inner_join(df_chi_data, by = "ID.y") %>%
- #inner_join(df_leu_data, by = "ID.y")
-
-df_C_N_ratio <- df_C_N_ratio %>%
-  mutate(GLU_CHI_ratio = GLU_value / (CHI_value + LEU_value))
-
-df_C_N_ratio$Depth      <- df_C_N_ratio$Depth.x.x 
-df_C_N_ratio$Treatment  <- df_C_N_ratio$Treatment.x 
-df_C_N_ratio$Zone       <- df_C_N_ratio$Zone.x 
-
-df_C_N_ratio
-```
-
-## Step 2e: Merge EEA data with elevation, warming and iris data
-```{r}
-# Calculate mean elevation per Plot based on both measurements 2024
-df_elevation_mean <- df_elevation %>%
-  group_by(Plot) %>%
-  summarise(Elevation_mean = mean(Elevation))
-
-df_iris_mean <- df_iris_sum  %>%
-  group_by(Plot, Layer) %>%
-  summarise("ri"= mean(ri, na.rm=TRUE)) %>%
-  ungroup()
-
-# Previously created with script_warming_data_2022.rmd 
-# Contains warming data from different sensors for 4 weeks prior to the sampling (12.08.2022 - 12.09.2022)
-df_EEA_merged$plotid <- substring(df_EEA_merged$ID.y, 1,3)
-df_warming_all_2022_monthly$Plot <- as.factor(df_warming_all_2022_monthly$plotid)
-
-
-df_elevation_mean$Plot <- as.factor(df_elevation_mean$Plot)
-df_EEA_merged$Plot <- as.factor(df_EEA_merged$Plot)
-df_iris_mean$Plot <- as.factor(df_iris_mean$Plot)
-df_iris_mean$Layer <- as.factor(df_iris_mean$Layer)
-
-
-df_EEA_sum <- df_EEA_merged %>%
+# Create EEA summary by plot, zone, treatment, layer, and enzyme
+df_eea_2_summary <- df_eea_1_main %>%
   group_by(Zone, Treatment, Layer, Enzyme, Plot) %>%
-  summarise(Activity_OM_mean = mean(Activity_OM, na.rm = TRUE))
+  summarise(Activity_OM_mean = mean(Activity_OM, na.rm = TRUE),
+            .groups = "drop")
 
-df_EEA_wide <- df_EEA_sum %>%
+# Transform to wide format for C and N activities
+df_eea_3_wide <- df_eea_2_summary %>%
   pivot_wider(
     names_from = Enzyme,
     values_from = Activity_OM_mean
-  )
-
-df_EEA_wide <- df_EEA_wide %>%
+  ) %>%
   mutate(
     Activity_C = GLU,
-    Activity_N = CHI + LEU
+    Activity_N = CHI + LEU,
+    CN_ratio = GLU / (CHI + LEU)
   )
 
-# Merge the two dataframes
-df_EEA_final <- df_EEA_wide %>%
-  left_join(df_elevation_mean, by = "Plot") %>%
-  left_join(df_iris_mean, by = c("Layer", "Plot")) %>%
-  left_join(df_warming_all_2022_monthly, by = "Plot")
+print("EEA summary datasets created")
+```
 
-df_EEA_final$CN_ratio <- (df_EEA_final$GLU / (df_EEA_final$CHI + df_EEA_final$LEU)) 
+## Step 2c: Merge all datasets for final analysis
+```{r}
+# Start with EEA wide data
+df_eea_4_final <- df_eea_3_wide
+
+# Add elevation data
+df_eea_4_final <- df_eea_4_final %>%
+  left_join(df_elevation_1_mean, by = "Plot")
+
+# Add IRIS data - uncomment when available
+# df_eea_4_final <- df_eea_4_final %>%
+#   left_join(df_iris_1_mean, by = c("Layer", "Plot"))
+
+# Add warming data - uncomment when available
+# df_eea_4_final <- df_eea_4_final %>%
+#   left_join(df_warming_1_monthly, by = "Plot")
+
+# Add core_id for statistical models
+df_eea_1_main <- df_eea_1_main %>%
+  mutate(core_id = substr(ID.y, 1, 7))
+
+print("Final analysis datasets merged successfully")
 ```
 
 # Step 3: Plots
 ## Step 3a: EEAs (factorial)
 ```{r}
-# Plot C-Acquisition
-plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
+# Plot C acquisition
+plot_EEA_mean_layer_GLU <- df_eea_1_main %>%
   filter(Enzyme == "GLU") %>%
   ggplot(aes(x = Treatment, y = Activity_OM, fill = Treatment)) +
     stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9),
@@ -436,15 +173,16 @@ plot_EEA_mean_layer_GLU <- df_EEA_merged %>%
     stat_summary(fun.data = mean_se, geom = "errorbar",
                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
+    scale_y_continuous(name = expression(paste("Carbon acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
     theme(legend.position = "none",
           axis.text.x = element_blank(),
-          panel.spacing = unit(1, "lines"))  # Increase spacing between facets
+          panel.spacing = unit(1, "lines"))
 
-plot_EEA_mean_layer_CHI_LEU <- df_EEA_merged %>%
+# Plot N acquisition
+plot_EEA_mean_layer_CHI_LEU <- df_eea_1_main %>%
   filter(!Enzyme == "GLU") %>%
   ggplot(aes(x = Treatment, y = Activity_OM, fill = Treatment)) +
     stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9),
@@ -452,22 +190,22 @@ plot_EEA_mean_layer_CHI_LEU <- df_EEA_merged %>%
     stat_summary(fun.data = mean_se, geom = "errorbar",
                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     scale_fill_manual(values = c("ambient" = "#4575B4", "+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
+    scale_y_continuous(name = expression(paste("Nitrogen acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), expand = c(0,0)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     coord_cartesian(ylim = c(0, 1500)) +
     theme(legend.position = "bottom",
           axis.text.x = element_blank(),
-          panel.spacing = unit(1, "lines"))  # Increase spacing between facets
+          panel.spacing = unit(1, "lines"))
 
-# Plot C and N acquisition
+# Combined C and N acquisition plot
 plot_CN <- ggarrange(
   plot_EEA_mean_layer_GLU,
   plot_EEA_mean_layer_CHI_LEU,
   ncol = 1,
   heights = c(1, 1.2),
   labels = c("A", "B"),
-  font.label = list(size = 16, face = "bold") # optional styling
+  font.label = list(size = 16, face = "bold")
 )
 
 plot_CN
@@ -475,117 +213,35 @@ plot_CN
 
 ## Step 3b: EEAs (regressions)
 ```{r}
-plot_EEA_C_warming_pin <- df_EEA_final %>%
-  #filter(Enzyme == "GLU") %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-                 formula = y ~ x, 
-                 parse = TRUE, 
-                 label.x.npc = "right",
-                 label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
-    scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
-      expand = c(0,0),
-      limits = c(0, 3500),
-      breaks = seq(0, 3000, by = 1000)) +
-    theme_JM + 
-    labs(x = "Monthly T at 20 cm depth [°C]") 
+# Plot C acquisition vs pin temperature (topsoil) - uncomment when warming data available
+# plot_EEA_C_warming_pin <- df_eea_4_final %>%
+#   filter(grepl("Topsoil", Layer)) %>%
+#   ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
+#     geom_point() +
+#     geom_smooth(method = "lm") +
+#     stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
+#                  formula = y ~ x, 
+#                  parse = TRUE, 
+#                  label.x.npc = "right",
+#                  label.y.npc = 0.9) +
+#     scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
+#     scale_y_continuous(
+#      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
+#       expand = c(0,0),
+#       limits = c(0, 3500),
+#       breaks = seq(0, 3000, by = 1000)) +
+#     theme_JM + 
+#     labs(x = "Monthly T at 20 cm depth [°C]") 
 
-plot_EEA_N_warming_pin <- df_EEA_final %>%
- # filter(Enzyme %in% c("CHI", "LEU")) %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = Activity_N, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_poly_eq(
-      aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-      formula = y ~ x,
-      parse = TRUE,
-      label.x.npc = "right",  # Horizontal position of the label
-      label.y.npc = 0.9       # Vertical position of the label
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0, 0),
-      limits = c(0, 3500),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM + 
-    labs(x = "Monthly T  at 20 cm depth [°C]") 
+# plot_EEA_C_warming_pin
 
-plot_EEA_C_warming_deep <- df_EEA_final %>%
-#  filter(Enzyme == "GLU") %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = Activity_C, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-                 formula = y ~ x, 
-                 parse = TRUE, 
-                 label.x.npc = "right",
-                 label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
-    scale_y_continuous(
-      name = expression(paste("C-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")), 
-      expand = c(0,0),
-      limits = c(0, 3500),
-      breaks = seq(0, 3000, by = 1000)) +
-    theme_JM + 
-    labs(x = "Monthly T  at 75 cm depth [°C]") 
-
-plot_EEA_N_warming_deep <- df_EEA_final %>%
- # filter(Enzyme %in% c("CHI", "LEU")) %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = Activity_N, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_poly_eq(
-      aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-      formula = y ~ x,
-      parse = TRUE,
-      label.x.npc = "right",  # Horizontal position of the label
-      label.y.npc = 0.9       # Vertical position of the label
-    ) +
-    scale_color_manual(
-      values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"),
-      name = "Zone:"
-    ) +
-    scale_y_continuous(
-      name = expression(paste("N-acquisition", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-      expand = c(0, 0),
-      limits = c(0, 3500),
-      breaks = seq(0, 3000, by = 1000)
-    ) +
-    theme_JM + 
-    labs(x = "Monthly T  at 75 cm depth [°C]") 
-
-plot_CN_warming_pin_deep <- ggarrange(
-  plot_EEA_C_warming_pin,
-  plot_EEA_N_warming_pin,
-  plot_EEA_C_warming_deep,
-  plot_EEA_N_warming_deep,
-  ncol = 2,
-  nrow = 2,
-  common.legend = TRUE,
-  legend = "top",
-  labels = c("A", "C", "B", "D"), 
-  font.label = list(size = 16, face = "bold") 
-)
-
-plot_CN_warming_pin_deep
+print("Regression plots commented out - uncomment when warming data is available")
 ```
 
 ## Step 3c: EEA-ratio (factorial)
 ```{r}
-plot_EEA_ratio <- df_C_N_ratio %>%
+# Plot C/N ratio by treatment
+plot_EEA_ratio <- df_eea_0_cn_ratio %>%
   filter(!is.na(GLU_CHI_ratio)) %>%
   ggplot(aes(x = Treatment, y = GLU_CHI_ratio, fill = Treatment)) +
     stat_summary(fun = mean, geom = "bar", position = position_dodge(width = 0.9),
@@ -599,458 +255,413 @@ plot_EEA_ratio <- df_C_N_ratio %>%
     coord_cartesian(ylim = c(0, 1.1)) +
     theme(legend.position = "bottom",
           axis.text.x = element_blank(),
-          panel.spacing = unit(1, "lines"))  
+          panel.spacing = unit(1, "lines"))
 
-# All Plots
 plot_EEA_ratio
 ```
 
 ## Step 3d: EEA-ratio (regression)
 ```{r}
-plot_EEA_CN_warming_pin <- df_EEA_final %>%
-  filter(grepl("Top-soil", Layer)) %>%
-  ggplot(aes(x = pinTemp_mean, y = CN_ratio, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-                 formula = y ~ x, 
-                 parse = TRUE, 
-                 label.x.npc = "right",
-                 label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
-    scale_y_continuous(
-      name = expression(paste("C/N-acquisition ratio")), 
-      expand = c(0,0),
-      limits = c(0, 1.5),
-      breaks = seq(0, 1.5, by = 0.5)) +
-    theme_JM + 
-    labs(x = "Monthly T at 20 cm depth [°C]") 
+# Plot C/N ratio vs pin temperature (topsoil) - uncomment when warming data available
+# plot_EEA_CN_warming_pin <- df_eea_4_final %>%
+#   filter(grepl("Topsoil", Layer)) %>%
+#   ggplot(aes(x = pinTemp_mean, y = CN_ratio, color = Zone)) +
+#     geom_point() +
+#     geom_smooth(method = "lm") +
+#     stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
+#                  formula = y ~ x, 
+#                  parse = TRUE, 
+#                  label.x.npc = "right",
+#                  label.y.npc = 0.9) +
+#     scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
+#     scale_y_continuous(
+#       name = expression(paste("C/N-acquisition ratio")), 
+#       expand = c(0,0),
+#       limits = c(0, 1.5),
+#       breaks = seq(0, 1.5, by = 0.5)) +
+#     theme_JM + 
+#     labs(x = "Monthly T at 20 cm depth [°C]") 
 
-plot_EEA_CN_warming_deep <- df_EEA_final %>%
-  filter(grepl("Bottom-soil", Layer)) %>%
-  ggplot(aes(x = deepTemp_mean, y = CN_ratio, color = Zone)) +
-    geom_point() +
-    geom_smooth(method = "lm", aes(color = Zone)) +
-    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-                 formula = y ~ x, 
-                 parse = TRUE, 
-                 label.x.npc = "right",
-                 label.y.npc = 0.9) +
-    scale_color_manual(values = c("PZ" = "#084081", "LM" = "#4eb3d3", "HM" = "#7fcdbb"), name = "Zone:") +
-    scale_y_continuous(
-      name = expression(paste("C/N-acquisition ratio")), 
-      expand = c(0,0),
-      limits = c(0, 1.5),
-      breaks = seq(0, 1.5, by = 0.5)) +
-    theme_JM + 
-    labs(x = "Monthly T at 80 cm depth [°C]") 
+# plot_EEA_CN_warming_pin
 
-plot_EEA_CN_warming_pin
-plot_EEA_CN_warming_deep 
-
-plot_CN_ratio_warming_pin_deep <- ggarrange(
-  plot_EEA_CN_warming_pin,
-  plot_EEA_CN_warming_deep, 
-  ncol = 1,
-  nrow = 2,
-  common.legend = TRUE,
-  legend = "bottom",
-  labels = c("C", "D"), 
-  font.label = list(size = 16, face = "bold") 
-)
-
-plot_CN_ratio_warming_pin_deep
-
-plot_CN_reg <- ggarrange(
-  plot_CN,
-  plot_CN_ratio_warming_pin_deep,
-  ncol = 2,
-  heights = c(1, 1.2),
- # labels = c("A", "B", "C", "D"),
-  font.label = list(size = 16, face = "bold") # optional styling
-)
-
-plot_CN_bar <- ggarrange(
-  plot_CN,
-  ncol = 1,
-  heights = c(1, 1.2),
-  labels = c("A", "B"),
-  font.label = list(size = 16, face = "bold") # optional styling
-)
-
-# All plots
-plot_CN_ratio_warming_pin_deep
-plot_CN_reg
-plot_CN_bar
+print("C/N ratio regression plots commented out - uncomment when warming data is available")
 ```
 
-# Step 4: Summarise dataframes
+# Step 4: Summarise dataframes (preliminary for statistics)
 ```{r}
-#df_eea_c_sum  <- df_EEA_merged  %>%
-#  filter(Enzyme == "GLU") %>%##
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%#
-#  summarise("EEA C" = mean(Activity_OM_mean, na.rm=TRUE)) %>%#
-#  ungroup()
+# Create summary datasets for statistical analysis and correlation matrix
+if(exists("df_alpha_sum")) {
+  df_alpha_0_summary <- df_alpha_sum %>% 
+    mutate(plotid = as.character(plotid))
+  print("Alpha diversity data available for summary")
+} else {
+  df_alpha_0_summary <- NULL
+  warning("Alpha diversity data not available")
+}
 
-#df_eea_n_sum  <- df_EEA_merged  %>%#
-#  filter(Enzyme %in% c("CHI", "LEU")) %>%#
-#  group_by(Zone, Treatment, Enzyme_group, plotid) %>%#
-#  summarise("EEA N" = mean(Activity_OM_mean, na.rm=TRUE)) %>%#
-#  ungroup()
+if(exists("df_qpcr_sum")) {
+  df_qpcr_0_summary <- df_qpcr_sum %>% 
+    mutate(plotid = as.character(plotid))
+  print("qPCR data available for summary")
+} else {
+  df_qpcr_0_summary <- NULL
+  warning("qPCR data not available")
+}
 
-#df_elevation_sum  <- df_elevation  %>%#
-  #rename("Plot" = "plotid") %>%#
- # group_by(plotid) %>%#
-  #summarise("Elevation" = mean(Elevation, na.rm=TRUE)) %>%#
- # ungroup()
+# Create comprehensive summary dataset
+df_eea_5_summary <- df_eea_4_final %>%
+  mutate(plotid = as.character(Plot))
 
-#df_iris_sum_2 <- df_iris_sum  %>%#
- # group_by(plotid) %>%#
- # summarise("Reduction index"= mean(ri, na.rm=TRUE)) %>%#
- # ungroup()
+# Add alpha diversity if available
+if(!is.null(df_alpha_0_summary)) {
+  df_eea_5_summary <- df_eea_5_summary %>%
+    left_join(df_alpha_0_summary, by = c("plotid", "Layer"))
+}
 
-#summarise warming data script_warming_data_2022
-df_warming_sum <- df_warming_all_2022_monthly %>%
-  group_by(plotid) %>%
-  summarise("Soil temperature" = mean(pinTemp_mean, na.rm=TRUE)) %>%
-  ungroup()
+# Add qPCR data if available
+if(!is.null(df_qpcr_0_summary)) {
+  df_eea_5_summary <- df_eea_5_summary %>%
+    left_join(df_qpcr_0_summary, by = "plotid")
+}
 
-# summarise alpha diversity (done in "script_community") Step 5e)
-# summarise Abundance (done in "script_qpcr_2023") Step 4)
+# Add soil temperature mean if warming data available
+if(!is.null(df_warming_1_monthly)) {
+  df_eea_5_summary <- df_eea_5_summary %>%
+    mutate("Soil temperature" = rowMeans(select(., contains("Temp_mean")), na.rm = TRUE))
+}
 
-#df_eea_c_sum <- df_eea_c_sum %>% mutate(plotid = as.character(plotid))
-#df_eea_n_sum <- df_eea_n_sum %>% mutate(plotid = as.character(plotid))
-#df_elevation_sum <- df_elevation_sum %>% mutate(plotid = as.character(plotid))
-#df_iris_sum_2 <- df_iris_sum_2 %>% mutate(plotid = as.character(plotid))
-df_warming_sum <- df_warming_sum %>% mutate(plotid = as.character(plotid))
-df_qpcr_sum <- df_qpcr_sum %>% mutate(plotid = as.character(plotid))
-df_alpha_sum <- df_alpha_sum %>% mutate(plotid = as.character(plotid))
-df_EEA_final <- df_EEA_final %>% mutate(plotid = as.character(plotid))
-
-df_summary <- df_EEA_final %>%
-  left_join(df_alpha_sum, by = c("plotid", "Layer")) %>%
-  inner_join(df_qpcr_sum, by = "plotid") %>%
-  inner_join(df_warming_sum, by = "plotid")
-
-df_summary_top <- df_summary %>%
-  filter(Layer == "Top-soil\n(0-30 cm)") %>%
-  select("EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
-  ungroup()
-
-df_summary_bottom <- df_summary %>%
-  filter(Layer == "Bottom-soil\n(40-100 cm)") %>%
-  select("EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
-  ungroup()
-
-df_summary_all <- df_summary %>%
-  select(Layer, "EEA C" = Activity_C, "EEA N" = Activity_N, "Alpha diversity" = "Alpha_diversity", Abundance, "Soil temperature", "Soil elevation" = Elevation_mean, "Soil reduction" = ri) %>%
-  ungroup()
+print("Summary dataset for correlations created")
 ```
 
 # Step 5: Statistics
-## Step 5a: EEAs (factorial)
+## Step 5a: Normality tests and data preparation
 ```{r}
-# Add core_id as random factor or use Plot for accounting for the Plots not just the cores being non-independent
-df_EEA_merged <- df_EEA_merged %>%
-  mutate(core_id = substr(ID.y, 1, 7))
+# Test normality of EEA activity data
+print("=== NORMALITY TESTS FOR EEA ACTIVITIES ===")
 
-# Fit the linear mixed-effects model
-stat_model_C <- lmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), data = df_EEA_merged %>% filter(Enzyme == "GLU"))
-stat_model_N <- lmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), data = df_EEA_merged %>% filter(Enzyme %in% c("LEU", "CHI")))
-
-# Main effects
-anova(stat_model_C)
-anova(stat_model_N)
-
-# Model diagnostics
-#  Residual plots
-plot(stat_model_C)
-plot(stat_model_N)
-
-# QQ plot of residuals
-qqnorm(resid(stat_model_C))
-qqline(resid(stat_model_C))
-qqnorm(resid(stat_model_N))
-qqline(resid(stat_model_N))
-
-# Residuals vs. Fitted values
-plot(fitted(stat_model_C), resid(stat_model_C))
-abline(h = 0, col = "red")
-plot(fitted(stat_model_N), resid(stat_model_N))
-abline(h = 0, col = "red")
-
-# Additional diagnostic plots using performance package
-check_model(stat_model_C)
-check_model(stat_model_N)
-
-# ANOVA
-anova(stat_model_C)
-anova(stat_model_N)
-
-# Model summary
-summary(stat_model_C)
-summary(stat_model_N)
-
-# Pairwise comparisons
-## For Zone
-stat_C_zone_emm <- emmeans(stat_model_C, ~ Zone)
-pairs(stat_C_zone_emm)
-stat_N_zone_emm <- emmeans(stat_model_N, ~ Zone)
-pairs(stat_N_zone_emm)
-
-## For Treatment
-stat_C_treatment_emm <- emmeans(stat_model_C, ~ Treatment)
-pairs(stat_C_treatment_emm)
-stat_N_treatment_emm <- emmeans(stat_model_N, ~ Treatment)
-pairs(stat_N_treatment_emm)
-
-## For Layer
-stat_C_layer_emm <- emmeans(stat_model_C, ~ Layer)
-pairs(stat_C_layer_emm)
-stat_N_layer_emm <- emmeans(stat_model_N, ~ Layer)
-pairs(stat_N_layer_emm)
-
-## For Zone:Treatment interaction
-stat_C_zone_treatment_emm <- emmeans(stat_model_C, ~ Zone | Treatment)
-pairs(stat_C_zone_treatment_emm)
-stat_N_zone_treatment_emm <- emmeans(stat_model_N, ~ Zone | Treatment)
-pairs(stat_N_zone_treatment_emm)
-
-## For Zone:Layer interaction
-stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone | Layer)
-pairs(stat_C_zone_layer_emm)
-stat_N_zone_layer_emm <- emmeans(stat_model_N, ~ Zone | Layer)
-pairs(stat_N_zone_layer_emm)
-
-## For Treatment:Layer interaction
-stat_C_treatment_layer_emm <- emmeans(stat_model_C, ~ Treatment | Layer)
-pairs(stat_C_treatment_layer_emm)
-stat_N_treatment_layer_emm <- emmeans(stat_model_N, ~ Treatment | Layer)
-pairs(stat_N_treatment_layer_emm)
-
-## For Treatment:Zone:Layer interaction
-stat_C_treatment_layer_zone_emm <- emmeans(stat_model_C, ~ Treatment | Layer | Zone)
-pairs(stat_C_treatment_layer_zone_emm)
-stat_N_treatment_layer_zone_emm <- emmeans(stat_model_N, ~ Treatment | Layer | Zone)
-pairs(stat_N_treatment_layer_zone_emm)
-
-# Visualizations
-## Interaction plot for Zone and Treatment
-ggplot(df_EEA_merged, aes(x = Zone, y = Activity_OM, color = Treatment)) +
-  stat_summary(fun = mean, geom = "point") +
-  stat_summary(fun = mean, geom = "line", aes(group = Treatment)) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.2) +
-  facet_wrap(~ Layer) +
-  theme_JM +
-  labs(title = "Interaction between Zone and Treatment by Layer across all Enzymes",
-       y = "Response Variable")
-
-performance::check_model(stat_model_C)
-performance::check_model(stat_model_N)
-```
-
-## Step 5b: EEAs (Regressions warming data)
-```{r}
-# Calculate mean temperature of both pin and deep sensors
-df_EEA_final <- df_EEA_final %>%
-  ungroup() %>%
-  mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
-
-df_summary <- df_summary %>%
-  ungroup() %>%
-  mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
-
-# Regressions with warming
-summary(lm(Activity_C ~ meanTemp, data = df_EEA_final))
-summary(lm(Activity_N ~ meanTemp, data = df_EEA_final))
-summary(lm(Alpha_diversity ~ meanTemp, data = df_summary))
-
-# Regressions with elevation
-summary(lm(Activity_C ~ Elevation_mean, data = df_EEA_final))
-summary(lm(Activity_N ~ Elevation_mean, data = df_EEA_final))
-summary(lm(Alpha_diversity ~ Elevation_mean, data = df_summary))
-
-# Regressions with reduction index
-summary(lm(Activity_C ~ ri, data = df_EEA_final))
-summary(lm(Activity_N ~ ri, data = df_EEA_final))
-summary(lm(Alpha_diversity ~ ri, data = df_summary))
-```
-
-## Step 5c: EEAs (Regressions elevation data) 
-```{r}
-# Join Elevation data to 
-# Run models
-stat_model_eea_c_elevation <- lm(Activity_C ~ Elevation_mean, data = df_EEA_final) 
-stat_model_eea_c_top_elevation <- lm(Activity_C ~ Elevation_mean, data = df_EEA_final %>% filter(Layer == "Top-soil\n(0-30 cm)"))
-stat_model_eea_c_bottom_elevation <- lm(Activity_C ~ Elevation_mean, data = df_EEA_final %>% filter(Layer == "Bottom-soil\n(40-100 cm)"))
-
-stat_model_eea_n_elevation <- lm(Activity_N ~ Elevation_mean, data = df_EEA_final) 
-stat_model_eea_n_top_elevation <- lm(Activity_N ~ Elevation_mean, data = df_EEA_final %>% filter(Layer == "Top-soil\n(0-30 cm)"))
-stat_model_eea_n_bottom_elevation <- lm(Activity_N ~ Elevation_mean, data = df_EEA_final %>% filter(Layer == "Bottom-soil\n(40-100 cm)"))
-
-# Function to extract R2 and p-value
-get_stats <- function(model) {
-  r_squared <- summary(model)$r.squared
-  f_statistic <- summary(model)$fstatistic
-  p_value <- pf(f_statistic[1], f_statistic[2], f_statistic[3], lower.tail = FALSE)
-  return(c(R_squared = r_squared, P_value = p_value))
+# Shapiro-Wilk test for C acquisition (GLU)
+eea_c_data <- df_eea_1_main %>% filter(Enzyme == "GLU", !is.na(Activity_OM))
+if(nrow(eea_c_data) <= 5000) {
+  shapiro_c <- shapiro.test(eea_c_data$Activity_OM)
+  print("Carbon acquisition (GLU) normality test:")
+  print(shapiro_c)
+} else {
+  print("Carbon acquisition dataset too large for Shapiro-Wilk test")
 }
 
-# Get statistics
-stats_eea_c_all <- get_stats(stat_model_eea_c_elevation)
-stats_eea_c_top <- get_stats(stat_model_eea_c_top_elevation)
-stats_eea_c_bottom <- get_stats(stat_model_eea_c_bottom_elevation)
-stats_eea_n_all <- get_stats(stat_model_eea_n_elevation)
-stats_eea_n_top <- get_stats(stat_model_eea_n_top_elevation)
-stats_eea_n_bottom <- get_stats(stat_model_eea_n_bottom_elevation)
+# Shapiro-Wilk test for N acquisition (CHI + LEU)
+eea_n_data <- df_eea_1_main %>% filter(Enzyme %in% c("CHI", "LEU"), !is.na(Activity_OM))
+if(nrow(eea_n_data) <= 5000) {
+  shapiro_n <- shapiro.test(eea_n_data$Activity_OM)
+  print("Nitrogen acquisition (CHI + LEU) normality test:")
+  print(shapiro_n)
+} else {
+  print("Nitrogen acquisition dataset too large for Shapiro-Wilk test")
+}
 
-# Print results
-print("All C:")
-print(stats_eea_c_all)
-print(summary(stat_model_eea_c_elevation))
+# QQ plots for visual assessment
+print("Generating QQ plots for visual normality assessment...")
 
-print("Top Soil C:")
-print(stats_eea_c_top)
-print(summary(stat_model_eea_c_top_elevation))
+qqplot_c <- df_eea_1_main %>%
+  filter(Enzyme == "GLU") %>%
+  ggplot(aes(sample = Activity_OM)) +
+    stat_qq() +
+    stat_qq_line() +
+    labs(title = "QQ Plot - Carbon Acquisition (Original Scale)", 
+         x = "Theoretical Quantiles", y = "Sample Quantiles") +
+    theme_JM
 
-print("Bottom Soil C:")
-print(stats_eea_c_bottom)
-print(summary(stat_model_eea_c_bottom_elevation))
+qqplot_n <- df_eea_1_main %>%
+  filter(Enzyme %in% c("CHI", "LEU")) %>%
+  ggplot(aes(sample = Activity_OM)) +
+    stat_qq() +
+    stat_qq_line() +
+    labs(title = "QQ Plot - Nitrogen Acquisition (Original Scale)", 
+         x = "Theoretical Quantiles", y = "Sample Quantiles") +
+    theme_JM
 
-print("All N:")
-print(stats_eea_n_all)
-print(summary(stat_model_eea_n_elevation))
-
-print("Top Soil N:")
-print(stats_eea_n_top)
-print(summary(stat_model_eea_n_top_elevation))
-
-print("Bottom Soil N:")
-print(stats_eea_n_bottom)
-print(summary(stat_model_eea_n_bottom_elevation))
+qqplot_c
+qqplot_n
 ```
 
-#Step 6: Correlation Matrix
-# Following https://cran.r-project.org/web/packages/ggcorrplot/readme/README.html
+## Step 5b: Mixed-effects models (factorial analysis)
 ```{r}
-# Retrieve numeric variables and remove plotid
-stat_numeric_vars_top <- df_summary_top %>%
-  select(where(is.numeric))
+# Standard linear mixed-effects models
+print("=== STANDARD LINEAR MIXED-EFFECTS MODELS ===")
 
-stat_numeric_vars_bottom <- df_summary_bottom  %>%
-  select(where(is.numeric))
+# Carbon acquisition model
+stat_model_C <- lmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), 
+                     data = df_eea_1_main %>% filter(Enzyme == "GLU"))
 
-# Calculate correlation and p-values for both top and bottom soil layers
-df_cor_res_top <- rcorr(as.matrix(stat_numeric_vars_top), type = "pearson")
-df_cor_matrix_top <- df_cor_res_top$r
-df_p_matrix_top <- df_cor_res_top$P
+# Nitrogen acquisition model  
+stat_model_N <- lmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), 
+                     data = df_eea_1_main %>% filter(Enzyme %in% c("LEU", "CHI")))
 
-df_cor_res_bottom <- rcorr(as.matrix(stat_numeric_vars_bottom), type = "pearson")
-df_cor_matrix_bottom <- df_cor_res_bottom$r
-df_p_matrix_bottom <- df_cor_res_bottom$P
+# Model diagnostics
+print("=== MODEL DIAGNOSTICS ===")
+print("Carbon acquisition model diagnostics:")
+check_model(stat_model_C)
 
-# Convert to long format
-df_cor_long_top <- as.data.frame(as.table(df_cor_matrix_top))
-df_p_long_top <- as.data.frame(as.table(df_p_matrix_top))
-colnames(df_cor_long_top) <- c("Var1", "Var2", "cor")
-colnames(df_p_long_top) <- c("Var1", "Var2", "p")
+print("Nitrogen acquisition model diagnostics:")
+check_model(stat_model_N)
 
-df_cor_long_bottom  <- as.data.frame(as.table(df_cor_matrix_bottom ))
-df_p_long_bottom  <- as.data.frame(as.table(df_p_matrix_bottom ))
-colnames(df_cor_long_bottom ) <- c("Var1", "Var2", "cor")
-colnames(df_p_long_bottom ) <- c("Var1", "Var2", "p")
+# Test residual normality
+shapiro.test(resid(stat_model_C))
+shapiro.test(resid(stat_model_N))
 
-# Merge and keep upper triangle only (no duplicates, no diagonal)
-df_cor_merged_top <- left_join(df_cor_long_top, df_p_long_top, by = c("Var1", "Var2")) %>%
-  filter(as.numeric(factor(Var1)) < as.numeric(factor(Var2)))
+# ANOVA results
+print("=== ANOVA RESULTS - STANDARD MODELS ===")
+print("Carbon acquisition:")
+anova(stat_model_C)
 
-df_cor_merged_bottom <- left_join(df_cor_long_bottom, df_p_long_bottom, by = c("Var1", "Var2")) %>%
-  filter(as.numeric(factor(Var1)) < as.numeric(factor(Var2)))
-
-# Add significance flag
-df_cor_merged_top <- df_cor_merged_top %>%
-  mutate(sig = p < 0.05)
-
-df_cor_merged_bottom <- df_cor_merged_bottom %>%
-  mutate(sig = p < 0.05)
-
-plot_corr_mat_top <- ggplot(df_cor_merged_top, aes(x = Var1, y = Var2, fill = cor)) +
-  geom_tile(color = "white") +
-  geom_text(
-    aes(label = round(cor, 2), fontface = ifelse(sig, "bold", "plain")),
-    color = "black"
-  ) +
-  scale_fill_gradient2(
-    low = "#E46726", high = "#6D9EC1", mid = "white", midpoint = 0,
-    limit = c(-1, 1), name = "Pearson\nCorrelation"
-  ) +
-  labs(x = NULL, y = NULL) +  
-  theme_JM +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-    legend.position = "right"  
-  ) +
-  coord_fixed() 
-
-plot_corr_mat_bottom <- ggplot(df_cor_merged_bottom, aes(x = Var1, y = Var2, fill = cor)) +
-  geom_tile(color = "white") +
-  geom_text(
-    aes(label = round(cor, 2), fontface = ifelse(sig, "bold", "plain")),
-    color = "black"
-  ) +
-  scale_fill_gradient2(
-    low = "#E46726", high = "#6D9EC1", mid = "white", midpoint = 0,
-    limit = c(-1, 1), name = "Pearson\nCorrelation"
-  ) +
-  labs(x = NULL, y = NULL) +  
-  theme_JM +
-  theme(
-    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
-    legend.position = "right"  
-  ) +
-  coord_fixed() 
-
-#install.packages("ggstatsplot")
-library(ggstatsplot)
-
-###      Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach.
-##      Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
-
-plot_corr_mat_all <- ggstatsplot::grouped_ggcorrmat(
-  data = df_summary_all,
-  grouping.var = Layer,
-  matrix.type = "lower",
-  type = "parametric", # parametric for Pearson, nonparametric for Spearman's correlation
-  colors = c("darkred", "white", "steelblue") # change default colors
-)
-
-plot_corr_mat_top <- ggstatsplot::ggcorrmat(
-  data = df_summary_top,
-  type = "parametric", # parametric for Pearson, nonparametric for Spearman's correlation
-  colors = c("darkred", "white", "steelblue") # change default colors
-)
-
-plot_corr_mat_bottom<- ggstatsplot::ggcorrmat(
-  data = df_summary_bottom,
-  type = "parametric", # parametric for Pearson, nonparametric for Spearman's correlation
-  colors = c("darkred", "white", "steelblue") # change default colors
-)
-
-ggarrange(plot_corr_mat_top, plot_corr_mat_bottom)
+print("Nitrogen acquisition:")
+anova(stat_model_N)
 ```
 
-# Supplement
+## Step 5c: Pairwise comparisons using emmeans
+```{r}
+# Choose the standard lmer models for pairwise comparisons
+print("=== PAIRWISE COMPARISONS - STANDARD MODELS ===")
+
+# Main effects
+print("--- ZONE COMPARISONS ---")
+stat_C_zone_emm <- emmeans(stat_model_C, ~ Zone)
+print("Carbon acquisition by Zone:")
+pairs(stat_C_zone_emm)
+
+stat_N_zone_emm <- emmeans(stat_model_N, ~ Zone)
+print("Nitrogen acquisition by Zone:")
+pairs(stat_N_zone_emm)
+
+print("--- TREATMENT COMPARISONS ---")
+stat_C_treatment_emm <- emmeans(stat_model_C, ~ Treatment)
+print("Carbon acquisition by Treatment:")
+pairs(stat_C_treatment_emm)
+
+stat_N_treatment_emm <- emmeans(stat_model_N, ~ Treatment)
+print("Nitrogen acquisition by Treatment:")
+pairs(stat_N_treatment_emm)
+
+print("--- LAYER COMPARISONS ---")
+stat_C_layer_emm <- emmeans(stat_model_C, ~ Layer)
+print("Carbon acquisition by Layer:")
+pairs(stat_C_layer_emm)
+
+stat_N_layer_emm <- emmeans(stat_model_N, ~ Layer)
+print("Nitrogen acquisition by Layer:")
+pairs(stat_N_layer_emm)
+
+# Interaction effects
+print("--- ZONE x TREATMENT INTERACTIONS ---")
+stat_C_zone_treatment_emm <- emmeans(stat_model_C, ~ Zone | Treatment)
+print("Carbon acquisition Zone x Treatment:")
+pairs(stat_C_zone_treatment_emm)
+
+stat_N_zone_treatment_emm <- emmeans(stat_model_N, ~ Zone | Treatment)
+print("Nitrogen acquisition Zone x Treatment:")
+pairs(stat_N_zone_treatment_emm)
+
+print("--- ZONE x LAYER INTERACTIONS ---")
+stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone | Layer)
+print("Carbon acquisition Zone x Layer:")
+pairs(stat_C_zone_layer_emm)
+
+stat_N_zone_layer_emm <- emmeans(stat_model_N, ~ Zone | Layer)
+print("Nitrogen acquisition Zone x Layer:")
+pairs(stat_N_zone_layer_emm)
+
+print("--- TREATMENT x LAYER INTERACTIONS ---")
+stat_C_treatment_layer_emm <- emmeans(stat_model_C, ~ Treatment | Layer)
+print("Carbon acquisition Treatment x Layer:")
+pairs(stat_C_treatment_layer_emm)
+
+stat_N_treatment_layer_emm <- emmeans(stat_model_N, ~ Treatment | Layer)
+print("Nitrogen acquisition Treatment x Layer:")
+pairs(stat_N_treatment_layer_emm)
+
+print("--- THREE-WAY INTERACTIONS ---")
+stat_C_treatment_layer_zone_emm <- emmeans(stat_model_C, ~ Treatment | Layer | Zone)
+print("Carbon acquisition Treatment x Layer x Zone:")
+pairs(stat_C_treatment_layer_zone_emm)
+
+stat_N_treatment_layer_zone_emm <- emmeans(stat_model_N, ~ Treatment | Layer | Zone)
+print("Nitrogen acquisition Treatment x Layer x Zone:")
+pairs(stat_N_treatment_layer_zone_emm)
+```
+
+## Step 5d: Regression analyses with environmental variables
+```{r}
+# Check if environmental variables are available
+if(!is.null(df_warming_1_monthly) && "Elevation_mean" %in% colnames(df_eea_4_final)) {
+  
+  print("=== ENVIRONMENTAL REGRESSION ANALYSES ===")
+  
+  # Calculate mean temperature if multiple sensors available
+  if(all(c("pinTemp_mean", "deepTemp_mean") %in% colnames(df_eea_4_final))) {
+    df_eea_4_final <- df_eea_4_final %>%
+      mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
+    
+    print("--- TEMPERATURE REGRESSIONS ---")
+    # Regressions with mean temperature
+    temp_c_model <- lm(Activity_C ~ meanTemp, data = df_eea_4_final)
+    temp_n_model <- lm(Activity_N ~ meanTemp, data = df_eea_4_final)
+    
+    print("Carbon acquisition ~ Mean temperature:")
+    print(summary(temp_c_model))
+    
+    print("Nitrogen acquisition ~ Mean temperature:")
+    print(summary(temp_n_model))
+    
+  } else if("pinTemp_mean" %in% colnames(df_eea_4_final)) {
+    print("--- PIN TEMPERATURE REGRESSIONS ---")
+    # Regressions with pin temperature only
+    pin_temp_c_model <- lm(Activity_C ~ pinTemp_mean, data = df_eea_4_final)
+    pin_temp_n_model <- lm(Activity_N ~ pinTemp_mean, data = df_eea_4_final)
+    
+    print("Carbon acquisition ~ Pin temperature:")
+    print(summary(pin_temp_c_model))
+    
+    print("Nitrogen acquisition ~ Pin temperature:")
+    print(summary(pin_temp_n_model))
+  }
+  
+  print("--- ELEVATION REGRESSIONS ---")
+  # Elevation regressions - overall
+  elev_c_model <- lm(Activity_C ~ Elevation_mean, data = df_eea_4_final)
+  elev_n_model <- lm(Activity_N ~ Elevation_mean, data = df_eea_4_final)
+  
+  print("Carbon acquisition ~ Elevation (all layers):")
+  print(summary(elev_c_model))
+  
+  print("Nitrogen acquisition ~ Elevation (all layers):")
+  print(summary(elev_n_model))
+  
+  # Elevation regressions by layer
+  if("Layer" %in% colnames(df_eea_4_final)) {
+    
+    # Topsoil
+    topsoil_data <- df_eea_4_final %>% filter(grepl("Topsoil", Layer))
+    if(nrow(topsoil_data) > 0) {
+      elev_c_top_model <- lm(Activity_C ~ Elevation_mean, data = topsoil_data)
+      elev_n_top_model <- lm(Activity_N ~ Elevation_mean, data = topsoil_data)
+      
+      print("Carbon acquisition ~ Elevation (topsoil only):")
+      print(summary(elev_c_top_model))
+      
+      print("Nitrogen acquisition ~ Elevation (topsoil only):")
+      print(summary(elev_n_top_model))
+    }
+    
+    # Subsoil
+    subsoil_data <- df_eea_4_final %>% filter(grepl("Subsoil", Layer))
+    if(nrow(subsoil_data) > 0) {
+      elev_c_sub_model <- lm(Activity_C ~ Elevation_mean, data = subsoil_data)
+      elev_n_sub_model <- lm(Activity_N ~ Elevation_mean, data = subsoil_data)
+      
+      print("Carbon acquisition ~ Elevation (subsoil only):")
+      print(summary(elev_c_sub_model))
+      
+      print("Nitrogen acquisition ~ Elevation (subsoil only):")
+      print(summary(elev_n_sub_model))
+    }
+  }
+  
+  # Reduction index regressions if available
+  if("ri" %in% colnames(df_eea_4_final)) {
+    print("--- REDUCTION INDEX REGRESSIONS ---")
+    
+    ri_c_model <- lm(Activity_C ~ ri, data = df_eea_4_final)
+    ri_n_model <- lm(Activity_N ~ ri, data = df_eea_4_final)
+    
+    print("Carbon acquisition ~ Reduction index:")
+    print(summary(ri_c_model))
+    
+    print("Nitrogen acquisition ~ Reduction index:")
+    print(summary(ri_n_model))
+  }
+  
+  # Multi-variable regression if data available
+  if(all(c("meanTemp", "Elevation_mean", "ri") %in% colnames(df_eea_4_final))) {
+    print("--- MULTIVARIATE REGRESSIONS ---")
+    
+    multi_c_model <- lm(Activity_C ~ meanTemp + Elevation_mean + ri, data = df_eea_4_final)
+    multi_n_model <- lm(Activity_N ~ meanTemp + Elevation_mean + ri, data = df_eea_4_final)
+    
+    print("Carbon acquisition ~ Temperature + Elevation + Reduction index:")
+    print(summary(multi_c_model))
+    
+    print("Nitrogen acquisition ~ Temperature + Elevation + Reduction index:")
+    print(summary(multi_n_model))
+  }
+  
+} else {
+  warning("Environmental data not available - skipping regression analyses")
+}
+
+# Include alpha diversity in regressions if available
+if(!is.null(df_alpha_0_summary) && exists("df_eea_5_summary")) {
+  print("=== ALPHA DIVERSITY REGRESSIONS ===")
+  
+  if("meanTemp" %in% colnames(df_eea_5_summary)) {
+    alpha_temp_model <- lm(Alpha_diversity ~ meanTemp, data = df_eea_5_summary)
+    print("Alpha diversity ~ Mean temperature:")
+    print(summary(alpha_temp_model))
+  }
+  
+  if("Elevation_mean" %in% colnames(df_eea_5_summary)) {
+    alpha_elev_model <- lm(Alpha_diversity ~ Elevation_mean, data = df_eea_5_summary)
+    print("Alpha diversity ~ Elevation:")
+    print(summary(alpha_elev_model))
+  }
+  
+  if("ri" %in% colnames(df_eea_5_summary)) {
+    alpha_ri_model <- lm(Alpha_diversity ~ ri, data = df_eea_5_summary)
+    print("Alpha diversity ~ Reduction index:")
+    print(summary(alpha_ri_model))
+  }
+}
+```
+
+# Step 6: Save final datasets
+```{r}
+# Save final EEA dataset for use in other scripts
+write.csv(df_eea_4_final, here("data", "eea", "df_EEA_final.csv"), row.names = FALSE)
+
+print("Final EEA dataset saved for downstream analysis")
+```
+
+# Step 7: Summary of dataframes
+```{r}
+# Summary of EEA analysis datasets
+print("=== EEA ANALYSIS DATASETS SUMMARY ===")
+
+print("=== EEA MAIN DATA (df_eea_1_main) ===")
+str(df_eea_1_main)
+print("Sample distribution by enzyme:")
+table(df_eea_1_main$Enzyme)
+
+print("=== EEA FINAL DATA (df_eea_4_final) ===")
+str(df_eea_4_final)
+print("Sample distribution by treatment and zone:")
+table(df_eea_4_final$Treatment, df_eea_4_final$Zone)
+
+print("=== C/N RATIO DATA (df_eea_0_cn_ratio) ===")
+str(df_eea_0_cn_ratio)
+summary(df_eea_0_cn_ratio$GLU_CHI_ratio)
+
+print("=== EEA ACTIVITY SUMMARY ===")
+summary(df_eea_4_final[c("Activity_C", "Activity_N", "CN_ratio")])
+```
+
 # References
 ```{r}
-# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
-# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
-# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
-# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
-# ggpmisc: Aphalo, P. J. (2024). ggpmisc: Miscellaneous Extensions to 'ggplot2'. R package version 0.5.5. https://CRAN.R-project.org/package=ggpmisc
-# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
-# car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
+# ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
+# ggpmisc: Aphalo, P. J. (2024). ggpmisc: Miscellaneous Extensions to 'ggplot2'. R package version 0.5.5. https://CRAN.R-project.org/package=ggpmisc
+# ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+# lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # lmerTest: Kuznetsova, A., Brockhoff, P. B., & Christensen, R. H. B. (2024). lmerTest: Tests in Linear Mixed Effects Models. R package version 3.1-3. https://CRAN.R-project.org/package=lmerTest
 # performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
-# Hmisc: Harrell, F. E. Jr, et al. (2024). Hmisc: Harrell Miscellaneous. R package version 5.1-2. https://CRAN.R-project.org/package=Hmisc
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```

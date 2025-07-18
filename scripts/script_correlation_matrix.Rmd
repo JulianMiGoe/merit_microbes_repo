@@ -1,0 +1,216 @@
+---
+title: "Correlation Matrix Analysis"
+author: "Julian Mittmann-Goetsch"
+date: "2024-08-06"
+output: html_document
+---
+
+## Version 1.1: Updated version log format - 17.07.2025 | JM
+## Version 1.0: Correlation matrix analysis for MERIT variables - 11.02.2025 | JM
+## Purpose: Generate correlation matrices for EEA, community, and environmental variables
+
+# Step 1: Prepare session and load data
+## Step 1a: Install necessary packages
+```{r, message=FALSE, warning=FALSE}
+#install.packages("ggstatsplot")
+#install.packages("tidyverse")
+#install.packages("here")
+```
+
+## Step 1b: Load necessary packages
+```{r}
+library(ggstatsplot)
+library(tidyverse)
+library(here)
+```
+
+## Step 1c: Load processed datasets
+```{r}
+# Load EEA final dataset (created in script_eea.Rmd)
+# This should contain the summarized EEA data with environmental variables
+if(exists("df_EEA_final")) {
+  df_eea_0_final <- df_EEA_final
+  print("EEA final dataset loaded from environment")
+} else {
+  # Alternative: Load from saved file if available
+  tryCatch({
+    df_eea_0_final <- read.csv(here("data", "eea", "df_EEA_final.csv"))
+    print("EEA final dataset loaded from file")
+  }, error = function(e) {
+    stop("EEA final dataset not found. Please run script_eea.Rmd first.")
+  })
+}
+
+# Load other required datasets
+# Community alpha diversity (from script_community.Rmd)
+if(exists("df_alpha_sum")) {
+  df_alpha_0_summary <- df_alpha_sum
+  print("Alpha diversity dataset loaded from environment")
+} else {
+  tryCatch({
+    df_alpha_0_summary <- read.csv(here("data", "rna", "df_alpha_summary.csv"))
+    print("Alpha diversity dataset loaded from file")
+  }, error = function(e) {
+    warning("Alpha diversity dataset not found. Some correlations may be missing.")
+    df_alpha_0_summary <- NULL
+  })
+}
+
+# qPCR data (from script_qpcr_2023.Rmd)
+if(exists("df_qpcr_sum")) {
+  df_qpcr_0_summary <- df_qpcr_sum
+  print("qPCR dataset loaded from environment")
+} else {
+  tryCatch({
+    df_qpcr_0_summary <- read.csv(here("data", "qpcr", "df_qpcr_summary.csv"))
+    print("qPCR dataset loaded from file")
+  }, error = function(e) {
+    warning("qPCR dataset not found. Some correlations may be missing.")
+    df_qpcr_0_summary <- NULL
+  })
+}
+
+# Warming data (from script_warming_data_2022.Rmd)
+if(exists("df_warming_all_2022_monthly")) {
+  df_warming_0_monthly <- df_warming_all_2022_monthly
+  print("Warming dataset loaded from environment")
+} else {
+  tryCatch({
+    df_warming_0_monthly <- read.csv(here("scripts", "df_warming_all_2022_monthly.csv"))
+    print("Warming dataset loaded from file")
+  }, error = function(e) {
+    warning("Warming dataset not found. Some correlations may be missing.")
+    df_warming_0_monthly <- NULL
+  })
+}
+
+# IRIS data (from script_iris.Rmd)
+if(exists("df_iris_summarized_2_final")) {
+  df_iris_0_summary <- df_iris_summarized_2_final
+  print("IRIS dataset loaded from environment")
+} else {
+  tryCatch({
+    df_iris_0_summary <- read.csv(here("data", "iris", "df_iris_summary.csv"))
+    print("IRIS dataset loaded from file")
+  }, error = function(e) {
+    warning("IRIS dataset not found. Some correlations may be missing.")
+    df_iris_0_summary <- NULL
+  })
+}
+```
+
+# Step 2: Prepare correlation datasets
+## Step 2a: Create comprehensive summary dataset
+```{r}
+# Start with EEA final data
+df_corr_1_base <- df_eea_0_final %>%
+  mutate(plotid = as.character(Plot))
+
+# Add alpha diversity if available
+if(!is.null(df_alpha_0_summary)) {
+  df_alpha_0_summary <- df_alpha_0_summary %>% 
+    mutate(plotid = as.character(plotid))
+  
+  df_corr_1_base <- df_corr_1_base %>%
+    left_join(df_alpha_0_summary, by = c("plotid", "Layer"))
+}
+
+# Add qPCR data if available
+if(!is.null(df_qpcr_0_summary)) {
+  df_qpcr_0_summary <- df_qpcr_0_summary %>% 
+    mutate(plotid = as.character(plotid))
+  
+  df_corr_1_base <- df_corr_1_base %>%
+    left_join(df_qpcr_0_summary, by = "plotid")
+}
+
+# Add warming data if available
+if(!is.null(df_warming_0_monthly)) {
+  df_warming_0_monthly <- df_warming_0_monthly %>% 
+    mutate(plotid = as.character(plotid))
+  
+  df_corr_1_base <- df_corr_1_base %>%
+    left_join(df_warming_0_monthly, by = "plotid")
+}
+
+# Add IRIS data if available
+if(!is.null(df_iris_0_summary)) {
+  df_iris_0_summary <- df_iris_0_summary %>% 
+    mutate(plotid = as.character(plotid))
+  df_corr_1_base <- df_corr_1_base %>%
+    left_join(df_iris_0_summary, by = c("plotid", "Layer"))
+}
+
+print("Base correlation dataset created")
+print(paste("Dimensions:", nrow(df_corr_1_base), "rows x", ncol(df_corr_1_base), "columns"))
+```
+
+## Step 2b: Select and rename variables for correlation analysis
+```{r}
+# Select key variables and rename for better visualization
+# Die Alpha-Diversity-Spalte heißt vermutlich nicht exakt 'Alpha_diversity'.
+# Prüfe Alternativen wie 'alpha_diversity', 'AlphaDiversity', 'Shannon', etc.
+# Passe ggf. den Spaltennamen hier an!
+df_corr_2_selected <- df_corr_1_base %>%
+  select(
+    Layer,
+    "Carbon acquisition" = Activity_C,
+    "Nitrogen acquisition" = Activity_N,
+    "Microbial abundance" = Abundance, # qPCR
+    "Alpha diversity" = alpha_diversity, # ggf. anpassen!
+    "Soil temperature" = pinTemp_mean,
+    "Marsh surface elevation" = Elevation_mean,
+    "Reduction index" = ri
+  ) %>%
+  # Remove rows with all NA values for numeric variables
+  filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na))
+
+print("Variables selected for correlation analysis:")
+print(colnames(df_corr_2_selected))
+print(paste("Final dataset dimensions:", nrow(df_corr_2_selected), "rows x", ncol(df_corr_2_selected), "columns"))
+```
+
+# Step 3: Generate correlation matrices
+## Step 3a: Overall correlation matrix (all layers combined)
+```{r}
+# Remove Layer column for overall analysis
+df_corr_overall <- df_corr_2_selected %>%
+  select(-Layer)
+
+# Generate overall correlation matrix
+plot_corr_overall <- ggstatsplot::ggcorrmat(
+  data = df_corr_overall,
+  matrix.type = "lower",
+  type = "parametric", # Use parametric for Pearson correlation
+  colors = c("darkred", "white", "steelblue"),
+  title = "Overall Correlation Matrix - All Variables",
+  subtitle = "Pearson correlation coefficients with significance levels"
+)
+
+print("Overall correlation matrix generated")
+plot_corr_overall
+```
+
+## Step 3b: Layer-specific correlation matrices
+```{r}
+# Generate grouped correlation matrix by layer
+plot_corr_by_layer <- ggstatsplot::grouped_ggcorrmat(
+  data = df_corr_2_selected,
+  grouping.var = Layer,
+  matrix.type = "lower",
+  type = "parametric", # Use parametric for Pearson correlation
+  colors = c("darkred", "white", "steelblue"),
+  title.prefix = "Correlation Matrix",
+  subtitle.prefix = "Pearson correlations"
+)
+
+print("Layer-specific correlation matrices generated")
+plot_corr_by_layer
+```
+
+# References
+```{r}
+# ggstatsplot: Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach. Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
+# tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
+# here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
+```
