@@ -5,7 +5,8 @@ date: "2025-02-11"
 output: html_document
 ---
 
-## Version 2.0: Streamlined and hierarchical data structure - 11.02.2025 | JM  
+## Version 2.1: Updated version log format - 17.07.2025 | JM
+## Version 2.0: Streamlined and hierarchical data structure - 11.07.2025 | JM  
 ## Version 1.1: Adapted script to match pre-filtered data from SERC - 10.04.2025 | JM
 ## Version 1.0: Basic script with data loading - 11.02.2025 | JM
 ## Purpose: Process and summarize soil temperature data from experimental warming plots

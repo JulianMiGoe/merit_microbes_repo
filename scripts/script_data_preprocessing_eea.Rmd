@@ -5,6 +5,7 @@ date: "2024-08-06"
 output: html_document
 ---
 
+## Version 1.1: Updated version log format - 17.07.2025 | JM
 ## Version 1.0: EEA raw data processing routine - 11.02.2025 | JM
 ## Purpose: Process raw platereader data files into standardized EEA dataset
 

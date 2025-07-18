@@ -5,15 +5,15 @@ date: "2024-08-06"
 output: html_document
 ---
 
-## Version 2.0: EEA analysis routine - streamlined and cleaned - 11.02.2025 | JM
-## Version 1.1: EEA data processing routine - 11.02.2025 | JM  
-## Version 1.0: Basic function to load data from raw files - 08.06.2024 | JM
+## Version 2.1: EEA analysis routine - removed robustlmm and log-transformed analyses - 17.07.2025 | JM
+## Version 2.0: EEA analysis routine - streamlined and cleaned - 11.07.2025 | JM
+## Version 1.1: EEA data processing routine - 02.07.2025 | JM  
+## Version 1.0: Basic function to load data from raw files - 02.02.2024 | JM
 ## Purpose: Statistical analysis and visualization of extracellular enzyme activities
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
-#install.packages("car")
 #install.packages("emmeans")
 #install.packages("ggplot2")
 #install.packages("ggpmisc")
@@ -23,12 +23,10 @@ output: html_document
 #install.packages("lmerTest")
 #install.packages("performance")
 #install.packages("tidyverse")
-#install.packages("robustlmm")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(car)
 library(emmeans)
 library(ggplot2)
 library(ggpmisc)
@@ -38,7 +36,6 @@ library(lme4)
 library(lmerTest)
 library(performance)
 library(tidyverse)
-library(robustlmm)
 ```
 
 ## Step 1c: Define plot theme
@@ -385,27 +382,6 @@ qqplot_n <- df_eea_1_main %>%
 
 qqplot_c
 qqplot_n
-
-# Log transformation and re-test
-df_eea_1_main_log <- df_eea_1_main %>%
-  mutate(Activity_OM_log = log(Activity_OM + 1))
-
-print("=== NORMALITY TESTS AFTER LOG TRANSFORMATION ===")
-
-# Test log-transformed data
-eea_c_log_data <- df_eea_1_main_log %>% filter(Enzyme == "GLU", !is.na(Activity_OM_log))
-if(nrow(eea_c_log_data) <= 5000) {
-  shapiro_c_log <- shapiro.test(eea_c_log_data$Activity_OM_log)
-  print("Log-transformed carbon acquisition normality test:")
-  print(shapiro_c_log)
-}
-
-eea_n_log_data <- df_eea_1_main_log %>% filter(Enzyme %in% c("CHI", "LEU"), !is.na(Activity_OM_log))
-if(nrow(eea_n_log_data) <= 5000) {
-  shapiro_n_log <- shapiro.test(eea_n_log_data$Activity_OM_log)
-  print("Log-transformed nitrogen acquisition normality test:")
-  print(shapiro_n_log)
-}
 ```
 
 ## Step 5b: Mixed-effects models (factorial analysis)
@@ -442,125 +418,78 @@ print("Nitrogen acquisition:")
 anova(stat_model_N)
 ```
 
-## Step 5c: Log-transformed models
+## Step 5c: Pairwise comparisons using emmeans
 ```{r}
-# Log-transformed models
-print("=== LOG-TRANSFORMED MIXED-EFFECTS MODELS ===")
-
-stat_model_C_log <- lmer(log(Activity_OM + 1) ~ Zone * Treatment * Layer + (1|Plot/core_id), 
-                         data = df_eea_1_main %>% filter(Enzyme == "GLU"))
-
-stat_model_N_log <- lmer(log(Activity_OM + 1) ~ Zone * Treatment * Layer + (1|Plot/core_id), 
-                         data = df_eea_1_main %>% filter(Enzyme %in% c("LEU", "CHI")))
-
-# Test residual normality for log models
-print("Residual normality tests for log-transformed models:")
-shapiro.test(resid(stat_model_C_log))
-shapiro.test(resid(stat_model_N_log))
-
-# ANOVA results for log models
-print("=== ANOVA RESULTS - LOG-TRANSFORMED MODELS ===")
-print("Log-transformed carbon acquisition:")
-anova(stat_model_C_log)
-
-print("Log-transformed nitrogen acquisition:")
-anova(stat_model_N_log)
-```
-
-## Step 5d: Robust mixed-effects models
-```{r}
-# Robust linear mixed-effects models
-print("=== ROBUST LINEAR MIXED-EFFECTS MODELS ===")
-
-stat_model_C_robust <- rlmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), 
-                             data = df_eea_1_main %>% filter(Enzyme == "GLU"))
-
-stat_model_N_robust <- rlmer(Activity_OM ~ Zone * Treatment * Layer + (1|Plot/core_id), 
-                             data = df_eea_1_main %>% filter(Enzyme %in% c("LEU", "CHI")))
-
-# Model summaries
-print("Robust carbon acquisition model:")
-summary(stat_model_C_robust)
-
-print("Robust nitrogen acquisition model:")
-summary(stat_model_N_robust)
-
-# Note: Use summary() instead of anova() for robust models
-print("Use summary() results above for robust model interpretation")
-```
-
-## Step 5e: Pairwise comparisons using emmeans
-```{r}
-# Choose the best performing model (robust models recommended)
-print("=== PAIRWISE COMPARISONS - ROBUST MODELS ===")
+# Choose the standard lmer models for pairwise comparisons
+print("=== PAIRWISE COMPARISONS - STANDARD MODELS ===")
 
 # Main effects
 print("--- ZONE COMPARISONS ---")
-stat_C_zone_emm_robust <- emmeans(stat_model_C_robust, ~ Zone)
+stat_C_zone_emm <- emmeans(stat_model_C, ~ Zone)
 print("Carbon acquisition by Zone:")
-pairs(stat_C_zone_emm_robust)
+pairs(stat_C_zone_emm)
 
-stat_N_zone_emm_robust <- emmeans(stat_model_N_robust, ~ Zone)
+stat_N_zone_emm <- emmeans(stat_model_N, ~ Zone)
 print("Nitrogen acquisition by Zone:")
-pairs(stat_N_zone_emm_robust)
+pairs(stat_N_zone_emm)
 
 print("--- TREATMENT COMPARISONS ---")
-stat_C_treatment_emm_robust <- emmeans(stat_model_C_robust, ~ Treatment)
+stat_C_treatment_emm <- emmeans(stat_model_C, ~ Treatment)
 print("Carbon acquisition by Treatment:")
-pairs(stat_C_treatment_emm_robust)
+pairs(stat_C_treatment_emm)
 
-stat_N_treatment_emm_robust <- emmeans(stat_model_N_robust, ~ Treatment)
+stat_N_treatment_emm <- emmeans(stat_model_N, ~ Treatment)
 print("Nitrogen acquisition by Treatment:")
-pairs(stat_N_treatment_emm_robust)
+pairs(stat_N_treatment_emm)
 
 print("--- LAYER COMPARISONS ---")
-stat_C_layer_emm_robust <- emmeans(stat_model_C_robust, ~ Layer)
+stat_C_layer_emm <- emmeans(stat_model_C, ~ Layer)
 print("Carbon acquisition by Layer:")
-pairs(stat_C_layer_emm_robust)
+pairs(stat_C_layer_emm)
 
-stat_N_layer_emm_robust <- emmeans(stat_model_N_robust, ~ Layer)
+stat_N_layer_emm <- emmeans(stat_model_N, ~ Layer)
 print("Nitrogen acquisition by Layer:")
-pairs(stat_N_layer_emm_robust)
+pairs(stat_N_layer_emm)
 
 # Interaction effects
 print("--- ZONE x TREATMENT INTERACTIONS ---")
-stat_C_zone_treatment_emm_robust <- emmeans(stat_model_C_robust, ~ Zone | Treatment)
+stat_C_zone_treatment_emm <- emmeans(stat_model_C, ~ Zone | Treatment)
 print("Carbon acquisition Zone x Treatment:")
-pairs(stat_C_zone_treatment_emm_robust)
+pairs(stat_C_zone_treatment_emm)
 
-stat_N_zone_treatment_emm_robust <- emmeans(stat_model_N_robust, ~ Zone | Treatment)
+stat_N_zone_treatment_emm <- emmeans(stat_model_N, ~ Zone | Treatment)
 print("Nitrogen acquisition Zone x Treatment:")
-pairs(stat_N_zone_treatment_emm_robust)
+pairs(stat_N_zone_treatment_emm)
 
 print("--- ZONE x LAYER INTERACTIONS ---")
-stat_C_zone_layer_emm_robust <- emmeans(stat_model_C_robust, ~ Zone | Layer)
+stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone | Layer)
 print("Carbon acquisition Zone x Layer:")
-pairs(stat_C_zone_layer_emm_robust)
+pairs(stat_C_zone_layer_emm)
 
-stat_N_zone_layer_emm_robust <- emmeans(stat_model_N_robust, ~ Zone | Layer)
+stat_N_zone_layer_emm <- emmeans(stat_model_N, ~ Zone | Layer)
 print("Nitrogen acquisition Zone x Layer:")
-pairs(stat_N_zone_layer_emm_robust)
+pairs(stat_N_zone_layer_emm)
 
 print("--- TREATMENT x LAYER INTERACTIONS ---")
-stat_C_treatment_layer_emm_robust <- emmeans(stat_model_C_robust, ~ Treatment | Layer)
+stat_C_treatment_layer_emm <- emmeans(stat_model_C, ~ Treatment | Layer)
 print("Carbon acquisition Treatment x Layer:")
-pairs(stat_C_treatment_layer_emm_robust)
+pairs(stat_C_treatment_layer_emm)
 
-stat_N_treatment_layer_emm_robust <- emmeans(stat_model_N_robust, ~ Treatment | Layer)
+stat_N_treatment_layer_emm <- emmeans(stat_model_N, ~ Treatment | Layer)
 print("Nitrogen acquisition Treatment x Layer:")
-pairs(stat_N_treatment_layer_emm_robust)
+pairs(stat_N_treatment_layer_emm)
 
 print("--- THREE-WAY INTERACTIONS ---")
-stat_C_treatment_layer_zone_emm_robust <- emmeans(stat_model_C_robust, ~ Treatment | Layer | Zone)
+stat_C_treatment_layer_zone_emm <- emmeans(stat_model_C, ~ Treatment | Layer | Zone)
 print("Carbon acquisition Treatment x Layer x Zone:")
-pairs(stat_C_treatment_layer_zone_emm_robust)
+pairs(stat_C_treatment_layer_zone_emm)
 
-stat_N_treatment_layer_zone_emm_robust <- emmeans(stat_model_N_robust, ~ Treatment | Layer | Zone)
+stat_N_treatment_layer_zone_emm <- emmeans(stat_model_N, ~ Treatment | Layer | Zone)
 print("Nitrogen acquisition Treatment x Layer x Zone:")
-pairs(stat_N_treatment_layer_zone_emm_robust)
+pairs(stat_N_treatment_layer_zone_emm)
 ```
 
-## Step 5f: Regression analyses with environmental variables
+## Step 5d: Regression analyses with environmental variables
 ```{r}
 # Check if environmental variables are available
 if(!is.null(df_warming_1_monthly) && "Elevation_mean" %in% colnames(df_eea_4_final)) {
@@ -726,7 +655,6 @@ summary(df_eea_4_final[c("Activity_C", "Activity_N", "CN_ratio")])
 
 # References
 ```{r}
-# car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
 # ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # ggpmisc: Aphalo, P. J. (2024). ggpmisc: Miscellaneous Extensions to 'ggplot2'. R package version 0.5.5. https://CRAN.R-project.org/package=ggpmisc
@@ -735,6 +663,5 @@ summary(df_eea_4_final[c("Activity_C", "Activity_N", "CN_ratio")])
 # lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
 # lmerTest: Kuznetsova, A., Brockhoff, P. B., & Christensen, R. H. B. (2024). lmerTest: Tests in Linear Mixed Effects Models. R package version 3.1-3. https://CRAN.R-project.org/package=lmerTest
 # performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
-# robustlmm: Koller, M. (2024). robustlmm: Robust Linear Mixed Effects Models. R package version 3.3-1. https://CRAN.R-project.org/package=robustlmm
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```

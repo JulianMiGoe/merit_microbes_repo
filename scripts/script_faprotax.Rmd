@@ -5,20 +5,17 @@ date: "2025-01-31"
 output: html_document
 ---
 
+## Version 2.1: Updated version log format - 17.07.2025 | JM
 ## Version 2.0: Unified script structure, English comments, hierarchical naming - 31.01.2025 | JM
 ## Version 1.0: Basic script using FAPROTAX output table - 31.01.2025 | JM
 
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
-#install.packages("broom")
 #install.packages("dplyr")
-#install.packages("emmeans")
 #install.packages("ggplot2")
 #install.packages("ggh4x")
 #install.packages("here")
-#install.packages("multcompView")
-#install.packages("purrr")
 #install.packages("tidyverse")
 ```
 

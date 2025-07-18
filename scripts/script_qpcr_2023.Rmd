@@ -5,6 +5,7 @@ date: "2025-01-31"
 output: html_document
 ---
 
+## Version 2.1: Updated version log format - 17.07.2025 | JM
 ## Version 2.0: Unified script structure, English comments, hierarchical naming - 07.07.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
 
@@ -147,12 +148,12 @@ write.csv(df_eub_3_plot_summary, here("data", "qpcr", "df_qpcr_summary.csv"), ro
 
 # References
 ```{r}
-# car: Fox, J. & Weisberg, S. (2024). car: Companion to Applied Regression. R package version 3.1-2. https://CRAN.R-project.org/package=car
 # emmeans: Lenth, R. V. (2024). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.10.2. https://CRAN.R-project.org/package=emmeans
 # ggplot2: Wickham, H., Chang, W., Henry, L., Pedersen, T. L., Takahashi, K., Wilke, C., Woo, K., & Yutani, H. (2024). ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics. R package version 3.5.1. https://CRAN.R-project.org/package=ggplot2
 # ggpubr: Kassambara, A. (2024). ggpubr: 'ggplot2' Based Publication Ready Plots. R package version 0.6.0. https://CRAN.R-project.org/package=ggpubr
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
 # lme4: Bates, D., Mächler, M., Bolker, B., & Walker, S. (2024). lme4: Linear Mixed-Effects Models using 'Eigen' and S4. R package version 1.1-35. https://CRAN.R-project.org/package=lme4
+# performance: Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D. (2024). performance: Assessment of Regression Models Performance. R package version 0.10.8. https://CRAN.R-project.org/package=performance
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 ```
 

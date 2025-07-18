@@ -5,6 +5,7 @@ date: "2024-08-06"
 output: html_document
 ---
 
+## Version 1.1: Updated version log format - 17.07.2025 | JM
 ## Version 1.0: Correlation matrix analysis for MERIT variables - 11.02.2025 | JM
 ## Purpose: Generate correlation matrices for EEA, community, and environmental variables
 

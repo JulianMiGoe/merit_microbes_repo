@@ -5,6 +5,7 @@ date: "2025-01-31"
 output: html_document
 ---
 
+## Version 2.1: Updated version log format - 17.07.2025 | JM
 ## Version 2.0: Unified script structure, English comments, hierarchical naming - 07.07.2025 | JM
 ## Version 1.1: Streamlined script - 02.06.2025 | JM
 ## Version 1.0: Basic outline of the script - 24.04.2025 | JM
