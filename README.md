@@ -27,6 +27,9 @@ merit_microbes_repo/
 │   ├── eea/                      # Extracellular enzyme activity data
 │   │   ├── df_EEA_final.csv              # Processed EEA data
 │   │   ├── df_EEA_processed.csv          # Intermediate processed data
+│   │   ├── df_EEA_deviations.csv         # Deviations from ambient baseline (REVISION)
+│   │   ├── df_EEA_deviation_summary.csv  # Summary of deviation patterns (REVISION)
+│   │   ├── df_EEA_deviation_statistical_tests.csv  # Statistical test results (REVISION)
 │   │   └── raw/                          # Raw platereader files
 │   ├── elevation/                # Elevation measurements
 │   │   └── df_iris_elevation.txt         # Plot elevation data
@@ -151,11 +154,12 @@ All scripts follow a harmonized structure with:
 4. **Zone-specific functional profiles** related to salinity and flooding regimes  
 
 ### Generated Outputs
-- **Correlation matrix** of all measured variables  
-- **Community NMDS plots** showing environmental drivers  
+- **Comprehensive correlation matrix** of all measured variables  
+- **Community ordination plots** showing environmental drivers  
 - **Functional group heatmaps** for biogeochemical processes  
 - **Temperature response plots** for enzyme activities  
 - **Alpha diversity comparisons** across treatments and zones  
+- **Deviation plots (REVISION)**: Warming effects relative to ambient baseline with dashed zero lines  
 
 ## Usage Instructions
 1. Clone the repository
@@ -185,3 +189,38 @@ Julian Mittmann-Goetsch (julian.johannes.mittmann-goetsch@uni-hamburg.de)
 Institute of Plant Science and Microbiology, University of Hamburg
 
 ---
+
+## Revision History
+
+### September 12, 2025 - Major Revision
+**Reviewer Response**: Implemented deviation analysis to better highlight warming effects relative to ambient baseline
+
+**Changes Made:**
+1. **script_eea.Rmd**: Added Step 8 (Revision section) with:
+   - Deviation calculations from ambient baseline
+   - Deviation bar plots showing warming treatment effects relative to control (ambient = 0)
+   - Percent change plots showing relative warming effects
+   - Statistical tests (one-sample t-tests) comparing warming treatments to baseline
+   - Standard error calculations and error bars for all plots
+   - Significance indicators (*) on plots for p < 0.05
+   - Corrected layer ordering (Topsoil above Subsoil)
+   - Removed titles and subtitles from plots for cleaner presentation
+   - Export of deviation datasets for further analysis
+   
+2. **New Output Files:**
+   - `data/eea/df_EEA_deviations.csv`: Complete deviation dataset
+   - `data/eea/df_EEA_deviation_summary.csv`: Summary statistics by zone
+   - `data/eea/df_EEA_deviation_statistical_tests.csv`: Statistical test results with p-values
+   
+3. **Visualization Improvements:**
+   - Deviation plots with dashed zero line representing ambient control
+   - Proper standard error bars calculated and displayed
+   - Statistical significance indicators (* for p < 0.05)
+   - Separate plots for +1.5°C and +3.0°C treatments showing positive/negative warming effects
+   - Enhanced interpretation of zone-specific warming responses
+   - Clean presentation without distracting titles/subtitles
+   
+**Rationale**: These changes address reviewer feedback to present enzyme activities as deviations from ambient baseline rather than absolute values, making warming effects more immediately apparent and supporting the interpretation that hydrology masks warming effects except in specific zones (high marsh).
+
+*Repository last updated: September 12, 2025*  
+*Current revision addresses reviewer feedback on visualization approach*
