@@ -12,14 +12,14 @@ output: html_document
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
-#install.packages("ggstatsplot")
+#install.packages("corrplot")
 #install.packages("tidyverse")
 #install.packages("here")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(ggstatsplot)
+library(corrplot)
 library(tidyverse)
 library(here)
 ```
@@ -177,40 +177,58 @@ print(paste("Final dataset dimensions:", nrow(df_corr_2_selected), "rows x", nco
 df_corr_overall <- df_corr_2_selected %>%
   select(-Layer)
 
-# Generate overall correlation matrix
-plot_corr_overall <- ggstatsplot::ggcorrmat(
-  data = df_corr_overall,
-  matrix.type = "lower",
-  type = "parametric", # Use parametric for Pearson correlation
-  colors = c("darkred", "white", "steelblue"),
-  title = "Overall Correlation Matrix - All Variables",
-  subtitle = "Pearson correlation coefficients with significance levels"
-)
+# Calculate correlation matrix
+cor_matrix <- cor(df_corr_overall, use = "complete.obs")
+
+# Create correlation plot
+corrplot(cor_matrix, 
+         method = "color",
+         type = "lower",
+         order = "hclust",
+         col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+         tl.col = "black", 
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.8,
+         title = "Overall Correlation Matrix - All Variables",
+         mar = c(0,0,1,0))
 
 print("Overall correlation matrix generated")
-plot_corr_overall
 ```
 
 ## Step 3b: Layer-specific correlation matrices
 ```{r}
-# Generate grouped correlation matrix by layer
-plot_corr_by_layer <- ggstatsplot::grouped_ggcorrmat(
-  data = df_corr_2_selected,
-  grouping.var = Layer,
-  matrix.type = "lower",
-  type = "parametric", # Use parametric for Pearson correlation
-  colors = c("darkred", "white", "steelblue"),
-  title.prefix = "Correlation Matrix",
-  subtitle.prefix = "Pearson correlations"
-)
+# Split data by layer and create separate correlation matrices
+layers <- unique(df_corr_2_selected$Layer)
+
+for(layer in layers) {
+  layer_data <- df_corr_2_selected %>%
+    filter(Layer == layer) %>%
+    select(-Layer)
+  
+  if(ncol(layer_data) > 1) {
+    cor_matrix_layer <- cor(layer_data, use = "complete.obs")
+    
+    corrplot(cor_matrix_layer, 
+             method = "color",
+             type = "lower",
+             order = "hclust",
+             col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+             tl.col = "black", 
+             tl.srt = 45,
+             addCoef.col = "black",
+             number.cex = 0.8,
+             title = paste("Correlation Matrix -", layer),
+             mar = c(0,0,1,0))
+  }
+}
 
 print("Layer-specific correlation matrices generated")
-plot_corr_by_layer
 ```
 
 # References
 ```{r}
-# ggstatsplot: Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach. Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
+# corrplot: Wei, T. and Simko, V. (2021). R package 'corrplot': Visualization of a Correlation Matrix. R package version 0.92. https://CRAN.R-project.org/package=corrplot
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
 ```
@@ -221,18 +239,59 @@ plot_corr_by_layer
 
 ## Step 4: Comprehensive summary table by Zone, Treatment, and Layer
 ```{r}
+# Debug: Check what variables are available
+vars_to_summarise <- c(
+  "Carbon acquisition",
+  "Nitrogen acquisition",
+  "Microbial abundance",
+  "Alpha diversity",
+  "Soil temperature",
+  "Marsh surface elevation",
+  "Reduction index"
+)
+
 df_corr_3_summary_table <- df_corr_1_base %>%
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Treatment = factor(Treatment, levels = c("ambient", "+1.5°C", "+3.0°C")),
- 
+  select(
+    Layer,
+    Zone,
+    Treatment,
+    "Carbon acquisition" = Activity_C,
+    "Nitrogen acquisition" = Activity_N,
+    "Microbial abundance" = Abundance, # qPCR
+    "Alpha diversity" = alpha_diversity, # ggf. anpassen!
+    "Soil temperature" = pinTemp_mean,
+    "Marsh surface elevation" = Elevation_mean,
+    "Reduction index" = ri
   ) %>%
-  group_by(Zone, Treatment, Layer) %>%
+  # Remove rows with all NA values for numeric variables
+  filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na)) %>%
+   group_by(Zone, Treatment, Layer) %>%
   summarise(
-    across(where(is.numeric), list(mean = ~mean(.x, na.rm = TRUE), 
-                                   se = ~sd(.x, na.rm = TRUE)/sqrt(sum(!is.na(.x))))),
+    across(any_of(vars_to_summarise), list(mean = ~mean(.x, na.rm = TRUE), 
+                                            se = ~sd(.x, na.rm = TRUE)/sqrt(sum(!is.na(.x))))),
     .groups = "drop"
   )
+
+df_corr_3_summary_table_Zone <- df_corr_1_base %>%
+  select(
+    Zone,
+    "Carbon acquisition" = Activity_C,
+    "Nitrogen acquisition" = Activity_N,
+    "Microbial abundance" = Abundance, # qPCR
+    "Alpha diversity" = alpha_diversity, # ggf. anpassen!
+    "Soil temperature" = pinTemp_mean,
+    "Marsh surface elevation" = Elevation_mean,
+    "Reduction index" = ri
+  ) %>%
+  # Remove rows with all NA values for numeric variables
+  filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na)) %>%
+   group_by(Zone) %>%
+  summarise(
+    across(any_of(vars_to_summarise), list(mean = ~mean(.x, na.rm = TRUE), 
+                                            se = ~sd(.x, na.rm = TRUE)/sqrt(sum(!is.na(.x))))),
+    .groups = "drop"
+  )
+
 
 write.csv(df_corr_3_summary_table, here("tables", "comprehensive_summary_all_variables.csv"), row.names = FALSE)
 ```
