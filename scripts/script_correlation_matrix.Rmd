@@ -311,14 +311,6 @@ write.csv(df_corr_3_summary_table, here("tables", "comprehensive_summary_all_var
    - Microbial metrics: Bacterial abundance (qPCR), Alpha diversity (Shannon)
    - Environmental variables: Soil temperature, Elevation, Reduction index
 
-3. **Output Files Generated:**
-   - `tables/comprehensive_summary_all_variables.csv`: Complete numeric summary
-   - `tables/comprehensive_summary_formatted.csv`: Formatted with mean ± SE notation
-
-4. **Statistical Framework:**
-   - Grouped by experimental design factors (Zone × Treatment × Layer)
-   - Standard error calculations for all variables
-   - Proper factor level ordering for consistent presentation
 
 **Rationale**: Provides comprehensive overview of all measured variables across the experimental design for manuscript tables and supplementary materials.
 
