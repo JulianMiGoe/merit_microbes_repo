@@ -192,35 +192,36 @@ Institute of Plant Science and Microbiology, University of Hamburg
 
 ## Revision History
 
-### September 12, 2025 - Major Revision
-**Reviewer Response**: Implemented deviation analysis to better highlight warming effects relative to ambient baseline
+### September 15, 2025 - Major Revision
+**Reviewer Response**: Enhanced statistical analysis and visualization consistency across multiple analyses
 
 **Changes Made:**
-1. **script_eea.Rmd**: Added Step 8 (Revision section) with:
-   - Deviation calculations from ambient baseline
-   - Deviation bar plots showing warming treatment effects relative to control (ambient = 0)
-   - Percent change plots showing relative warming effects
-   - Statistical tests (one-sample t-tests) comparing warming treatments to baseline
-   - Standard error calculations and error bars for all plots
-   - Significance indicators (*) on plots for p < 0.05
-   - Corrected layer ordering (Topsoil above Subsoil)
-   - Removed titles and subtitles from plots for cleaner presentation
-   - Export of deviation datasets for further analysis
-   
-2. **New Output Files:**
+
+1. **script_eea.Rmd**: Enhanced deviation analysis with:
+   - Deviation plots showing warming effects relative to ambient baseline (ambient = 0)
+   - Fixed y-axis scaling (-500 to +500) for consistent comparison across panels
+   - Statistical significance indicators (*) positioned at y = 400 for visibility
+   - Enhanced statistical framework with plot-level calculations and proper standard errors
+   - One-sample t-tests comparing treatments against baseline (p < 0.05 threshold)
+
+2. **script_qpcr_2023.Rmd**: Added comprehensive visualization suite:
+   - Bacterial abundance plots matching EEA figure styling and color scheme
+   - Boxplots with jitter points and summary bar plots with error bars
+   - Consistent theme_JM application and scientific notation formatting
+   - Two-panel layout (A/B) with shared legend for manuscript consistency
+
+3. **script_correlation_matrix.Rmd**: Added comprehensive summary table generation:
+   - Created detailed summary statistics grouped by Zone, Treatment, and Layer
+   - Includes all measured variables: EEA activities, microbial abundance, alpha diversity, environmental parameters
+   - Generates both numeric and formatted (mean ± SE) output tables for manuscript use
+
+**New Output Files:**
    - `data/eea/df_EEA_deviations.csv`: Complete deviation dataset
    - `data/eea/df_EEA_deviation_summary.csv`: Summary statistics by zone
-   - `data/eea/df_EEA_deviation_statistical_tests.csv`: Statistical test results with p-values
-   
-3. **Visualization Improvements:**
-   - Deviation plots with dashed zero line representing ambient control
-   - Proper standard error bars calculated and displayed
-   - Statistical significance indicators (* for p < 0.05)
-   - Separate plots for +1.5°C and +3.0°C treatments showing positive/negative warming effects
-   - Enhanced interpretation of zone-specific warming responses
-   - Clean presentation without distracting titles/subtitles
-   
-**Rationale**: These changes address reviewer feedback to present enzyme activities as deviations from ambient baseline rather than absolute values, making warming effects more immediately apparent and supporting the interpretation that hydrology masks warming effects except in specific zones (high marsh).
+   - `data/eea/df_EEA_deviation_statistical_tests.csv`: Statistical test results
+   - `tables/comprehensive_summary_all_variables.csv`: Numeric summary of all variables
+   - `tables/comprehensive_summary_formatted.csv`: Formatted summary with mean ± SE
 
-*Repository last updated: September 12, 2025*  
-*Current revision addresses reviewer feedback on visualization approach*
+**Rationale**: These changes ensure consistent visualization standards across all analyses and enhance the presentation of warming effects through deviation-based analysis with proper statistical interpretation.
+
+*Repository last updated: September 15, 2025*

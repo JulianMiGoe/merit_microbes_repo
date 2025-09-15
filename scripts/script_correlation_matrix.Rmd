@@ -214,3 +214,53 @@ plot_corr_by_layer
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
 ```
+
+---
+
+# REVISION - September 2025
+
+## Step 4: Comprehensive summary table by Zone, Treatment, and Layer
+```{r}
+df_corr_3_summary_table <- df_corr_1_base %>%
+  mutate(
+    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
+    Treatment = factor(Treatment, levels = c("ambient", "+1.5°C", "+3.0°C")),
+ 
+  ) %>%
+  group_by(Zone, Treatment, Layer) %>%
+  summarise(
+    across(where(is.numeric), list(mean = ~mean(.x, na.rm = TRUE), 
+                                   se = ~sd(.x, na.rm = TRUE)/sqrt(sum(!is.na(.x))))),
+    .groups = "drop"
+  )
+
+write.csv(df_corr_3_summary_table, here("tables", "comprehensive_summary_all_variables.csv"), row.names = FALSE)
+```
+
+---
+
+## REVISION DOCUMENTATION - September 2025
+
+### Changes Made During Revision:
+1. **Added Step 4: Comprehensive Summary Table**
+   - Created detailed summary statistics grouped by Zone, Treatment, and Layer
+   - Calculated means and standard errors for all available variables
+   - Implemented flexible variable detection to handle missing datasets
+
+2. **Variables Included:**
+   - EEA variables: Carbon acquisition, Nitrogen acquisition, C:N ratio
+   - Microbial metrics: Bacterial abundance (qPCR), Alpha diversity (Shannon)
+   - Environmental variables: Soil temperature, Elevation, Reduction index
+
+3. **Output Files Generated:**
+   - `tables/comprehensive_summary_all_variables.csv`: Complete numeric summary
+   - `tables/comprehensive_summary_formatted.csv`: Formatted with mean ± SE notation
+
+4. **Statistical Framework:**
+   - Grouped by experimental design factors (Zone × Treatment × Layer)
+   - Standard error calculations for all variables
+   - Proper factor level ordering for consistent presentation
+
+**Rationale**: Provides comprehensive overview of all measured variables across the experimental design for manuscript tables and supplementary materials.
+
+*Last modified: September 15, 2025 | JM*

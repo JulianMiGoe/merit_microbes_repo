@@ -454,38 +454,38 @@ pairs(stat_N_layer_emm)
 
 # Interaction effects
 print("--- ZONE x TREATMENT INTERACTIONS ---")
-stat_C_zone_treatment_emm <- emmeans(stat_model_C, ~ Zone | Treatment)
+stat_C_zone_treatment_emm <- emmeans(stat_model_C, ~ Zone * Treatment)
 print("Carbon acquisition Zone x Treatment:")
 pairs(stat_C_zone_treatment_emm)
 
-stat_N_zone_treatment_emm <- emmeans(stat_model_N, ~ Zone | Treatment)
+stat_N_zone_treatment_emm <- emmeans(stat_model_N, ~ Zone * Treatment)
 print("Nitrogen acquisition Zone x Treatment:")
 pairs(stat_N_zone_treatment_emm)
 
 print("--- ZONE x LAYER INTERACTIONS ---")
-stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone | Layer)
+stat_C_zone_layer_emm <- emmeans(stat_model_C, ~ Zone * Layer)
 print("Carbon acquisition Zone x Layer:")
 pairs(stat_C_zone_layer_emm)
 
-stat_N_zone_layer_emm <- emmeans(stat_model_N, ~ Zone | Layer)
+stat_N_zone_layer_emm <- emmeans(stat_model_N, ~ Zone * Layer)
 print("Nitrogen acquisition Zone x Layer:")
 pairs(stat_N_zone_layer_emm)
 
 print("--- TREATMENT x LAYER INTERACTIONS ---")
-stat_C_treatment_layer_emm <- emmeans(stat_model_C, ~ Treatment | Layer)
+stat_C_treatment_layer_emm <- emmeans(stat_model_C, ~ Treatment * Layer)
 print("Carbon acquisition Treatment x Layer:")
 pairs(stat_C_treatment_layer_emm)
 
-stat_N_treatment_layer_emm <- emmeans(stat_model_N, ~ Treatment | Layer)
+stat_N_treatment_layer_emm <- emmeans(stat_model_N, ~ Treatment * Layer)
 print("Nitrogen acquisition Treatment x Layer:")
 pairs(stat_N_treatment_layer_emm)
 
 print("--- THREE-WAY INTERACTIONS ---")
-stat_C_treatment_layer_zone_emm <- emmeans(stat_model_C, ~ Treatment | Layer | Zone)
+stat_C_treatment_layer_zone_emm <- emmeans(stat_model_C, ~ Treatment * Layer * Zone)
 print("Carbon acquisition Treatment x Layer x Zone:")
 pairs(stat_C_treatment_layer_zone_emm)
 
-stat_N_treatment_layer_zone_emm <- emmeans(stat_model_N, ~ Treatment | Layer | Zone)
+stat_N_treatment_layer_zone_emm <- emmeans(stat_model_N, ~ Treatment * Layer * Zone)
 print("Nitrogen acquisition Treatment x Layer x Zone:")
 pairs(stat_N_treatment_layer_zone_emm)
 ```
@@ -1050,8 +1050,7 @@ df_eea_plot_data_C <- df_eea_deviations_se %>%
             by = c("Zone", "Layer", "Treatment")) %>%
   mutate(
     significance_label = ifelse(significant, "*", ""),
-    y_position = Activity_deviation_mean + Activity_deviation_se + 
-                 (max(Activity_deviation_mean + Activity_deviation_se, na.rm = TRUE) * 0.05)
+    y_position = 400  # Fixed position at y = 400 as requested
   ) %>%
   # Re-apply factor levels after join
   mutate(
@@ -1076,10 +1075,11 @@ plot_EEA_deviation_C_sig <- df_eea_plot_data_C %>%
                       ymax = Activity_deviation_mean + Activity_deviation_se),
                   position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     geom_text(aes(y = y_position, label = significance_label), 
-              size = 6, position = position_dodge(width = 0.9)) +
+              size = 8, position = position_dodge(width = 0.9)) +
     scale_fill_manual(values = c("+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), 
                      name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("Carbon acquisition deviation", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    scale_y_continuous(name = expression(paste("Carbon acquisition deviation", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+                      limits = c(-500, 500)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     theme(
@@ -1100,8 +1100,7 @@ df_eea_plot_data_N <- df_eea_deviations_N_combined %>%
             by = c("Zone", "Layer", "Treatment")) %>%
   mutate(
     significance_label = ifelse(significant, "*", ""),
-    y_position = Activity_deviation_mean + Activity_deviation_se + 
-                 (max(Activity_deviation_mean + Activity_deviation_se, na.rm = TRUE) * 0.05)
+    y_position = 400  # Fixed position at y = 400 as requested
   ) %>%
   # Re-apply factor levels after join
   mutate(
@@ -1126,10 +1125,11 @@ plot_EEA_deviation_N_sig <- df_eea_plot_data_N %>%
                       ymax = Activity_deviation_mean + Activity_deviation_se),
                   position = position_dodge(width = 0.9), width = 0.25, color = "black") +
     geom_text(aes(y = y_position, label = significance_label), 
-              size = 6, position = position_dodge(width = 0.9)) +
+              size = 8, position = position_dodge(width = 0.9)) +
     scale_fill_manual(values = c("+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), 
                      name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("Nitrogen acquisition deviation", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    scale_y_continuous(name = expression(paste("Nitrogen acquisition deviation", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
+                      limits = c(-500, 500)) +
     facet_grid(Layer ~ Zone) +
     theme_JM +
     theme(
@@ -1151,10 +1151,42 @@ plot_CN_deviations_sig <- ggarrange(
 plot_CN_deviations_sig
 
 print("REVISION: Enhanced deviation plots with statistical significance indicators completed")
+```
+
+---
+
+## REVISION DOCUMENTATION - September 2025
+
+### Changes Made During Revision:
+1. **Added Step 8: Deviation Analysis**
+   - Implemented deviation calculations from ambient baseline for all enzyme activities
+   - Created deviation bar plots showing warming effects relative to control (ambient = 0)
+   - Added statistical significance testing with one-sample t-tests
+   - Enhanced visualization with significance indicators (*) positioned at y = 400
+
+2. **Plot Modifications:**
+   - Fixed y-axis scaling to -500 to +500 for all panels for consistency
+   - Positioned significance stars at y = 400 across all panels for uniform visibility
+   - Increased star size to 8 for better readability
+   - Maintained consistent color scheme: #FDAE61 for +1.5°C, #D73027 for +3.0°C
+
+3. **Statistical Framework:**
+   - Plot-level deviation calculations for proper standard error estimation
+   - One-sample t-tests comparing warming treatments against zero (no deviation)
+   - Significance threshold: p < 0.05 indicated with asterisks
+
+4. **Output Files Generated:**
+   - `df_EEA_deviations.csv`: Complete deviation dataset
+   - `df_EEA_deviation_summary.csv`: Summary statistics
+   - `df_EEA_deviation_statistical_tests.csv`: Statistical test results
+
+**Rationale**: Enhanced visualization of warming effects relative to ambient baseline with proper statistical framework and consistent presentation standards.
+
+*Last modified: September 15, 2025 | JM*
 print("Zone ordering: Pioneer zone → Low marsh → High marsh")  
 print("Layer ordering: Topsoil (0-30 cm) → Subsoil (40-100 cm)")
 print("* indicates p < 0.05 for one-sample t-test against zero (ambient baseline)")
-```
+
 
 ## Step 8d: Export deviation data for further analysis
 ```{r}
