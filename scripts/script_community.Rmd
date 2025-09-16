@@ -74,6 +74,9 @@ df_tab_fam_0_raw <- read.csv("./data/rna/taxa_sum_Family.csv", dec = ".", sep = 
 # Load elevation data
 df_elevation_0_raw <- read.delim("./data/elevation/df_iris_elevation.txt", dec = ".", sep= "\t")
 
+# Load IRIS reduction index data
+df_iris_0_summary <- read.csv("./data/iris/df_iris_summary.csv", dec = ".", sep = ",")
+
 # Load external warming data (generated with script_warming_data_2022.Rmd)
 df_warming_monthly_0_raw <- read.csv("./scripts/df_warming_all_2022_monthly.csv", dec = ".", sep = ",")
 df_warming_weekly_0_raw <- read.csv("./scripts/df_warming_all_2022_weekly.csv", dec = ".", sep = ",")
@@ -466,7 +469,7 @@ df_bray_curtis_topsoil_2_merged <- df_bray_curtis_topsoil_1_processed %>%
   left_join(df_metadata_0_raw, by = c("comparison" = "sample_name")) %>%
   dplyr::rename(plotid2 = Plot, depth2 = Depth, zone2 = Zone) %>%
   filter(depth1 == depth2) %>%
-  select(sample_name, comparison, depth1, depth2, plotid1, plotid2, zone1, zone2, BrayCurtisDissimilarity)
+  dplyr::select(sample_name, comparison, depth1, depth2, plotid1, plotid2, zone1, zone2, BrayCurtisDissimilarity)
 
 # Merge with metadata for subsoil
 df_bray_curtis_subsoil_2_merged <- df_bray_curtis_subsoil_1_processed %>%
@@ -475,7 +478,7 @@ df_bray_curtis_subsoil_2_merged <- df_bray_curtis_subsoil_1_processed %>%
   left_join(df_metadata_0_raw, by = c("comparison" = "sample_name")) %>%
   dplyr::rename(plotid2 = Plot, depth2 = Depth, zone2 = Zone) %>%
   filter(depth1 == depth2) %>%
-  select(sample_name, comparison, depth1, depth2, plotid1, plotid2, zone1, zone2, BrayCurtisDissimilarity)
+  dplyr::select(sample_name, comparison, depth1, depth2, plotid1, plotid2, zone1, zone2, BrayCurtisDissimilarity)
 ```
 
 
@@ -498,7 +501,7 @@ df_warming_delta_1_processed <- df_plot_pairs_1_processed %>%
     delta_pinTemp = abs(pinTemp1 - pinTemp2),
     delta_deepTemp = abs(deepTemp1 - deepTemp2)
   ) %>%
-  select(plotid1, plotid2, delta_surfaceTemp, delta_pinTemp, delta_deepTemp)
+  dplyr::select(plotid1, plotid2, delta_surfaceTemp, delta_pinTemp, delta_deepTemp)
 
 df_warming_delta_1_processed$plotid1 <- as.factor(df_warming_delta_1_processed$plotid1)
 df_warming_delta_1_processed$plotid2 <- as.factor(df_warming_delta_1_processed$plotid2)
@@ -525,13 +528,20 @@ df_elevation_delta_1_processed <- df_plot_pairs_elevation_1_processed %>%
   left_join(df_elevation_mean_1_processed, by = c("plotid2" = "Plot")) %>%
   dplyr::rename(elevation2 = elevation_mean) %>%
   mutate(delta_elevation = abs(elevation1 - elevation2)) %>%
-  select(plotid1, plotid2, delta_elevation)
+  dplyr::select(plotid1, plotid2, delta_elevation)
 
 df_elevation_delta_1_processed$plotid1 <- as.factor(df_elevation_delta_1_processed$plotid1)
 df_elevation_delta_1_processed$plotid2 <- as.factor(df_elevation_delta_1_processed$plotid2)
 ```
 
-## Step 6d: Merge environmental data with community dissimilarities
+## Step 6d: Calculate reduction index deltas between plots
+```{r}
+# Calculate mean reduction index per plot and layer
+df_ri_mean_1_processed <- df_iris_0_summary %>%
+  mutate(Plot = as.character(Plot)) %>%
+  dplyr::select(Plot, Layer, ri)
+
+## Step 6e: Merge environmental data with community dissimilarities
 ```{r}
 # Merge topsoil dissimilarities with temperature data
 df_bray_curtis_topsoil_2_merged$plotid1 <- as.factor(df_bray_curtis_topsoil_2_merged$plotid1)
@@ -550,13 +560,13 @@ df_bray_delta_topsoil_1_processed <- df_bray_curtis_topsoil_2_merged %>%
     delta_pinTemp = coalesce(delta_pinTemp, delta_pinTemp_rev),
     delta_deepTemp = coalesce(delta_deepTemp, delta_deepTemp_rev)
   ) %>%
-  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, 
+  dplyr::select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, 
          delta_deepTemp, delta_pinTemp, delta_surfaceTemp, zone1, zone2) %>%
   rowwise() %>%
   mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
   ungroup() %>%
   distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
-  select(-sorted_plotids)
+  dplyr::select(-sorted_plotids)
 
 # Merge subsoil dissimilarities with temperature data
 df_bray_delta_subsoil_1_processed <- df_bray_curtis_subsoil_2_merged %>%
@@ -568,13 +578,13 @@ df_bray_delta_subsoil_1_processed <- df_bray_curtis_subsoil_2_merged %>%
     delta_pinTemp = coalesce(delta_pinTemp, delta_pinTemp_rev),
     delta_deepTemp = coalesce(delta_deepTemp, delta_deepTemp_rev)
   ) %>%
-  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, 
+  dplyr::select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, 
          delta_deepTemp, delta_pinTemp, delta_surfaceTemp, zone1, zone2) %>%
   rowwise() %>%
   mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
   ungroup() %>%
   distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
-  select(-sorted_plotids)
+  dplyr::select(-sorted_plotids)
 
 # Merge with elevation data for topsoil
 df_bray_delta_topsoil_elevation_1_processed <- df_bray_curtis_topsoil_2_merged %>%
@@ -582,12 +592,12 @@ df_bray_delta_topsoil_elevation_1_processed <- df_bray_curtis_topsoil_2_merged %
   left_join(df_elevation_delta_1_processed, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), 
            suffix = c("", "_rev")) %>%
   mutate(delta_elevation = coalesce(delta_elevation, delta_elevation_rev)) %>%
-  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_elevation, zone1, zone2) %>%
+  dplyr::select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_elevation, zone1, zone2) %>%
   rowwise() %>%
   mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
   ungroup() %>%
   distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
-  select(-sorted_plotids)
+  dplyr::select(-sorted_plotids)
 
 # Merge with elevation data for subsoil
 df_bray_delta_subsoil_elevation_1_processed <- df_bray_curtis_subsoil_2_merged %>%
@@ -595,15 +605,14 @@ df_bray_delta_subsoil_elevation_1_processed <- df_bray_curtis_subsoil_2_merged %
   left_join(df_elevation_delta_1_processed, by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), 
            suffix = c("", "_rev")) %>%
   mutate(delta_elevation = coalesce(delta_elevation, delta_elevation_rev)) %>%
-  select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_elevation, zone1, zone2) %>%
+  dplyr::select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_elevation, zone1, zone2) %>%
   rowwise() %>%
   mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
   ungroup() %>%
   distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
-  select(-sorted_plotids)
-```
+  dplyr::select(-sorted_plotids)
 
-## Step 6e: Environmental dissimilarity plots and statistics
+## Step 6f: Environmental dissimilarity plots and statistics
 ```{r}
 # Temperature dissimilarity plots for topsoil
 plot_bray_delta_topsoil_surface_2_final <- df_bray_delta_topsoil_1_processed %>%
@@ -725,6 +734,168 @@ plot_temperature_combined_2_final
 plot_elevation_combined_2_final
 ```
 
+## Step 6g: Alternative RI analysis with different data structure
+```{r}
+# Calculate mean ri per plot and layer
+# (Assumes df_iris is already loaded with columns: plotid, Layer, ri)
+df_ri_mean <- df_iris_0_summary %>%
+  group_by(Plot, Layer) %>%
+  summarise(ri_mean = mean(ri, na.rm = TRUE), .groups = "drop") %>%
+  dplyr::rename(plotid = Plot)
+
+# Calculate all pairwise deltas for ri
+ri_pairs <- combn(unique(df_ri_mean$plotid), 2)
+df_ri_delta <- tibble(
+  plotid1 = ri_pairs[1,],
+  plotid2 = ri_pairs[2,]
+) %>%
+  left_join(df_ri_mean, by = c("plotid1" = "plotid")) %>%
+  dplyr::rename(ri1 = ri_mean, Layer1 = Layer) %>%
+  left_join(df_ri_mean, by = c("plotid2" = "plotid", "Layer1" = "Layer")) %>%
+  dplyr::rename(ri2 = ri_mean, Layer = Layer1) %>%
+  mutate(delta_ri = abs(ri1 - ri2)) %>%
+  dplyr::select(plotid1, plotid2, Layer, delta_ri)
+df_ri_delta$plotid1 <- as.factor(df_ri_delta$plotid1)
+df_ri_delta$plotid2 <- as.factor(df_ri_delta$plotid2)
+
+# Merge delta_ri with Bray-Curtis for top-soil
+if (exists("df_bray_curtis_topsoil_2_merged")) {
+  df_bray_delta_top_ri <- df_bray_curtis_topsoil_2_merged %>%
+    left_join(df_ri_delta %>% filter(Layer == "Topsoil\n(0-30 cm)"), by = c("plotid1", "plotid2")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Topsoil\n(0-30 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+    mutate(delta_ri = coalesce(delta_ri, delta_ri_rev)) %>%
+    dplyr::select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_ri, everything(), -ends_with("_rev")) %>%
+    rowwise() %>%
+    mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
+    ungroup() %>%
+    distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+    dplyr::select(-sorted_plotids)
+} else {
+  df_bray_delta_top_ri <- NULL
+}
+
+# Merge delta_ri with Bray-Curtis for bottom-soil
+if (exists("df_bray_curtis_subsoil_2_merged")) {
+  df_bray_delta_bottom_ri <- df_bray_curtis_subsoil_2_merged %>%
+    left_join(df_ri_delta %>% filter(Layer == "Subsoil\n(40-100 cm)"), by = c("plotid1", "plotid2")) %>%
+    left_join(df_ri_delta %>% filter(Layer == "Subsoil\n(40-100 cm)"), by = c("plotid2" = "plotid1", "plotid1" = "plotid2"), suffix = c("", "_rev")) %>%
+    mutate(delta_ri = coalesce(delta_ri, delta_ri_rev)) %>%
+    dplyr::select(sample_name, comparison, plotid1, plotid2, BrayCurtisDissimilarity, delta_ri, everything(), -ends_with("_rev")) %>%
+    rowwise() %>%
+    mutate(sorted_plotids = paste(sort(c(plotid1, plotid2)), collapse = "_")) %>%
+    ungroup() %>%
+    distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
+    dplyr::select(-sorted_plotids)
+} else {
+  df_bray_delta_bottom_ri <- NULL
+}
+
+# Plot for top-soil
+if (!is.null(df_bray_delta_top_ri)) {
+  plot_bray_delta_top_ri <- df_bray_delta_top_ri %>%
+    ggplot(aes(x = delta_ri, y = BrayCurtisDissimilarity)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+                 label.x = "left", label.y = 0.1,
+                 formula = y ~ x, parse = TRUE, coef.digits = 3) +
+    theme_JM +
+    xlab("Delta reduction index") +
+    ylab("Dissimilarity") +
+    ggtitle("Top-soil (0-30 cm)")
+} else {
+  plot_bray_delta_top_ri <- NULL
+}
+
+# Plot for bottom-soil (remove regression line - not significant)
+if (!is.null(df_bray_delta_bottom_ri)) {
+  plot_bray_delta_bottom_ri <- df_bray_delta_bottom_ri %>%
+    ggplot(aes(x = delta_ri, y = BrayCurtisDissimilarity)) +
+    geom_point() +
+    theme_JM +
+    xlab("Delta reduction index") +
+    ylab("Dissimilarity") +
+    ggtitle("Bottom-soil (40-100 cm)")
+} else {
+  plot_bray_delta_bottom_ri <- NULL
+}
+
+# Arrange both panels
+if (!is.null(plot_bray_delta_top_ri) & !is.null(plot_bray_delta_bottom_ri)) {
+  ggarrange(plot_bray_delta_top_ri, plot_bray_delta_bottom_ri, ncol = 1, nrow = 2)
+}
+```
+
+## Step 6h: Combined plot with elevation and temperature plots
+```{r}
+# Plot dissimilarities & elevation + statistics (updated)
+plot_bray_delta_top_elevation <- df_bray_delta_topsoil_elevation_1_processed %>%
+  ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta elevation [cm]") +
+  ylab("Dissimilarity") +
+  ggtitle("Top-soil (0-30 cm)")
+
+plot_bray_delta_bottom_elevation <- df_bray_delta_subsoil_elevation_1_processed %>%
+  ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~")),
+               label.x = "left", label.y = 0.1,
+               formula = y ~ x, parse = TRUE, coef.digits = 3) +
+  theme_JM +
+  xlab("Delta elevation [cm]") +
+  ylab("Dissimilarity") +
+  ggtitle("Bottom-soil (40-100 cm)")
+
+# Get temperature plots (remove regression lines - not significant)
+# Create new temperature plots without regression lines
+plot_bray_delta_top_pin <- df_bray_delta_topsoil_1_processed %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_pinTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  theme_JM + 
+  xlab("Delta pin temperature [°C]") +
+  ylab("Dissimilarity") +
+  ggtitle("Top-soil (0-30 cm)")
+
+plot_bray_delta_bottom_deep <- df_bray_delta_subsoil_1_processed %>%
+  filter(zone1 == zone2) %>%
+  ggplot(aes(x = delta_deepTemp, y = BrayCurtisDissimilarity)) +
+  geom_point() +
+  theme_JM +
+  xlab("Delta deep temperature [°C]") +
+  ylab("Dissimilarity") +
+  ggtitle("Bottom-soil (40-100 cm)")
+
+# Create the combined plot with 6 panels
+if (!is.null(plot_bray_delta_top_ri) & !is.null(plot_bray_delta_bottom_ri)) {
+  plot_bray_delta_combined <- ggarrange(
+    plot_bray_delta_top_elevation + xlim(0, 80), 
+    plot_bray_delta_top_ri + xlim(0, 1),
+    plot_bray_delta_top_pin + xlim(0, 3.5), 
+    plot_bray_delta_bottom_elevation + xlim(0, 80), 
+    plot_bray_delta_bottom_ri + xlim(0, 1),
+    plot_bray_delta_bottom_deep + xlim(0, 3.5),
+    ncol = 3, 
+    nrow = 2,
+    labels = c("A", "C", "E", "B", "D", "F"), 
+    font.label = list(size = 14, face = "bold"), 
+    common.legend = TRUE, 
+    legend = "top" 
+  )
+  
+  plot_bray_delta_combined
+} else {
+  cat("Combined plot cannot be created: Missing RI plots\n")
+}
+```
+
 ## Step 6f: Statistical analysis of environmental relationships
 ```{r}
 # Temperature-dissimilarity relationships
@@ -742,79 +913,17 @@ stat_lm_subsoil_pin_1_main <- lm(BrayCurtisDissimilarity ~ delta_pinTemp,
 stat_lm_subsoil_deep_1_main <- lm(BrayCurtisDissimilarity ~ delta_deepTemp, 
                                   data = df_bray_delta_subsoil_1_processed %>% filter(zone1 == zone2))
 
-# Elevation-dissimilarity relationships
-stat_lm_topsoil_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevation, 
-                                       data = df_bray_delta_topsoil_elevation_1_processed)
-stat_lm_subsoil_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevation, 
-                                       data = df_bray_delta_subsoil_elevation_1_processed)
-
-# Combined temperature analysis with mean of pin and deep temperatures
-df_bray_delta_combined_1_processed <- df_bray_delta_topsoil_1_processed %>%
-  bind_rows(df_bray_delta_subsoil_1_processed) %>%
-  mutate(meanTemp = (delta_pinTemp + delta_deepTemp) / 2)
-
-stat_lm_combined_meanTemp_1_main <- lm(BrayCurtisDissimilarity ~ meanTemp, 
-                                      data = df_bray_delta_combined_1_processed %>% filter(zone1 == zone2))
-
 # Combined elevation analysis
 df_bray_delta_elevation_combined_1_processed <- df_bray_delta_topsoil_elevation_1_processed %>%
   bind_rows(df_bray_delta_subsoil_elevation_1_processed)
 
 stat_lm_combined_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevation, 
+
+
+stat_lm_combined_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevation, 
                                        data = df_bray_delta_elevation_combined_1_processed)
 ```
 
-# Summary: Data overview
-## Summary of all main dataframes
-```{r}
-# Metadata summary
-cat("Metadata summary:\n")
-summary(df_metadata_0_raw)
-
-# Phyloseq objects summary
-cat("\nPhyloseq raw data summary:\n")
-print(ps_raw_2_filtered)
-
-cat("\nPhyloseq rarefied data summary:\n")
-print(ps_rare_2_filtered)
-
-# Alpha diversity summary
-cat("\nAlpha diversity summary:\n")
-summary(df_alpha_div_3_long)
-
-# Community dissimilarity summary
-cat("\nCommunity dissimilarity summaries:\n")
-cat("Topsoil Bray-Curtis dissimilarity:\n")
-summary(df_bray_curtis_topsoil_2_merged$BrayCurtisDissimilarity)
-
-cat("\nSubsoil Bray-Curtis dissimilarity:\n")
-summary(df_bray_curtis_subsoil_2_merged$BrayCurtisDissimilarity)
-
-# Environmental data summary
-cat("\nTemperature delta summary:\n")
-summary(df_warming_delta_1_processed)
-
-cat("\nElevation delta summary:\n")
-summary(df_elevation_delta_1_processed)
-
-# Statistical results summary
-cat("\nKey statistical results:\n")
-cat("PERMANOVA main results:\n")
-print(stat_permanova_bray_1_main)
-
-cat("\nAlpha diversity ANOVA results:\n")
-print(stat_anova_alpha_1_main)
-
-cat("\nTemperature-dissimilarity relationships (R-squared values):\n")
-cat("Topsoil pin temperature:", summary(stat_lm_topsoil_pin_1_main)$r.squared, "\n")
-cat("Subsoil deep temperature:", summary(stat_lm_subsoil_deep_1_main)$r.squared, "\n")
-cat("Combined mean temperature:", summary(stat_lm_combined_meanTemp_1_main)$r.squared, "\n")
-
-cat("\nElevation-dissimilarity relationships (R-squared values):\n")
-cat("Topsoil elevation:", summary(stat_lm_topsoil_elevation_1_main)$r.squared, "\n")
-cat("Subsoil elevation:", summary(stat_lm_subsoil_elevation_1_main)$r.squared, "\n")
-cat("Combined elevation:", summary(stat_lm_combined_elevation_1_main)$r.squared, "\n")
-```
 
 ```{r}
 # Export summarized alpha diversity data for correlation matrix integration
@@ -822,7 +931,7 @@ df_alpha_summary_export <- df_alpha_div_3_long %>%
   group_by(Plot, Layer) %>%
   summarise(alpha_diversity = mean(Value, na.rm = TRUE), .groups = "drop") %>%
   mutate(plotid = as.character(Plot))
-write.csv(df_alpha_summary_export, here("data", "rna", "df_alpha_summary.csv"), row.names = FALSE)
+write.csv(df_alpha_summary_export, "./data/rna/df_alpha_summary.csv", row.names = FALSE)
 ```
 
 
@@ -842,6 +951,173 @@ write.csv(df_alpha_summary_export, here("data", "rna", "df_alpha_summary.csv"), 
 # RColorBrewer: Neuwirth, E. (2014). RColorBrewer: ColorBrewer Palettes. R package version 1.1-3. https://CRAN.R-project.org/package=RColorBrewer
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 # vegan: Oksanen, J. et al. (2024). vegan: Community Ecology Package. R package version 2.6-4. https://CRAN.R-project.org/package=vegan
+```
+
+# REVISION - Mantel Tests for Community-Environment Correlations
+## Simple Mantel Tests Analogous to Distance Decay Plots
+
+```{r}
+# Create Bray-Curtis dissimilarity matrices for both depth layers
+bray_dist_topsoil <- vegdist(t(otu_table(ps_topsoil_1_processed)), method = "bray")
+bray_dist_subsoil <- vegdist(t(otu_table(ps_subsoil_1_processed)), method = "bray")
+
+# Get sample names from phyloseq objects to ensure matching order
+topsoil_samples <- sample_names(ps_topsoil_1_processed)
+subsoil_samples <- sample_names(ps_subsoil_1_processed)
+
+# Prepare environmental data for topsoil - match phyloseq sample order
+meta_topsoil_env <- df_metadata_0_raw %>%
+  filter(sample_name %in% topsoil_samples) %>%
+  mutate(Plot = as.character(Plot)) %>%
+  # Join environmental data
+  left_join(
+    df_elevation_0_raw %>%
+      group_by(Plot) %>%
+      summarise(elevation_mean = mean(Elevation, na.rm = TRUE), .groups = "drop") %>%
+      mutate(Plot = as.character(Plot)), 
+    by = "Plot"
+  ) %>%
+  left_join(
+    df_warming_monthly_0_raw %>%
+      dplyr::select(plotid, pinTemp_mean) %>%
+      dplyr::rename(Plot = plotid) %>%
+      mutate(Plot = as.character(Plot)), 
+    by = "Plot"
+  ) %>%
+  left_join(
+    df_iris_0_summary %>%
+      filter(Layer == "Topsoil\n(0-30 cm)") %>%
+      dplyr::select(Plot, ri) %>%
+      mutate(Plot = as.character(Plot)), 
+    by = "Plot"
+  ) %>%
+  # Ensure same order as phyloseq object
+  arrange(match(sample_name, topsoil_samples))
+
+# Prepare environmental data for subsoil - match phyloseq sample order
+meta_subsoil_env <- df_metadata_0_raw %>%
+  filter(sample_name %in% subsoil_samples) %>%
+  mutate(Plot = as.character(Plot)) %>%
+  # Join environmental data (using same elevation and temperature data)
+  left_join(
+    df_elevation_0_raw %>%
+      group_by(Plot) %>%
+      summarise(elevation_mean = mean(Elevation, na.rm = TRUE), .groups = "drop") %>%
+      mutate(Plot = as.character(Plot)), 
+    by = "Plot"
+  ) %>%
+  left_join(
+    df_warming_monthly_0_raw %>%
+      dplyr::select(plotid, pinTemp_mean) %>%
+      dplyr::rename(Plot = plotid) %>%
+      mutate(Plot = as.character(Plot)), 
+    by = "Plot"
+  ) %>%
+  left_join(
+    df_iris_0_summary %>%
+      filter(Layer == "Subsoil\n(40-100 cm)") %>%
+      dplyr::select(Plot, ri) %>%
+      mutate(Plot = as.character(Plot)), 
+    by = "Plot"
+  ) %>%
+  # Ensure same order as phyloseq object
+  arrange(match(sample_name, subsoil_samples))
+
+# Create environmental distance matrices with matching sample order
+elev_dist_topsoil <- dist(meta_topsoil_env$elevation_mean, method = "euclidean")
+temp_dist_topsoil <- dist(meta_topsoil_env$pinTemp_mean, method = "euclidean")
+ri_dist_topsoil <- dist(meta_topsoil_env$ri, method = "euclidean")
+
+elev_dist_subsoil <- dist(meta_subsoil_env$elevation_mean, method = "euclidean")
+temp_dist_subsoil <- dist(meta_subsoil_env$pinTemp_mean, method = "euclidean")
+ri_dist_subsoil <- dist(meta_subsoil_env$ri, method = "euclidean")
+
+# Perform Mantel tests for TOPSOIL (0-10cm)
+mantel_topsoil_temp <- mantel(bray_dist_topsoil, temp_dist_topsoil, 
+                              method = "pearson", permutations = 999)
+mantel_topsoil_elev <- mantel(bray_dist_topsoil, elev_dist_topsoil, 
+                              method = "pearson", permutations = 999)
+mantel_topsoil_ri <- mantel(bray_dist_topsoil, ri_dist_topsoil, 
+                            method = "pearson", permutations = 999)
+
+# Perform Mantel tests for SUBSOIL (30-40cm)
+mantel_subsoil_temp <- mantel(bray_dist_subsoil, temp_dist_subsoil, 
+                              method = "pearson", permutations = 999)
+mantel_subsoil_elev <- mantel(bray_dist_subsoil, elev_dist_subsoil, 
+                              method = "pearson", permutations = 999)
+mantel_subsoil_ri <- mantel(bray_dist_subsoil, ri_dist_subsoil, 
+                            method = "pearson", permutations = 999)
+
+# Display Mantel test results
+cat("=== MANTEL TEST RESULTS ===\n")
+cat("Community Bray-Curtis dissimilarity vs. Environmental distance correlations\n")
+cat("Method: Pearson correlation with 999 permutations\n\n")
+
+cat("TOPSOIL (0-10 cm):\n")
+cat("Temperature:      r =", sprintf("%.3f", mantel_topsoil_temp$statistic), 
+    ", p =", sprintf("%.3f", mantel_topsoil_temp$signif), "\n")
+cat("Elevation:        r =", sprintf("%.3f", mantel_topsoil_elev$statistic), 
+    ", p =", sprintf("%.3f", mantel_topsoil_elev$signif), "\n")
+cat("Reduction Index:  r =", sprintf("%.3f", mantel_topsoil_ri$statistic), 
+    ", p =", sprintf("%.3f", mantel_topsoil_ri$signif), "\n")
+
+cat("\nSUBSOIL (30-40 cm):\n")
+cat("Temperature:      r =", sprintf("%.3f", mantel_subsoil_temp$statistic), 
+    ", p =", sprintf("%.3f", mantel_subsoil_temp$signif), "\n")
+cat("Elevation:        r =", sprintf("%.3f", mantel_subsoil_elev$statistic), 
+    ", p =", sprintf("%.3f", mantel_subsoil_elev$signif), "\n")
+cat("Reduction Index:  r =", sprintf("%.3f", mantel_subsoil_ri$statistic), 
+    ", p =", sprintf("%.3f", mantel_subsoil_ri$signif), "\n")
+```
+
+# Merge environmental data with subsoil metadata
+meta_subsoil_env <- meta_subsoil %>%
+  left_join(elevation_topsoil, by = "Plot") %>%  # Same elevation data
+  left_join(temp_topsoil, by = "Plot") %>%       # Same temperature data
+  left_join(ri_subsoil, by = "Plot") %>%
+  arrange(sample_name)
+
+# Create environmental distance matrices for subsoil
+elev_dist_subsoil <- dist(meta_subsoil_env$elevation_mean, method = "euclidean")
+temp_dist_subsoil <- dist(meta_subsoil_env$pinTemp_mean, method = "euclidean")
+ri_dist_subsoil <- dist(meta_subsoil_env$ri, method = "euclidean")
+
+# Perform Mantel tests for TOPSOIL (0-10cm)
+mantel_topsoil_temp <- mantel(bray_dist_topsoil, temp_dist_topsoil, 
+                              method = "pearson", permutations = 999)
+mantel_topsoil_elev <- mantel(bray_dist_topsoil, elev_dist_topsoil, 
+                              method = "pearson", permutations = 999)
+mantel_topsoil_ri <- mantel(bray_dist_topsoil, ri_dist_topsoil, 
+                            method = "pearson", permutations = 999)
+
+# Perform Mantel tests for SUBSOIL (30-40cm)
+mantel_subsoil_temp <- mantel(bray_dist_subsoil, temp_dist_subsoil, 
+                              method = "pearson", permutations = 999)
+mantel_subsoil_elev <- mantel(bray_dist_subsoil, elev_dist_subsoil, 
+                              method = "pearson", permutations = 999)
+mantel_subsoil_ri <- mantel(bray_dist_subsoil, ri_dist_subsoil, 
+                            method = "pearson", permutations = 999)
+
+# Display Mantel test results
+cat("=== MANTEL TEST RESULTS ===\n")
+cat("Community Bray-Curtis dissimilarity vs. Environmental distance correlations\n")
+cat("Method: Pearson correlation with 999 permutations\n\n")
+
+cat("TOPSOIL (0-10 cm):\n")
+cat("Temperature:      r =", sprintf("%.3f", mantel_topsoil_temp$statistic), 
+    ", p =", sprintf("%.3f", mantel_topsoil_temp$signif), "\n")
+cat("Elevation:        r =", sprintf("%.3f", mantel_topsoil_elev$statistic), 
+    ", p =", sprintf("%.3f", mantel_topsoil_elev$signif), "\n")
+cat("Reduction Index:  r =", sprintf("%.3f", mantel_topsoil_ri$statistic), 
+    ", p =", sprintf("%.3f", mantel_topsoil_ri$signif), "\n")
+
+cat("\nSUBSOIL (30-40 cm):\n")
+cat("Temperature:      r =", sprintf("%.3f", mantel_subsoil_temp$statistic), 
+    ", p =", sprintf("%.3f", mantel_subsoil_temp$signif), "\n")
+cat("Elevation:        r =", sprintf("%.3f", mantel_subsoil_elev$statistic), 
+    ", p =", sprintf("%.3f", mantel_subsoil_elev$signif), "\n")
+cat("Reduction Index:  r =", sprintf("%.3f", mantel_subsoil_ri$statistic), 
+    ", p =", sprintf("%.3f", mantel_subsoil_ri$signif), "\n")
 ```
 
 

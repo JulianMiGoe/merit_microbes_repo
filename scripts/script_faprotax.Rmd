@@ -35,25 +35,20 @@ library(multcomp)
 ## Step 1c: Custom theme
 ```{r}
 # Custom theme for consistent plot styling
-theme_JM <- function() {
-  theme_bw() +
-    theme(
-      panel.background = element_rect(fill = "white"),
-      plot.background = element_rect(fill = "white"),
-      panel.border = element_rect(colour = "black", fill = NA, size = 1),
-      strip.background = element_rect(fill = "grey90", colour = "black", size = 0.5),
-      strip.text = element_text(face = "bold", size = 12),
-      axis.text = element_text(size = 11, colour = "black"),
-      axis.title = element_text(size = 12, face = "bold"),
-      legend.background = element_rect(fill = "white"),
-      legend.key = element_rect(fill = "white"),
-      legend.text = element_text(size = 11),
-      legend.title = element_text(size = 12, face = "bold"),
-      plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
-      axis.ticks = element_line(colour = "black"),
-      axis.ticks.length = unit(0.2, "cm")
-    )
-}
+theme_JM <- theme(
+  axis.title.x      = element_text(colour = "black", size = 12),
+  axis.text.x       = element_text(colour = "black", size = 12), 
+  axis.title.y      = element_text(colour = "black", size = 12),
+  axis.text.y       = element_text(colour = "black", size = 12), 
+  legend.title      = element_text(colour = "black", size = 12),
+  legend.text       = element_text(colour = "black", size = 12), 
+  legend.position   = "top",
+  panel.background  = element_blank(), 
+  panel.border      = element_rect(colour = "black", fill = NA, size = 1.2),
+  legend.key        = element_blank(),
+  strip.text.x      = element_text(colour = "black", size = 12),
+  strip.text.y      = element_text(colour = "black", size = 12)
+)
 ```
 
 ## Step 1d: Load functional and metadata data
@@ -152,6 +147,7 @@ df_heatmap_degradation_1_processed <- df_filtered_degradation_1_processed %>%
 
 # Calculate mean abundance with layer separation
 df_heatmap_degradation_layer_1_processed <- df_filtered_degradation_1_processed %>%
+  filter(!Functional %in% c("aliphatic_non_methane_hydrocarbon_degradation")) %>%
   group_by(Functional, Zone, Treatment, Layer) %>%
   summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop")
 
@@ -204,23 +200,18 @@ plot_heatmap_degradation_layer_2_final <- ggplot(df_heatmap_degradation_layer_1_
                                max(df_heatmap_degradation_1_processed$mean_abundance))),
     breaks = pretty(df_heatmap_degradation_1_processed$mean_abundance, n = 3),
     guide = guide_colorbar(
-      barwidth = 1, 
-      barheight = 8, 
+      barwidth = 12, 
+      barheight = 1.2, 
       title.position = "top", 
       title.hjust = 0.5,
       label.theme = element_text(size = 8, angle = 0),
       title.theme = element_text(size = 10)
     )
   ) +
-  theme_minimal() +
+  theme_bw() +
+  theme_JM +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.text.y = element_text(size = 10),
-    strip.background = element_rect(fill = "lightgrey"),
-    strip.text = element_text(face = "bold"),
-    legend.position = "right",
-    panel.spacing = unit(0.1, "lines"),
-    axis.title.y = element_text(margin = margin(r = 10))
+    legend.position = "bottom"
   ) +
   labs(x = "Treatment", y = "Functional Group") +
   scale_y_discrete(labels = function(x) stringr::str_to_sentence(gsub("_", " ", x)))
@@ -257,588 +248,254 @@ plot_heatmap_all_2_final
 plot_heatmap_degradation_layer_2_final
 ```
 
-# Step 4: Deviation analysis from ambient baseline (following EEA methodology)
-## Step 4a: Calculate plot-level means first
-```{r}
-# Calculate plot-level means for each functional group (equivalent to EEA approach)
-df_faprotax_plot_means <- df_merged_2_final %>%
-  group_by(Zone, Layer, Treatment, Plot, Functional) %>%
-  summarise(
-    abundance_plot_mean = mean(abundance, na.rm = TRUE),
-    n_subplots = n(),
-    .groups = "drop"
-  ) %>%
-  # Apply proper factor levels
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C"))
-  )
 
-print("=== FAPROTAX PLOT MEANS CALCULATED ===")
-print(paste("Number of plot means:", nrow(df_faprotax_plot_means)))
-print("Sample of plot means:")
-print(head(df_faprotax_plot_means))
-```
-
-## Step 4b: Calculate ambient baseline means
-```{r}
-# Calculate ambient baseline means for each Zone/Layer/Functional combination
-df_faprotax_baseline_means <- df_faprotax_plot_means %>%
-  filter(Treatment == "Ambient") %>%
-  group_by(Zone, Layer, Functional) %>%
-  summarise(abundance_ambient_mean = mean(abundance_plot_mean, na.rm = TRUE),
-            n_ambient_plots = n(),
-            .groups = "drop")
-
-print("=== FAPROTAX AMBIENT BASELINE MEANS ===")
-print(paste("Number of baseline means:", nrow(df_faprotax_baseline_means)))
-print("Sample of baselines:")
-print(head(df_faprotax_baseline_means))
-```
-
-## Step 4c: Calculate plot-level deviations
-```{r}
-# Calculate deviations for each plot (warming plots only)
-df_faprotax_plot_deviations <- df_faprotax_plot_means %>%
-  filter(Treatment != "Ambient") %>%  # Remove ambient (it becomes the baseline)
-  # Join with baseline means
-  left_join(df_faprotax_baseline_means, by = c("Zone", "Layer", "Functional")) %>%
-  # Calculate deviation for each plot mean
-  mutate(
-    abundance_deviation = abundance_plot_mean - abundance_ambient_mean,
-    abundance_percent_change = ((abundance_plot_mean - abundance_ambient_mean) / abundance_ambient_mean) * 100
-  ) %>%
-  # Clean up infinite values for percent change
-  mutate(
-    abundance_percent_change = ifelse(is.infinite(abundance_percent_change) | is.nan(abundance_percent_change), 
-                                    NA, abundance_percent_change)
-  ) %>%
-  # Update factor levels (remove ambient)
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-print("=== FAPROTAX PLOT-LEVEL DEVIATIONS CALCULATED ===")
-print(paste("Number of plot deviations:", nrow(df_faprotax_plot_deviations)))
-print("Sample of plot deviations:")
-print(head(df_faprotax_plot_deviations[, c("Zone", "Layer", "Treatment", "Functional", "Plot", "abundance_plot_mean", "abundance_ambient_mean", "abundance_deviation")]))
-```
-
-## Step 4d: Calculate summary statistics with standard errors
-```{r}
-# Calculate summary statistics (means and standard errors) from plot deviations
-df_faprotax_deviations_summary <- df_faprotax_plot_deviations %>%
-  group_by(Zone, Layer, Treatment, Functional) %>%
-  summarise(
-    n_plots = n(),
-    abundance_deviation_mean = mean(abundance_deviation, na.rm = TRUE),
-    abundance_deviation_se = sd(abundance_deviation, na.rm = TRUE) / sqrt(n()),
-    abundance_percent_change_mean = mean(abundance_percent_change, na.rm = TRUE),
-    abundance_percent_change_se = sd(abundance_percent_change, na.rm = TRUE) / sqrt(n()),
-    .groups = "drop"
-  ) %>%
-  # Maintain factor ordering
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-print("=== FAPROTAX DEVIATION SUMMARY STATISTICS ===")
-print(paste("Number of summary statistics:", nrow(df_faprotax_deviations_summary)))
-print("Sample of summary statistics:")
-print(head(df_faprotax_deviations_summary))
-```
-
-## Step 4e: Two-way ANOVA and post-hoc testing
-```{r}
-# Load required package for post-hoc tests
-library(emmeans)
-library(multcomp)
-
-# Prepare data for ANOVA (using plot-level means)
-df_faprotax_anova_data <- df_faprotax_plot_means %>%
-  # Convert to factors for ANOVA
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C"))
-  )
-
-# Function to perform ANOVA and extract significance letters
-get_anova_results <- function(functional_group) {
-  # Filter data for specific functional group
-  data_subset <- df_faprotax_anova_data %>%
-    filter(Functional == functional_group)
-  
-  # Check if we have enough data
-  if(nrow(data_subset) < 6) {
-    return(NULL)
-  }
-  
-  # Perform two-way ANOVA for each Zone separately (since we want within-zone comparisons)
-  results_list <- list()
-  
-  for(zone in c("Pioneer zone", "Low marsh", "High marsh")) {
-    for(layer in c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")) {
-      zone_layer_data <- data_subset %>%
-        filter(Zone == zone, Layer == layer)
-      
-      # Check if we have enough observations
-      if(nrow(zone_layer_data) >= 3 && length(unique(zone_layer_data$Treatment)) >= 2) {
-        
-        # Perform one-way ANOVA (Treatment within Zone/Layer)
-        tryCatch({
-          anova_result <- aov(abundance_plot_mean ~ Treatment, data = zone_layer_data)
-          anova_p <- summary(anova_result)[[1]][["Pr(>F)"]][1]
-          
-          # If significant, perform post-hoc test
-          if(!is.na(anova_p) && anova_p < 0.05) {
-            # Tukey HSD for pairwise comparisons
-            tukey_result <- TukeyHSD(anova_result)
-            
-            # Get compact letter display
-            emmean_result <- emmeans(anova_result, "Treatment")
-            cld_result <- cld(emmean_result, Letters = letters)
-            
-            # Store results
-            for(i in 1:nrow(cld_result)) {
-              results_list[[paste(zone, layer, cld_result$Treatment[i], sep = "_")]] <- data.frame(
-                Functional = functional_group,
-                Zone = zone,
-                Layer = layer,
-                Treatment = cld_result$Treatment[i],
-                significance_letter = trimws(cld_result$.group[i]),
-                anova_p = anova_p,
-                stringsAsFactors = FALSE
-              )
-            }
-          } else {
-            # If not significant, all treatments get the same letter
-            treatments <- unique(zone_layer_data$Treatment)
-            for(treatment in treatments) {
-              results_list[[paste(zone, layer, treatment, sep = "_")]] <- data.frame(
-                Functional = functional_group,
-                Zone = zone,
-                Layer = layer,
-                Treatment = treatment,
-                significance_letter = "a",
-                anova_p = ifelse(is.na(anova_p), NA, anova_p),
-                stringsAsFactors = FALSE
-              )
-            }
-          }
-        }, error = function(e) {
-          # If ANOVA fails, assign 'a' to all
-          treatments <- unique(zone_layer_data$Treatment)
-          for(treatment in treatments) {
-            results_list[[paste(zone, layer, treatment, sep = "_")]] <- data.frame(
-              Functional = functional_group,
-              Zone = zone,
-              Layer = layer,
-              Treatment = treatment,
-              significance_letter = "a",
-              anova_p = NA,
-              stringsAsFactors = FALSE
-            )
-          }
-        })
-      }
-    }
-  }
-  
-  # Combine all results for this functional group
-  if(length(results_list) > 0) {
-    return(do.call(rbind, results_list))
-  } else {
-    return(NULL)
-  }
-}
-
-# Get all unique functional groups
-all_functional_groups <- unique(df_faprotax_anova_data$Functional)
-
-print("Performing ANOVAs for all functional groups...")
-print(paste("Total functional groups to analyze:", length(all_functional_groups)))
-
-# Apply ANOVA to all functional groups
-anova_results_list <- list()
-pb <- txtProgressBar(min = 0, max = length(all_functional_groups), style = 3)
-
-for(i in seq_along(all_functional_groups)) {
-  func_group <- all_functional_groups[i]
-  result <- get_anova_results(func_group)
-  if(!is.null(result)) {
-    anova_results_list[[func_group]] <- result
-  }
-  setTxtProgressBar(pb, i)
-}
-close(pb)
-
-# Combine all ANOVA results
-if(length(anova_results_list) > 0) {
-  df_faprotax_anova_results <- do.call(rbind, anova_results_list)
-  rownames(df_faprotax_anova_results) <- NULL
-} else {
-  df_faprotax_anova_results <- data.frame()
-}
-
-print("ANOVA analysis completed!")
-print(paste("Results for", nrow(df_faprotax_anova_results), "combinations"))
-print("Sample of ANOVA results:")
-print(head(df_faprotax_anova_results, 10))
-```
-
-## Step 4f: Prepare original-style heatmaps with significance letters
-```{r}
-# Recalculate mean abundances for heatmap (back to original approach)
-df_faprotax_heatmap_means <- df_merged_2_final %>%
-  group_by(Zone, Layer, Treatment, Functional) %>%
-  summarise(mean_abundance = mean(abundance, na.rm = TRUE), .groups = "drop") %>%
-  # Ensure factor levels are maintained
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("Ambient", "+1.5°C", "+3.0°C"))
-  ) %>%
-  # Add significance letters
-  left_join(df_faprotax_anova_results, 
-           by = c("Zone", "Layer", "Treatment", "Functional"))
-
-# Filter for degradation processes with significance letters
-df_faprotax_degradation_heatmap <- df_faprotax_heatmap_means %>%
-  filter(Functional %in% functional_groups_degradation)
-
-# Filter for key functional groups with significance letters  
-key_functional_groups <- c(
-  "cellulolysis", "chitinolysis", "ligninolysis", "xylanolysis",
-  "aerobic_chemoheterotrophy", "fermentation", "photoautotrophy",
-  "nitrate_reduction", "nitrate_denitrification", "aerobic_nitrite_oxidation", 
-  "aerobic_ammonia_oxidation", "methanotrophy", "methanogenesis",
-  "sulfate_respiration", "hydrocarbon_degradation"
-)
-
-df_faprotax_key_heatmap <- df_faprotax_heatmap_means %>%
-  filter(Functional %in% key_functional_groups)
-
-print("=== HEATMAP DATA WITH SIGNIFICANCE LETTERS PREPARED ===")
-print("Sample of degradation heatmap data:")
-print(head(df_faprotax_degradation_heatmap[, c("Zone", "Layer", "Treatment", "Functional", "mean_abundance", "significance_letter")], 10))
-```
-
-## Step 4g: Create original-style heatmaps with significance letters
-```{r}
-# Create heatmap for degradation processes with significance letters
-plot_faprotax_degradation_letters <- df_faprotax_degradation_heatmap %>%
-  mutate(Functional_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
-  ggplot(aes(x = Treatment, y = Functional_clean, fill = mean_abundance)) +
-  geom_tile(color = "white", size = 0.5) +
-  geom_text(aes(label = ifelse(!is.na(significance_letter), 
-                              significance_letter, "")),
-            color = "black", size = 4, fontface = "bold") +
-  facet_grid(Layer ~ Zone, scales = "free", space = "free") +
-  scale_fill_gradientn(
-    name = "Mean Abundance",
-    colors = c("#d0d1e6", "#a6bddb", "#023858"),
-    values = scales::rescale(c(min(df_faprotax_degradation_heatmap$mean_abundance, na.rm = TRUE),
-                               median(df_faprotax_degradation_heatmap$mean_abundance, na.rm = TRUE),
-                               max(df_faprotax_degradation_heatmap$mean_abundance, na.rm = TRUE))),
-    breaks = pretty(df_faprotax_degradation_heatmap$mean_abundance, n = 5),
-    guide = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top")
-  ) +
-  theme_JM() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
-    axis.text.y = element_text(size = 10),
-    strip.text = element_text(size = 11),
-    panel.spacing = unit(0.2, "lines"),
-    legend.position = "right"
-  ) +
-  labs(
-    title = "Degradation Processes - Abundance with Statistical Grouping",
-    subtitle = "Letters (a,b,c) indicate significant differences within each zone/layer",
-    x = "Treatment", 
-    y = "Functional Group"
-  )
-
-# Create heatmap for key functional groups with significance letters
-plot_faprotax_key_letters <- df_faprotax_key_heatmap %>%
-  mutate(Functional_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
-  ggplot(aes(x = Treatment, y = Functional_clean, fill = mean_abundance)) +
-  geom_tile(color = "white", size = 0.5) +
-  geom_text(aes(label = ifelse(!is.na(significance_letter), 
-                              significance_letter, "")),
-            color = "black", size = 3, fontface = "bold") +
-  facet_grid(Layer ~ Zone, scales = "free", space = "free") +
-  scale_fill_gradientn(
-    name = "Mean Abundance",
-    colors = c("#d0d1e6", "#a6bddb", "#023858"),
-    values = scales::rescale(c(min(df_faprotax_key_heatmap$mean_abundance, na.rm = TRUE),
-                               median(df_faprotax_key_heatmap$mean_abundance, na.rm = TRUE),
-                               max(df_faprotax_key_heatmap$mean_abundance, na.rm = TRUE))),
-    breaks = pretty(df_faprotax_key_heatmap$mean_abundance, n = 5),
-    guide = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top")
-  ) +
-  theme_JM() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-    axis.text.y = element_text(size = 9),
-    strip.text = element_text(size = 10),
-    panel.spacing = unit(0.2, "lines"),
-    legend.position = "right"
-  ) +
-  labs(
-    title = "Key Functional Groups - Abundance with Statistical Grouping",
-    subtitle = "Letters (a,b,c) indicate significant differences within each zone/layer",
-    x = "Treatment", 
-    y = "Functional Group"
-  )
-
-# Create a compact overview showing only functional groups with significant differences
-df_faprotax_significant_only <- df_faprotax_heatmap_means %>%
-  # Only include functional groups that have at least one significant difference
-  group_by(Functional) %>%
-  filter(any(!is.na(anova_p) & anova_p < 0.05, na.rm = TRUE)) %>%
-  ungroup() %>%
-  filter(Functional %in% c(functional_groups_degradation, key_functional_groups))
-
-plot_faprotax_significant_only <- df_faprotax_significant_only %>%
-  mutate(Functional_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
-  ggplot(aes(x = Treatment, y = Functional_clean, fill = mean_abundance)) +
-  geom_tile(color = "white", size = 0.5) +
-  geom_text(aes(label = ifelse(!is.na(significance_letter), 
-                              significance_letter, "")),
-            color = "black", size = 3.5, fontface = "bold") +
-  facet_grid(Layer ~ Zone, scales = "free", space = "free") +
-  scale_fill_gradientn(
-    name = "Mean Abundance",
-    colors = c("#d0d1e6", "#a6bddb", "#023858"),
-    values = scales::rescale(c(min(df_faprotax_significant_only$mean_abundance, na.rm = TRUE),
-                               median(df_faprotax_significant_only$mean_abundance, na.rm = TRUE),
-                               max(df_faprotax_significant_only$mean_abundance, na.rm = TRUE))),
-    breaks = pretty(df_faprotax_significant_only$mean_abundance, n = 4),
-    guide = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top")
-  ) +
-  theme_JM() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
-    axis.text.y = element_text(size = 10),
-    strip.text = element_text(size = 11),
-    panel.spacing = unit(0.2, "lines"),
-    legend.position = "right"
-  ) +
-  labs(
-    title = "Functional Groups with Significant Treatment Effects",
-    subtitle = "Only groups with significant ANOVA (p < 0.05) shown. Letters indicate post-hoc grouping.",
-    x = "Treatment", 
-    y = "Functional Group"
-  )
-
-# Display plots
-print("=== DEGRADATION PROCESSES WITH SIGNIFICANCE LETTERS ===")
-plot_faprotax_degradation_letters
-
-print("=== KEY FUNCTIONAL GROUPS WITH SIGNIFICANCE LETTERS ===")
-plot_faprotax_key_letters
-
-print("=== SIGNIFICANT FUNCTIONAL GROUPS ONLY ===")
-plot_faprotax_significant_only
-```
 
 ---
 
 ## REVISION DOCUMENTATION - September 2025
 
-### Changes Made During Revision:
-1. **Comprehensive ANOVA Analysis Framework**
-   - Implemented two-way ANOVA analysis for all functional groups
-   - Added post-hoc Tukey HSD testing with compact letter display
-   - Automated ANOVA processing for 200+ functional groups with progress tracking
+### New Analysis: Pathway Deviation Analysis
+1. **Deviation Calculation for Filtered Degradation Pathways**
+   - Calculated percent deviations from ambient baseline for +1.5°C and +3.0°C treatments
+   - Focus on 5 filtered degradation pathways after excluding pathways with too many zero values
+   - Excluded pathways: aromatic hydrocarbon degradation, aliphatic non-methane hydrocarbon degradation, ligninolysis
+   - Deviations calculated separately for each Zone × Layer combination
 
-2. **Statistical Package Integration:**
-   - Added emmeans package for marginal means and post-hoc comparisons
-   - Added multcomp package for compact letter display (a, b, c groupings)
-   - Implemented comprehensive error handling for failed ANOVA tests
+2. **Visualization Framework:**
+   - Horizontal bar plot layout with pathways on Y-axis and treatments as bars
+   - Horizontal dashed line at 0% representing ambient baseline
+   - Error bars showing standard errors of percent change
+   - Consistent color scheme: #FDAE61 (+1.5°C), #D73027 (+3.0°C)
+   - No plot titles or headers for clean presentation
 
-3. **Visualization Enhancement:**
-   - Created three types of heatmaps with statistical significance letters:
-     * Degradation processes with abundance values and significance grouping
-     * Key functional groups (15 selected processes) with statistical annotation
-     * Significant-only overview showing only functions with treatment effects (p < 0.05)
-   - Maintained original abundance-based heatmap style with added statistical layers
+3. **Statistical Approach:**
+   - Plot-level means calculated first, then deviations from zone/layer-specific ambient means
+   - Standard errors calculated from plot-level deviations for robust error estimation
+   - Lowercase "ambient" used in treatment factor levels
 
-4. **Statistical Framework:**
-   - One-way ANOVA (Treatment) within each Zone/Layer combination
-   - Tukey HSD post-hoc tests for pairwise comparisons when significant
-   - Compact letter display showing statistical groupings (a, b, c)
-   - Significance threshold: p < 0.05
-
-5. **Automated Processing:**
-   - Progress bar for ANOVA analysis of all functional groups
-   - Automatic assignment of significance letters based on post-hoc tests
-   - Consistent factor level management throughout analysis pipeline
-
-**Rationale**: Extended statistical rigor to functional predictions with comprehensive ANOVA framework and enhanced visualization showing treatment effects within environmental contexts.
-
-*Last modified: September 15, 2025 | JM*
-
-
-## Step 4f: Prepare data for heatmaps
+## Step 5: Pathway Deviation Analysis
+### Step 5a: Basic pathway abundance histograms
 ```{r}
-# Filter for degradation processes (most manageable subset)
-df_faprotax_degradation_dev <- df_faprotax_deviations_summary %>%
-  filter(Functional %in% functional_groups_degradation) %>%
-  # Add significance information
-  left_join(df_faprotax_significance %>% select(Zone, Layer, Treatment, Functional, significant, significant_lenient, t_test_p), 
-           by = c("Zone", "Layer", "Treatment", "Functional"))
-
-# Filter for key functional groups (broader but still focused)
-key_functional_groups <- c(
-  "cellulolysis", "chitinolysis", "ligninolysis", "xylanolysis",
-  "aerobic_chemoheterotrophy", "fermentation", "photoautotrophy",
-  "nitrate_reduction", "nitrate_denitrification", "aerobic_nitrite_oxidation", 
-  "aerobic_ammonia_oxidation", "methanotrophy", "methanogenesis",
-  "sulfate_respiration", "hydrocarbon_degradation"
+# Define all degradation pathways for initial exploration
+all_degradation_pathways <- c(
+  "cellulolysis", "chitinolysis", "ligninolysis", "hydrocarbon_degradation",
+  "fermentation", "aliphatic_non_methane_hydrocarbon_degradation",
+  "aromatic_hydrocarbon_degradation", "aromatic_compound_degradation"
 )
 
-df_faprotax_key_dev <- df_faprotax_deviations_summary %>%
-  filter(Functional %in% key_functional_groups) %>%
-  # Add significance information
-  left_join(df_faprotax_significance %>% select(Zone, Layer, Treatment, Functional, significant, significant_lenient, t_test_p), 
-           by = c("Zone", "Layer", "Treatment", "Functional"))
+# Create histograms to assess data distribution
+plot_faprotax_histograms <- df_merged_2_final %>%
+  filter(Functional %in% all_degradation_pathways) %>%
+  mutate(Pathway_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
+  ggplot(aes(x = abundance)) +
+  geom_histogram(bins = 20, fill = "steelblue", alpha = 0.7, color = "white") +
+  facet_wrap(~ Pathway_clean, scales = "free", ncol = 2) +
+  theme_JM() +
+  labs(x = "Abundance", y = "Count")
 
-print("Debug: Sample of degradation data with significance:")
-print(head(df_faprotax_degradation_dev %>% select(Zone, Layer, Treatment, Functional, abundance_deviation_mean, significant, significant_lenient, t_test_p), 10))
+print("=== PATHWAY ABUNDANCE HISTOGRAMS ===")
+plot_faprotax_histograms
 ```
 
-## Step 4g: Create deviation heatmaps
+### Step 5b: Pathway filtering and final dataset
 ```{r}
+# Exclude pathways with too many zero values based on histograms
+# Excluded: aromatic_hydrocarbon_degradation, aliphatic_non_methane_hydrocarbon_degradation, ligninolysis
+final_pathways <- c(
+  "cellulolysis", 
+  "chitinolysis", 
+  "hydrocarbon_degradation",
+  "fermentation", 
+  "aromatic_compound_degradation"
+)
 
-# Create deviation heatmap for degradation processes
-plot_faprotax_deviation_degradation <- df_faprotax_degradation_dev %>%
-  mutate(Functional_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
-  ggplot(aes(x = Treatment, y = Functional_clean, fill = abundance_deviation_mean)) +
-  geom_tile(color = "white", size = 0.5) +
-  geom_text(aes(label = case_when(
-    significant_lenient == TRUE & abs(abundance_deviation_mean) > 0.001 ~ sprintf("%.3f", abundance_deviation_mean),
-    # Fallback: show largest deviations regardless of significance if no significant ones
-    n_significant == 0 & abs(abundance_deviation_mean) > 0.01 ~ sprintf("%.3f", abundance_deviation_mean),
-    TRUE ~ ""
-  )), color = "black", size = 3, fontface = "bold") +
-  facet_grid(Layer ~ Zone, scales = "free", space = "free") +
-  scale_fill_gradient2(
-    name = "Abundance Change\nfrom Ambient Control",
-    low = "#B2182B",     # Dark red for negative deviations
-    mid = "white",       # White for no change
-    high = "#2166AC",    # Dark blue for positive deviations
-    midpoint = 0,
-    guide = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top")
-  ) +
-  theme_JM() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
-    axis.text.y = element_text(size = 10),
-    strip.text = element_text(size = 11),
-    panel.spacing = unit(0.2, "lines"),
-    legend.position = "right"
-  ) +
-  labs(
-    title = if(n_significant > 0) "Degradation Process Response to Warming (p < 0.05/0.1)" else "Degradation Process Response to Warming (largest effects)",
-    x = "Treatment", 
-    y = "Functional Group"
-  )
-
-# Create deviation heatmap for key functional groups
-plot_faprotax_deviation_key <- df_faprotax_key_dev %>%
-  mutate(Functional_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
-  ggplot(aes(x = Treatment, y = Functional_clean, fill = abundance_deviation_mean)) +
-  geom_tile(color = "white", size = 0.5) +
-  geom_text(aes(label = case_when(
-    significant_lenient == TRUE & abs(abundance_deviation_mean) > 0.001 ~ sprintf("%.3f", abundance_deviation_mean),
-    # Fallback: show largest deviations regardless of significance if no significant ones
-    n_significant == 0 & abs(abundance_deviation_mean) > 0.005 ~ sprintf("%.3f", abundance_deviation_mean),
-    TRUE ~ ""
-  )), color = "black", size = 2.5, fontface = "bold") +
-  facet_grid(Layer ~ Zone, scales = "free", space = "free") +
-  scale_fill_gradient2(
-    name = "Abundance Change\nfrom Ambient Control",
-    low = "#B2182B",     # Dark red for negative deviations
-    mid = "white",       # White for no change
-    high = "#2166AC",    # Dark blue for positive deviations
-    midpoint = 0,
-    guide = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top")
-  ) +
-  theme_JM() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-    axis.text.y = element_text(size = 9),
-    strip.text = element_text(size = 10),
-    panel.spacing = unit(0.2, "lines"),
-    legend.position = "right"
-  ) +
-  labs(
-    title = if(n_significant > 0) "Key Functional Groups Response to Warming (p < 0.05/0.1)" else "Key Functional Groups Response to Warming (largest effects)",
-    x = "Treatment", 
-    y = "Functional Group"
-  )
-
-# Create a simplified overview with only the most variable processes
-df_faprotax_variable <- df_faprotax_deviations_summary %>%
-  group_by(Functional) %>%
-  summarise(max_abs_change = max(abs(abundance_deviation_mean), na.rm = TRUE), .groups = "drop") %>%
-  filter(max_abs_change > 0.02) %>%  # Only processes with >0.02 absolute change somewhere
-  pull(Functional)
-
-plot_faprotax_deviation_variable <- df_faprotax_deviations_summary %>%
-  filter(Functional %in% df_faprotax_variable) %>%
-  # Add significance information
-  left_join(df_faprotax_significance %>% select(Zone, Layer, Treatment, Functional, significant, significant_lenient, t_test_p), 
-           by = c("Zone", "Layer", "Treatment", "Functional")) %>%
-  mutate(Functional_clean = stringr::str_to_sentence(gsub("_", " ", Functional))) %>%
-  ggplot(aes(x = Treatment, y = Functional_clean, fill = abundance_deviation_mean)) +
-  geom_tile(color = "white", size = 0.5) +
-  geom_text(aes(label = case_when(
-    significant_lenient == TRUE & abs(abundance_deviation_mean) > 0.001 ~ sprintf("%.3f", abundance_deviation_mean),
-    # Fallback: show largest deviations regardless of significance if no significant ones
-    n_significant == 0 & abs(abundance_deviation_mean) > 0.01 ~ sprintf("%.3f", abundance_deviation_mean),
-    TRUE ~ ""
-  )), color = "black", size = 3, fontface = "bold") +
-  facet_grid(Layer ~ Zone, scales = "free", space = "free") +
-  scale_fill_gradient2(
-    name = "Abundance Change\nfrom Ambient Control",
-    low = "#B2182B",     # Dark red for negative deviations
-    mid = "white",       # White for no change
-    high = "#2166AC",    # Dark blue for positive deviations
-    midpoint = 0,
-    guide = guide_colorbar(barwidth = 1.5, barheight = 10, title.position = "top")
-  ) +
-  theme_JM() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
-    axis.text.y = element_text(size = 10),
-    strip.text = element_text(size = 11),
-    panel.spacing = unit(0.2, "lines"),
-    legend.position = "right"
-  ) +
-  labs(
-    title = if(n_significant > 0) "Most Variable Functional Groups (significant effects)" else "Most Variable Functional Groups (largest effects)",
-    x = "Treatment", 
-    y = "Functional Group"
-  )
-
-# Display plots
-print("=== DEGRADATION PROCESSES DEVIATION HEATMAP ===")
-plot_faprotax_deviation_degradation
-
-print("=== KEY FUNCTIONAL GROUPS DEVIATION HEATMAP ===")
-plot_faprotax_deviation_key
-
-print("=== MOST VARIABLE PROCESSES HEATMAP ===")
-plot_faprotax_deviation_variable
+print("=== PATHWAY FILTERING ===")
+print("Excluded pathways due to too many zero values:")
+print("- Aromatic hydrocarbon degradation")
+print("- Aliphatic non-methane hydrocarbon degradation") 
+print("- Ligninolysis")
+print("Remaining pathways:")
+print(final_pathways)
 ```
+
+### Step 5c: Calculate pathway means and deviations
+```{r}
+# Calculate plot-level means for filtered pathways
+df_plot_means <- df_merged_2_final %>%
+  filter(Functional %in% final_pathways) %>%
+  group_by(Zone, Layer, Treatment, Plot, Functional) %>%
+  summarise(abundance_plot_mean = mean(abundance, na.rm = TRUE), .groups = "drop")
+
+# Calculate ambient baselines
+df_baselines <- df_plot_means %>%
+  filter(Treatment == "Ambient") %>%
+  group_by(Zone, Layer, Functional) %>%
+  summarise(ambient_mean = mean(abundance_plot_mean, na.rm = TRUE), .groups = "drop")
+
+# Identify valid combinations (no missing baselines and not zero baselines)
+valid_combinations <- df_baselines %>%
+  filter(!is.na(ambient_mean), ambient_mean > 0) %>%
+  dplyr::select(Zone, Layer, Functional)
+
+print("=== VALID COMBINATIONS (NO NAs, NON-ZERO BASELINES) ===")
+print(paste("Number of valid Zone/Layer/Functional combinations:", nrow(valid_combinations)))
+print(valid_combinations)
+
+# Filter analysis to only valid combinations
+df_plot_means_filtered <- df_plot_means %>%
+  inner_join(valid_combinations, by = c("Zone", "Layer", "Functional"))
+
+df_baselines_filtered <- df_baselines %>%
+  inner_join(valid_combinations, by = c("Zone", "Layer", "Functional"))
+
+# Calculate deviations for warming treatments (only valid combinations)
+df_deviations <- df_plot_means_filtered %>%
+  filter(Treatment != "Ambient") %>%
+  left_join(df_baselines_filtered, by = c("Zone", "Layer", "Functional")) %>%
+  mutate(
+    # Absolute deviation (like EEA plots)
+    absolute_change = abundance_plot_mean - ambient_mean,
+    # Percentage deviation
+    percent_change = ((abundance_plot_mean - ambient_mean) / ambient_mean) * 100
+  )
+
+# Summary statistics for both absolute and percentage deviations
+df_deviation_summary <- df_deviations %>%
+  group_by(Zone, Layer, Treatment, Functional) %>%
+  summarise(
+    # Absolute change statistics
+    absolute_change_mean = mean(absolute_change, na.rm = TRUE),
+    absolute_change_se = sd(absolute_change, na.rm = TRUE) / sqrt(n()),
+    # Percentage change statistics
+    percent_change_mean = mean(percent_change, na.rm = TRUE),
+    percent_change_se = sd(percent_change, na.rm = TRUE) / sqrt(n()),
+    n_plots = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(Pathway_clean = stringr::str_to_sentence(gsub("_", " ", Functional)))
+
+print("=== DEVIATION CALCULATIONS COMPLETE ===")
+print(paste("Number of deviation summary records:", nrow(df_deviation_summary)))
+print("All records have valid baselines (no NAs or zeros)")
+```
+
+### Step 5d: Absolute numbers table for all pathways
+```{r}
+# Create comprehensive table with absolute pathway means (only valid combinations)
+df_pathway_means_table <- df_merged_2_final %>%
+  filter(Functional %in% final_pathways) %>%
+  # Only include valid combinations
+  inner_join(valid_combinations, by = c("Zone", "Layer", "Functional")) %>%
+  group_by(Zone, Treatment, Layer, Functional) %>%
+  summarise(
+    mean_abundance = mean(abundance, na.rm = TRUE),
+    se_abundance = sd(abundance, na.rm = TRUE) / sqrt(n()),
+    n_samples = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Pathway = stringr::str_to_sentence(gsub("_", " ", Functional)),
+    mean_se = paste0(round(mean_abundance, 4), " ± ", round(se_abundance, 4))
+  ) %>%
+  dplyr::select(Zone, Treatment, Layer, Pathway, mean_abundance, se_abundance, mean_se, n_samples) %>%
+  arrange(Zone, Layer, Treatment, Pathway)
+
+print("=== ABSOLUTE PATHWAY MEANS TABLE (VALID COMBINATIONS ONLY) ===")
+print(df_pathway_means_table)
+
+# Export table for easy viewing
+write.csv(df_pathway_means_table, "pathway_means_absolute_numbers_valid.csv", row.names = FALSE)
+print("Table exported as 'pathway_means_absolute_numbers_valid.csv'")
+```
+
+### Step 5e: Deviation plots (percentage and absolute)
+```{r}
+# Create percentage deviation plot (like before)
+treatment_colors <- c("+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027")
+
+plot_pathway_deviations_percent <- df_deviation_summary %>%
+  ggplot(aes(x = percent_change_mean, y = Pathway_clean, fill = Treatment)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7, alpha = 0.8) +
+  geom_errorbar(aes(xmin = percent_change_mean - percent_change_se,
+                    xmax = percent_change_mean + percent_change_se),
+                position = position_dodge(width = 0.8), width = 0.3, size = 0.6) +
+  facet_grid(Layer ~ Zone, scales = "free_y") +
+  scale_fill_manual(values = treatment_colors, name = "Treatment") +
+  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  theme_JM() +
+  theme(
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    strip.text = element_text(size = 10, face = "bold"),
+    legend.position = "bottom"
+  ) +
+  labs(x = "Change from Ambient (%)", y = "Degradation Pathway")
+
+# Create focused percentage deviation plot with only 3 selected pathways
+selected_pathways <- c("hydrocarbon_degradation", "aromatic_compound_degradation", "fermentation")
+
+plot_pathway_deviations_percent_focused <- df_deviation_summary %>%
+  filter(Functional %in% selected_pathways) %>%
+  ggplot(aes(x = percent_change_mean, y = Pathway_clean, fill = Treatment)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7, alpha = 0.8) +
+  geom_errorbar(aes(xmin = percent_change_mean - percent_change_se,
+                    xmax = percent_change_mean + percent_change_se),
+                position = position_dodge(width = 0.8), width = 0.3, size = 0.6) +
+  facet_grid(fct_rev(Layer) ~ Zone, scales = "free_y") +
+  scale_fill_manual(values = treatment_colors, name = "Treatment") +
+  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  theme_bw() +
+  theme_JM +
+  theme(
+    legend.position = "bottom"
+  ) +
+  labs(x = "Change from Ambient (%)", y = "Degradation Pathway")
+
+# Create absolute deviation plot (like EEA plots)
+plot_pathway_deviations_absolute <- df_deviation_summary %>%
+  ggplot(aes(x = absolute_change_mean, y = Pathway_clean, fill = Treatment)) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7, alpha = 0.8) +
+  geom_errorbar(aes(xmin = absolute_change_mean - absolute_change_se,
+                    xmax = absolute_change_mean + absolute_change_se),
+                position = position_dodge(width = 0.8), width = 0.3, size = 0.6) +
+  facet_grid(Layer ~ Zone, scales = "free_y") +
+  scale_fill_manual(values = treatment_colors, name = "Treatment") +
+  theme_JM() +
+  theme(
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    strip.text = element_text(size = 10, face = "bold"),
+    legend.position = "bottom"
+  ) +
+  labs(x = "Absolute Change from Ambient", y = "Degradation Pathway")
+
+print("=== PERCENTAGE DEVIATION PLOT (ALL PATHWAYS) ===")
+plot_pathway_deviations_percent
+
+print("=== FOCUSED PERCENTAGE DEVIATION PLOT (3 SELECTED PATHWAYS) ===")
+plot_pathway_deviations_percent_focused
+
+print("=== ABSOLUTE DEVIATION PLOT (EEA-STYLE) ===")
+plot_pathway_deviations_absolute
+
+# Create combined plot with heatmap and focused deviation plot
+print("=== COMBINED PLOT: HEATMAP AND FOCUSED DEVIATION ANALYSIS ===")
+combined_plot_heatmap_deviation <- ggarrange(
+  plot_heatmap_degradation_layer_2_final,
+  plot_pathway_deviations_percent_focused,
+  ncol = 1,
+  nrow = 2,
+  labels = c("A", "B"),
+  heights = c(1, 1)
+)
+
+print(combined_plot_heatmap_deviation)
+```
+
+*Last modified: September 16, 2025 | JM*
 
 # Summary: Data overview
 ## Summary of all main dataframes

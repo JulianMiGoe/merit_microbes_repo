@@ -327,8 +327,22 @@ if(!is.null(df_qpcr_0_summary)) {
 
 # Add soil temperature mean if warming data available
 if(!is.null(df_warming_1_monthly)) {
-  df_eea_5_summary <- df_eea_5_summary %>%
-    mutate("Soil temperature" = rowMeans(select(., contains("Temp_mean")), na.rm = TRUE))
+  # Find temperature columns first
+  temp_cols <- df_eea_5_summary %>% select(contains("Temp_mean")) %>% names()
+  
+  if(length(temp_cols) > 0) {
+    df_eea_5_summary <- df_eea_5_summary %>%
+      mutate("Soil temperature" = rowMeans(select(., all_of(temp_cols)), na.rm = TRUE))
+  } else {
+    # If no temperature columns found, add individual temperature variables if available
+    if("pinTemp_mean" %in% colnames(df_eea_5_summary) & "deepTemp_mean" %in% colnames(df_eea_5_summary)) {
+      df_eea_5_summary <- df_eea_5_summary %>%
+        mutate("Soil temperature" = rowMeans(cbind(pinTemp_mean, deepTemp_mean), na.rm = TRUE))
+    } else if("pinTemp_mean" %in% colnames(df_eea_5_summary)) {
+      df_eea_5_summary <- df_eea_5_summary %>%
+        mutate("Soil temperature" = pinTemp_mean)
+    }
+  }
 }
 
 print("Summary dataset for correlations created")
