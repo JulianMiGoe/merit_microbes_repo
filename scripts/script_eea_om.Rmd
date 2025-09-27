@@ -1,0 +1,433 @@
+---
+title: "EEA-OM Correlations"
+author: "MERIT Project Analysis"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Load libraries
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggpmisc)
+library(readr)
+library(here)
+
+# Define theme_JM
+theme_JM <- theme(
+  text             = element_text(family = "sans", colour = "black", size = 12),
+  axis.title.x     = element_text(),
+  axis.text.x      = element_text(),
+  axis.title.y     = element_text(),
+  axis.text.y      = element_text(),
+  legend.title     = element_text(),
+  legend.text      = element_text(),
+  legend.position  = "top",
+  panel.background = element_blank(),
+  panel.border     = element_rect(colour = "black", fill = NA, linewidth = 1.2),
+  legend.key       = element_blank(),
+  strip.text.x     = element_text(),
+  strip.text.y     = element_text()
+)
+```
+
+# Load and process data
+```{r}
+# Load EEA raw data (processed version with individual measurements)
+df_eea_raw <- read.csv(here("data", "eea", "df_EEA_processed.csv"), dec = ".", sep = ",")
+
+# Load OM data 
+df_om <- read.delim(here("data", "om", "df_OM_MERIT_2022.txt"), dec = ".", sep = "\t")
+
+# Check data structure
+cat("EEA raw data structure:\n")
+cat("Total EEA observations:", nrow(df_eea_raw), "\n")
+cat("EEA columns:", ncol(df_eea_raw), "\n")
+cat("Sample EEA IDs:", head(df_eea_raw$ID.y), "\n")
+
+cat("\nOM data structure:\n")
+cat("Total OM observations:", nrow(df_om), "\n")
+cat("OM columns:", ncol(df_om), "\n")
+cat("Sample OM IDs:", head(df_om$ID), "\n")
+cat("OM values (already in %):", head(df_om$OM), "\n")
+
+# Check unique enzymes in EEA data
+cat("\nUnique enzymes in EEA data:\n")
+print(table(df_eea_raw$Enzyme))
+
+# Direct merge on ID columns (ID.y in EEA matches ID in OM)
+df_eea_om <- df_eea_raw %>%
+  # Select relevant EEA columns
+  dplyr::select(ID.y, Enzyme, Activity_OM, Plot, Subplot, Depth.y, Zone, Treatment, Layer) %>%
+  # Rename for clarity
+  dplyr::rename(ID = ID.y, Depth = Depth.y) %>%
+  # Merge with OM data on ID
+  left_join(df_om %>% dplyr::select(ID, OM, Zone, Depth, Treatment), 
+            by = "ID", suffix = c("_eea", "_om")) %>%
+  # Remove samples without OM data
+  filter(!is.na(OM)) %>%
+  # Ensure OM is numeric
+  mutate(OM = as.numeric(OM)) %>%
+  # Standardize treatment names to match repository conventions
+  mutate(Treatment_eea = case_when(
+    Treatment_eea == "ambient" ~ "ambient",
+    Treatment_eea == "+1.5°C" ~ "+1.5°C", 
+    Treatment_eea == "+3.0°C" ~ "+3.0°C",
+    TRUE ~ Treatment_eea
+  )) %>%
+  # Set factor order for treatments to ensure correct plotting order
+  mutate(Treatment_eea = factor(Treatment_eea, levels = c("ambient", "+1.5°C", "+3.0°C")))
+
+# Remove outliers from OM data only (not EEA activities)
+df_eea_om_clean <- df_eea_om %>%
+  mutate(
+    Q1_OM = quantile(OM, 0.05, na.rm = TRUE),
+    Q3_OM = quantile(OM, 0.95, na.rm = TRUE),
+    IQR_OM = Q3_OM - Q1_OM,
+    lower_bound_OM = Q1_OM - 1.5 * IQR_OM,
+    upper_bound_OM = Q3_OM + 1.5 * IQR_OM
+  ) %>%
+  filter(OM >= lower_bound_OM & OM <= upper_bound_OM) %>%
+  select(-Q1_OM, -Q3_OM, -IQR_OM, -lower_bound_OM, -upper_bound_OM)
+
+# Show OM outlier removal results
+cat("\nOM outlier removal results:")
+cat("\nOriginal OM observations:", nrow(df_eea_om))
+cat("\nAfter OM outlier removal:", nrow(df_eea_om_clean))
+cat("\nOM outliers removed:", nrow(df_eea_om) - nrow(df_eea_om_clean))
+cat("\nPercent removed:", round((nrow(df_eea_om) - nrow(df_eea_om_clean)) / nrow(df_eea_om) * 100, 2), "%")
+
+cat("\nOM range before:", round(range(df_eea_om$OM, na.rm = TRUE), 2), "%")
+cat("\nOM range after:", round(range(df_eea_om_clean$OM, na.rm = TRUE), 2), "%")
+
+# Update the main dataframe to use cleaned data
+df_eea_om <- df_eea_om_clean
+
+cat("\nMerge results:")
+cat("\nEEA raw observations:", nrow(df_eea_raw))
+cat("\nOM observations:", nrow(df_om))
+cat("\nSuccessfully merged EEA-OM observations:", nrow(df_eea_om))
+
+# Check enzyme distribution in merged data
+cat("\nEnzyme distribution in merged data:\n")
+print(table(df_eea_om$Enzyme))
+
+# Check treatment and layer distribution
+cat("\nTreatment distribution in merged data:\n")
+print(table(df_eea_om$Treatment_eea))
+cat("\nLayer distribution in merged data:\n")  
+print(table(df_eea_om$Layer))
+
+# Check OM range
+cat("\nOM range in merged data:", round(range(df_eea_om$OM, na.rm = TRUE), 2), "%\n")
+cat("Mean OM:", round(mean(df_eea_om$OM, na.rm = TRUE), 2), "%\n")
+
+# Show sample of merged data
+cat("\nSample of merged data:\n")
+print(head(df_eea_om))
+```
+
+# EEA-OM Correlations
+## Individual Enzyme Activities vs Organic Matter (Raw Data)
+```{r, fig.width=10, fig.height=6}
+# Check if we have data for plotting
+
+df_eea_om_2 <- df_eea_om %>%
+  filter(!OM > 20) %>%
+  group_by(Enzyme, Treatment_eea, Layer, Plot, Subplot, Depth_eea) %>%
+  summarise(Activity_OM_mean = mean(Activity_OM),
+            OM_mean = mean(OM),
+            n_samples = n(),
+            .groups = "drop") 
+
+if(nrow(df_eea_om) > 0) {
+  
+  # CHI (Chitinase) - filter for CHI enzyme only
+  if("CHI" %in% df_eea_om$Enzyme) {
+    plot_CHI_OM <- df_eea_om %>%
+      filter(Enzyme == "CHI") %>%
+      ggplot(aes(x = OM, y = Activity_OM)) +
+      geom_point(aes(shape = Layer, color = Treatment_eea), size = 2.5, alpha = 0.7) +
+      geom_smooth(aes(color = Treatment_eea), method = "lm", se = TRUE, linewidth = 1) +
+      scale_color_manual(values = c("ambient" = "#4575b4", "+1.5°C" = "#fdae61", "+3.0°C" = "#d73027"),
+                        name = "Temperature") +  
+      scale_shape_manual(values = c("Topsoil\n(0-30 cm)" = 16, "Subsoil\n(40-100 cm)" = 17),
+                        name = "Layer") +
+      labs(x = "Organic matter content[%]", 
+           y = expression(paste("Activity [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+      theme_JM +
+      stat_poly_eq(
+          aes(label = paste(..rr.label.., 
+                            ..p.value.label.., sep = "~~~"), color = Treatment_eea),
+          formula = y ~ x,
+          parse = TRUE,
+          label.x = "right",
+          label.y = c(0.9, 0.8, 0.7)) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1),
+            legend.position = "right") +
+      ylim(0, 2500)
+    
+    print(plot_CHI_OM)
+  }
+  
+} else {
+  cat("No data available for CHI plots\n")
+}
+```
+
+## GLU (Glucosidase) vs Organic Matter
+```{r, fig.width=10, fig.height=6}
+if(nrow(df_eea_om) > 0 && "GLU" %in% df_eea_om$Enzyme) {
+  
+  plot_GLU_OM <- df_eea_om_2 %>%
+    #filter(Enzyme == "GLU") %>%
+    ggplot(aes(x = OM_mean, y = Activity_OM_mean)) +
+    geom_point(aes(shape = Layer, color = Treatment_eea), size = 2.5, alpha = 0.7) +
+    geom_smooth(aes(color = Treatment_eea), method = "lm",  se = TRUE, linewidth = 1) +
+    scale_color_manual(values = c("ambient" = "#4575b4", "+1.5°C" = "#fdae61", "+3.0°C" = "#d73027"),
+                      name = "Temperature") +  
+      scale_shape_manual(values = c("Topsoil\n(0-30 cm)" = 16, "Subsoil\n(40-100 cm)" = 17),
+                      name = "Layer") +
+    labs(x = "Organic matter content [%]", 
+         y = expression(paste("ß-Glucosidase activity [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    theme_JM +
+    stat_poly_eq(
+        aes(label = paste(..rr.label.., 
+                          ..p.value.label.., sep = "~~~"), color = Treatment_eea),
+        formula = y ~ x,
+        parse = TRUE,
+        label.x = "right",
+        label.y = c(0.9, 0.8, 0.7)) +
+    guides(color = guide_legend(order = 1),
+           shape = guide_legend(order = 2)) +
+    theme(axis.text.x = element_text(hjust = 1),
+          legend.position = "right") +
+    ylim(0, 2500)
+
+  print(plot_GLU_OM)
+  
+} else {
+  cat("No GLU data available\n")
+}
+```
+
+## LEU (Leucine aminopeptidase) vs Organic Matter
+```{r, fig.width=10, fig.height=6}
+if(nrow(df_eea_om) > 0 && "LEU" %in% df_eea_om$Enzyme) {
+  
+  plot_LEU_OM <- df_eea_om %>%
+    filter(Enzyme == "LEU") %>%
+    ggplot(aes(x = OM, y = Activity_OM)) +
+    geom_point(aes(shape = Layer, color = Treatment_eea), size = 2.5, alpha = 0.7) +
+    geom_smooth(aes(color = Treatment_eea), method = "lm", formula = y ~ poly(x, 2, raw = TRUE), se = TRUE, linewidth = 1) +
+    scale_color_manual(values = c("ambient" = "#4575b4", "+1.5°C" = "#fdae61", "+3.0°C" = "#d73027"),
+                      name = "Temperature") +  
+    scale_shape_manual(values = c("Topsoil\n(0-30 cm)" = 16, "Subsoil\n(40-100 cm)" = 17),
+                      name = "Layer") +
+    labs(x = "Organic matter content[%]", 
+         y = expression(paste("Activity [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    theme_JM +
+    stat_poly_eq(
+        aes(label = paste(..rr.label.., 
+                          ..p.value.label.., sep = "~~~"), color = Treatment_eea),
+        formula = y ~ x,
+        parse = TRUE,
+        label.x = "right",
+        label.y = c(0.9, 0.8, 0.7)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "right") +
+    ylim(0, 2500)
+
+  print(plot_LEU_OM)
+  
+} else {
+  cat("No LEU data available\n")
+}
+
+
+write.csv(df_eea_om, here("data", "eea", "df_eea_om.csv"), row.names = FALSE)
+```
+
+# Aggregate Plots with Mean Values
+```{r, fig.width=10, fig.height=6}
+# Check available columns for grouping
+cat("Available columns in df_eea_om:\n")
+print(colnames(df_eea_om))
+
+# Calculate mean values for each unique combination to create ~27 points
+# Use available grouping variables including Plot
+if("Zone_eea" %in% colnames(df_eea_om) && "Plot" %in% colnames(df_eea_om)) {
+  df_means <- df_eea_om %>%
+    group_by(Treatment_eea, Layer, Zone_eea, Plot, Enzyme) %>%
+    summarise(
+      mean_OM = mean(OM, na.rm = TRUE),
+      mean_Activity = mean(Activity_OM, na.rm = TRUE),
+      se_OM = sd(OM, na.rm = TRUE) / sqrt(n()),
+      se_Activity = sd(Activity_OM, na.rm = TRUE) / sqrt(n()),
+      n_samples = n(),
+      .groups = "drop"
+    ) %>%
+    filter(n_samples >= 1)  # Include combinations with at least 1 sample
+} else if("Plot" %in% colnames(df_eea_om)) {
+  df_means <- df_eea_om %>%
+    group_by(Treatment_eea, Layer, Plot, Enzyme) %>%
+    summarise(
+      mean_OM = mean(OM, na.rm = TRUE),
+      mean_Activity = mean(Activity_OM, na.rm = TRUE),
+      se_OM = sd(OM, na.rm = TRUE) / sqrt(n()),
+      se_Activity = sd(Activity_OM, na.rm = TRUE) / sqrt(n()),
+      n_samples = n(),
+      .groups = "drop"
+    ) %>%
+    filter(n_samples >= 1)
+} else {
+  # Fallback: use Treatment and Layer only
+  df_means <- df_eea_om %>%
+    group_by(Treatment_eea, Layer, Enzyme) %>%
+    summarise(
+      mean_OM = mean(OM, na.rm = TRUE),
+      mean_Activity = mean(Activity_OM, na.rm = TRUE),
+      se_OM = sd(OM, na.rm = TRUE) / sqrt(n()),
+      se_Activity = sd(Activity_OM, na.rm = TRUE) / sqrt(n()),
+      n_samples = n(),
+      .groups = "drop"
+    )
+}
+
+cat("Number of mean data points per enzyme:")
+print(table(df_means$Enzyme))
+
+# CHI Mean Values Plot
+if("CHI" %in% df_means$Enzyme) {
+  plot_CHI_means <- df_means %>%
+    filter(Enzyme == "CHI") %>%
+    ggplot(aes(x = mean_OM, y = mean_Activity)) +
+    geom_point(aes(shape = Layer, color = Treatment_eea), size = 3, alpha = 0.8) +
+    geom_smooth(aes(color = Treatment_eea), method = "lm", se = TRUE, linewidth = 1) +
+    scale_color_manual(values = c("ambient" = "#4575b4", "+1.5°C" = "#fdae61", "+3.0°C" = "#d73027"),
+                      name = "Temperature") +  
+    scale_shape_manual(values = c("Topsoil\n(0-30 cm)" = 16, "Subsoil\n(40-100 cm)" = 17),
+                      name = "Layer") +
+    labs(x = "Organic matter content[%]", 
+         y = expression(paste("Activity [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    theme_JM +
+    stat_poly_eq(
+        aes(label = paste(..rr.label.., 
+                          ..p.value.label.., sep = "~~~"), color = Treatment_eea),
+        formula = y ~ x,
+        parse = TRUE,
+        label.x = "right",
+        label.y = c(0.9, 0.8, 0.7)) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "right") +
+    ylim(0, 2500)
+  
+  print(plot_CHI_means)
+}
+
+# GLU Mean Values Plot
+if("GLU" %in% df_means$Enzyme) {
+  plot_GLU_means <- df_means %>%
+    filter(Enzyme == "GLU") %>%
+    ggplot(aes(x = mean_OM, y = mean_Activity)) +
+    geom_point(aes(shape = Layer, color = Treatment_eea), size = 3, alpha = 0.8) +
+    geom_smooth(aes(color = Treatment_eea), method = "lm", se = TRUE, linewidth = 1) +
+    scale_color_manual(values = c("ambient" = "#4575b4", "+1.5°C" = "#fdae61", "+3.0°C" = "#d73027"),
+                      name = "Temperature") +  
+    scale_shape_manual(values = c("Topsoil\n(0-30 cm)" = 16, "Subsoil\n(40-100 cm)" = 17),
+                      name = "Layer") +
+    labs(x = "Organic matter content [%]", 
+         y = expression(paste("ß-Glucosidase activity [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    theme_JM +
+    stat_poly_eq(
+        aes(label = paste(..rr.label.., 
+                          ..p.value.label.., sep = "~~~"), color = Treatment_eea),
+        formula = y ~ x,
+        parse = TRUE,
+        label.x = "right",
+        label.y = c(0.9, 0.8, 0.7)) +
+    guides(color = guide_legend(order = 1),
+           shape = guide_legend(order = 2)) +
+    theme(axis.text.x = element_text(hjust = 1),
+          legend.position = "right") +
+    ylim(0, 1500)
+  
+  print(plot_GLU_means)
+}
+
+# LEU Mean Values Plot
+if("LEU" %in% df_means$Enzyme) {
+  plot_LEU_means <- df_means %>%
+    filter(Enzyme == "LEU") %>%
+    ggplot(aes(x = mean_OM, y = mean_Activity)) +
+    geom_point(aes(shape = Layer, color = Treatment_eea), size = 3, alpha = 0.8) +
+    geom_smooth(aes(color = Treatment_eea), method = "lm", se = TRUE, linewidth = 1) +
+    scale_color_manual(values = c("ambient" = "#4575b4", "+1.5°C" = "#fdae61", "+3.0°C" = "#d73027"),
+                      name = "Temperature") +  
+    scale_shape_manual(values = c("Topsoil\n(0-30 cm)" = 16, "Subsoil\n(40-100 cm)" = 17),
+                      name = "Layer") +
+    labs(x = "Organic matter content[%]", 
+         y = expression(paste("Activity [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]"))) +
+    theme_JM +
+    stat_poly_eq(
+        aes(label = paste(..rr.label.., 
+                          ..p.value.label.., sep = "~~~"), color = Treatment_eea),
+        formula = y ~ x,
+        parse = TRUE,
+        label.x = "right",
+        label.y = c(0.9, 0.8, 0.7)) +
+    theme(axis.text.x = element_text( hjust = 1),
+          legend.position = "right") +
+    ylim(0, 2500)
+  
+  print(plot_LEU_means)
+}
+```
+
+# Summary Statistics
+```{r}
+# Calculate correlation statistics for each enzyme separately
+correlations <- df_eea_om %>%
+  group_by(Enzyme, Treatment_eea, Layer) %>%
+  summarise(
+    correlation = cor(Activity_OM, OM, use = "complete.obs"),
+    n_samples = n(),
+    mean_activity = mean(Activity_OM, na.rm = TRUE),
+    mean_om = mean(OM, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(Enzyme, Treatment_eea, Layer)
+
+print("=== CORRELATION RESULTS BY ENZYME ===")
+print(correlations)
+
+# Overall summary
+cat("\n=== OVERALL SUMMARY ===\n")
+cat("Total EEA-OM paired observations:", nrow(df_eea_om), "\n")
+cat("Unique enzymes:", paste(unique(df_eea_om$Enzyme), collapse = ", "), "\n")
+cat("Treatments:", paste(unique(df_eea_om$Treatment_eea), collapse = ", "), "\n")
+cat("Layers:", paste(unique(df_eea_om$Layer), collapse = ", "), "\n")
+cat("OM range:", round(range(df_eea_om$OM, na.rm = TRUE), 2), "%\n")
+cat("Activity range:", round(range(df_eea_om$Activity_OM, na.rm = TRUE), 2), "\n")
+
+# Sample sizes by enzyme
+enzyme_counts <- table(df_eea_om$Enzyme)
+cat("\nSample sizes by enzyme:\n")
+print(enzyme_counts)
+```
+
+# Session Info
+```{r}
+sessionInfo()
+```
+
+This script analyzes the relationship between enzyme activities (CHI, GLU, LEU) and organic matter content using a direct ID-based matching approach. Each enzyme is plotted individually with temperature treatment and soil layer information. Statistical correlations are calculated and displayed for each enzyme-treatment-layer combination.

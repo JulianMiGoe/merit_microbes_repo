@@ -91,7 +91,7 @@ cat("Zone comparisons:\n")
 print(stat_pairs_zones)
 
 # Pairwise comparisons between treatments within zones
-stat_emm_treatment_zone <- emmeans(stat_model_eub, ~ Treatment | Zone)
+stat_emm_treatment_zone <- emmeans(stat_model_eub, ~ Treatment * Zone)
 stat_pairs_treatment_zone <- pairs(stat_emm_treatment_zone)
 
 cat("\nTreatment comparisons within zones:\n")

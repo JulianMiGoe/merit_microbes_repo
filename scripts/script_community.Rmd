@@ -16,7 +16,7 @@ output: pdf_document
 ## Version 1.1: Include jpg. images of Gels and TapeStation - 27.11.2023 | JM
 ## Version 1.0: Display DNA and RNA concentrations - 24.11.2023 | JM
 
-\
+
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
@@ -431,14 +431,17 @@ stat_alpha_layer_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Layer)
 stat_alpha_layer_pairs_1_main <- pairs(stat_alpha_layer_emm_1_main)
 
 # Interaction comparisons
-stat_alpha_zone_treatment_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Zone | Treatment)
+stat_alpha_zone_treatment_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Zone * Treatment)
 stat_alpha_zone_treatment_pairs_1_main <- pairs(stat_alpha_zone_treatment_emm_1_main)
 
-stat_alpha_zone_layer_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Zone | Layer)
+stat_alpha_zone_layer_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Zone * Layer)
 stat_alpha_zone_layer_pairs_1_main <- pairs(stat_alpha_zone_layer_emm_1_main)
 
-stat_alpha_treatment_layer_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Treatment | Layer)
+stat_alpha_treatment_layer_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Treatment * Layer)
 stat_alpha_treatment_layer_pairs_1_main <- pairs(stat_alpha_treatment_layer_emm_1_main)
+
+stat_alpha_treatment_layer_zone_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Treatment * Layer * Zone)
+stat_alpha_treatment_layer_zone_pairs_1_main <- pairs(stat_alpha_treatment_layer_zone_emm_1_main)
 ```
 
 
@@ -1068,7 +1071,7 @@ cat("Elevation:        r =", sprintf("%.3f", mantel_subsoil_elev$statistic),
     ", p =", sprintf("%.3f", mantel_subsoil_elev$signif), "\n")
 cat("Reduction Index:  r =", sprintf("%.3f", mantel_subsoil_ri$statistic), 
     ", p =", sprintf("%.3f", mantel_subsoil_ri$signif), "\n")
-```
+
 
 # Merge environmental data with subsoil metadata
 meta_subsoil_env <- meta_subsoil %>%
