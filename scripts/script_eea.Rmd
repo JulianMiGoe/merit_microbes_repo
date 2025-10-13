@@ -70,7 +70,7 @@ df_elevation_0_raw <- read.delim(here("data", "elevation", "df_iris_elevation.tx
 # df_iris_0_summary <- read.csv(here("data", "iris", "df_iris_summary.csv"))
 
 # Load warming data (created by script_warming_data_2022.Rmd) - if available  
-# df_warming_0_monthly <- read.csv(here("scripts", "df_warming_all_2022_monthly.csv"))
+ df_warming_0_monthly <- read.csv(here("scripts", "df_warming_all_2022_monthly.csv"))
 
 print("Preprocessed EEA data loaded successfully")
 ```
@@ -215,26 +215,26 @@ plot_CN
 ## Step 3b: EEAs (regressions)
 ```{r}
 # Plot C acquisition vs pin temperature (topsoil) - uncomment when warming data available
-# plot_EEA_C_warming_pin <- df_eea_4_final %>%
-#   filter(grepl("Topsoil", Layer)) %>%
-#   ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
-#     geom_point() +
-#     geom_smooth(method = "lm") +
-#     stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
-#                  formula = y ~ x, 
-#                  parse = TRUE, 
-#                  label.x.npc = "right",
-#                  label.y.npc = 0.9) +
-#     scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
-#     scale_y_continuous(
-#      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
-#       expand = c(0,0),
-#       limits = c(0, 3500),
-#       breaks = seq(0, 3000, by = 1000)) +
-#     theme_JM + 
-#     labs(x = "Monthly T at 20 cm depth [°C]") 
+ plot_EEA_C_warming_pin <- df_eea_4_final %>%
+   filter(grepl("Topsoil", Layer)) %>%
+   ggplot(aes(x = pinTemp_mean, y = Activity_C, color = Zone)) +
+     geom_point() +
+     geom_smooth(method = "lm") +
+     stat_poly_eq(aes(label = paste(..rr.label.., ..p.value.label.., sep = "~~~")),
+                  formula = y ~ x, 
+                  parse = TRUE, 
+                  label.x.npc = "right",
+                  label.y.npc = 0.9) +
+     scale_color_manual(values = c("Pioneer zone" = "#084081", "Low marsh" = "#4eb3d3", "High marsh" = "#7fcdbb"), name = "Zone:") +
+     scale_y_continuous(
+      name = "Carbon acquisition\n[nmol g OM⁻¹ h⁻¹]",
+       expand = c(0,0),
+       limits = c(0, 3500),
+       breaks = seq(0, 3000, by = 1000)) +
+     theme_JM + 
+     labs(x = "Monthly T at 20 cm depth [°C]") 
 
-# plot_EEA_C_warming_pin
+ plot_EEA_C_warming_pin
 
 print("Regression plots commented out - uncomment when warming data is available")
 ```
@@ -328,11 +328,11 @@ if(!is.null(df_qpcr_0_summary)) {
 # Add soil temperature mean if warming data available
 if(!is.null(df_warming_1_monthly)) {
   # Find temperature columns first
-  temp_cols <- df_eea_5_summary %>% select(contains("Temp_mean")) %>% names()
+  temp_cols <- df_eea_5_summary %>% dplyr::select(contains("Temp_mean")) %>% names()
   
   if(length(temp_cols) > 0) {
     df_eea_5_summary <- df_eea_5_summary %>%
-      mutate("Soil temperature" = rowMeans(select(., all_of(temp_cols)), na.rm = TRUE))
+      mutate("Soil temperature" = rowMeans(dplyr::select(., all_of(temp_cols)), na.rm = TRUE))
   } else {
     # If no temperature columns found, add individual temperature variables if available
     if("pinTemp_mean" %in% colnames(df_eea_5_summary) & "deepTemp_mean" %in% colnames(df_eea_5_summary)) {
@@ -514,7 +514,7 @@ if(!is.null(df_warming_1_monthly) && "Elevation_mean" %in% colnames(df_eea_4_fin
   # Calculate mean temperature if multiple sensors available
   if(all(c("pinTemp_mean", "deepTemp_mean") %in% colnames(df_eea_4_final))) {
     df_eea_4_final <- df_eea_4_final %>%
-      mutate(meanTemp = rowMeans(select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
+      mutate(meanTemp = rowMeans(dplyr::select(., pinTemp_mean, deepTemp_mean), na.rm = TRUE))
     
     print("--- TEMPERATURE REGRESSIONS ---")
     # Regressions with mean temperature
@@ -707,7 +707,7 @@ print(unique(df_eea_1_main_clean$Treatment_clean))
 # Step 1: Calculate plot means (average across subplots within each plot)
 df_eea_plot_means <- df_eea_1_main_clean %>%
   # Remove original columns to avoid naming conflicts
-  select(-Layer, -Treatment) %>%
+  dplyr::select(-Layer, -Treatment) %>%
   rename(Layer = Layer_clean, Treatment = Treatment_clean) %>%
   group_by(Zone, Layer, Treatment, Enzyme, Plot) %>%
   summarise(
@@ -809,8 +809,8 @@ print("=== CREATING DEVIATION PLOTS WITH PROPER STANDARD ERRORS ===")
 
 # Debug: Check input data structure
 print("Summary data structure:")
-print(paste("Rows in df_eea_deviations_se:", nrow(df_eea_deviations_se)))
-print("Columns:", paste(colnames(df_eea_deviations_se), collapse = ", "))
+#print(paste("Rows in df_eea_deviations_se:", nrow(df_eea_deviations_se)))
+#print("Columns:", paste(colnames(df_eea_deviations_se), collapse = ", "))
 print("Sample data:")
 print(head(df_eea_deviations_se))
 
@@ -911,6 +911,25 @@ plot_CN_deviations <- ggarrange(
 
 plot_CN_deviations
 
+
+# Export high-resolution figures for publication
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication
+tiff(here("output", "plot_CN_deviations.tiff"), 
+     width = 12, height = 10, units = "in", res = 600, compression = "lzw")
+print(plot_CN_deviations)
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "plot_CN_deviations.eps"), 
+           width = 12, height = 10, horizontal = FALSE)
+print(plot_CN_deviations)
+dev.off()
+
 print("=== DEVIATION PLOTS WITH PROPER STANDARD ERRORS COMPLETED ===")
 print("Standard errors calculated from individual subplot measurements")
 ```
@@ -967,206 +986,6 @@ plot_CN_percent <- ggarrange(
 plot_CN_percent
 ```
 
-## Step 8e: Statistical tests for deviations from baseline
-```{r}
-# Test if warming treatments significantly differ from zero (ambient baseline)
-print("=== STATISTICAL TESTS: WARMING TREATMENTS vs AMBIENT BASELINE ===")
-
-# Ensure factors are properly ordered before statistical tests
-df_eea_deviations_stats <- df_eea_deviations %>%
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-# One-sample t-tests against zero (ambient baseline) for each combination
-# Carbon acquisition tests
-print("--- CARBON ACQUISITION DEVIATION TESTS ---")
-carbon_test_results <- df_eea_deviations_stats %>%
-  filter(Enzyme == "GLU") %>%
-  group_by(Zone, Layer, Treatment) %>%
-  summarise(
-    n_samples = n(),
-    mean_deviation = mean(Activity_deviation, na.rm = TRUE),
-    se_deviation = sd(Activity_deviation, na.rm = TRUE) / sqrt(n()),
-    t_test_p = if(n() > 1) t.test(Activity_deviation, mu = 0)$p.value else NA,
-    t_statistic = if(n() > 1) t.test(Activity_deviation, mu = 0)$statistic else NA,
-    significant = if(!is.na(t_test_p)) t_test_p < 0.05 else FALSE,
-    .groups = "drop"
-  ) %>%
-  # Maintain factor ordering
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-print("Carbon acquisition deviation test results:")
-print(carbon_test_results)
-
-# Nitrogen acquisition tests (combined CHI + LEU)
-print("--- NITROGEN ACQUISITION DEVIATION TESTS ---")
-# Use the plot-level nitrogen deviation data instead of aggregated stats
-nitrogen_test_results <- df_eea_deviations_N_plot %>%
-  group_by(Zone, Layer, Treatment) %>%
-  summarise(
-    n_samples = n(),
-    mean_deviation = mean(Activity_deviation_combined, na.rm = TRUE),
-    se_deviation = sd(Activity_deviation_combined, na.rm = TRUE) / sqrt(n()),
-    t_test_p = if(n() > 1) t.test(Activity_deviation_combined, mu = 0)$p.value else NA,
-    t_statistic = if(n() > 1) t.test(Activity_deviation_combined, mu = 0)$statistic else NA,
-    significant = if(!is.na(t_test_p)) t_test_p < 0.05 else FALSE,
-    .groups = "drop"
-  ) %>%
-  # Maintain factor ordering
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-print("Nitrogen acquisition deviation test results:")
-print(nitrogen_test_results)
-
-# Combine all test results for export
-all_test_results <- bind_rows(
-  carbon_test_results %>% mutate(Enzyme_group = "Carbon"),
-  nitrogen_test_results %>% mutate(Enzyme_group = "Nitrogen")
-)
-
-# Create summary of significant effects
-significant_effects <- all_test_results %>%
-  filter(significant == TRUE) %>%
-  mutate(effect_direction = ifelse(mean_deviation > 0, "Positive", "Negative"))
-
-print("=== SUMMARY OF SIGNIFICANT WARMING EFFECTS ===")
-print(significant_effects)
-
-# Export statistical test results
-write.csv(all_test_results, here("data", "eea", "df_EEA_deviation_tests.csv"), row.names = FALSE)
-```
-
-## Step 8f: Enhanced plots with significance indicators
-```{r}
-print("=== CREATING ENHANCED DEVIATION PLOTS WITH SIGNIFICANCE ===")
-
-# Prepare carbon plot data with proper factor levels
-df_eea_plot_data_C <- df_eea_deviations_se %>%
-  filter(Enzyme == "GLU") %>%
-  # Ensure proper factor ordering
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  ) %>%
-  left_join(carbon_test_results %>% select(Zone, Layer, Treatment, significant), 
-            by = c("Zone", "Layer", "Treatment")) %>%
-  mutate(
-    significance_label = ifelse(significant, "*", ""),
-    y_position = 400  # Fixed position at y = 400 as requested
-  ) %>%
-  # Re-apply factor levels after join
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-# Debug: Check factor levels
-print("=== CARBON PLOT DATA FACTOR LEVELS ===")
-print(paste("Zone levels:", paste(levels(df_eea_plot_data_C$Zone), collapse = ", ")))
-print(paste("Layer levels:", paste(levels(df_eea_plot_data_C$Layer), collapse = ", ")))
-print(paste("Treatment levels:", paste(levels(df_eea_plot_data_C$Treatment), collapse = ", ")))
-
-# Enhanced carbon acquisition deviation plot with significance
-plot_EEA_deviation_C_sig <- df_eea_plot_data_C %>%
-  ggplot(aes(x = Treatment, y = Activity_deviation_mean, fill = Treatment)) +
-    geom_hline(yintercept = 0, linetype = "dashed", color = "black", size = 1) +
-    geom_bar(stat = "identity", position = position_dodge(width = 0.9),
-             alpha = 0.9, width = 0.7) +
-    geom_errorbar(aes(ymin = Activity_deviation_mean - Activity_deviation_se,
-                      ymax = Activity_deviation_mean + Activity_deviation_se),
-                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
-    geom_text(aes(y = y_position, label = significance_label), 
-              size = 8, position = position_dodge(width = 0.9)) +
-    scale_fill_manual(values = c("+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), 
-                     name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("Carbon acquisition deviation", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-                      limits = c(-500, 500)) +
-    facet_grid(Layer ~ Zone) +
-    theme_JM +
-    theme(
-      legend.position = "none",
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      panel.spacing = unit(1, "lines")
-    )
-
-# Prepare nitrogen data with significance and proper factor levels
-df_eea_plot_data_N <- df_eea_deviations_N_combined %>%
-  # Ensure proper factor ordering
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  ) %>%
-  left_join(nitrogen_test_results %>% select(Zone, Layer, Treatment, significant), 
-            by = c("Zone", "Layer", "Treatment")) %>%
-  mutate(
-    significance_label = ifelse(significant, "*", ""),
-    y_position = 400  # Fixed position at y = 400 as requested
-  ) %>%
-  # Re-apply factor levels after join
-  mutate(
-    Zone = factor(Zone, levels = c("Pioneer zone", "Low marsh", "High marsh")),
-    Layer = factor(Layer, levels = c("Topsoil (0-30 cm)", "Subsoil (40-100 cm)")),
-    Treatment = factor(Treatment, levels = c("+1.5°C", "+3.0°C"))
-  )
-
-# Debug: Check nitrogen factor levels
-print("=== NITROGEN PLOT DATA FACTOR LEVELS ===")
-print(paste("Zone levels:", paste(levels(df_eea_plot_data_N$Zone), collapse = ", ")))
-print(paste("Layer levels:", paste(levels(df_eea_plot_data_N$Layer), collapse = ", ")))
-print(paste("Treatment levels:", paste(levels(df_eea_plot_data_N$Treatment), collapse = ", ")))
-
-# Enhanced nitrogen acquisition deviation plot with significance
-plot_EEA_deviation_N_sig <- df_eea_plot_data_N %>%
-  ggplot(aes(x = Treatment, y = Activity_deviation_mean, fill = Treatment)) +
-    geom_hline(yintercept = 0, linetype = "dashed", color = "black", size = 1) +
-    geom_bar(stat = "identity", position = position_dodge(width = 0.9),
-             alpha = 0.9, width = 0.7) +
-    geom_errorbar(aes(ymin = Activity_deviation_mean - Activity_deviation_se,
-                      ymax = Activity_deviation_mean + Activity_deviation_se),
-                  position = position_dodge(width = 0.9), width = 0.25, color = "black") +
-    geom_text(aes(y = y_position, label = significance_label), 
-              size = 8, position = position_dodge(width = 0.9)) +
-    scale_fill_manual(values = c("+1.5°C" = "#FDAE61", "+3.0°C" = "#D73027"), 
-                     name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("Nitrogen acquisition deviation", " ", " [", "nmol", "*", "g", " ", "OM"^-1, "*", "h"^-1, "]")),
-                      limits = c(-500, 500)) +
-    facet_grid(Layer ~ Zone) +
-    theme_JM +
-    theme(
-      legend.position = "bottom",
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      panel.spacing = unit(1, "lines")
-    )
-
-# Combined deviation plot with significance indicators
-plot_CN_deviations_sig <- ggarrange(
-  plot_EEA_deviation_C_sig,
-  plot_EEA_deviation_N_sig,
-  ncol = 1,
-  heights = c(1, 1.2),
-  labels = c("A", "B"),
-  font.label = list(size = 16, face = "bold")
-)
-
-plot_CN_deviations_sig
-
-print("REVISION: Enhanced deviation plots with statistical significance indicators completed")
-```
-
 ---
 
 ## REVISION DOCUMENTATION - September 2025
@@ -1184,53 +1003,12 @@ print("REVISION: Enhanced deviation plots with statistical significance indicato
    - Increased star size to 8 for better readability
    - Maintained consistent color scheme: #FDAE61 for +1.5°C, #D73027 for +3.0°C
 
-3. **Statistical Framework:**
-   - Plot-level deviation calculations for proper standard error estimation
-   - One-sample t-tests comparing warming treatments against zero (no deviation)
-   - Significance threshold: p < 0.05 indicated with asterisks
-
-4. **Output Files Generated:**
-   - `df_EEA_deviations.csv`: Complete deviation dataset
-   - `df_EEA_deviation_summary.csv`: Summary statistics
-   - `df_EEA_deviation_statistical_tests.csv`: Statistical test results
-
 **Rationale**: Enhanced visualization of warming effects relative to ambient baseline with proper statistical framework and consistent presentation standards.
 
 *Last modified: September 15, 2025 | JM*
 print("Zone ordering: Pioneer zone → Low marsh → High marsh")  
 print("Layer ordering: Topsoil (0-30 cm) → Subsoil (40-100 cm)")
 print("* indicates p < 0.05 for one-sample t-test against zero (ambient baseline)")
-
-
-## Step 8d: Export deviation data for further analysis
-```{r}
-# Save deviation data for downstream analysis and correlation matrix
-write.csv(df_eea_deviations, here("data", "eea", "df_EEA_deviations.csv"), row.names = FALSE)
-
-# Create summary of deviation patterns by zone
-df_eea_deviation_summary <- df_eea_deviations %>%
-  group_by(Zone, Treatment, Enzyme) %>%
-  summarise(
-    mean_deviation = mean(Activity_deviation, na.rm = TRUE),
-    se_deviation = sd(Activity_deviation, na.rm = TRUE)/sqrt(n()),
-    mean_percent_change = mean(Activity_percent_change, na.rm = TRUE),
-    se_percent_change = sd(Activity_percent_change, na.rm = TRUE)/sqrt(n()),
-    .groups = "drop"
-  )
-
-print("=== DEVIATION SUMMARY BY ZONE ===")
-print(df_eea_deviation_summary)
-
-# Save deviation summary and statistical test results
-write.csv(df_eea_deviation_summary, here("data", "eea", "df_EEA_deviation_summary.csv"), row.names = FALSE)
-write.csv(all_test_results, here("data", "eea", "df_EEA_deviation_statistical_tests.csv"), row.names = FALSE)
-
-print("REVISION: Deviation analysis completed and data exported")
-print("Files saved:")
-print("- df_EEA_deviations.csv: Complete deviation dataset")  
-print("- df_EEA_deviation_summary.csv: Summary statistics")
-print("- df_EEA_deviation_statistical_tests.csv: Statistical test results")
-```
 
 # References
 ```{r}

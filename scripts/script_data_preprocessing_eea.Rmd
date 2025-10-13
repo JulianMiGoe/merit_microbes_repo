@@ -302,15 +302,15 @@ print("Data filtering completed successfully")
 # Separate enzyme data for ratio calculation
 df_glu_data <- df_eea_3_filtered %>%
   filter(Enzyme == "GLU") %>%
-  select(ID.y, GLU_value = Activity_OM, Depth.x, Zone, Treatment, Layer)  
+  dplyr::select(ID.y, GLU_value = Activity_OM, Depth.x, Zone, Treatment, Layer)  
 
 df_chi_data <- df_eea_3_filtered %>%
   filter(Enzyme == "CHI") %>%
-  select(ID.y, CHI_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
+  dplyr::select(ID.y, CHI_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
 
 df_leu_data <- df_eea_3_filtered %>%
   filter(Enzyme == "LEU") %>%
-  select(ID.y, LEU_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
+  dplyr::select(ID.y, LEU_value = Activity_OM, Depth.x, Zone, Treatment, Layer) 
 
 # Combine for C/N ratio calculation
 df_eea_4_cn_ratio <- df_glu_data %>%

@@ -239,12 +239,12 @@ stat_permanova_bray_1_main <- adonis2(dist_matrix_1_processed ~ Zone * Layer * T
                                      data = df_sample_data_1_processed, by = "terms")
 
 # Perform pairwise comparisons for main factors
-stat_pairwise_bray_zone_1_main <- pairwise.adonis2(dist_matrix_1_processed ~ Zone, 
-                                                   data = df_sample_data_1_processed, p.adjust.m = "holm")
-stat_pairwise_bray_layer_1_main <- pairwise.adonis2(dist_matrix_1_processed ~ Layer, 
-                                                    data = df_sample_data_1_processed, p.adjust.m = "holm")
-stat_pairwise_bray_treatment_1_main <- pairwise.adonis2(dist_matrix_1_processed ~ Treatment, 
-                                                       data = df_sample_data_1_processed, p.adjust.m = "holm")
+#stat_pairwise_bray_zone_1_main <- pairwise.adonis2(dist_matrix_1_processed ~ Zone, 
+#                                                   data = df_sample_data_1_processed, p.adjust.m = "holm")
+#stat_pairwise_bray_layer_1_main <- pairwise.adonis2(dist_matrix_1_processed ~ Layer, 
+#                                                    data = df_sample_data_1_processed, p.adjust.m = "holm")
+#stat_pairwise_bray_treatment_1_main <- pairwise.adonis2(dist_matrix_1_processed ~ Treatment, 
+#                                                       data = df_sample_data_1_processed, p.adjust.m = "holm")
 ```
 
 # Step 4: Taxonomic composition analysis
@@ -344,6 +344,33 @@ plot_barplot_combined_2_final <- annotate_figure(plot_barplot_combined_2_final,
                                                                 gp = gpar(fontsize = 12, fontface = "bold")))
 
 plot_barplot_combined_2_final
+
+# Export high-resolution figures for publication
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication
+  tiff(here("output", "plot_barplot_combined_2_final.tiff"), 
+       width = 12, height = 10, units = "in", res = 600, compression = "lzw")
+  print(plot_barplot_combined_2_final)
+  dev.off()
+  
+  tiff(here("output", "Featured_image_Mittmann-Goetsch.tiff"), 
+       width = 12, height = 6.7, units = "in", res = 600, compression = "lzw")
+  print(plot_barplot_combined_2_final)
+  dev.off()
+  
+# Also save as EPS for vector graphics option
+postscript(here("output", "plot_barplot_combined_2_final.eps"), 
+           width = 12, height = 10, horizontal = FALSE)
+print(plot_barplot_combined_2_final)
+dev.off()
+
+cat("High-resolution figures saved:\n")
+cat("- plot_barplot_combined_2_final.tiff (600 DPI)\n")
+cat("- plot_barplot_combined_2_final.eps (vector)\n")
 ```
 
 # Step 5: Alpha diversity analysis
@@ -403,6 +430,28 @@ plot_alpha_nmds_2_final <- ggarrange(
 )
 
 plot_alpha_nmds_2_final
+
+# Export high-resolution figures for publication
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication
+tiff(here("output", "plot_alpha_nmds_2_final.tiff"), 
+     width = 14, height = 8, units = "in", res = 600, compression = "lzw")
+print(plot_alpha_nmds_2_final)
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "plot_alpha_nmds_2_final.eps"), 
+           width = 14, height = 8, horizontal = FALSE)
+print(plot_alpha_nmds_2_final)
+dev.off()
+
+cat("High-resolution figures saved:\n")
+cat("- plot_alpha_nmds_2_final.tiff (600 DPI)\n")
+cat("- plot_alpha_nmds_2_final.eps (vector)\n")
 ```
 
 ## Step 5b: Alpha diversity statistical analysis
@@ -543,6 +592,9 @@ df_elevation_delta_1_processed$plotid2 <- as.factor(df_elevation_delta_1_process
 df_ri_mean_1_processed <- df_iris_0_summary %>%
   mutate(Plot = as.character(Plot)) %>%
   dplyr::select(Plot, Layer, ri)
+```
+
+
 
 ## Step 6e: Merge environmental data with community dissimilarities
 ```{r}
@@ -614,6 +666,8 @@ df_bray_delta_subsoil_elevation_1_processed <- df_bray_curtis_subsoil_2_merged %
   ungroup() %>%
   distinct(sorted_plotids, BrayCurtisDissimilarity, .keep_all = TRUE) %>%
   dplyr::select(-sorted_plotids)
+
+```
 
 ## Step 6f: Environmental dissimilarity plots and statistics
 ```{r}
@@ -894,6 +948,28 @@ if (!is.null(plot_bray_delta_top_ri) & !is.null(plot_bray_delta_bottom_ri)) {
   )
   
   plot_bray_delta_combined
+  
+  # Export high-resolution figures for publication
+  # Create output directory if it doesn't exist
+  if (!dir.exists(here("output"))) {
+    dir.create(here("output"), recursive = TRUE)
+  }
+
+  # Export high-resolution TIFF file for publication
+  tiff(here("output", "plot_bray_delta_combined.tiff"), 
+       width = 15, height = 10, units = "in", res = 600, compression = "lzw")
+  print(plot_bray_delta_combined)
+  dev.off()
+
+  # Also save as EPS for vector graphics option
+  postscript(here("output", "plot_bray_delta_combined.eps"), 
+             width = 15, height = 10, horizontal = FALSE)
+  print(plot_bray_delta_combined)
+  dev.off()
+
+  cat("High-resolution figures saved:\n")
+  cat("- plot_bray_delta_combined.tiff (600 DPI)\n")
+  cat("- plot_bray_delta_combined.eps (vector)\n")
 } else {
   cat("Combined plot cannot be created: Missing RI plots\n")
 }
@@ -921,9 +997,6 @@ df_bray_delta_elevation_combined_1_processed <- df_bray_delta_topsoil_elevation_
   bind_rows(df_bray_delta_subsoil_elevation_1_processed)
 
 stat_lm_combined_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevation, 
-
-
-stat_lm_combined_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevation, 
                                        data = df_bray_delta_elevation_combined_1_processed)
 ```
 
@@ -933,8 +1006,7 @@ stat_lm_combined_elevation_1_main <- lm(BrayCurtisDissimilarity ~ delta_elevatio
 df_alpha_summary_export <- df_alpha_div_3_long %>%
   group_by(Plot, Layer) %>%
   summarise(alpha_diversity = mean(Value, na.rm = TRUE), .groups = "drop") %>%
-  mutate(plotid = as.character(Plot))
-write.csv(df_alpha_summary_export, "./data/rna/df_alpha_summary.csv", row.names = FALSE)
+
 ```
 
 

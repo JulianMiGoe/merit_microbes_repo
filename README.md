@@ -216,11 +216,7 @@ Institute of Plant Science and Microbiology, University of Hamburg
    - Generates both numeric and formatted (mean ± SE) output tables for manuscript use
 
 **New Output Files:**
-   - `data/eea/df_EEA_deviations.csv`: Complete deviation dataset
-   - `data/eea/df_EEA_deviation_summary.csv`: Summary statistics by zone
-   - `data/eea/df_EEA_deviation_statistical_tests.csv`: Statistical test results
    - `tables/comprehensive_summary_all_variables.csv`: Numeric summary of all variables
-   - `tables/comprehensive_summary_formatted.csv`: Formatted summary with mean ± SE
 
 **Rationale**: These changes ensure consistent visualization standards across all analyses and enhance the presentation of warming effects through deviation-based analysis with proper statistical interpretation.
 

@@ -152,7 +152,7 @@ print(paste("Dimensions:", nrow(df_corr_1_base), "rows x", ncol(df_corr_1_base),
 # Prüfe Alternativen wie 'alpha_diversity', 'AlphaDiversity', 'Shannon', etc.
 # Passe ggf. den Spaltennamen hier an!
 df_corr_2_selected <- df_corr_1_base %>%
-  select(
+  dplyr::select(
     Layer,
     "Carbon acquisition" = Activity_C,
     "Nitrogen acquisition" = Activity_N,
@@ -175,12 +175,54 @@ print(paste("Final dataset dimensions:", nrow(df_corr_2_selected), "rows x", nco
 ```{r}
 # Remove Layer column for overall analysis
 df_corr_overall <- df_corr_2_selected %>%
-  select(-Layer)
+  dplyr::select(-Layer)
 
 # Calculate correlation matrix
 cor_matrix <- cor(df_corr_overall, use = "complete.obs")
 
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication
+tiff(here("output", "correlation_matrix_overall.tiff"), 
+     width = 10, height = 10, units = "in", res = 600, compression = "lzw")
+
 # Create correlation plot
+corrplot(cor_matrix, 
+         method = "color",
+         type = "lower",
+         order = "hclust",
+         col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+         tl.col = "black", 
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.8,
+         title = "Overall Correlation Matrix - All Variables",
+         mar = c(0,0,1,0))
+
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "correlation_matrix_overall.eps"), 
+           width = 10, height = 10, horizontal = FALSE)
+
+corrplot(cor_matrix, 
+         method = "color",
+         type = "lower",
+         order = "hclust",
+         col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+         tl.col = "black", 
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.8,
+         title = "Overall Correlation Matrix - All Variables",
+         mar = c(0,0,1,0))
+
+dev.off()
+
+# Display plot in R
 corrplot(cor_matrix, 
          method = "color",
          type = "lower",
@@ -204,11 +246,51 @@ layers <- unique(df_corr_2_selected$Layer)
 for(layer in layers) {
   layer_data <- df_corr_2_selected %>%
     filter(Layer == layer) %>%
-    select(-Layer)
+    dplyr::select(-Layer)
   
   if(ncol(layer_data) > 1) {
     cor_matrix_layer <- cor(layer_data, use = "complete.obs")
     
+    # Create clean filename for layer
+    layer_clean <- gsub("[^A-Za-z0-9]", "_", layer)
+    
+    # Export high-resolution TIFF file for publication
+    tiff(here("output", paste0("correlation_matrix_", layer_clean, ".tiff")), 
+         width = 10, height = 10, units = "in", res = 600, compression = "lzw")
+    
+    corrplot(cor_matrix_layer, 
+             method = "color",
+             type = "lower",
+             order = "hclust",
+             col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+             tl.col = "black", 
+             tl.srt = 45,
+             addCoef.col = "black",
+             number.cex = 0.8,
+             title = paste("Correlation Matrix -", layer),
+             mar = c(0,0,1,0))
+    
+    dev.off()
+    
+    # Also save as EPS for vector graphics option
+    postscript(here("output", paste0("correlation_matrix_", layer_clean, ".eps")), 
+               width = 10, height = 10, horizontal = FALSE)
+    
+    corrplot(cor_matrix_layer, 
+             method = "color",
+             type = "lower",
+             order = "hclust",
+             col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+             tl.col = "black", 
+             tl.srt = 45,
+             addCoef.col = "black",
+             number.cex = 0.8,
+             title = paste("Correlation Matrix -", layer),
+             mar = c(0,0,1,0))
+    
+    dev.off()
+    
+    # Display plot in R
     corrplot(cor_matrix_layer, 
              method = "color",
              type = "lower",
@@ -224,7 +306,17 @@ for(layer in layers) {
 }
 
 print("Layer-specific correlation matrices generated")
+
+cat("High-resolution correlation matrix figures saved:\n")
+cat("- correlation_matrix_overall.tiff (600 DPI)\n")
+cat("- correlation_matrix_overall.eps (vector)\n")
+for(layer in layers) {
+  layer_clean <- gsub("[^A-Za-z0-9]", "_", layer)
+  cat(paste0("- correlation_matrix_", layer_clean, ".tiff (600 DPI)\n"))
+  cat(paste0("- correlation_matrix_", layer_clean, ".eps (vector)\n"))
+}
 ```
+
 
 # References
 ```{r}
@@ -251,7 +343,7 @@ vars_to_summarise <- c(
 )
 
 df_corr_3_summary_table <- df_corr_1_base %>%
-  select(
+  dplyr::select(
     Layer,
     Zone,
     Treatment,
@@ -273,7 +365,7 @@ df_corr_3_summary_table <- df_corr_1_base %>%
   )
 
 df_corr_3_summary_table_Zone <- df_corr_1_base %>%
-  select(
+  dplyr::select(
     Zone,
     "Carbon acquisition" = Activity_C,
     "Nitrogen acquisition" = Activity_N,

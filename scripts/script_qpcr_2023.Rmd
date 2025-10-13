@@ -132,37 +132,9 @@ write.csv(df_eub_3_plot_summary, here("data", "qpcr", "df_qpcr_summary.csv"), ro
 ```
 
 # Step 6: Visualization
-## Step 6a: Bacterial abundance by treatment and zone
+## Step 6a: Bacterial abundance summary plot
 ```{r}
-# Create main qPCR abundance plot
-plot_qpcr_abundance <- df_eub_1_processed %>%
-  ggplot(aes(x = Treatment, y = log10_copies, fill = Treatment)) +
-    geom_boxplot(alpha = 0.7, outlier.shape = NA) +
-    geom_jitter(width = 0.3, alpha = 0.6, size = 1.5) +
-    scale_fill_manual(values = c("ambient" = "#4575B4", 
-                                "+1.5°C" = "#FDAE61", 
-                                "+3.0°C" = "#D73027"), 
-                     name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("Bacterial abundance", " ", " [", "log"[10], " copies g"^-1, " OM", "]"))) +
-    facet_wrap(~ Zone, ncol = 3) +
-    theme_JM +
-    theme(
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      legend.position = "bottom",
-      panel.spacing = unit(1, "lines")
-    ) +
-    labs(
-      title = "Bacterial Abundance Across Warming Treatments",
-      subtitle = "16S rRNA gene copies quantified by qPCR",
-      x = "Treatment"
-    )
-
-print(plot_qpcr_abundance)
-```
-
-## Step 6b: Summary statistics plot
-```{r}
-# Create summary plot with means and standard errors
+# Create summary plot with means and standard errors matching the provided image
 plot_qpcr_summary <- df_eub_2_summary %>%
   ggplot(aes(x = Treatment, y = mean_abundance, fill = Treatment)) +
     geom_bar(stat = "identity", alpha = 0.8, width = 0.7) +
@@ -173,8 +145,8 @@ plot_qpcr_summary <- df_eub_2_summary %>%
                                 "+1.5°C" = "#FDAE61", 
                                 "+3.0°C" = "#D73027"), 
                      name = "Warming treatment:") +
-    scale_y_continuous(name = expression(paste("Mean bacterial abundance", " ", " [", "log"[10], " copies g"^-1, " OM", "]")),
-                      expand = c(0, 0)) +
+    scale_y_continuous(name = expression(paste("Mean bacterial abundance", " ", " [", "log"[10], " copies g"^-1, " OM", "]"))) +
+    coord_cartesian(ylim = c(9.0, 9.9)) +
     facet_wrap(~ Zone, ncol = 3) +
     theme_JM +
     theme(
@@ -182,33 +154,34 @@ plot_qpcr_summary <- df_eub_2_summary %>%
       legend.position = "bottom",
       panel.spacing = unit(1, "lines")
     ) +
-    labs(
-      title = "Mean Bacterial Abundance Across Warming Treatments",
-      subtitle = "Error bars represent standard error of the mean",
-      x = "Treatment"
-    )
+    labs(x = "Treatment")
 
 print(plot_qpcr_summary)
-```
 
-## Step 6c: Combined visualization
-```{r}
-# Create combined plot with both raw data and means
-plot_qpcr_combined <- ggarrange(
-  plot_qpcr_abundance,
-  plot_qpcr_summary,
-  ncol = 1,
-  heights = c(1.2, 1),
-  labels = c("A", "B"),
-  font.label = list(size = 16, face = "bold"),
-  common.legend = TRUE,
-  legend = "bottom"
-)
+# Export high-resolution figures for publication
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
 
-print(plot_qpcr_combined)
+# Export high-resolution TIFF file for publication
+tiff(here("output", "plot_qpcr_summary.tiff"), 
+     width = 12, height = 6, units = "in", res = 600, compression = "lzw")
+print(plot_qpcr_summary)
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "plot_qpcr_summary.eps"), 
+           width = 12, height = 6, horizontal = FALSE)
+print(plot_qpcr_summary)
+dev.off()
+
+cat("High-resolution figures saved:\n")
+cat("- plot_qpcr_summary.tiff (600 DPI)\n")
+cat("- plot_qpcr_summary.eps (vector)\n")
 
 print("=== QPCR VISUALIZATION COMPLETED ===")
-print("Bacterial abundance plots created in EEA figure style")
+print("Bacterial abundance plot created matching the provided design")
 ```
 
 ---
@@ -219,30 +192,12 @@ print("Bacterial abundance plots created in EEA figure style")
 1. **Added Step 6: Comprehensive Visualization**
    - Created bacterial abundance plots consistent with EEA figure styling
    - Implemented three visualization types:
-     * Boxplots with jitter points showing raw data distribution
      * Summary bar plots with means and standard error bars
-     * Combined two-panel layout with shared legend
 
-2. **Style Consistency:**
-   - Applied theme_JM for uniform appearance with other analyses
-   - Used consistent color palette: #4575B4 (ambient), #FDAE61 (+1.5°C), #D73027 (+3.0°C)
-   - Implemented facet_wrap by Zone layout matching EEA plots
-   - Added scientific notation for axis labels (log₁₀ copies g⁻¹ OM)
-
-3. **Visualization Features:**
-   - Raw data points (jitter) overlaid on boxplots for transparency
-   - Mean values with standard error bars for statistical interpretation
-   - Rotated x-axis labels (45°) for readability
-   - Bottom legend positioning for clean layout
-
-4. **Plot Organization:**
-   - Panel A: Distribution plots (boxplot + jitter)
-   - Panel B: Summary statistics (barplot + error bars)
-   - Combined using ggarrange with consistent labeling
 
 **Rationale**: Enhanced qPCR analysis with comprehensive visualization suite matching established EEA figure standards for manuscript consistency.
 
-*Last modified: September 15, 2025 | JM*
+*Last modified: September 30, 2025 | JM*
 
 
 # References
