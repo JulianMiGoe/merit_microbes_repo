@@ -64,7 +64,7 @@ print(paste("Date range:", min(df_warming_0_raw$date, na.rm = TRUE), "to", max(d
 ```{r}
 # Select relevant columns from raw data
 df_warming_1_filtered <- df_warming_0_raw %>%
-   select(date, yday, plotid, treatment, zone, aboveTemp, airTemp, deepTemp, 
+   dplyr::select(date, yday, plotid, treatment, zone, aboveTemp, airTemp, deepTemp, 
           lagTemp, pinTemp, surfaceTemp, rh_avg, vp_avg, wind_speed_avg) %>%
    # Convert date column to proper date format
    mutate(date = as.Date(date))

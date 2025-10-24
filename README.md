@@ -27,6 +27,9 @@ merit_microbes_repo/
 │   ├── eea/                      # Extracellular enzyme activity data
 │   │   ├── df_EEA_final.csv              # Processed EEA data
 │   │   ├── df_EEA_processed.csv          # Intermediate processed data
+│   │   ├── df_EEA_deviations.csv         # Deviations from ambient baseline (REVISION)
+│   │   ├── df_EEA_deviation_summary.csv  # Summary of deviation patterns (REVISION)
+│   │   ├── df_EEA_deviation_statistical_tests.csv  # Statistical test results (REVISION)
 │   │   └── raw/                          # Raw platereader files
 │   ├── elevation/                # Elevation measurements
 │   │   └── df_iris_elevation.txt         # Plot elevation data
@@ -151,11 +154,12 @@ All scripts follow a harmonized structure with:
 4. **Zone-specific functional profiles** related to salinity and flooding regimes  
 
 ### Generated Outputs
-- **Correlation matrix** of all measured variables  
-- **Community NMDS plots** showing environmental drivers  
+- **Comprehensive correlation matrix** of all measured variables  
+- **Community ordination plots** showing environmental drivers  
 - **Functional group heatmaps** for biogeochemical processes  
 - **Temperature response plots** for enzyme activities  
 - **Alpha diversity comparisons** across treatments and zones  
+- **Deviation plots (REVISION)**: Warming effects relative to ambient baseline with dashed zero lines  
 
 ## Usage Instructions
 1. Clone the repository
@@ -185,3 +189,35 @@ Julian Mittmann-Goetsch (julian.johannes.mittmann-goetsch@uni-hamburg.de)
 Institute of Plant Science and Microbiology, University of Hamburg
 
 ---
+
+## Revision History
+
+### September 15, 2025 - Major Revision
+**Reviewer Response**: Enhanced statistical analysis and visualization consistency across multiple analyses
+
+**Changes Made:**
+
+1. **script_eea.Rmd**: Enhanced deviation analysis with:
+   - Deviation plots showing warming effects relative to ambient baseline (ambient = 0)
+   - Fixed y-axis scaling (-500 to +500) for consistent comparison across panels
+   - Statistical significance indicators (*) positioned at y = 400 for visibility
+   - Enhanced statistical framework with plot-level calculations and proper standard errors
+   - One-sample t-tests comparing treatments against baseline (p < 0.05 threshold)
+
+2. **script_qpcr_2023.Rmd**: Added comprehensive visualization suite:
+   - Bacterial abundance plots matching EEA figure styling and color scheme
+   - Boxplots with jitter points and summary bar plots with error bars
+   - Consistent theme_JM application and scientific notation formatting
+   - Two-panel layout (A/B) with shared legend for manuscript consistency
+
+3. **script_correlation_matrix.Rmd**: Added comprehensive summary table generation:
+   - Created detailed summary statistics grouped by Zone, Treatment, and Layer
+   - Includes all measured variables: EEA activities, microbial abundance, alpha diversity, environmental parameters
+   - Generates both numeric and formatted (mean ± SE) output tables for manuscript use
+
+**New Output Files:**
+   - `tables/comprehensive_summary_all_variables.csv`: Numeric summary of all variables
+
+**Rationale**: These changes ensure consistent visualization standards across all analyses and enhance the presentation of warming effects through deviation-based analysis with proper statistical interpretation.
+
+*Repository last updated: September 15, 2025*

@@ -55,7 +55,7 @@ df_om_0_raw_2022 <- read.delim(here("data", "om", "df_OM_MERIT_2022.txt"), dec="
 ```{r}
 # Process 2019 data
 df_om_1_processed_2019 <- df_om_0_raw_2019 %>% 
-  select(Zone, Treatment, Depth, OM) %>% 
+  dplyr::select(Zone, Treatment, Depth, OM) %>% 
   mutate(
     Year = 2019,
     Zone = as.factor(Zone),
@@ -66,7 +66,7 @@ df_om_1_processed_2019 <- df_om_0_raw_2019 %>%
 
 # Process 2021 data
 df_om_1_processed_2021 <- df_om_0_raw_2021 %>% 
-  select(Year, Zone, Treatment, Depth, OM) %>% 
+  dplyr::select(Year, Zone, Treatment, Depth, OM) %>% 
   mutate(
     Zone = as.factor(Zone),
     Treatment = as.factor(Treatment),
@@ -76,7 +76,7 @@ df_om_1_processed_2021 <- df_om_0_raw_2021 %>%
 
 # Process 2022 data
 df_om_1_processed_2022 <- df_om_0_raw_2022 %>% 
-  select(Year, Zone, Treatment, Depth, OM) %>% 
+  dplyr::select(Year, Zone, Treatment, Depth, OM) %>% 
   mutate(
     Zone = as.factor(Zone),
     Treatment = as.factor(Treatment),
@@ -121,6 +121,27 @@ plot_om_yearly <- df_om_3_final %>%
 
 # Display main plot
 print(plot_om_yearly)
+
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication
+tiff(here("output", "plot_om_yearly.tiff"), 
+     width = 12, height = 8, units = "in", res = 600, compression = "lzw")
+print(plot_om_yearly)
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "plot_om_yearly.eps"), 
+           width = 12, height = 8, horizontal = FALSE)
+print(plot_om_yearly)
+dev.off()
+
+cat("High-resolution figures saved:\n")
+cat("- plot_om_yearly.tiff (600 DPI)\n")
+cat("- plot_om_yearly.eps (vector)\n")
 ```
 
 ## Step 3b: Create depth-specific plots

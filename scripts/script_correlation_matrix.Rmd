@@ -12,14 +12,14 @@ output: html_document
 # Step 1: Prepare session and load data
 ## Step 1a: Install necessary packages
 ```{r, message=FALSE, warning=FALSE}
-#install.packages("ggstatsplot")
+#install.packages("corrplot")
 #install.packages("tidyverse")
 #install.packages("here")
 ```
 
 ## Step 1b: Load necessary packages
 ```{r}
-library(ggstatsplot)
+library(corrplot)
 library(tidyverse)
 library(here)
 ```
@@ -152,7 +152,7 @@ print(paste("Dimensions:", nrow(df_corr_1_base), "rows x", ncol(df_corr_1_base),
 # Prüfe Alternativen wie 'alpha_diversity', 'AlphaDiversity', 'Shannon', etc.
 # Passe ggf. den Spaltennamen hier an!
 df_corr_2_selected <- df_corr_1_base %>%
-  select(
+  dplyr::select(
     Layer,
     "Carbon acquisition" = Activity_C,
     "Nitrogen acquisition" = Activity_N,
@@ -175,42 +175,235 @@ print(paste("Final dataset dimensions:", nrow(df_corr_2_selected), "rows x", nco
 ```{r}
 # Remove Layer column for overall analysis
 df_corr_overall <- df_corr_2_selected %>%
-  select(-Layer)
+  dplyr::select(-Layer)
 
-# Generate overall correlation matrix
-plot_corr_overall <- ggstatsplot::ggcorrmat(
-  data = df_corr_overall,
-  matrix.type = "lower",
-  type = "parametric", # Use parametric for Pearson correlation
-  colors = c("darkred", "white", "steelblue"),
-  title = "Overall Correlation Matrix - All Variables",
-  subtitle = "Pearson correlation coefficients with significance levels"
-)
+# Calculate correlation matrix
+cor_matrix <- cor(df_corr_overall, use = "complete.obs")
+
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication
+tiff(here("output", "correlation_matrix_overall.tiff"), 
+     width = 10, height = 10, units = "in", res = 600, compression = "lzw")
+
+# Create correlation plot
+corrplot(cor_matrix, 
+         method = "color",
+         type = "lower",
+         order = "hclust",
+         col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+         tl.col = "black", 
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.8,
+         title = "Overall Correlation Matrix - All Variables",
+         mar = c(0,0,1,0))
+
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "correlation_matrix_overall.eps"), 
+           width = 10, height = 10, horizontal = FALSE)
+
+corrplot(cor_matrix, 
+         method = "color",
+         type = "lower",
+         order = "hclust",
+         col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+         tl.col = "black", 
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.8,
+         title = "Overall Correlation Matrix - All Variables",
+         mar = c(0,0,1,0))
+
+dev.off()
+
+# Display plot in R
+corrplot(cor_matrix, 
+         method = "color",
+         type = "lower",
+         order = "hclust",
+         col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+         tl.col = "black", 
+         tl.srt = 45,
+         addCoef.col = "black",
+         number.cex = 0.8,
+         title = "Overall Correlation Matrix - All Variables",
+         mar = c(0,0,1,0))
 
 print("Overall correlation matrix generated")
-plot_corr_overall
 ```
 
 ## Step 3b: Layer-specific correlation matrices
 ```{r}
-# Generate grouped correlation matrix by layer
-plot_corr_by_layer <- ggstatsplot::grouped_ggcorrmat(
-  data = df_corr_2_selected,
-  grouping.var = Layer,
-  matrix.type = "lower",
-  type = "parametric", # Use parametric for Pearson correlation
-  colors = c("darkred", "white", "steelblue"),
-  title.prefix = "Correlation Matrix",
-  subtitle.prefix = "Pearson correlations"
-)
+# Split data by layer and create separate correlation matrices
+layers <- unique(df_corr_2_selected$Layer)
+
+for(layer in layers) {
+  layer_data <- df_corr_2_selected %>%
+    filter(Layer == layer) %>%
+    dplyr::select(-Layer)
+  
+  if(ncol(layer_data) > 1) {
+    cor_matrix_layer <- cor(layer_data, use = "complete.obs")
+    
+    # Create clean filename for layer
+    layer_clean <- gsub("[^A-Za-z0-9]", "_", layer)
+    
+    # Export high-resolution TIFF file for publication
+    tiff(here("output", paste0("correlation_matrix_", layer_clean, ".tiff")), 
+         width = 10, height = 10, units = "in", res = 600, compression = "lzw")
+    
+    corrplot(cor_matrix_layer, 
+             method = "color",
+             type = "lower",
+             order = "hclust",
+             col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+             tl.col = "black", 
+             tl.srt = 45,
+             addCoef.col = "black",
+             number.cex = 0.8,
+             title = paste("Correlation Matrix -", layer),
+             mar = c(0,0,1,0))
+    
+    dev.off()
+    
+    # Also save as EPS for vector graphics option
+    postscript(here("output", paste0("correlation_matrix_", layer_clean, ".eps")), 
+               width = 10, height = 10, horizontal = FALSE)
+    
+    corrplot(cor_matrix_layer, 
+             method = "color",
+             type = "lower",
+             order = "hclust",
+             col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+             tl.col = "black", 
+             tl.srt = 45,
+             addCoef.col = "black",
+             number.cex = 0.8,
+             title = paste("Correlation Matrix -", layer),
+             mar = c(0,0,1,0))
+    
+    dev.off()
+    
+    # Display plot in R
+    corrplot(cor_matrix_layer, 
+             method = "color",
+             type = "lower",
+             order = "hclust",
+             col = colorRampPalette(c("darkred", "white", "steelblue"))(100),
+             tl.col = "black", 
+             tl.srt = 45,
+             addCoef.col = "black",
+             number.cex = 0.8,
+             title = paste("Correlation Matrix -", layer),
+             mar = c(0,0,1,0))
+  }
+}
 
 print("Layer-specific correlation matrices generated")
-plot_corr_by_layer
+
+cat("High-resolution correlation matrix figures saved:\n")
+cat("- correlation_matrix_overall.tiff (600 DPI)\n")
+cat("- correlation_matrix_overall.eps (vector)\n")
+for(layer in layers) {
+  layer_clean <- gsub("[^A-Za-z0-9]", "_", layer)
+  cat(paste0("- correlation_matrix_", layer_clean, ".tiff (600 DPI)\n"))
+  cat(paste0("- correlation_matrix_", layer_clean, ".eps (vector)\n"))
+}
 ```
+
 
 # References
 ```{r}
-# ggstatsplot: Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach. Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
+# corrplot: Wei, T. and Simko, V. (2021). R package 'corrplot': Visualization of a Correlation Matrix. R package version 0.92. https://CRAN.R-project.org/package=corrplot
 # tidyverse: Wickham, H., Bryan, J., François, R., Henry, L., Müller, K., Pedersen, T. L., & Takahashi, K. (2024). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 2.0.0. https://CRAN.R-project.org/package=tidyverse
 # here: Müller, K. & Bryan, J. (2024). here: A Simpler Way to Find Your Files. R package version 1.0.1. https://CRAN.R-project.org/package=here
 ```
+
+---
+
+# REVISION - September 2025
+
+## Step 4: Comprehensive summary table by Zone, Treatment, and Layer
+```{r}
+# Debug: Check what variables are available
+vars_to_summarise <- c(
+  "Carbon acquisition",
+  "Nitrogen acquisition",
+  "Microbial abundance",
+  "Alpha diversity",
+  "Soil temperature",
+  "Marsh surface elevation",
+  "Reduction index"
+)
+
+df_corr_3_summary_table <- df_corr_1_base %>%
+  dplyr::select(
+    Layer,
+    Zone,
+    Treatment,
+    "Carbon acquisition" = Activity_C,
+    "Nitrogen acquisition" = Activity_N,
+    "Microbial abundance" = Abundance, # qPCR
+    "Alpha diversity" = alpha_diversity, # ggf. anpassen!
+    "Soil temperature" = pinTemp_mean,
+    "Marsh surface elevation" = Elevation_mean,
+    "Reduction index" = ri
+  ) %>%
+  # Remove rows with all NA values for numeric variables
+  filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na)) %>%
+   group_by(Zone, Treatment, Layer) %>%
+  summarise(
+    across(any_of(vars_to_summarise), list(mean = ~mean(.x, na.rm = TRUE), 
+                                            se = ~sd(.x, na.rm = TRUE)/sqrt(sum(!is.na(.x))))),
+    .groups = "drop"
+  )
+
+df_corr_3_summary_table_Zone <- df_corr_1_base %>%
+  dplyr::select(
+    Zone,
+    "Carbon acquisition" = Activity_C,
+    "Nitrogen acquisition" = Activity_N,
+    "Microbial abundance" = Abundance, # qPCR
+    "Alpha diversity" = alpha_diversity, # ggf. anpassen!
+    "Soil temperature" = pinTemp_mean,
+    "Marsh surface elevation" = Elevation_mean,
+    "Reduction index" = ri
+  ) %>%
+  # Remove rows with all NA values for numeric variables
+  filter(!if_all(c("Carbon acquisition":"Reduction index"), is.na)) %>%
+   group_by(Zone) %>%
+  summarise(
+    across(any_of(vars_to_summarise), list(mean = ~mean(.x, na.rm = TRUE), 
+                                            se = ~sd(.x, na.rm = TRUE)/sqrt(sum(!is.na(.x))))),
+    .groups = "drop"
+  )
+
+
+write.csv(df_corr_3_summary_table, here("tables", "comprehensive_summary_all_variables.csv"), row.names = FALSE)
+```
+
+---
+
+## REVISION DOCUMENTATION - September 2025
+
+### Changes Made During Revision:
+1. **Added Step 4: Comprehensive Summary Table**
+   - Created detailed summary statistics grouped by Zone, Treatment, and Layer
+   - Calculated means and standard errors for all available variables
+   - Implemented flexible variable detection to handle missing datasets
+
+2. **Variables Included:**
+   - EEA variables: Carbon acquisition, Nitrogen acquisition, C:N ratio
+   - Microbial metrics: Bacterial abundance (qPCR), Alpha diversity (Shannon)
+   - Environmental variables: Soil temperature, Elevation, Reduction index
+
+
+**Rationale**: Provides comprehensive overview of all measured variables across the experimental design for manuscript tables and supplementary materials.
+
+*Last modified: September 15, 2025 | JM*

@@ -52,7 +52,7 @@ df_temperature_0_raw <- read.delim(here("data", "climate", "regional_averages_tm
 ```{r}
 # Process precipitation data
 df_precipitation_1_processed <- df_precipitation_0_raw %>%
-  select(Year = Jahr, Month = Monat, Precipitation = Schleswig.Holstein) %>%
+  dplyr::select(Year = Jahr, Month = Monat, Precipitation = Schleswig.Holstein) %>%
   mutate(
     Year = as.numeric(Year),
     Month = as.numeric(Month),
@@ -61,7 +61,7 @@ df_precipitation_1_processed <- df_precipitation_0_raw %>%
 
 # Process temperature data
 df_temperature_1_processed <- df_temperature_0_raw %>%
-  select(Year = Jahr, Month = Monat, Temperature = Schleswig.Holstein) %>%
+  dplyr::select(Year = Jahr, Month = Monat, Temperature = Schleswig.Holstein) %>%
   mutate(
     Year = as.numeric(Year),
     Month = as.numeric(Month),
@@ -108,6 +108,27 @@ plot_climate_overview <- df_climate_2_merged %>%
 
 # Display plot
 print(plot_climate_overview)
+
+# Create output directory if it doesn't exist
+if (!dir.exists(here("output"))) {
+  dir.create(here("output"), recursive = TRUE)
+}
+
+# Export high-resolution TIFF file for publication (400 DPI minimum)
+tiff(here("output", "plot_climate_overview.tiff"), 
+     width = 10, height = 6, units = "in", res = 600, compression = "lzw")
+print(plot_climate_overview)
+dev.off()
+
+# Also save as EPS for vector graphics option
+postscript(here("output", "plot_climate_overview.eps"), 
+           width = 10, height = 6, horizontal = FALSE)
+print(plot_climate_overview)
+dev.off()
+
+cat("High-resolution figures saved:\n")
+cat("- plot_climate_overview.tiff (600 DPI)\n")
+cat("- plot_climate_overview.eps (vector)\n")
 ```
 
 ## Step 3b: Create separate plots for temperature and precipitation
@@ -175,7 +196,7 @@ cat("Number of years:", df_climate_3_summary$n_years, "\n")
 # Yearly summary for export
 df_climate_4_yearly_summary <- df_climate_2_merged %>%
   filter(Year > 2001 & Year < 2023) %>%
-  select(Year, Temperature, Precipitation) %>%
+  dplyr::select(Year, Temperature, Precipitation) %>%
   arrange(Year)
 
 cat("\nYearly climate data (August):\n")
