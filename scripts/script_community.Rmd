@@ -493,6 +493,9 @@ stat_alpha_treatment_layer_zone_emm_1_main <- emmeans(stat_model_alpha_1_main, ~
 stat_alpha_treatment_layer_zone_pairs_1_main <- pairs(stat_alpha_treatment_layer_zone_emm_1_main)
 ```
 
+# Interaction comparisons
+stat_alpha_zone_treatment_emm_1_main <- emmeans(stat_model_alpha_1_main, ~ Zone | Treatment)
+stat_alpha_zone_treatment_pairs_1_main <- pairs(stat_alpha_zone_treatment_emm_1_main)
 
 # Step 6: Environmental dissimilarity analysis
 ## Step 6a: Calculate community dissimilarities by layer
@@ -896,7 +899,7 @@ plot_bray_delta_top_elevation <- df_bray_delta_topsoil_elevation_1_processed %>%
   theme_JM +
   xlab("Delta elevation [cm]") +
   ylab("Dissimilarity") +
-  ggtitle("Top-soil (0-30 cm)")
+  ggtitle("Topsoil (0-30 cm)")
 
 plot_bray_delta_bottom_elevation <- df_bray_delta_subsoil_elevation_1_processed %>%
   ggplot(aes(x = delta_elevation, y = BrayCurtisDissimilarity)) +
@@ -1009,6 +1012,17 @@ df_alpha_summary_export <- df_alpha_div_3_long %>%
 
 ```
 
+
+
+```{r}
+# Export summarized alpha diversity data for correlation matrix integration
+df_alpha_summary_export <- df_alpha_div_3_long %>%
+  group_by(Plot, Layer) %>%
+  summarise(alpha_diversity = mean(Value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(plotid = as.character(Plot))
+write.csv(df_alpha_summary_export, here("data", "rna", "df_alpha_summary.csv"), row.names = FALSE)
+```
+```
 
 
 # References
